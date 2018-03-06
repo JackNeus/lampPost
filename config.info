@@ -1,0 +1,6 @@
+#This is what the config file should look like (with values, of course)
+
+DEBUG=True
+PORT=5001
+
+SECRET_KEY=
