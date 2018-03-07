@@ -1,7 +1,11 @@
 View the raw text of this file, or the formatting will be messed up.
+
 To get started, run the following commands:
+
 aptitude update
+
 aptitude -y upgrade
+
 aptitude install -y build-essential python-dev python2.7-dev
 
 You also need to install pip. Look online for how to do this.
