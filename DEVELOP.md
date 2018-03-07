@@ -1,3 +1,4 @@
+View the raw text of this file, or the formatting will be messed up.
 To get started, run the following commands:
 aptitude update
 aptitude -y upgrade
