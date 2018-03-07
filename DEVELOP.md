@@ -36,6 +36,13 @@ run:
 pip install -r requirements.txt
 YOU NEED TO DO THIS THE FIRST TIME YOU START YOUR VIRTUALENV.
 
+# Getting Started
+
+Run the following:
+cp config.info dev_config.cfg
+
+Then edit dev_config.cfg and add appropriate values.
+
 # Development
 
 Run the following to run the app locally: python run.py
