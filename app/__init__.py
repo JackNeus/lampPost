@@ -16,3 +16,6 @@ CONFIG = app.config
 @app.errorhandler(404)
 def error(e):
     return render_template("404.html"), 404
+
+from app.mod_web.controllers import mod_web as web_module
+app.register_blueprint(web_module)

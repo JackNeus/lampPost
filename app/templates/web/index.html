@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<h1>WEBSITE</h1>
+{% if msg %}<h2>{{msg}}</h2>{% endif %}
+{% if form %}
+<form method="POST" action="/index" role="form">
+	{{ form.csrf_token }}
+	{{ render_field(form.name) }}
+	<button type="submit" name="submit">Enter Name</button>
+</form>
+{% endif %}
+{% endblock %}
