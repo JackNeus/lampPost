@@ -1,4 +1,4 @@
-View the raw text of this file, or the formatting will be messed up.
+# Installation 
 
 To get started, run the following commands:
 
@@ -35,3 +35,7 @@ Conversely, to update your virtual environment (install new dependencies),
 run:
 pip install -r requirements.txt
 YOU NEED TO DO THIS THE FIRST TIME YOU START YOUR VIRTUALENV.
+
+# Development
+
+Run the following to run the app locally: python run.py
