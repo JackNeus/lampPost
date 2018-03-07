@@ -12,3 +12,15 @@ def index():
 		msg = "Hello, "+name
 		return render_template("web/index.html", msg=msg)
 	return render_template("web/index.html", form=form)
+
+@mod_web.route('/spud', methods=['GET'])
+@mod_web.route('/spuds', methods=['GET'])
+@mod_web.route('/potato', methods=['GET'])
+def potato():
+	print("This is the server speaking!")
+	print(request.args)
+	if "msg" in request.args:
+		my_message = request.args["msg"]
+	else:
+		my_message = None
+	return render_template("web/potato.html", my_message=my_message)

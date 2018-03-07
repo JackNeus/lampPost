@@ -1,0 +1,18 @@
+<html>
+	<head>
+		<title>Potato Page</title>
+	</head>
+<body>
+	<h1>Hello, Potato!</h1>
+	<img src="../../static/potato.jpg" style="border-style:dashed;"></img>
+	<h5>Hello, Spud!</h5>
+	<h4>Your message: </h4>
+	<p>
+		{% if my_message %}
+		{{ my_message }}
+		{% else %}
+		No message for me! :(
+		{% endif %}
+	</p>
+</body>
+</html>
