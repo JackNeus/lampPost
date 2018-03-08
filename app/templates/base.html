@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 {% macro render_field(field, disabled = false, char_limit = None) %}
   <div class="form-elt {% if field.errors %}error{% endif %}">
     {% if field.type == "TextAreaField" %}
@@ -16,10 +18,13 @@
 {% endmacro %}
 
 <html>
-<head>
 
+<head>
 </head>
+
 <body>
+  <h1> Shared Header </h1>
   {% block content %}{% endblock %}
 </body>
+
 </html>

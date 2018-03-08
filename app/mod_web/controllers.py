@@ -24,3 +24,7 @@ def potato():
 	else:
 		my_message = None
 	return render_template("web/potato.html", my_message=my_message)
+
+@mod_web.route('/carrot')
+def carrot():
+	return render_template("web/carrot.html")
