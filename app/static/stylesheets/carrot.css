@@ -7,9 +7,13 @@ html, body
     height: 100%;
 }
 
+#resultTitle {
+	font-weight: bold;
+}
+
 .container-fluid {
-	padding-left: 8vh;
-	padding-right: 8vh;
+	padding-left: 6vw;
+	padding-right: 6vw;
 }
 
 #site-description {
@@ -17,16 +21,23 @@ html, body
 	color: #ee7622;
 }
 
-#resultView {
-  height: 7vh;
+.smallSearchResult {
+  height: 10vh;
   border: ridge;
+}
+
+.eventView {
+  height: 80vh;
+  overflow: scroll;
   text-align: center;
 }
 
-#eventView {
-  height: 90vh;
-  overflow: scroll;
-  text-align: center;
+#eventView1 {
+	display: none;
+}
+
+#eventView2 {
+	display: none;
 }
 
 body {
