@@ -2,22 +2,34 @@ h1 {
     text-align: center;
 }
 
+html, body
+{
+    height: 100%;
+}
+
+.container-fluid {
+	padding-left: 8vh;
+	padding-right: 8vh;
+}
+
 #site-description {
 	text-align: center;
 	color: #ee7622;
 }
 
 #resultView {
-	height: 100%;
-	color:red;
-	overflow: auto;
+  height: 7vh;
+  border: ridge;
+  text-align: center;
 }
 
 #eventView {
-	height: 100%;
-	overflow: auto;
+  height: 90vh;
+  overflow: scroll;
+  text-align: center;
 }
 
 body {
 	background-color: #deadbe;
 }
+
