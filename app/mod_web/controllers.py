@@ -28,3 +28,11 @@ def potato():
 @mod_web.route('/carrot')
 def carrot():
 	return render_template("web/carrot.html")
+	
+@mod_web.route('/puppies', methods=['GET', 'POST'])
+def puppies():
+	if request.method == 'POST' and "dog" in request.form:
+		dog=request.form['dog']
+		return render_template("web/puppies.html", dog=dog)
+	else:
+		return render_template("web/puppies.html")

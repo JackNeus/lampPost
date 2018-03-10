@@ -1,0 +1,113 @@
+<!DOCTYPE html> 
+<html lang="en">
+
+<script>
+	// Show breed of dog
+	function show(dog) {
+		document.getElementById("dog-type").innerHTML = document.getElementById(dog).innerHTML;
+	}
+	// Highlight picture of favorite dog
+	function show_favorite(dog) {
+	
+		if (dog == "Siberian Husky") fav_pic = "siberian-husky-pic";
+		else if (dog == "Black Lab") fav_pic = "black-lab-pic"
+		else if (dog == "Chocolate Lab") fav_pic = "chocolate-lab-pic";
+		else fav_pic = "golden-retriever-pic";
+		
+		document.getElementById(fav_pic).style.border = "2px double cyan";
+	}
+</script>
+
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="../../static/stylesheets/puppies.css?v=1.79">
+    <title>Puppies</title>
+
+</head>
+
+
+<!-- Create page with three columns -->
+<div class="container-fluid">
+	
+	<body>
+		<h1 id="header">Hello, Puppies!</h1>
+	</body>
+	
+	<!-- First colum: two clickable dog pictures -->
+	<div class="row">
+		<div class="col-md-3" style="background-color:blue;">
+			<div id="golden-retriever-pic">
+			<input type="image" class="img-responsive" onclick="show('golden-retriever')"
+			src="../../static/puppies/golden-retriever.jpg" alt="Golden Retriever"></input>
+			</div>
+			<input id="chocolate-lab-pic" type="image" class="img-responsive" onclick="show('chocolate-lab')"
+			src="../../static/puppies/chocolate-lab.jpg" alt="Chocolate Lab"></input>
+		</div>
+		
+		<!-- Second colum: form and post -->
+		<div class="col-md-6" style="background-color:pink;">
+			
+			<!-- Simple form to pick favorite dog -->
+			<form method="post" id="dog-form" padding="10%">
+				<div class="form-group">
+					<label for="dog">Favorite Dog:</label>
+					<select id="dog-select" name="dog">
+						<option disabled selected value>Select your favorite dog!</option>
+						<option value="Siberian Husky">Siberian Husky</option>
+						<option value="Chocolate Lab">Chocolate Lab</option>
+						<option value="Golden Retriever">Golden Retriever</option>
+						<option value="Black Lab">Black Lab</option>
+					</select>
+				</div>
+				<div class="form-group"> 
+					<button type="submit">Submit</button>
+				</div>
+			</form>
+			
+			<!-- Print favorite dog on page -->
+			<p id='favorite' class="favorite-dog">
+				{% if dog %}
+				Your favorite dog is a {{ dog }}!
+				{% endif %}
+			</p>
+			
+		</div>
+		
+		<!-- Third colum: two clickable dog pictures -->
+		<div class="col-md-3" style="background-color:blue;">	
+			<input id="black-lab-pic" type="image" onclick="show('black-lab')" class="img-responsive"
+			src="../../static/puppies/black-lab-puppy-daisies.jpg" alt="Black Lab"></input>
+			<input id="siberian-husky-pic" type="image" class="img-responsive" onclick="show('siberian-husky')"
+			src="../../static/puppies/siberian-husky.jpg" alt="Siberian Husky"></input>	
+		</div>
+		
+		<!-- Invoke javascript to highlight favorite dog -->
+		{% if dog %}
+			<script> show_favorite("{{ dog }}"); </script>
+		{% endif %}
+		
+	</div>
+	
+	<!-- Second row: shows dog breed when picture is clicked -->
+	<div class="row">
+		<div class="col-md-12">
+			<p class="puppy-name" >(Click on a dog to find out its breed!)</p>
+			<p class="puppy-name" id="dog-type"></p>
+			<div class="hidden">
+				<p id="black-lab">That's a Black Lab!</p>
+				<p id="chocolate-lab">That's is a Chocolate Lab!</p>
+				<p id="siberian-husky">That's a Siberian Husky!</p>
+			{	<p id="golden-retriever">That's a Golden Retriever!</p>
+			</div>
+		</div>
+	</div>	
+</div>
+
+</htm4
