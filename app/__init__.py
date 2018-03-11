@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from mongoengine import register_connection
 
 class FlaskApp(Flask):
     def __init__(self):
@@ -13,9 +14,22 @@ except FileNotFoundError:
 
 CONFIG = app.config
 
+if False:
+    # MongoLab
+    register_connection (
+        alias = "default", 
+        name = CONFIG["DB_NAME"],
+        username = CONFIG["DB_USERNAME"],
+        password = CONFIG["DB_PASSWORD"],
+        host = CONFIG["DB_HOST"],
+        port = CONFIG["DB_PORT"]
+    )
+
 @app.errorhandler(404)
 def error(e):
     return render_template("404.html"), 404
 
 from app.mod_web.controllers import mod_web as web_module
 app.register_blueprint(web_module)
+from app.mod_api.controllers import mod_api as api_module
+app.register_blueprint(api_module)
