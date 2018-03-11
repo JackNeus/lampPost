@@ -1,6 +1,8 @@
 from flask import Blueprint, request, render_template
+
 from app.mod_web.forms import NameForm
 from app.mod_web.models import User
+from .models import *
 
 mod_web = Blueprint('web', __name__, url_prefix="")
 
