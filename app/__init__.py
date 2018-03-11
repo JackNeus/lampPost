@@ -14,15 +14,16 @@ except FileNotFoundError:
 
 CONFIG = app.config
 
-# MongoLab
-register_connection (
-    alias = "default", 
-    name = CONFIG["DB_NAME"],
-    username = CONFIG["DB_USERNAME"],
-    password = CONFIG["DB_PASSWORD"],
-    host = CONFIG["DB_HOST"],
-    port = CONFIG["DB_PORT"]
-)
+if False:
+    # MongoLab
+    register_connection (
+        alias = "default", 
+        name = CONFIG["DB_NAME"],
+        username = CONFIG["DB_USERNAME"],
+        password = CONFIG["DB_PASSWORD"],
+        host = CONFIG["DB_HOST"],
+        port = CONFIG["DB_PORT"]
+    )
 
 @app.errorhandler(404)
 def error(e):
