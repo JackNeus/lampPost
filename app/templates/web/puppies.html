@@ -42,20 +42,22 @@
 	
 	<!-- First colum: two clickable dog pictures -->
 	<div class="row">
-		<div class="col-md-3" style="background-color:blue;">
-			<div id="golden-retriever-pic">
-			<input type="image" class="img-responsive" onclick="show('golden-retriever')"
+		<div class="col-lg-2"></div>
+		<div class="col-lg-2" style="background-color:blue;">
+			<input id="golden-retriever-pic" type="image" onclick="show('golden-retriever')"
+			position="fixed" style="width:100%;"
 			src="../../static/puppies/golden-retriever.jpg" alt="Golden Retriever"></input>
-			</div>
-			<input id="chocolate-lab-pic" type="image" class="img-responsive" onclick="show('chocolate-lab')"
+			
+			<input id="chocolate-lab-pic" type="image" position="fixed" 
+			onclick="show('chocolate-lab')"  style="width:100%;"
 			src="../../static/puppies/chocolate-lab.jpg" alt="Chocolate Lab"></input>
 		</div>
 		
 		<!-- Second colum: form and post -->
-		<div class="col-md-6" style="background-color:pink;">
+		<div class="col-lg-4" style="background-color:pink;">
 			
 			<!-- Simple form to pick favorite dog -->
-			<form method="post" id="dog-form" padding="10%">
+			<form method="post" id="dog-form">
 				<div class="form-group">
 					<label for="dog">Favorite Dog:</label>
 					<select id="dog-select" name="dog">
@@ -81,12 +83,16 @@
 		</div>
 		
 		<!-- Third colum: two clickable dog pictures -->
-		<div class="col-md-3" style="background-color:blue;">	
-			<input id="black-lab-pic" type="image" onclick="show('black-lab')" class="img-responsive"
+		<div class="col-lg-2" style="background-color:blue;">	
+			<input id="black-lab-pic" type="image" onclick="show('black-lab')" style="width:100%;"
 			src="../../static/puppies/black-lab-puppy-daisies.jpg" alt="Black Lab"></input>
-			<input id="siberian-husky-pic" type="image" class="img-responsive" onclick="show('siberian-husky')"
+			
+			<input id="siberian-husky-pic" type="image" style="width:100%;" 
+			onclick="show('siberian-husky')"
 			src="../../static/puppies/siberian-husky.jpg" alt="Siberian Husky"></input>	
 		</div>
+		
+		<div class="col-lg-2"></div>
 		
 		<!-- Invoke javascript to highlight favorite dog -->
 		{% if dog %}
@@ -102,7 +108,7 @@
 			<p class="puppy-name" id="dog-type"></p>
 			<div class="hidden">
 				<p id="black-lab">That's a Black Lab!</p>
-				<p id="chocolate-lab">That's is a Chocolate Lab!</p>
+				<p id="chocolate-lab">That's a Chocolate Lab!</p>
 				<p id="siberian-husky">That's a Siberian Husky!</p>
 			{	<p id="golden-retriever">That's a Golden Retriever!</p>
 			</div>
