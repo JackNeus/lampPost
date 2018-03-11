@@ -35,6 +35,25 @@ def carrot():
 def puppies():
 	if request.method == 'POST' and "dog" in request.form:
 		dog=request.form['dog']
-		return render_template("web/puppies.html", dog=dog)
+		with open('app/mod_web/votes.txt', 'r') as fid:
+			line = fid.readline()
+			name=[]
+			num=[]
+			i = 0
+			while line:
+				votes = line.split(":")
+				print(votes)
+				name.append(votes[0])
+				num.append(int(votes[1]))
+				if (name[i] == dog):
+					num[i] += 1
+				line = fid.readline()
+				i += 1
+				
+		with open('app/mod_web/votes.txt', 'w') as fid:
+			for j in range(0, i):
+				fid.write(name[j] + ":" + str(num[j]) +'\n')
+				
+		return render_template("web/puppies.html", dog=dog, votes1=num[0], votes2=num[1], votes3=num[2], votes4=num[3])
 	else:
 		return render_template("web/puppies.html")

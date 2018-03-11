@@ -1,4 +1,4 @@
-Siberian Husky:24
-Black Lab:16
-Chocolate Lab:36
-Golden Retriever:26
+Siberian Husky:1
+Black Lab:1
+Chocolate Lab:2
+Golden Retriever:0

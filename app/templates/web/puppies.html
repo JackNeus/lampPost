@@ -16,6 +16,20 @@
 		
 		document.getElementById(fav_pic).style.border = "2px double cyan";
 	}
+	// Sort vote results and display them to page
+	function sort(v1, v2, v3, v4) {
+		data = [{'dog':"Siberian Husky", 'votes':v1}, {'dog':"Black Lab", 'votes':v2}, 
+			  {'dog':"Chocolate Lab", 'votes':v3}, {'dog':"Golden Retriever", 'votes':v1}]
+		console.log(data);
+		data.sort(function(a, b) {
+			return a.votes - b.votes; });
+			
+		ranks = ["first", "second", "third", "fourth"];
+		for (var i = 0; i < data.length; i++) {
+			document.getElementById(ranks[i]).innerHTML = data[i].dog + ": " + data[i].votes;
+		}
+		
+	}
 </script>
 
 <head>
@@ -27,7 +41,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="../../static/stylesheets/puppies.css?v=1.79">
+    <link rel="stylesheet" type="text/css" href="../../static/stylesheets/puppies.css?v=1.82">
     <title>Puppies</title>
 
 </head>
@@ -79,6 +93,18 @@
 				Your favorite dog is a {{ dog }}!
 				{% endif %}
 			</p>
+			
+			<div class="votes">
+			{% if dog %}
+				<h4>Current Votes:</h4>
+				<p id="first"></p>
+				<p id="second"></p>
+				<p id="third"></p>
+				<p id="fourth"></p>
+				<script> sort("{{ votes1 }}", "{{ votes2 }}", "{{ votes3 }}", "{{ votes4 }}"); 
+				</script>
+			{% endif %}
+		</div>
 			
 		</div>
 		

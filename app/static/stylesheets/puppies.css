@@ -9,7 +9,10 @@ img, input {
     height: auto;
     width: auto;
     max-width: 100%;
-    padding: 5% 0%
+    margin: 5% 0%
+}
+input[type=image]:hover {
+	border: 0.25em solid silver;
 }
 p.puppy-name {
 	text-align: center;
@@ -25,6 +28,12 @@ p.favorite-dog {
 	text-align: center;
 	font-size: 25px;
 	color: teal;
+}
+
+div.votes, p.votes {
+	background-color: #4CAF50;
+	color: white;
+	text-align: center;
 }
 
 label {
@@ -51,7 +60,11 @@ button[type=submit] {
     cursor: pointer;
 }
 
+button[type=submit]:hover {
+	background-color: #2C8F30;
+}
 
-body {
+
+html, body {
 	background-color: #00aaff;
 }
