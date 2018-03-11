@@ -49,6 +49,14 @@ html, body
 	color: white;
 }
 
+.nav-item {
+	padding-left: 1vw;
+	padding-right: 1vw;
+}
+.nav-link {
+	color: white;
+}
+
 .menuTitle {
 	font:;
 }
