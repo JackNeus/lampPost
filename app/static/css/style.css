@@ -17,6 +17,9 @@ html, body {
     padding-left: 0vw;
     padding-right: 2vw; }
 
+.debug-data {
+  color: red; }
+
 #searchBox {
   padding-top: 2vh; }
 
