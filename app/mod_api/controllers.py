@@ -21,6 +21,7 @@ def add_event(title):
 		new_event = EventEntry(
 			title=title, 
 			creator="admin",
+			location="Princeton University",
 			start_datetime=datetime.now(),
 			end_datetime=datetime.now(),
 			description="This is an event titled %s." % title).save()

@@ -5,6 +5,7 @@ class EventEntry(Document):
 	title = StringField(required = True)
 	creator = StringField(required = True)
 
+	location = StringField(required = True)
 	start_datetime = DateTimeField(required = True)
 	end_datetime = DateTimeField(required = True)
 

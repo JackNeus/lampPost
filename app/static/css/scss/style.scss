@@ -53,10 +53,26 @@ html, body {
 				}
 			}	
 		}
-		.eventView {
-		  height: 85vh;
-		  overflow: scroll;
+		.event-view {
+		  height: 60vh;
+		  overflow: hidden;
+		  border: ridge;
+		  background-color: #7FDBFF;
+		  margin: 2vh 2em;
 		  display: none;
+			
+			.event-result-title {
+				font-size: 40px;
+				color: white;
+				text-align: center;
+				font-weight: bold;
+			}
+			.event-result-info {
+				width: 100%;
+				font-size: 20px;
+				color: white;
+				margin: 1em 0.5em;
+			}
 		}
 	}
 }
