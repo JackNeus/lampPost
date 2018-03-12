@@ -1,6 +1,6 @@
-[{"title": "AI Night", "group": "Outdoor Action", "location": "OA Wall",
-"time":	"10:00pm-12:00am", "likes": "100", "photo": "AI-night.jpg"}, 
-{"title": "Dance Show", "group": "Dance", "location": "Frist",
-"time":	"8:00pm-10:00pm", "likes": "90", "photo":""},
-{"title": "Theater Performance", "group": "Triangle Show", "location": "McCarter",
-"time":	"8:00pm-10:00pm", "likes": "80", "photo":""}]
+[{"title": "AI Night", "creator": "Outdoor Action", "location": "OA Wall",
+"start_datetime":	"10:00pm-12:00am", "likes": "100", "photo": "AI-night.jpg"}, 
+{"title": "Dance Show", "creator": "Dance", "location": "Frist",
+"start_datetime":	"8:00pm-10:00pm", "likes": "90", "photo":""},
+{"title": "Theater Performance", "creator": "Triangle Show", "location": "McCarter",
+"start_datetime":	"8:00pm-10:00pm", "likes": "80", "photo":""}]
