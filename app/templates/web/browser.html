@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+<script>
+function getNum(searchId) {
+	return searchId.split("smallSearchResult").pop();
+}
+
+// don't run jQuery until page is loaded
+$(document).ready(function(){
+    $(".smallSearchResult").click( function(){
+    	$(".smallSearchResult").removeClass("selected");
+    	$(this).addClass("selected");
+		$(".eventView").hide();
+		console.log($(this).attr("id"));
+		$("#eventView"+ getNum( $(this).attr("id") )).show();
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  	<div class="row" id = "bigRow">
+	   <div class="col-md-4" id = "leftCol">
+	   		<form>
+				<div class="form-group" id="searchBox">
+			    <input class="form-control" placeholder="Search for events here!"> </input>
+				</div>
+			</form>
+
+	   		<div class="smallSearchResult" id="smallSearchResult1">  
+	   			<div class="resultContents">
+	   				<p id = "resultTitle"> Event Title. </p>
+	   				Location, Time, Likes 
+	   			</div>
+	    	</div>
+
+	    	<div class="smallSearchResult" id="smallSearchResult2">  
+	    		<div class="resultContents">
+	   				<p id = "resultTitle"> Event Title. </p>
+	   				Location, Time, Likes 
+	   			</div>
+	    	</div>
+		</div>
+	 	<div class="col-md-8" id = "rightCol"> 
+	 		<div class = "eventView" id = "eventView1" s> 
+		   		<p id = "Description1"> 
+
+				   The carrot (Daucus carota subsp. sativus) is a root vegetable, usually orange in colour, though purple, black, red, white, and yellow cultivars exist.[1] Carrots are a domesticated form of the wild carrot, Daucus carota, native to Europe and southwestern Asia. The plant probably originated in Persia and was originally cultivated for its leaves and seeds. The most commonly eaten part of the plant is the taproot, although the greens are sometimes eaten as well. The domestic carrot has been selectively bred for its greatly enlarged, more palatable, less woody-textured taproot.
+
+					The carrot is a biennial plant in the umbellifer family Apiaceae. At first, it grows a rosette of leaves while building up the enlarged taproot. Fast-growing cultivars mature within three months (90 days) of sowing the seed, while slower-maturing cultivars are harvested four months later (120 days). The roots contain high quantities of alpha- and beta-carotene, and are a good source of vitamin K and vitamin B6, but the belief that eating carrots improves night vision is a myth put forward by the British in World War II to mislead the enemy about their military capabilities.
+
+					A depiction labeled "garden" carrot from the Juliana Anicia Codex, a 6th-century AD Constantinopolitan copy of Dioscorides' 1st-century Greek pharmacopoeia. The facing page states that "the root can be cooked and eaten."[7]
+					When they were first cultivated, carrots were grown for their aromatic leaves and seeds rather than their roots. Carrot seeds have been found in Switzerland and Southern Germany dating back to 2000–3000 BC.[8] Some close relatives of the carrot are still grown for their leaves and seeds, such as parsley, cilantro, coriander, fennel, anise, dill and cumin. The first mention of the root in classical sources is from the 1st century;[9] the Romans ate a root vegetable called pastinaca,[10] which may have been either the carrot or the closely related parsnip.[11][12]
+
+					The plant is depicted and described in the Eastern Roman Juliana Anicia Codex, a 6th-century AD Constantinopolitan copy of the Greek physician Dioscorides' 1st-century pharmacopoeia of herbs and medicines, De Materia Medica. Three different types of carrots are depicted, and the text states that "the root can be cooked and eaten".[13]
+
+
+					Carrots in a range of colours
+					The plant was introduced into Spain by the Moors in the 8th century.[14] In the 10th century, roots from West Asia, India and Europe were purple.[15] The modern carrot originated in Afghanistan at about this time.[9] The 11th-century Jewish scholar Simeon Seth describes both red and yellow carrots,[16] as does the 12th-century Arab-Andalusian agriculturist, Ibn al-'Awwam.[17] Cultivated carrots appeared in China in the 14th century, and in Japan in the 18th century.[9]
+
+					Orange-coloured carrots appeared in the Netherlands in the 17th century,[18] which has been related to the fact that the Dutch flag at the time included orange.[15] These modern carrots were described by the English antiquary John Aubrey (1626–1697): "Carrots were first sown at Beckington in Somersetshire. Some very old Man there [in 1668] did remember their first bringing hither."[19] European settlers introduced the carrot to colonial America in the 17th century.[20]
+
+					Outwardly purple carrots, still orange on the inside, were sold in British stores beginning in 2002.[15]
+
+					Description
+					Daucus carota is a biennial plant. In the first year, its rosette of leaves produces large amounts of sugars, which are stored in the taproot to provide energy for the plant to flower in the second year.
+
+
+					Seedlings shortly after germination
+					Soon after germination, carrot seedlings show a distinct demarcation between taproot and stem: the stem is thicker and lacks lateral roots. At the upper end of the stem is the seed leaf. The first true leaf appears about 10–15 days after germination. Subsequent leaves are alternate (with a single leaf attached to a node), spirally arranged, and pinnately compound, with leaf bases sheathing the stem. As the plant grows, the bases of the seed leaves, near the taproot, are pushed apart. The stem, located just above the ground, is compressed and the internodes are not distinct. When the seed stalk elongates for flowering, the tip of the stem narrows and becomes pointed, and the stem extends upward to become a highly branched inflorescence up to 60–200 cm (20–80 in) tall.[21]
+
+					Most of the taproot consists of a pulpy outer cortex (phloem) and an inner core (xylem). High-quality carrots have a large proportion of cortex compared to core. Although a completely xylem-free carrot is not possible, some cultivars have small and deeply pigmented cores; the taproot can appear to lack a core when the colour of the cortex and core are similar in intensity. Taproots are typically long and conical, although cylindrical and nearly-spherical cultivars are available. The root diameter can range from 1 cm (0.4 in) to as much as 10 cm (4 in) at the widest part. The root length ranges from 5 to 50 cm (2 to 20 in), although most are between 10 and 25 cm (4 and 10 in).[21]
+
+				</p>
+			</div>
+
+			<div class = "eventView" id = "eventView2"> 
+				<p id = "Description2"> 
+
+					History
+					Both written history and molecular genetic studies indicate that the domestic carrot has a single origin in Central Asia.[4] Its wild ancestors probably originated in Persia (regions of which are now Iran and Afghanistan), which remains the centre of diversity for the wild carrot Daucus carota. A naturally occurring subspecies of the wild carrot was presumably bred selectively over the centuries to reduce bitterness, increase sweetness and minimise the woody core; this process produced the familiar garden vegetable.[5][6]
+
+
+					A depiction labeled "garden" carrot from the Juliana Anicia Codex, a 6th-century AD Constantinopolitan copy of Dioscorides' 1st-century Greek pharmacopoeia. The facing page states that "the root can be cooked and eaten."[7]
+					When they were first cultivated, carrots were grown for their aromatic leaves and seeds rather than their roots. Carrot seeds have been found in Switzerland and Southern Germany dating back to 2000–3000 BC.[8] Some close relatives of the carrot are still grown for their leaves and seeds, such as parsley, cilantro, coriander, fennel, anise, dill and cumin. The first mention of the root in classical sources is from the 1st century;[9] the Romans ate a root vegetable called pastinaca,[10] which may have been either the carrot or the closely related parsnip.[11][12]
+
+					The plant is depicted and described in the Eastern Roman Juliana Anicia Codex, a 6th-century AD Constantinopolitan copy of the Greek physician Dioscorides' 1st-century pharmacopoeia of herbs and medicines, De Materia Medica. Three different types of carrots are depicted, and the text states that "the root can be cooked and eaten".[13]
+
+
+					Carrots in a range of colours
+					The plant was introduced into Spain by the Moors in the 8th century.[14] In the 10th century, roots from West Asia, India and Europe were purple.[15] The modern carrot originated in Afghanistan at about this time.[9] The 11th-century Jewish scholar Simeon Seth describes both red and yellow carrots,[16] as does the 12th-century Arab-Andalusian agriculturist, Ibn al-'Awwam.[17] Cultivated carrots appeared in China in the 14th century, and in Japan in the 18th century.[9]
+
+					Orange-coloured carrots appeared in the Netherlands in the 17th century,[18] which has been related to the fact that the Dutch flag at the time included orange.[15] These modern carrots were described by the English antiquary John Aubrey (1626–1697): "Carrots were first sown at Beckington in Somersetshire. Some very old Man there [in 1668] did remember their first bringing hither."[19] European settlers introduced the carrot to colonial America in the 17th century.[20]
+
+					Outwardly purple carrots, still orange on the inside, were sold in British stores beginning in 2002.[15]
+
+					Description
+					Daucus carota is a biennial plant. In the first year, its rosette of leaves produces large amounts of sugars, which are stored in the taproot to provide energy for the plant to flower in the second year.
+
+
+					Seedlings shortly after germination
+					Soon after germination, carrot seedlings show a distinct demarcation between taproot and stem: the stem is thicker and lacks lateral roots. At the upper end of the stem is the seed leaf. The first true leaf appears about 10–15 days after germination. Subsequent leaves are alternate (with a single leaf attached to a node), spirally arranged, and pinnately compound, with leaf bases sheathing the stem. As the plant grows, the bases of the seed leaves, near the taproot, are pushed apart. The stem, located just above the ground, is compressed and the internodes are not distinct. When the seed stalk elongates for flowering, the tip of the stem narrows and becomes pointed, and the stem extends upward to become a highly branched inflorescence up to 60–200 cm (20–80 in) tall.[21]
+
+					Most of the taproot consists of a pulpy outer cortex (phloem) and an inner core (xylem). High-quality carrots have a large proportion of cortex compared to core. Although a completely xylem-free carrot is not possible, some cultivars have small and deeply pigmented cores; the taproot can appear to lack a core when the colour of the cortex and core are similar in intensity. Taproots are typically long and conical, although cylindrical and nearly-spherical cultivars are available. The root diameter can range from 1 cm (0.4 in) to as much as 10 cm (4 in) at the widest part. The root length ranges from 5 to 50 cm (2 to 20 in), although most are between 10 and 25 cm (4 and 10 in).[21]
+
+				</p>
+			</div>
+		</div>	
+	</div>
+</div>
+{% endblock %}

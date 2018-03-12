@@ -1,0 +1,6 @@
+[{"title": "AI Night", "group": "Outdoor Action", "location": "OA Wall",
+"time":	"10:00pm-12:00am", "likes": "100", "photo": "../../static/AI-night.jpg"}, 
+{"title": "Dance Show", "group": "Dance", "location": "Frist",
+"time":	"8:00pm-10:00pm", "likes": "90", "photo":""},
+{"title": "Theater Performance", "group": "Triangle Show", "location": "McCarter",
+"time":	"8:00pm-10:00pm", "likes": "80", "photo":""}]

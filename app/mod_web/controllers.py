@@ -31,7 +31,7 @@ def potato():
 ###############################################################################################
 @mod_web.route('/carrot', methods=['GET', 'POST'])
 def carrot():
-	with open('app/static/events.json', 'r') as fid:
+	with open('app/static/carrot/events.json', 'r') as fid:
 		data = json.load(fid)
 	if data:
 		return render_template("web/carrot.html", data=data)
@@ -39,6 +39,11 @@ def carrot():
 		return render_template("web/carrot.html")
 	
 ################################################################################################
+
+@mod_web.route('/browser')
+def browser():
+	return render_template("web/browser.html")
+
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():
 	if request.method == 'POST' and "dog" in request.form:

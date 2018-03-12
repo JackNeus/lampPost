@@ -2,8 +2,6 @@
 <html lang="en">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-
-
 </script>
 
 <script>
@@ -63,17 +61,14 @@ $(document).ready(function(){
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-	<link rel="stylesheet" type="text/css" href="../../static/stylesheets/carrot.css?v=1">
+	<link rel="stylesheet" type="text/css" href="../../static/css/carrot.css?v=2">
 	<title>LampPost</title>
 
 </head>
-
-
 <body>
-
 	<!-- A grey horizontal navbar that becomes vertical on small screens -->
-
 	<nav class="navbar navbar-expand-sm navbar-default">
+
   			<span class="mr-auto navbar-brand mb-0 h1"> 
   				LampPost 
   			</span>
@@ -90,16 +85,11 @@ $(document).ready(function(){
 						<a class="nav-link" href="#"> Help </a>
 		    		</li>
 		    	</ul>
-
 	</nav>
 
-
 	<div class="container-fluid">
-
-		
-
-
 	  	<div class="row" id = "bigRow">
+
 			   <div class="col-md-4" id = "leftCol">
 
 			   		<form>
@@ -110,8 +100,7 @@ $(document).ready(function(){
 
 				
 					<!-- Fills in with "search" results from events.json -->
-					<div id="searches">
-			    		</div>
+					<div id="searches"></div>
 			    	
 			    	</div>
 
@@ -127,7 +116,6 @@ $(document).ready(function(){
 				   			<p id="eventLikes"></p>
 				   		</div>
 					</div>
-
 				</div>
 				
 				<!-- Update page with data from events.json -->
@@ -136,12 +124,8 @@ $(document).ready(function(){
 					</script>
 				{% endif %}
 
-
 		</div>
-
 	</div>
-
 </body>
-
 
 </html>

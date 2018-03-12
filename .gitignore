@@ -2,3 +2,7 @@
 *.pyc
 *.cfg
 env/*
+
+# Sass
+.sass-cache/
+*.css.map
