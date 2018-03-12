@@ -9,6 +9,7 @@ img, input {
     height: auto;
     width: auto;
     max-width: 100%;
+    border: 0.25em solid transparent;
     margin: 5% 0%
 }
 input[type=image]:hover {

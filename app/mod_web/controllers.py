@@ -3,6 +3,7 @@ from flask import Blueprint, request, render_template
 from app.mod_web.forms import NameForm
 from app.mod_web.models import User
 from .models import *
+import json
 
 mod_web = Blueprint('web', __name__, url_prefix="")
 
@@ -27,10 +28,17 @@ def potato():
 		my_message = None
 	return render_template("web/potato.html", my_message=my_message)
 
-@mod_web.route('/carrot')
+###############################################################################################
+@mod_web.route('/carrot', methods=['GET', 'POST'])
 def carrot():
-	return render_template("web/carrot.html")
+	with open('app/static/events.json', 'r') as fid:
+		data = json.load(fid)
+	if data:
+		return render_template("web/carrot.html", data=data)
+	else:
+		return render_template("web/carrot.html")
 	
+################################################################################################
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():
 	if request.method == 'POST' and "dog" in request.form:
@@ -57,3 +65,9 @@ def puppies():
 		return render_template("web/puppies.html", dog=dog, votes1=num[0], votes2=num[1], votes3=num[2], votes4=num[3])
 	else:
 		return render_template("web/puppies.html")
+		
+@mod_web.route('/hello', methods=['GET', 'POST'])
+def hello():
+	return render_template("web/hello.html")
+
+

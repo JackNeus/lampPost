@@ -27,17 +27,41 @@ html, body
 	padding-top: 2vh;
 }
 
+img {
+	float: right;
+	width: 40%; 
+	margin: 0em 1em;
+	height: auto;
+}
+
 .smallSearchResult {
   height: 10vh;
   border: ridge;
   cursor: pointer;
+  overflow: hidden;
   background-color:white;
 }
 
 .eventView {
-  height: 85vh;
-  overflow: scroll;
+  height: 60vh;
+  overflow: hidden;
+  border: ridge;
+  background-color: #7FDBFF;
+  margin: 2vh 2em;
   display: none;
+}
+
+.event-result-title {
+	font-size: 40px;
+	color: white;
+	text-align: center;
+	font-weight: bold;
+}
+.event-result-info {
+	width: 100%;
+	font-size: 20px;
+	color: white;
+	margin: 1em 0.5em;
 }
 
 .h1 {
