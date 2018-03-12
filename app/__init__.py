@@ -14,7 +14,7 @@ except FileNotFoundError:
 
 CONFIG = app.config
 
-if False:
+try:
     # MongoLab
     register_connection (
         alias = "default", 
@@ -24,6 +24,9 @@ if False:
         host = CONFIG["DB_HOST"],
         port = CONFIG["DB_PORT"]
     )
+except Exception:
+    print("Database was not configured.")
+    pass
 
 @app.errorhandler(404)
 def error(e):
