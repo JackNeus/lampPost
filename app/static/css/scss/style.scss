@@ -39,6 +39,10 @@ html, body {
 		 	border: ridge;
 		 	cursor: pointer;
 		 	background-color: white;
+		 	&.selected {
+    			color: white;
+    			background-color: #999;
+		 	}
 			.resultContents {
 				padding-left: 0.8vw;
 				padding-right: 0.8vw;

@@ -9,10 +9,8 @@ function getNum(searchId) {
 // don't run jQuery until page is loaded
 $(document).ready(function(){
     $(".smallSearchResult").click( function(){
-    	$(".smallSearchResult").css({"backgroundColor":"white"});
-    	$(".smallSearchResult").css({"color":"black"});
-    	$(this).css({"backgroundColor":"#555555"});
-    	$(this).css({"color":"white"});
+    	$(".smallSearchResult").removeClass("selected");
+    	$(this).addClass("selected");
 		$(".eventView").hide();
 		console.log($(this).attr("id"));
 		$("#eventView"+ getNum( $(this).attr("id") )).show();

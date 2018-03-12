@@ -23,6 +23,9 @@ html, body {
       border: ridge;
       cursor: pointer;
       background-color: white; }
+      html #bigRow .smallSearchResult.selected, body #bigRow .smallSearchResult.selected {
+        color: white;
+        background-color: #999; }
       html #bigRow .smallSearchResult .resultContents, body #bigRow .smallSearchResult .resultContents {
         padding-left: 0.8vw;
         padding-right: 0.8vw;
