@@ -25,7 +25,7 @@ try:
         port = CONFIG["DB_PORT"]
     )
 except Exception:
-    print("Database was not configured.")
+    print("Database could not be configured.")
     pass
 
 @app.errorhandler(404)
