@@ -2,6 +2,12 @@
 
 {% block scripts %}
 <script src="/static/js/browser.js"></script>
+{% if data %}
+<script>
+setData(JSON.parse('{{ data | tojson | safe}}'));
+$("#global-debug-msg").text("Page initialized with mock data. Search box will return actual data.");
+</script>
+{% endif %}
 {% endblock %}
 
 {% block content %}
