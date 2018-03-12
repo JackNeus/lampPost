@@ -30,7 +30,11 @@ def potato():
 @mod_web.route('/carrot')
 def carrot():
 	return render_template("web/carrot.html")
-	
+
+@mod_web.route('/browser')
+def browser():
+	return render_template("web/browser.html")
+
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():
 	if request.method == 'POST' and "dog" in request.form:
