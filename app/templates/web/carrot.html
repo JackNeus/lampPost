@@ -43,9 +43,9 @@ $(document).ready(function(){
     	$(".smallSearchResult").css({"color":"black"});
     	$(this).css({"backgroundColor":"#555555"});
     	$(this).css({"color":"white"});
-		$(".eventView").hide();
+		$(".event-view").hide();
 		setValues(getNum( $(this).attr("id")) - 1);
-		$("#eventView").show();
+		$("#event-view").show();
 	});
 });
 
@@ -106,7 +106,7 @@ $(document).ready(function(){
 
 				<!-- Fills in with event data from events.json -->
 			 	<div class="col-md-8" id = "rightCol"> 
-			 		<div class = "eventView" id = "eventView"> 
+			 		<div class = "event-view" id = "event-view"> 
 				   		<p class="event-result-title" id = "eventTitle"></p>
 				   		<div class = "event-result-info">
 				   			<div id="eventPhoto"></div>
