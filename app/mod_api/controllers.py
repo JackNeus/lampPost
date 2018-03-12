@@ -6,17 +6,20 @@ import re
 
 mod_api = Blueprint('api', __name__, url_prefix="/api")
 
+success_text = "Success"
+error_text = "Error"
+internal_error_text = "Internal error. Please contact a developer."
 def gen_response(status):
 	response = {"status": status}
 	return response
 
 def gen_data_response(data):
-	response = gen_response("Success")
+	response = gen_response(success_text)
 	response["data"] = data
 	return jsonify(data)
 
 def gen_error_response(error_msg):
-	response = gen_response("Error")
+	response = gen_response(error_text)
 	response["error_msg"] = error_msg
 	return jsonify(response)
 
@@ -48,7 +51,6 @@ def add_event_old(title):
 
 @mod_api.route("/event/add", methods=["PUT"])
 def add_event():
-	print(request.data)
 	if not request.is_json:
 		return gen_error_response("Request was not JSON.")
 	data = request.get_json()
@@ -58,7 +60,6 @@ def add_event():
 			return gen_error_response("Request was missing %s parameter." % field)
 	# Try to add new event
 	try:
-		print(json.dumps(data))
 		new_event = EventEntry.from_json(json.dumps(data))
 		new_event.save()
 		return gen_data_response({"id": str(new_event.id)})
@@ -69,3 +70,18 @@ def add_event():
 	except Exception as e:
 		return gen_error_response(str(e))
 	# Return id of newly added event.
+	
+@mod_api.route("/event/delete/<id>", methods=["DELETE"])
+def delete_event(id):
+	try:
+		event = EventEntry.objects(id=id)
+		if len(event) == 0:
+			return gen_error_response("No event with that id exists.")
+		if len(event) > 1:
+			# This cannot and should not ever happen.
+			return gen_error_response(internal_error_text);
+		# Delete event.
+		event[0].delete()
+		return gen_data_response(success_text)
+	except Exception as e:
+		return gen_error_response(str(e))
