@@ -40,13 +40,14 @@ def carrot():
 	
 ################################################################################################
 
+
+@mod_web.route('/')
+def home():
+	return render_template("web/home.html")
+
 @mod_web.route('/browser')
 def browser():
 	return render_template("web/browser.html")
-
-@mod_web.route('/main')
-def main():
-	return render_template("web/main.html")
 
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():
