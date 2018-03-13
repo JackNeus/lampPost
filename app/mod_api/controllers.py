@@ -26,7 +26,7 @@ def gen_error_response(error_msg):
 @mod_api.route("/event/<title>")
 def events(title):
 	try:
-		regex = re.compile(title)
+		regex = re.compile(title, re.IGNORECASE)
 		event_data = EventEntry.objects(title=regex)
 		event_data = [get_raw_event(event) for event in event_data]
 		return jsonify(event_data)

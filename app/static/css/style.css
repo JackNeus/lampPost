@@ -16,26 +16,51 @@ html, body {
   html #bigRow, body #bigRow {
     padding-left: 0vw;
     padding-right: 2vw; }
-    html #bigRow #searchBox, body #bigRow #searchBox {
-      padding-top: 2vh; }
-    html #bigRow .smallSearchResult, body #bigRow .smallSearchResult {
-      height: 10vh;
-      border: ridge;
-      cursor: pointer;
-      background-color: white; }
-      html #bigRow .smallSearchResult.selected, body #bigRow .smallSearchResult.selected {
-        color: white;
-        background-color: #999; }
-      html #bigRow .smallSearchResult .resultContents, body #bigRow .smallSearchResult .resultContents {
-        padding-left: 0.8vw;
-        padding-right: 0.8vw;
-        padding-top: 0.6vh;
-        padding-bottom: 0.6vh; }
-        html #bigRow .smallSearchResult .resultContents #resultTitle, body #bigRow .smallSearchResult .resultContents #resultTitle {
-          font-weight: bold; }
-    html #bigRow .eventView, body #bigRow .eventView {
-      height: 85vh;
-      overflow: scroll;
-      display: none; }
+
+.debug-data {
+  color: red; }
+
+#searchBox {
+  padding-top: 2vh; }
+
+.smallSearchResult {
+  height: 10vh;
+  border: ridge;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: white; }
+  .smallSearchResult.selected {
+    color: white;
+    background-color: #999; }
+  .smallSearchResult .resultContents {
+    padding-left: 0.8vw;
+    padding-right: 0.8vw;
+    padding-top: 0.6vh;
+    padding-bottom: 0.6vh; }
+    .smallSearchResult .resultContents #resultTitle {
+      font-weight: bold; }
+
+.event-view {
+  height: 80vh;
+  overflow: hidden;
+  background-color: white;
+  margin: 2vh 0vw;
+  display: none; }
+  .event-view .event-result-title {
+    font-family: serif;
+    font-size: 40px;
+    color: #000033;
+    text-align: center;
+    font-weight: bold; }
+  .event-view .event-result-info {
+    width: 100%;
+    font-size: 20px;
+    color: #000033;
+    margin: 1em 0.5em; }
+  .event-view img {
+    float: right;
+    width: 40%;
+    margin: 0em 1em;
+    height: auto; }
 
 /*# sourceMappingURL=style.css.map */

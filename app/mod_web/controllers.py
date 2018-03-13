@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template
-
+from app import CONFIG
 from app.mod_web.forms import NameForm
 from app.mod_web.models import User
 from .models import *
@@ -28,20 +28,15 @@ def potato():
 		my_message = None
 	return render_template("web/potato.html", my_message=my_message)
 
-###############################################################################################
-@mod_web.route('/carrot', methods=['GET', 'POST'])
-def carrot():
-	with open('app/static/carrot/events.json', 'r') as fid:
-		data = json.load(fid)
-	if data:
-		return render_template("web/carrot.html", data=data)
-	else:
-		return render_template("web/carrot.html")
-	
-################################################################################################
-
 @mod_web.route('/browser')
 def browser():
+	if "USE_MOCK_DATA" in CONFIG and CONFIG["USE_MOCK_DATA"]:
+		# Ignore USE_MOCK_DATA flag if not in DEBUG mode.
+		if CONFIG["DEBUG"]:
+			with open('app/static/mock_data/data.json', 'r') as f:
+				data = json.load(f)
+				return render_template("web/browser.html", data = data)
+			print("Error loading mock data.")
 	return render_template("web/browser.html")
 
 @mod_web.route('/main')
