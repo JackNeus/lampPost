@@ -59,23 +59,23 @@ html, body {
 }
 
 .event-view {
-  height: 60vh;
+  height: 80vh;
   overflow: hidden;
-  border: ridge;
-  background-color: #7FDBFF;
-  margin: 2vh 2em;
+  background-color: white;
+  margin: 2vh 0vw;
   display: none;
 	
 	.event-result-title {
+		font-family: serif;
 		font-size: 40px;
-		color: white;
+		color: $primary-color;
 		text-align: center;
 		font-weight: bold;
 	}
 	.event-result-info {
 		width: 100%;
 		font-size: 20px;
-		color: white;
+		color: $primary-color;
 		margin: 1em 0.5em;
 	}
 	img {

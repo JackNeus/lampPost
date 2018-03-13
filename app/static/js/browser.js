@@ -37,6 +37,7 @@ $(document).ready(function(){
 		document.getElementById("eventLocation").innerHTML = "Location: " + event_data[num].location;
 		document.getElementById("eventGroup").innerHTML = "Creator: " + event_data[num].creator;
 		document.getElementById("eventTime").innerHTML = "Time: " + event_data[num].start_datetime;
+		document.getElementById("eventDescription").innerHTML = "Description: " + event_data[num].description;
 	}
 
 	function fetchData(title) {
