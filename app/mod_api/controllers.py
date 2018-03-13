@@ -70,6 +70,18 @@ def add_event():
 	except Exception as e:
 		return gen_error_response(str(e))
 	# Return id of newly added event.
+
+@mod_api.route("/event/get/<id>", methods=["PUT"])
+def get_event(id):
+	try:
+		event = EventEntry.objects(id=id)
+		if len(event) == 0:
+			return gen_error_response("No event with that id exists.")
+		if len(event) > 1:
+			# More than 1 event returned for the given ID, which is very bad
+			return gen_error_response(internal_error_text)
+	except Exception as e:
+		return gen_error_response(str(e))
 	
 @mod_api.route("/event/delete/<id>", methods=["DELETE"])
 def delete_event(id):
@@ -79,7 +91,7 @@ def delete_event(id):
 			return gen_error_response("No event with that id exists.")
 		if len(event) > 1:
 			# This cannot and should not ever happen.
-			return gen_error_response(internal_error_text);
+			return gen_error_response(internal_error_text)
 		# Delete event.
 		event[0].delete()
 		return gen_data_response(success_text)
