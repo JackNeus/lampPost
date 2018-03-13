@@ -80,9 +80,9 @@ def get_event(id):
 		if len(event) > 1:
 			# More than 1 event returned for the given ID, which is very bad
 			return gen_error_response(internal_error_text)
+		return jsonify(get_raw_event(event[0]))
 	except Exception as e:
 		return gen_error_response(str(e))
-	return jsonify(get_raw_event(event[0]))
 	
 @mod_api.route("/event/delete/<id>", methods=["DELETE"])
 def delete_event(id):
