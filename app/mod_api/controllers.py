@@ -83,7 +83,7 @@ def get_event(id):
 		return jsonify(get_raw_event(event[0]))
 	except Exception as e:
 		return gen_error_response(str(e))
-	
+
 @mod_api.route("/event/delete/<id>", methods=["DELETE"])
 def delete_event(id):
 	try:
@@ -92,7 +92,7 @@ def delete_event(id):
 			return gen_error_response("No event with that id exists.")
 		if len(event) > 1:
 			# This cannot and should not ever happen.
-			return gen_error_response(internal_error_text)
+			return gen_error_response(internal_error_text);
 		# Delete event.
 		event[0].delete()
 		return gen_data_response(success_text)
