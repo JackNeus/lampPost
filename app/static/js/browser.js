@@ -43,12 +43,12 @@ $(document).ready(function(){
 	function fetchData(title) {
 		$.getJSON('http://localhost:5001/api/event/'+title, function(data){
 		    event_data = data;
+		    console.log(event_data)
+			addSearchResults(event_data)
 		});
 	}
 
 	$("#search-box").keyup(function() {
-		var data = fetchData($(this).val());
-		console.log("Event data: " + event_data);
-		addSearchResults(event_data)
+		fetchData($(this).val());
 	});
 });
