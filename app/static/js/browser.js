@@ -1,29 +1,47 @@
+// Given an id of the form 'smallSearchResultX', return X.
 function getNum(searchId) {
 	return searchId.split("smallSearchResult").pop();
 }
-// don't run jQuery until page is loaded
-$(document).ready(function(){
-	var event_data;
 
+// Fetch data from the API.
+// TODO: Switch to use /api/event/search endpoint.
+function fetchData(title) {
+	$.getJSON('http://localhost:5001/api/event/'+title, function(data){
+	    event_data = data;
+	});
+}
+
+// Event data for currently displayed data.
+var event_data;
+
+// Allow for external population of event_data.
+// Currently only used for USE_MOCK_DATA flag.
+function setData(data) {
+	event_data = data;
+}
+
+$(document).ready(function(){
+	// Update event handlers for search results.
 	function updateSearchResultEventHanders() {
 		$(".smallSearchResult").click( function(){
-	    	console.log("Here");
+			// Toggle highlighting in search results.
 	    	$(".smallSearchResult").removeClass("selected");
 	    	$(this).addClass("selected");
+	    	// Populate and display event view.
 			$(".event-view").hide();
-			console.log($(this).attr("id"));
-			$(".event-view").hide();
-			setValues(getNum( $(this).attr("id")) - 1);
+			var eventNum = getNum($(this).attr("id")) - 1;
+			populateEventViewPanel(eventNum);
 			$("#event-view").show();
 		});
 	}
 
-	function addSearchResults(data) {
+	// Populate search result panel with event_data.
+	function updateSearchResults() {
 		searches = "";
-		for (var i = 0; i < data.length; i++) {
+		for (var i = 0; i < event_data.length; i++) {
 			searches += "<div class=\"smallSearchResult\" id=\"smallSearchResult" + (i + 1) + "\">";
 			searches += "\n" + "<div class=\"resultContents\">";
-			searches += "\n" + "<p id=\"resultTitle" + (i + 1) + "\">" + data[i].title + "</p>";
+			searches += "\n" + "<p id=\"resultTitle" + (i + 1) + "\">" + event_data[i].title + "</p>";
 			searches += "\n" + "</div>" + "\n" + "</div>" + "\n";
 		}
 		document.getElementById("searches").innerHTML = searches;
@@ -31,8 +49,8 @@ $(document).ready(function(){
 		$(".smallSearchResult").show();
 	}
 
-	// set information for event results panel
-	function setValues(num) {
+	// Populate event view panel with event_data[num].
+	function populateEventViewPanel(num) {
 		document.getElementById("eventTitle").innerHTML = event_data[num].title;
 		document.getElementById("eventLocation").innerHTML = "Location: " + event_data[num].location;
 		document.getElementById("eventGroup").innerHTML = "Creator: " + event_data[num].creator;
@@ -40,15 +58,14 @@ $(document).ready(function(){
 		document.getElementById("eventDescription").innerHTML = "Description: " + event_data[num].description;
 	}
 
-	function fetchData(title) {
-		$.getJSON('http://localhost:5001/api/event/'+title, function(data){
-		    event_data = data;
-		});
-	}
-
+	// Event handler for search box.
 	$("#search-box").keyup(function() {
-		var data = fetchData($(this).val());
-		console.log("Event data: " + event_data);
-		addSearchResults(event_data)
+		fetchData($(this).val());
+		updateSearchResults();
 	});
+
+	// If event_data is intialized, populate page.
+	if (event_data) {
+		updateSearchResults();
+	}
 });

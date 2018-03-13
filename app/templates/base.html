@@ -48,6 +48,9 @@
           </li>
         </ul>
     </nav>
+    {% if config.DEBUG %}
+      <h4 class="debug-data" id="global-debug-msg"></h4>
+    {% endif %}
     {% block content %}{% endblock %}
   </body>
   {% block scripts %}{% endblock %}
