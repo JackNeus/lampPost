@@ -46,12 +46,7 @@ def browser():
 
 @mod_web.route('/main')
 def main():
-	with open('app/static/carrot/events.json', 'r') as fid:
-		data = json.load(fid)
-	if data:
-		return render_template("web/main.html", data=data)
-	else:
-		return render_template("web/main.html")
+	return render_template("web/main.html")
 
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():
