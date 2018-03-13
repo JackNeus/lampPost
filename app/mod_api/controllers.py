@@ -71,7 +71,7 @@ def add_event():
 		return gen_error_response(str(e))
 	# Return id of newly added event.
 
-@mod_api.route("/event/get/<id>", methods=["PUT"])
+@mod_api.route("/event/get/<id>", methods=["GET"])
 def get_event(id):
 	try:
 		event = EventEntry.objects(id=id)
@@ -82,6 +82,7 @@ def get_event(id):
 			return gen_error_response(internal_error_text)
 	except Exception as e:
 		return gen_error_response(str(e))
+	return jsonify(get_raw_event(event[0]))
 	
 @mod_api.route("/event/delete/<id>", methods=["DELETE"])
 def delete_event(id):
