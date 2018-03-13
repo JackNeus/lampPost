@@ -7,11 +7,9 @@ $(document).ready(function(){
 
 	function updateSearchResultEventHanders() {
 		$(".smallSearchResult").click( function(){
-	    	console.log("Here");
 	    	$(".smallSearchResult").removeClass("selected");
 	    	$(this).addClass("selected");
 			$(".event-view").hide();
-			console.log($(this).attr("id"));
 			$(".event-view").hide();
 			setValues(getNum( $(this).attr("id")) - 1);
 			$("#event-view").show();
@@ -43,7 +41,6 @@ $(document).ready(function(){
 	function fetchData(title) {
 		$.getJSON('http://localhost:5001/api/event/'+title, function(data){
 		    event_data = data;
-		    console.log(event_data)
 			addSearchResults(event_data)
 		});
 	}
