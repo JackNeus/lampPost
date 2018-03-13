@@ -39,6 +39,15 @@ def browser():
 			print("Error loading mock data.")
 	return render_template("web/browser.html")
 
+@mod_web.route('/main')
+def main():
+	with open('app/static/carrot/events.json', 'r') as fid:
+		data = json.load(fid)
+	if data:
+		return render_template("web/main.html", data=data)
+	else:
+		return render_template("web/main.html")
+
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():
 	if request.method == 'POST' and "dog" in request.form:

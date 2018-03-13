@@ -2,7 +2,7 @@
 *.pyc
 *.cfg
 env/*
-
+*/.DS_Store
 # Sass
 .sass-cache/
 *.css.map

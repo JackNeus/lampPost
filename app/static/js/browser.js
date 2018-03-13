@@ -3,14 +3,6 @@ function getNum(searchId) {
 	return searchId.split("smallSearchResult").pop();
 }
 
-// Fetch data from the API.
-// TODO: Switch to use /api/event/search endpoint.
-function fetchData(title) {
-	$.getJSON('http://localhost:5001/api/event/'+title, function(data){
-	    event_data = data;
-	});
-}
-
 // Event data for currently displayed data.
 var event_data;
 
@@ -57,10 +49,18 @@ $(document).ready(function(){
 		document.getElementById("eventTime").innerHTML = "Time: " + event_data[num].start_datetime;
 	}
 
+	// Fetch data from the API.
+	// TODO: Switch to use /api/event/search endpoint.
+	function runSearch(title) {
+		$.getJSON('http://localhost:5001/api/event/'+title, function(data){
+		    event_data = data;
+			updateSearchResults();
+		});
+	}
+
 	// Event handler for search box.
 	$("#search-box").keyup(function() {
-		fetchData($(this).val());
-		updateSearchResults();
+		runSearch($(this).val());
 	});
 
 	// If event_data is intialized, populate page.
