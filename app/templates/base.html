@@ -17,6 +17,7 @@
 
 <!DOCTYPE html>
 
+
 <html>
   <head>
     <title>LampPost</title>
@@ -30,28 +31,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     {% block header %}{% endblock %}
   </head>
 
-  <body>  <!-- A grey horizontal navbar that becomes vertical on small screens -->
-    <nav class="navbar navbar-expand-sm navbar-default">
+  <body>  
+
+    <nav class="navbar navbar-expand-sm navbar-dark">
       <span class="mr-auto navbar-brand mb-0 h1"> LampPost </span>
       <ul class="navbar-nav"> 
-          <li class="nav-item">
-              <a class="nav-link" href="#"> Add an Event! </a>
+          <li class="nav-item " id="navBarAddEvent">
+              <a class="nav-link " href="addEvent"> Add an Event! </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item ">
               <a class="nav-link" href="#"> About </a>
           </li>
-          <li class="nav-item">
-              <a class="nav-link" href="#"> Help </a>
+          <li class="nav-item ">
+              <a class="nav-link " href="#"> Help </a>
           </li>
         </ul>
     </nav>
+
+
     {% if config.DEBUG %}
       <h4 class="debug-data" id="global-debug-msg"></h4>
     {% endif %}
     {% block content %}{% endblock %}
   </body>
   {% block scripts %}{% endblock %}
+
 </html>

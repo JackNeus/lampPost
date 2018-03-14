@@ -3,19 +3,23 @@ html, body {
   background-color: #eeeeeee; }
   html .h1, body .h1 {
     font-size: 28px; }
-  html .navbar-default, body .navbar-default {
+  html .navbar, body .navbar {
     background-color: #000033;
     color: white; }
-    html .navbar-default .nav-item, body .navbar-default .nav-item {
+    html .navbar .nav-item, body .navbar .nav-item {
+      color: white;
       padding-left: 1vw;
       padding-right: 1vw; }
-    html .navbar-default .nav-link, body .navbar-default .nav-link {
+    html .navbar .nav-link, body .navbar .nav-link {
       color: white; }
   html h1, body h1 {
     text-align: center; }
   html #bigRow, body #bigRow {
     padding-left: 0vw;
     padding-right: 2vw; }
+
+#addEventForm {
+  padding-top: 2vh; }
 
 .debug-data {
   color: red; }

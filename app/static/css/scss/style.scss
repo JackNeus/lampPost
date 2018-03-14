@@ -11,10 +11,11 @@ html, body {
 
 	background-color: $background-color;
 
-	.navbar-default {
+	.navbar {
 		background-color: $primary-color;
 		color: white;
 		.nav-item {
+			color: white;
 			padding-left: 1vw;
 			padding-right: 1vw;
 		}
@@ -31,6 +32,10 @@ html, body {
 		padding-left: 0vw;
 		padding-right: 2vw;
 	}
+}
+
+#addEventForm {
+	padding-top: 2vh;
 }
 
 .debug-data {

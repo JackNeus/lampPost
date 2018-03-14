@@ -39,6 +39,10 @@ def browser():
 			print("Error loading mock data.")
 	return render_template("web/browser.html")
 
+@mod_web.route('/addEvent')
+def addEvent():
+	return render_template("web/addEvent.html")
+
 @mod_web.route('/main')
 def main():
 	with open('app/static/carrot/events.json', 'r') as fid:
