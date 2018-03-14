@@ -3,14 +3,6 @@ function getNum(searchId) {
 	return searchId.split("smallSearchResult").pop();
 }
 
-// Fetch data from the API.
-// TODO: Switch to use /api/event/search endpoint.
-function fetchData(title) {
-	$.getJSON('http://localhost:5001/api/event/'+title, function(data){
-	    event_data = data;
-	});
-}
-
 // Event data for currently displayed data.
 var event_data;
 
@@ -59,10 +51,13 @@ $(document).ready(function(){
 		document.getElementById("eventDescription").innerHTML = "Description: " + event_data[num].description;
 	}
 
-	function fetchData(title) {
-		$.getJSON('http://localhost:5001/api/event/'+title, function(data){
-		    event_data = data;
-			updateSearchResults(event_data);
+	function fetchData(query) {
+		$.getJSON('http://localhost:5001/api/event/search/'+query, function(data){
+		    if (data["status"] === "Success") 
+				event_data = data["data"];
+			else
+				event_data = null;
+			updateSearchResults();
 		});
 	}
 
