@@ -23,32 +23,6 @@ def gen_error_response(error_msg):
 	response["error_msg"] = error_msg
 	return jsonify(response)
 
-@mod_api.route("/event/<title>")
-def events(title):
-	try:
-		regex = re.compile(title, re.IGNORECASE)
-		event_data = EventEntry.objects(title=regex)
-		event_data = [get_raw_event(event) for event in event_data]
-		return jsonify(event_data)
-	except Exception as e:
-		return gen_error_response(str(e))
-
-@mod_api.route("/addevent/<title>")
-def add_event_old(title):
-	try:
-		# This is temporary. 
-		# In the future fields will be properly populated.
-		new_event = EventEntry(
-			title=title, 
-			creator="admin",
-			location="Princeton University",
-			start_datetime=datetime.now(),
-			end_datetime=datetime.now(),
-			description="This is an event titled %s." % title).save()
-		return (gen_data_response({"id": str(new_event.id)}))
-	except Exception as e:
-		return gen_error_response(str(e))
-
 @mod_api.route("/event/add", methods=["PUT"])
 def add_event():
 	if not request.is_json:
