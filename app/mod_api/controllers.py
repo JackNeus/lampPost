@@ -86,7 +86,6 @@ def event_search(query, start_datetime):
 		tokens = query.split()
 		results = []
 		for token in tokens:
-			print(token)
 			# Need to take creator_display into account.
 			token_re = re.compile("\s*" + token)
 			events = set(EventEntry.objects(title = token_re, end_datetime__gte = start_datetime))
