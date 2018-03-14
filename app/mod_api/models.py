@@ -35,4 +35,6 @@ class EventEntry(Document):
 def get_raw_event(event_entry):
 	raw = event_entry.to_mongo()
 	raw["_id"] = str(raw["_id"])
+	raw["start_datetime"] = str(raw["start_datetime"])
+	raw["end_datetime"] = str(raw["end_datetime"])
 	return raw
