@@ -1,10 +1,20 @@
 from dateutil.parser import *
 from mongoengine import *
 
+# List of fields that MUST be supplied by user.
+required_fields = [
+"title",
+"creator",
+"location",
+"start_datetime",
+"end_datetime",
+"description"]
+
 class EventEntry(Document):
-	title = StringField(required = True)
+	title = StringField(required = True, unique = True)
 	creator = StringField(required = True)
 
+	location = StringField(required = True, min_length=3)
 	start_datetime = DateTimeField(required = True)
 	end_datetime = DateTimeField(required = True)
 
@@ -25,4 +35,6 @@ class EventEntry(Document):
 def get_raw_event(event_entry):
 	raw = event_entry.to_mongo()
 	raw["_id"] = str(raw["_id"])
+	raw["start_datetime"] = str(raw["start_datetime"])
+	raw["end_datetime"] = str(raw["end_datetime"])
 	return raw

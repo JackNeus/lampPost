@@ -10,3 +10,6 @@ DB_HOST=
 DB_PORT=
 DB_USERNAME=
 DB_PASSWORD=
+
+# If set to True, will initialize data to data in static/mock_data/data.json
+USE_MOCK_DATA=
