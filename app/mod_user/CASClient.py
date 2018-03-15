@@ -35,7 +35,6 @@ class CASClient:
          return ret
       elif CONFIG["DEBUG"]:
          ret = "http://localhost:" + str(CONFIG["PORT"]) + "/login"
-         print(ret)
          return ret
       return "something is badly wrong"
 
