@@ -29,9 +29,9 @@ def add_event():
 		return gen_error_response("Request was not JSON.")
 	data = request.get_json()
 	# Check that the correct parameters have been given.
-	for field in required_fields:
-		if field not in data:
-			return gen_error_response("Request was missing %s parameter." % field)
+	missing_fields = get_missing_fields(data)
+	if len(missing_fields) > 0:
+		return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
 	# Try to add new event
 	try:
 		new_event = EventEntry.from_json(json.dumps(data))
@@ -76,24 +76,29 @@ def delete_event(id):
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
 # For each token, events with tokens (whitespace delimited) matching the token are aggregated.
-# The current event fields queried are title, location, and creator.
+# The current event fields queried are title, location, and host.
 # The intersection of results for the tokens is returned.
 # Only events ending after start_datetime are included in search results.
+# Currently, if one or more instances of an event match the search terms, all instances are returned.
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>/<start_datetime>")
 def event_search(query, start_datetime):
 	try:
 		tokens = query.split()
+		print(tokens)
 		results = []
 		for token in tokens:
-			# Need to take creator_display into account.
-			token_re = re.compile("\s*" + token)
-			events = set(EventEntry.objects(title = token_re, end_datetime__gte = start_datetime))
-			events = events.union(set(EventEntry.objects(location = token_re, end_datetime__gte = start_datetime)))
-			events = events.union(set(EventEntry.objects(creator = token_re, end_datetime__gte = start_datetime)))
+			# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
+			token_re = re.compile("(\s*|^)" + token, re.IGNORECASE)
+			events = set()
+			events = events.union(set(EventEntry.objects(title = token_re, instances__end_datetime__gte = start_datetime)))
+			events = events.union(set(EventEntry.objects(host = token_re, instances__end_datetime__gte = start_datetime)))
+			events = events.union(set(EventEntry.objects(instances__location = token_re, instances__end_datetime__gte = start_datetime)))
+			print(len(events))
 			results.append(events)
 		events = set.intersection(*results)
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
-		return gen_error_response(str(e))
+		raise e
+		#return gen_error_response(str(e))
