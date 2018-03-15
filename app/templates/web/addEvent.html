@@ -4,107 +4,250 @@
 
 {% block content %}
 
+<link rel="stylesheet" type="text/css" href="/static/css/addEvent.css">
+
 <script> 
 
-	$(document).ready(function(){
-		$('.nav-item').removeClass('active');
+	var currentNumShowing = 1;
+	var maxShowings = 4;
+
+	// add numbers to first showing (e.g. "Location" -> "Location 1")
+	function numberFirstShowing() {
+		$("#firstLocation").text("Location 1");
+		$("#firstDay").text("Day 1");
+		$("#firstTime1").text("Start Time 1");
+		$("#firstTime2").text("End Time 1");
+	}
+
+	// remove numbers from first showing (e.g. "Location 1" -> "Location")
+	function unNumberFirstShowing() {
+		$("#firstLocation").text("Location");
+		$("#firstDay").text("Day");
+		$("#firstTime1").text("Start Time");
+		$("#firstTime2").text("End Time");
+	}
+
+	function processClick( num ) {
+		// this is a special case, because we need to introduce numbering
+		if (currentNumShowing == 1) {
+			numberFirstShowing();
+		}
+		// another special case, because then we need we need to remove numbering
+		if (num == 1) {
+			unNumberFirstShowing();
+		}
+
+
+		// remove the bigger ones instantly
+		for (i = num + 1; i <= maxShowings; i++) {
+			$("#form-row-" + i.toString()).slideUp("slow");
+		}
+		// slide down relevant ones
+		for (i = currentNumShowing + 1; i <= num; i++) {
+			$("#form-row-" + i.toString()).slideDown("slow");
+		}
+		// change currentNumShowing
+		currentNumShowing = num;
+	}
+
+		$(document).ready(function(){
+			$('.nav-item').removeClass('active');
+
+		// make the forms visible
+		$("#form-row-2").removeClass("invisible");
+		$("#form-row-3").removeClass("invisible");
+		$("#form-row-4").removeClass("invisible");
+
+		// slide these forms (which are currently invisible) up, to make
+		// compatible with the slideDown's needed later
+		$("#form-row-2").slideUp(0);
+		$("#form-row-3").slideUp(0);
+		$("#form-row-4").slideUp(0);
+
+		
+		
+
+
+		// when we click the circle for x showings, slide up all the forms instantly
+		// then, slide down the relevant ones slowly
+		$("#inlineRadio1").click(function() {
+			processClick(1);
+		});
+
+		$("#inlineRadio2").click(function() {
+			processClick(2);
+		});
+
+		$("#inlineRadio3").click(function() {
+			processClick(3);
+		});
+
+		$("#inlineRadio4").click(function() {
+			processClick(4);
+		});
 	});
 
-	function setNavBar() {
-		console.log("alive");
-		document.getElementById("navBarAddEvent").classList.add("active");
-	}
-</script>
+		function setNavBar() {
+			document.getElementById("navBarAddEvent").classList.add("active");
+		}
 
-<body onload="setNavBar()">
+	</script>
 
-	<div class="row" id = "bigRowAddEvent">
-		<div class="col-md-3" id = "leftCol">
+	<body onload="setNavBar()">
 
-		</div>
-		<div class="col-md-6" id = "leftCol">
-			<h3 style="text-align:center"> Add your event by filling out the fields below. </h3>
+		<div class="row" id = "bigRowAddEvent">
+			<div class="col-md-3" id = "leftCol">
 
-			<form id="addEventForm">
-				<div class="form-group">
-					<label for="exampleInputEmail1"> Title </label>
-					<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="The name of your event.">
-					
-				</div>
-				<div class="form-group">
-					<label for="exampleFormControlTextarea1"> Description </label>
-					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="A brief description of your event, and why people should come!"></textarea>
-					<small id="emailHelp" class="form-text text-muted"> Good descriptions.... an example (maybe) </small>
-				</div>
+			</div>
+			<div class="col-md-6" id = "leftCol">
+				<h3 > Add your event by filling out the fields below. </h3>
 
-				<div class="form-group">
-					<label style="padding-right:1vw">  Number of showings: </label>
+				<form id="addEventForm">
+					<div class="form-group">
+						<label for="exampleInputEmail1"> Title </label>
+						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="The name of your event.">
 
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-						<label class="form-check-label" for="inlineRadio1">1</label>
 					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-						<label class="form-check-label" for="inlineRadio2">2</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-						<label class="form-check-label" for="inlineRadio3">3</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-						<label class="form-check-label" for="inlineRadio3">4</label>
+					<div class="form-group">
+						<label for="exampleFormControlTextarea1"> Description </label>
+						<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="A brief description of your event, and why people should come!"></textarea>
+						<small id="emailHelp" class="form-text text-muted"> Good descriptions.... an example (maybe) </small>
 					</div>
 
-				</div>
+					<div class="form-group">
+						<label style="padding-right:1vw">  Number of showings: </label>
 
-				<div class="form-row">
-					<div class="form-group col-md-4">
-						<label for="inputCity"> Location 1</label>
-						<input type="text" class="form-control" id="inputCity">
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" checked="checked" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+							<label class="form-check-label" for="inlineRadio1">1</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" >
+							<label class="form-check-label" for="inlineRadio2">2</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+							<label class="form-check-label" for="inlineRadio3">3</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option3" >
+							<label class="form-check-label" for="inlineRadio4">4</label>
+						</div>
+
 					</div>
-					<div class="form-group col-md-4">
-						<label for="inputState"> Day 1 </label>
-						<select id="inputState" class="form-control">
-							<option selected>Choose...</option>
-							<option>...</option>
-						</select>
+
+					<div class="form-row" id="form-row-1">
+						<div class="form-group col-md-3">
+							<label id = "firstLocation"> Location</label>
+							<input type="text" class="form-control" id="inputCity">
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputState" id="firstDay"> Day </label>
+							<select id="inputState" class="form-control">
+								<option selected>Choose...</option>
+								<option>...</option>
+							</select>
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputZip" id="firstTime1"> Start Time </label>
+							<input type="text" class="form-control" id="inputZip">
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputZip" id="firstTime2"> End Time </label>
+							<input type="text" class="form-control" id="inputZip">
+						</div>
 					</div>
-					<div class="form-group col-md-4">
-						<label for="inputZip"> Time 1</label>
-						<input type="text" class="form-control" id="inputZip">
+
+					<div class="form-row invisible" id="form-row-2">
+						<div class="form-group col-md-3">
+							<label for="inputCity"> Location 2 </label>
+							<input type="text" class="form-control" id="inputCity">
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputState"> Day 2 </label>
+							<select id="inputState" class="form-control">
+								<option selected>Choose...</option>
+								<option>...</option>
+							</select>
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputZip"> Start Time 2 </label>
+							<input type="text" class="form-control" id="inputZip">
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputZip"> End Time 2 </label>
+							<input type="text" class="form-control" id="inputZip">
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" id="gridCheck">
-						<label class="form-check-label" for="gridCheck">
-							Check me out
-						</label>
+
+					<div class="form-row invisible" id="form-row-3">
+						<div class="form-group col-md-3">
+							<label for="inputCity"> Location 3 </label>
+							<input type="text" class="form-control" id="inputCity">
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputState"> Day 3 </label>
+							<select id="inputState" class="form-control">
+								<option selected>Choose...</option>
+								<option>...</option>
+							</select>
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputZip"> Start Time 3</label>
+							<input type="text" class="form-control" id="inputZip">
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputZip"> End Time 3</label>
+							<input type="text" class="form-control" id="inputZip">
+						</div>
 					</div>
-				</div>
+
+					<div class="form-row invisible" id="form-row-4">
+						<div class="form-group col-md-3">
+							<label for="inputCity"> Location 4 </label>
+							<input type="text" class="form-control" id="inputCity">
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputState"> Day 4 </label>
+							<select id="inputState" class="form-control">
+								<option selected>Choose...</option>
+								<option>...</option>
+							</select>
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputZip"> Start Time 4</label>
+							<input type="text" class="form-control" id="inputZip">
+						</div>
+						<div class="form-group col-md-3">
+							<label for="inputZip"> End Time 4</label>
+							<input type="text" class="form-control" id="inputZip">
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label for="exampleInputFile"> Event Photo/Poster </label>
+						<input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+						<small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+					</div>
+
+					<div class="form-group">
+						<label for="exampleInputEmail1"> Promo Video </label>
+						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter youtube link.">
+
+					</div>
 
 
 
 
 
+					<button type="submit" class="btn btn-primary">Submit!</button>
+				</form>
 
-				<div class="form-group">
-					<label for="exampleInputPassword1">Password</label>
-					<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-				</div>
-				<div class="form-check">
-					<input type="checkbox" class="form-check-input" id="exampleCheck1">
-					<label class="form-check-label" for="exampleCheck1">Check me out</label>
-				</div>
-				<button type="submit" class="btn btn-primary">Submit</button>
-			</form>
+			</div>
+			<div class="col-md-3" id = "leftCol">
 
-		</div>
-		<div class="col-md-3" id = "leftCol">
+			</div>
 
-		</div>
-
-	</body>
-	{% endblock %}
+		</body>
+		{% endblock %}
