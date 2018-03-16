@@ -95,13 +95,19 @@ $(document).ready(function(){
 				class: "resultLocation"
 			}).append(event_data[i].location);
 			
-			var time = $('<p />').attr({
-				class: "resultTime"
-			}).append(makeDate(event_data[i].start_datetime, event_data[i].end_datetime));
+			// print multiple instances
+			var instances = event_data[i].instances;
+			var allTimes = $('<div />');
+			for (var j = 0; j < instances.length; j++) {
+				var time = $('<p />').attr({
+					class: "resultTime"
+				}).append(makeDate(instances[j].start_datetime, instances[j].end_datetime));
+				allTimes.append(time);
+			}
 			
 			var smallDiv = $('<div >').attr({
 				class: "resultContents"
-			}).append(title).append(time).append(loc);
+			}).append(title).append(allTimes).append(loc);
 			
 			var largeDiv = $('<div />').attr({
 				class: "smallSearchResult", id: "smallSearchResult" + (i + 1), 
@@ -116,9 +122,9 @@ $(document).ready(function(){
 	// Populate event view panel with event_data[num].
 	function populateEventViewPanel(num) {
 		document.getElementById("eventTitle").innerHTML = event_data[num].title;
-		document.getElementById("eventLocation").innerHTML = "Location: " + event_data[num].location;
-		document.getElementById("eventGroup").innerHTML = "Creator: " + event_data[num].creator;
-		document.getElementById("eventTime").innerHTML = "Time: " + event_data[num].start_datetime;
+		document.getElementById("eventLocation").innerHTML = "Location: " + event_data[num]["instances"][0].location;
+		document.getElementById("eventHost").innerHTML = "Host: " + event_data[num].host;
+		document.getElementById("eventTime").innerHTML = "Time: " + event_data[num]["instances"][0].start_datetime;
 		document.getElementById("eventDescription").innerHTML = "Description: " + event_data[num].description;
 	}
 	
