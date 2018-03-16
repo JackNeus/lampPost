@@ -85,7 +85,6 @@ def delete_event(id):
 def event_search(query, start_datetime):
 	try:
 		tokens = query.split()
-		print(tokens)
 		results = []
 		for token in tokens:
 			# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
@@ -94,11 +93,9 @@ def event_search(query, start_datetime):
 			events = events.union(set(EventEntry.objects(title = token_re, instances__end_datetime__gte = start_datetime)))
 			events = events.union(set(EventEntry.objects(host = token_re, instances__end_datetime__gte = start_datetime)))
 			events = events.union(set(EventEntry.objects(instances__location = token_re, instances__end_datetime__gte = start_datetime)))
-			print(len(events))
 			results.append(events)
 		events = set.intersection(*results)
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
-		raise e
-		#return gen_error_response(str(e))
+		return gen_error_response(str(e))
