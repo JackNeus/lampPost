@@ -69,3 +69,4 @@ def get_raw_event(event_entry):
         raw["instances"][i]["start_datetime"] = str(raw["instances"][i]["start_datetime"])
         raw["instances"][i]["end_datetime"] = str(raw["instances"][i]["end_datetime"])
     return raw
+
