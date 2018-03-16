@@ -1,29 +1,72 @@
 {% extends "base.html" %}
 
+<style>
+
+</style>
+
 {% block scripts %}
-<script src="/static/js/browser.js"></script>
+<script src="/static/js/browser.js?v=9"></script>
+
 {% if data %}
 <script>
 setData(JSON.parse('{{ data | tojson | safe}}'));
 $("#global-debug-msg").text("Page initialized with mock data. Search box will return actual data.");
 </script>
 {% endif %}
+
 {% endblock %}
+
+{% block css %}
+<!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css?v=6">
+    
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% endblock %}
+
+
 
 {% block content %}
 <div class="container-fluid">
-  	<div class="row" id = "bigRow">
-	   <div class="col-md-4" id = "leftCol">
-	   		<form>
+  	<div class="flex-container-row" id = "bigRow">
+  	
+	   <div class="flex-container-col" id = "leftCol">
+	   		<form onsubmit="return false;">
 				<div class="form-group" id="searchBox">
-			    <input id="search-box" class="form-control" placeholder="Search for events here!" value=""></input>
+			    		<input id="search-box" class="form-control" 
+			    		placeholder="Search for events here!" value=""></input>
 				</div>
+				
+				
+				<div class="d-flex flex-row align-items-start filters">
+				  <div class="p-2 filterButton">
+					  <button type="button" class="btn btn-xs" 
+					  id="filterBtn">Filters</button>
+				  </div>
+			
+				  <div class="p-2 datetime">
+					  <label for="datepicker">Date: </label>
+					  <input type="text" id="datepicker" 
+						   class="form-control" name="datepicker">
+				  </div>
+				  <div class="p-2 datetime">
+					  <label for="timepicker">Time: </label>
+					  <input type="text" id="timepicker"  name="timepicker"
+						autocomplete="off" autocorrect="off" 
+						autocapitalize="off" spellcheck="false" 
+						class="form-control"></div>
+				  </div>
+			
 			</form>
+			
 				
 			<!-- Fills in with "search" results from events.json -->
-			<div id="searches"></div>
+			<div class="flex-item-scroll" id="searches"></div>
 		</div>
-	 	<div class="col-md-8" id = "rightCol"> 
+		
+	 	<div class="flex-container-col" id = "rightCol"> 
 	 		<div class = "event-view" id = "event-view"> 
 		   		<p class="event-result-title" id = "eventTitle"></p>
 		   		<div class = "event-result-info">
