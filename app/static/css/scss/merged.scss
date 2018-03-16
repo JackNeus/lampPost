@@ -1,6 +1,10 @@
 $background-color: #eeeeee;
 $primary-color: #2d9eee;
-$font-stack: "Arial";
+$font-stack: "Avenir-Medium";
+/* rgb values for primary-color */
+$primary-color-r: 29;
+$primary-color-g: 158;
+$primary-color-b: 238;
 
 html, body {
 	// Font Style
@@ -11,16 +15,14 @@ html, body {
 
 	background-color: $background-color;
 
-	.navbar-default {
+	.logo {
+		width: 200px;
+	}
+	.navbar-expand-md {
 		background-color: $primary-color;
-		color: white;
-		.nav-item {
-			padding-left: 1vw;
-			padding-right: 1vw;
-		}
-		.nav-link {
-			color: white;
-		}
+	}
+	.nav-link {
+		font-size: 20px;
 	}
 
 	h1 {
@@ -66,21 +68,21 @@ html, body {
 
 .smallSearchResult {
  	height: 13vh;
- 	border: 1px solid $primary-color;
+ 	border: 1px solid silver;
  	border-radius: 5px;
  	cursor: pointer;
  	margin: 0vh 2vh;
  	overflow: hidden;
- 	background: rgba(0, 191, 255, 0.25);
+ 	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.25);
  	&.selected {
 		color: white;
-		background-color: rgba(0, 191, 255, 0.54);
+		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.54);
 		&:hover {
-			background-color: rgba(0, 191, 255, 0.44);
+			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.44);
 		}
  	}
  	&:hover {
- 		background-color: rgba(0, 191, 255, 0.22);
+ 		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.22);
  	}
 	.resultContents {
 		padding-left: 0.8vw;
@@ -117,14 +119,14 @@ html, body {
 	.event-result-title {
 		font-family: serif;
 		font-size: 40px;
-		color: $primary-color;
+		color: black;
 		text-align: center;
 		font-weight: bold;
 	}
 	.event-result-info {
 		width: 100%;
 		font-size: 20px;
-		color: $primary-color;
+		color: black;
 		margin: 1em 0.5em;
 	}
 	img {
@@ -173,6 +175,4 @@ html, body {
         flex-direction: column;
     }
 }
-
-
 

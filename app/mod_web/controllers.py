@@ -7,6 +7,11 @@ import json
 
 mod_web = Blueprint('web', __name__, url_prefix="")
 
+# Homepage
+@mod_web.route('/')
+def home():
+	return render_template("web/home.html")
+
 @mod_web.route('/index', methods=['GET', 'POST'])
 def index():
 	form = NameForm(request.form)
@@ -38,15 +43,6 @@ def browser():
 				return render_template("web/browser.html", data = data)
 			print("Error loading mock data.")
 	return render_template("web/browser.html")
-
-@mod_web.route('/main')
-def main():
-	with open('app/static/carrot/events.json', 'r') as fid:
-		data = json.load(fid)
-	if data:
-		return render_template("web/main.html", data=data)
-	else:
-		return render_template("web/main.html")
 
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():

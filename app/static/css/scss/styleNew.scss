@@ -1,0 +1,60 @@
+$background-color: #eeeeeee;
+$primary-color: #2d9eee;
+$font-stack: "Avenir-Medium";
+
+html, body {
+	// Font Style
+	font: 100% $font-stack;
+	.h1 {
+		font-size:28px;
+	}
+
+	background-color: $background-color;
+
+	.logo {
+		width: 200px;
+	}
+	.navbar-expand-md {
+		background-color: $primary-color;
+	}
+	.nav-link {
+		font-size: 20px;
+	}
+
+	h1 {
+		text-align: center;
+	}
+
+	#bigRow {
+		padding-left: 0vw;
+		padding-right: 2vw;
+
+		#searchBox {
+			padding-top: 2vh;
+		}
+		.smallSearchResult {
+		 	height: 10vh;
+		 	border: ridge;
+		 	cursor: pointer;
+		 	background-color: white;
+		 	&.selected {
+    			color: white;
+    			background-color: #999;
+		 	}
+			.resultContents {
+				padding-left: 0.8vw;
+				padding-right: 0.8vw;
+				padding-top: 0.6vh;
+				padding-bottom: 0.6vh;
+				#resultTitle {
+					font-weight: bold;
+				}
+			}	
+		}
+		.eventView {
+		  height: 85vh;
+		  overflow: scroll;
+		  display: none;
+		}
+	}
+}

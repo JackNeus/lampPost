@@ -1,15 +1,13 @@
 html, body {
-  font: 100% "Arial";
+  font: 100% "Avenir-Medium";
   background-color: #eeeeeee; }
-  html .h1, body .h1 {
-    font-size: 28px; }
-  html .navbar-default, body .navbar-default {
-    background-color: #000033;
-    color: white; }
-    html .navbar-default .nav-item, body .navbar-default .nav-item {
-      padding-left: 1vw;
-      padding-right: 1vw; }
-    html .navbar-default .nav-link, body .navbar-default .nav-link {
+  html .logo, body .logo {
+    width: 200px; }
+  html .navbar-expand-md, body .navbar-expand-md {
+    background-color: #2d9eee;
+    }
+  html .nav-link, body .nav-link {
+      font-size: 20px;
       color: white; }
   html h1, body h1 {
     text-align: center; }

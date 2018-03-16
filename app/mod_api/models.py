@@ -11,6 +11,8 @@ required_fields = [
 "description"]
 
 class EventEntry(Document):
+	meta = {'strict': False};
+	
 	title = StringField(required = True, unique = True)
 	creator = StringField(required = True)
 
