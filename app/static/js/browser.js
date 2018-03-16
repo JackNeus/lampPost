@@ -30,7 +30,7 @@ $(document).ready(function(){
 	
 	// calculates the number of days between date1 and date2
 	Date.daysBetween = function( date1, date2 ) {
-	  //Get 1 day in milliseconds
+	  // Get 1 day in milliseconds
 	  var one_day=1000*60*60*24;
 
 	  // Convert both dates to milliseconds
@@ -50,16 +50,21 @@ $(document).ready(function(){
 		var end_date = new Date(end);
 		var today = new Date();
 		
-		// Special cases for yesterday, today, & tomorrow
+		// Special cases for dates within a week of current date
+		var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", 
+				    "Thursday", "Friday", "Saturday"];
 		var time_diff = Date.daysBetween(today, start_date);
+		
 		if (time_diff == -1)
 			var date_str = "Yesterday";
 		else if (time_diff == 0)
 			var date_str = "Today";
 		else if (time_diff == 1)
 			var date_str = "Tomorrow";
+		else if (1 < time_diff && time_diff < 7) 
+			var date_str = weekdays[start_date.getDay()];
 		else
-			var date_str = start_date.getMonth() + '/' + start_date.getDate();
+			var date_str = (start_date.getMonth() + 1) + '/' + start_date.getDate();
 			
 		// don't show year unless year is different than current year
 		if (start_date.getFullYear() != today.getFullYear()) 
@@ -117,14 +122,11 @@ $(document).ready(function(){
 		document.getElementById("eventDescription").innerHTML = "Description: " + event_data[num].description;
 	}
 	
-	// functions that pick date/time and toggle them
+	// functions that pick date and toggle the filter for date
 	$(function() {
 		$('#datepicker').datepicker();
 	});
-	$(function() {
-		$('#timepicker').timepicker({ 'forceRoundTime': true });
-	});
-	$('#filterBtn').click(function() {
+	$('#filter-btn').click(function() {
 		$('.datetime').slideToggle(200);
 	});
 
@@ -138,6 +140,7 @@ $(document).ready(function(){
 		});
 	}
 	
+	// converts java date string into python date string (mm/dd/yy to yy-mm-dd)
 	function java2py_date( date_java ){
 		var today = new Date();
 		var date_split = date_java.split('/');

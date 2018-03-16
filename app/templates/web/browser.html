@@ -5,7 +5,7 @@
 </style>
 
 {% block scripts %}
-<script src="/static/js/browser.js?v=9123456"></script>
+<script src="/static/js/browser.js?v=23"></script>
 
 {% if data %}
 <script>
@@ -29,23 +29,17 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				
 				
 				<div class="d-flex flex-row align-items-start filters">
-				  <div class="p-2 filterButton">
+				  <div class="p-2 filter-button">
 					  <button type="button" class="btn btn-xs" 
-					  id="filterBtn">Filters</button>
+					  id="filter-btn">Filters</button>
 				  </div>
 			
 				  <div class="p-2 datetime">
-					  <label for="datepicker">Date: </label>
+					  <label for="datepicker">Search from date: </label>
 					  <input type="text" id="datepicker" 
 						   class="form-control" name="datepicker">
 				  </div>
-				  <div class="p-2 datetime">
-					  <label for="timepicker">Time: </label>
-					  <input type="text" id="timepicker"  name="timepicker"
-						autocomplete="off" autocorrect="off" 
-						autocapitalize="off" spellcheck="false" 
-						class="form-control"></div>
-				  </div>
+				 </div>
 			
 			</form>
 			
