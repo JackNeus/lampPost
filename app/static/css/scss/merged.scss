@@ -32,6 +32,7 @@ html, body {
 	#bigRow {
 		padding-left: 0vw;
 		padding-right: 0vw;
+		margin-bottom: 2vh;
 	}
 }
 
@@ -54,7 +55,6 @@ html, body {
 	input[type=text] {
 		font-size: 0.65em;
 	}
-	
 	.btn {
 		line-height: 1;
 		font-size: 0.75em;
@@ -67,7 +67,7 @@ html, body {
 
 
 .smallSearchResult {
- 	height: 13vh;
+ 	height: 10vh;
  	border: 1px solid silver;
  	border-radius: 5px;
  	cursor: pointer;
@@ -76,9 +76,9 @@ html, body {
  	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.25);
  	&.selected {
 		color: white;
-		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.54);
+		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.55);
 		&:hover {
-			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.44);
+			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.52);
 		}
  	}
  	&:hover {
@@ -89,9 +89,9 @@ html, body {
 		padding-right: 0.8vw;
 		padding-top: 0.6vh;
 		padding-bottom: 0.6vh;
-		font-size: 0.75em;
 		overflow: hidden;
 			.resultTitle {
+				font-size: 0.9em;
 				font-weight: bold;
 			}
 			.resultLocation {

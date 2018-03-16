@@ -79,11 +79,24 @@ $(document).ready(function(){
 		return date_str + " " + start_time + "-" + end_time;
 	}
 
-	// Populate search result panel with event_data.
+	// Populate search result panel with event_data sorted by date.
 	function updateSearchResults() {
 		// clear current searches
 		var currentSearches = document.getElementById("searches");
 		currentSearches.innerHTML = "";
+		
+		// sort all instances of the event by date
+		for (var i = 0; i < event_data.length; i++) {
+			event_data[i].instances.sort(function(a, b) {
+				return Date.daysBetween(new Date(b.start_datetime), 
+								new Date(a.start_datetime));
+			});
+		}
+		// sort the events by date (using the first instance of the event)
+		event_data.sort(function (a, b) {
+			return Date.daysBetween(new Date(b.instances[0].start_datetime), 
+						      new Date(a.instances[0].start_datetime));
+		});
 		
 		// create html code for each search result
 		for (var i = 0; i < event_data.length; i++) {
@@ -101,7 +114,8 @@ $(document).ready(function(){
 			for (var j = 0; j < instances.length; j++) {
 				var time = $('<p />').attr({
 					class: "resultTime"
-				}).append(makeDate(instances[j].start_datetime, instances[j].end_datetime));
+				}).append(makeDate(instances[j].start_datetime, 
+						       instances[j].end_datetime));
 				allTimes.append(time);
 			}
 			
