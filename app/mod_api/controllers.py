@@ -1,10 +1,14 @@
+from app.mod_user.models import User
 from .models import *
 from datetime import datetime
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, make_response, request, render_template
+from flask_httpauth import HTTPTokenAuth
+from flask_login import login_required
 import json
 import re
 
 mod_api = Blueprint('api', __name__, url_prefix="/api")
+auth = HTTPTokenAuth(scheme='Token')
 
 success_text = "Success"
 error_text = "Error"
@@ -22,6 +26,17 @@ def gen_error_response(error_msg):
 	response = gen_response(error_text)
 	response["error_msg"] = error_msg
 	return jsonify(response)
+
+@auth.verify_token
+def verify_token(token):
+	user = User.verify_auth_token(token)
+	if user is None:
+		return False
+	return True
+
+@auth.error_handler
+def unauthorized():
+	return make_response(jsonify({'error': 'Unauthorized access'}), 403)
 
 @mod_api.route("/event/add", methods=["PUT"])
 def add_event():
@@ -82,6 +97,7 @@ def delete_event(id):
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>/<start_datetime>")
+@auth.login_required
 def event_search(query, start_datetime):
 	try:
 		tokens = query.split()

@@ -1,6 +1,6 @@
 from . import controllers as controller
 from . import CASClient as CASClient
-from flask import abort, Blueprint, jsonify, request, redirect, render_template
+from flask import abort, Blueprint, jsonify, make_response, request, redirect, render_template
 from flask_login import login_required, current_user
 
 mod_user = Blueprint('user', __name__, url_prefix="")
@@ -11,7 +11,9 @@ def login():
 	auth_attempt = C.Authenticate()
 	if "netid" in auth_attempt:  # Successfully authenticated.
 		controller.login(auth_attempt["netid"])
-		return redirect("/browser")
+		response = make_response(redirect("/browser"))
+		response.set_cookie('api_token', current_user.generate_auth_token())
+		return response
 	elif "location" in auth_attempt:  # Redirect to CAS.
 		return redirect(auth_attempt["location"])
 	else:  # This should never happen!
@@ -22,4 +24,6 @@ def login():
 @mod_user.route('/logout', methods=['GET', 'POST'])
 def logout():
 	controller.logout()
-	return redirect("/browser")
+	response = make_response(redirect("/browser"))
+	response.set_cookie('api_token', '', expires=0)
+	return response
