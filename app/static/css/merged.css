@@ -1,21 +1,21 @@
+/* rgb values for primary-color */
 html, body {
-  font: 100% "Arial";
+  font: 100% "Avenir-Medium";
   background-color: #eeeeee; }
   html .h1, body .h1 {
     font-size: 28px; }
-  html .navbar-default, body .navbar-default {
-    background-color: #2d9eee;
-    color: white; }
-    html .navbar-default .nav-item, body .navbar-default .nav-item {
-      padding-left: 1vw;
-      padding-right: 1vw; }
-    html .navbar-default .nav-link, body .navbar-default .nav-link {
-      color: white; }
+  html .logo, body .logo {
+    width: 200px; }
+  html .navbar-expand-md, body .navbar-expand-md {
+    background-color: #2d9eee; }
+  html .nav-link, body .nav-link {
+    font-size: 20px; }
   html h1, body h1 {
     text-align: center; }
   html #bigRow, body #bigRow {
     padding-left: 0vw;
-    padding-right: 0vw; }
+    padding-right: 0vw;
+    margin-bottom: 2vh; }
 
 .debug-data {
   color: red; }
@@ -37,28 +37,28 @@ html, body {
     display: none; }
 
 .smallSearchResult {
-  height: 13vh;
-  border: 1px solid #2d9eee;
+  height: 10vh;
+  border: 1px solid silver;
   border-radius: 5px;
   cursor: pointer;
   margin: 0vh 2vh;
   overflow: hidden;
-  background: rgba(0, 191, 255, 0.25); }
+  background: rgba(29, 158, 238, 0.25); }
   .smallSearchResult.selected {
     color: white;
-    background-color: rgba(0, 191, 255, 0.54); }
+    background-color: rgba(29, 158, 238, 0.55); }
     .smallSearchResult.selected:hover {
-      background-color: rgba(0, 191, 255, 0.44); }
+      background-color: rgba(29, 158, 238, 0.52); }
   .smallSearchResult:hover {
-    background-color: rgba(0, 191, 255, 0.22); }
+    background-color: rgba(29, 158, 238, 0.22); }
   .smallSearchResult .resultContents {
     padding-left: 0.8vw;
     padding-right: 0.8vw;
     padding-top: 0.6vh;
     padding-bottom: 0.6vh;
-    font-size: 0.75em;
     overflow: hidden; }
     .smallSearchResult .resultContents .resultTitle {
+      font-size: 0.9em;
       font-weight: bold; }
     .smallSearchResult .resultContents .resultLocation {
       font-size: 0.85em;
@@ -78,13 +78,13 @@ html, body {
   .event-view .event-result-title {
     font-family: serif;
     font-size: 40px;
-    color: #2d9eee;
+    color: black;
     text-align: center;
     font-weight: bold; }
   .event-view .event-result-info {
     width: 100%;
     font-size: 20px;
-    color: #2d9eee;
+    color: black;
     margin: 1em 0.5em; }
   .event-view img {
     float: right;
@@ -124,4 +124,4 @@ html, body {
   .flex-container-row {
     flex-direction: column; } }
 
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=merged.css.map */
