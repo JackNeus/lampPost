@@ -152,7 +152,6 @@ $(document).ready(function(){
 
 	function fetchData(query) {
 		var callback = function(data){
-		    console.log(data);
 		    if (data["status"] === "Success") 
 				event_data = data["data"];
 			else

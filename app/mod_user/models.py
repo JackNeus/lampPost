@@ -4,7 +4,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSign
 from mongoengine import *
 
 class UserEntry(Document):
-	netid = StringField(required = True)
+	netid = StringField(required = True, unique = True)
 
 class User(UserMixin):
 	def __init__(self, uid, netid):
@@ -19,6 +19,7 @@ class User(UserMixin):
 
 	# So long as the expiration time is greater than the CAS expiration time,
 	# there should be no problem with a user's token expiring mid-session.
+	# TODO: Figure out the exact CAS expiration time.
 	def generate_auth_token(self, expiration = 3600 * 24 * 7):
 		s = Serializer(app.config['SECRET_KEY'], expires_in = expiration)
 		return s.dumps({'id': self.uid})

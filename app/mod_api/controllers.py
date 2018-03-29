@@ -34,6 +34,8 @@ def verify_token(token):
 		return False
 	return True
 
+# TODO: Show some sort of error message in browser if a search fails.
+# More of a job for frontend, but I didn't want it to get lost in the HTML.
 @auth.error_handler
 def unauthorized():
 	return make_response(jsonify({'error': 'Unauthorized access'}), 403)

@@ -12,6 +12,7 @@ def login():
 	if "netid" in auth_attempt:  # Successfully authenticated.
 		controller.login(auth_attempt["netid"])
 		response = make_response(redirect("/browser"))
+		# Generate Authorization Token for API use.
 		response.set_cookie('api_token', current_user.generate_auth_token())
 		return response
 	elif "location" in auth_attempt:  # Redirect to CAS.
@@ -25,5 +26,6 @@ def login():
 def logout():
 	controller.logout()
 	response = make_response(redirect("/browser"))
+	# Remove cookie.
 	response.set_cookie('api_token', '', expires=0)
 	return response
