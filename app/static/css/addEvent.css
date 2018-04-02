@@ -1,5 +1,7 @@
 .invisible {
-  color: purple;
   display: none; }
+
+label {
+  font-weight: bold; }
 
 /*# sourceMappingURL=addEvent.css.map */

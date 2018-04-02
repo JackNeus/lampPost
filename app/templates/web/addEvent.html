@@ -5,6 +5,23 @@
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="/static/css/addEvent.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+
+<script>
+	$(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+      	format: 'mm/dd/yyyy',
+      	container: container,
+      	todayHighlight: true,
+      	autoclose: true,
+      };
+      date_input.datepicker(options);
+  })
+</script>
 
 <script> 
 
@@ -50,8 +67,8 @@
 		currentNumShowing = num;
 	}
 
-		$(document).ready(function(){
-			$('.nav-item').removeClass('active');
+	$(document).ready(function(){
+		$('.nav-item').removeClass('active');
 
 		// make the forms visible
 		$("#form-row-2").removeClass("invisible");
@@ -87,167 +104,162 @@
 		});
 	});
 
-		function setNavBar() {
-			document.getElementById("navBarAddEvent").classList.add("active");
-		}
+	function setNavBar() {
+		document.getElementById("navBarAddEvent").classList.add("active");
+	}
 
-	</script>
+</script>
 
-	<body onload="setNavBar()">
+<body onload="setNavBar()">
 
-		<div class="row" id = "bigRowAddEvent">
-			<div class="col-md-3" id = "leftCol">
+	<div class="row" id = "bigRowAddEvent">
+		<div class="col-md-3" id = "leftCol">
 
-			</div>
-			<div class="col-md-6" id = "leftCol">
-				<h3 > Add your event by filling out the fields below. </h3>
+		</div>
+		<div class="col-md-6" id = "leftCol">
+			<h3 > Add your event by filling out the fields below. </h3>
 
-				<form id="addEventForm">
-					<div class="form-group">
-						<label for="exampleInputEmail1"> Title </label>
-						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="The name of your event.">
+			<form id="addEventForm">
+				<div class="form-group">
+					<label for="exampleInputEmail1" > Title </label>
+					<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="The name of your event.">
 
+				</div>
+				<div class="form-group">
+					<label for="exampleFormControlTextarea1"> Description </label>
+					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="A brief description of your event, and why people should come!"></textarea>
+					<small id="emailHelp" class="form-text text-muted"> Good descriptions.... an example (maybe) </small>
+				</div>
+
+				<div class="form-group">
+					<label style="padding-right:1vw">  Number of showings: </label>
+
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" checked="checked" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+						<label class="form-check-label" for="inlineRadio1" style="font-weight:normal">1</label>
 					</div>
-					<div class="form-group">
-						<label for="exampleFormControlTextarea1"> Description </label>
-						<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="A brief description of your event, and why people should come!"></textarea>
-						<small id="emailHelp" class="form-text text-muted"> Good descriptions.... an example (maybe) </small>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" >
+						<label class="form-check-label" for="inlineRadio2" style="font-weight:normal">2</label>
 					</div>
-
-					<div class="form-group">
-						<label style="padding-right:1vw">  Number of showings: </label>
-
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" checked="checked" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-							<label class="form-check-label" for="inlineRadio1">1</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" >
-							<label class="form-check-label" for="inlineRadio2">2</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-							<label class="form-check-label" for="inlineRadio3">3</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option3" >
-							<label class="form-check-label" for="inlineRadio4">4</label>
-						</div>
-
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+						<label class="form-check-label" for="inlineRadio3" style="font-weight:normal">3</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option3" >
+						<label class="form-check-label" for="inlineRadio4" style="font-weight:normal">4</label>
 					</div>
 
-					<div class="form-row" id="form-row-1">
-						<div class="form-group col-md-3">
-							<label id = "firstLocation"> Location</label>
-							<input type="text" class="form-control" id="inputCity">
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputState" id="firstDay"> Day </label>
-							<select id="inputState" class="form-control">
-								<option selected>Choose...</option>
-								<option>...</option>
-							</select>
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputZip" id="firstTime1"> Start Time </label>
-							<input type="text" class="form-control" id="inputZip">
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputZip" id="firstTime2"> End Time </label>
-							<input type="text" class="form-control" id="inputZip">
-						</div>
-					</div>
+				</div>
 
-					<div class="form-row invisible" id="form-row-2">
-						<div class="form-group col-md-3">
-							<label for="inputCity"> Location 2 </label>
-							<input type="text" class="form-control" id="inputCity">
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputState"> Day 2 </label>
-							<select id="inputState" class="form-control">
-								<option selected>Choose...</option>
-								<option>...</option>
-							</select>
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputZip"> Start Time 2 </label>
-							<input type="text" class="form-control" id="inputZip">
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputZip"> End Time 2 </label>
-							<input type="text" class="form-control" id="inputZip">
-						</div>
-					</div>
-
-					<div class="form-row invisible" id="form-row-3">
-						<div class="form-group col-md-3">
-							<label for="inputCity"> Location 3 </label>
-							<input type="text" class="form-control" id="inputCity">
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputState"> Day 3 </label>
-							<select id="inputState" class="form-control">
-								<option selected>Choose...</option>
-								<option>...</option>
-							</select>
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputZip"> Start Time 3</label>
-							<input type="text" class="form-control" id="inputZip">
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputZip"> End Time 3</label>
-							<input type="text" class="form-control" id="inputZip">
-						</div>
-					</div>
-
-					<div class="form-row invisible" id="form-row-4">
-						<div class="form-group col-md-3">
-							<label for="inputCity"> Location 4 </label>
-							<input type="text" class="form-control" id="inputCity">
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputState"> Day 4 </label>
-							<select id="inputState" class="form-control">
-								<option selected>Choose...</option>
-								<option>...</option>
-							</select>
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputZip"> Start Time 4</label>
-							<input type="text" class="form-control" id="inputZip">
-						</div>
-						<div class="form-group col-md-3">
-							<label for="inputZip"> End Time 4</label>
-							<input type="text" class="form-control" id="inputZip">
-						</div>
+				<div class="form-row" id="form-row-1">
+					<div class="form-group col-md-3">
+						<label id = "firstLocation"> Location</label>
+						<input type="text" class="form-control" id="inputCity">
 					</div>
 
 
-					<div class="form-group">
-						<label for="exampleInputFile"> Event Photo/Poster </label>
-						<input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
-						<small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+					<div class="form-group col-md-2">
+						<label id="firstDay" > Start Date </label>
+						<input class="form-control" name="date" type="text">
+					</div>
+					<div class="form-group col-md-2">
+						<label for="inputZip" id="firstTime1"> Start Time </label>
+						<input type="time" class="form-control" id="inputZip">
+					</div>
+					<div class="form-group col-md-2">
+						<label id="firstDay" > End Date </label>
+						<input class="form-control" name="date" type="text">
+					</div>
+					<div class="form-group col-md-2">
+						<label for="inputZip" id="firstTime1"> End Time </label>
+						<input type="time" class="form-control" id="inputZip">
+					</div>
+				</div>
+
+				<div class="form-row invisible" id="form-row-2">
+					<div class="form-group col-md-3">
+						<label for="inputCity"> Location 2 </label>
+						<input type="text" class="form-control" id="inputCity">
 					</div>
 
-					<div class="form-group">
-						<label for="exampleInputEmail1"> Promo Video </label>
-						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter youtube link.">
-
+					<div class="form-group col-md-3">
+						<label id="firstDay" > Date 2</label>
+						<input class="form-control" name="date" type = "text">
 					</div>
+					<div class="form-group col-md-3">
+						<label for="inputZip"> Start Time 2 </label>
+						<input type="text" class="form-control" id="inputZip">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="inputZip"> End Time 2 </label>
+						<input type="text" class="form-control" id="inputZip">
+					</div>
+				</div>
+
+				<div class="form-row invisible" id="form-row-3">
+					<div class="form-group col-md-3">
+						<label for="inputCity"> Location 3 </label>
+						<input type="text" class="form-control" id="inputCity">
+					</div>
+					<div class="form-group col-md-3">
+						<label id="firstDay" > Date 3</label>
+						<input class="form-control" name="date" type = "text">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="inputZip"> Start Time 3</label>
+						<input type="text" class="form-control" id="inputZip">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="inputZip"> End Time 3</label>
+						<input type="text" class="form-control" id="inputZip">
+					</div>
+				</div>
+
+				<div class="form-row invisible" id="form-row-4">
+					<div class="form-group col-md-3">
+						<label for="inputCity"> Location 4 </label>
+						<input type="text" class="form-control" id="inputCity">
+					</div>
+					<div class="form-group col-md-3">
+						<label id="firstDay" > Date 4 </label>
+						<input class="form-control" name="date" type = "text">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="inputZip"> Start Time 4</label>
+						<input type="text" class="form-control" id="inputZip">
+					</div>
+					<div class="form-group col-md-3">
+						<label for="inputZip"> End Time 4</label>
+						<input type="text" class="form-control" id="inputZip">
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label for="exampleInputFile"> Event Photo/Poster </label>
+					<input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+					<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
+				</div>
+
+				<div class="form-group">
+					<label for="exampleInputEmail1"> Promo Video </label>
+					<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="YouTube link to your video, if applicable.">
+
+				</div>
 
 
 
 
 
-					<button type="submit" class="btn btn-primary">Submit!</button>
-				</form>
+				<button type="submit" class="btn btn-primary">Submit!</button>
+			</form>
 
-			</div>
-			<div class="col-md-3" id = "leftCol">
+		</div>
+		<div class="col-md-3" id = "leftCol">
 
-			</div>
+		</div>
 
-		</body>
-		{% endblock %}
+	</body>
+	{% endblock %}
