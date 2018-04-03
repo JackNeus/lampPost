@@ -63,6 +63,8 @@ def get_missing_fields(obj):
     return missing
 
 def get_raw_event(event_entry):
+    if event_entry is None:
+        return []
     raw = event_entry.to_mongo()
     raw["_id"] = str(raw["_id"])
     for i in range(len(raw["instances"])):

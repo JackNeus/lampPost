@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, jsonify, make_response, request, render_template
+from flask import jsonify, make_response, request, render_template
 from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
 from json import dumps
@@ -8,13 +8,14 @@ from app.mod_user.models import User
 from . import api_module as mod_api
 from . import controllers as controller
 from .models import *
-
+from app import CONFIG
 
 auth = HTTPTokenAuth(scheme='Token')
 
 success_text = "Success"
 error_text = "Error"
-internal_error_text = "Internal error. Please contact a developer."
+failure_text = "Error"
+internal_failure_message = "Something went wrong. Please contact a developer."
 def gen_response(status):
 	response = {"status": status}
 	return response
@@ -28,6 +29,14 @@ def gen_error_response(error_msg):
 	response = gen_response(error_text)
 	response["error_msg"] = error_msg
 	return jsonify(response)
+
+def gen_failure_response(failure_msg):
+	# Only print failure message if in DEBUG mode. 
+	# Otherwise, use a canned response.
+	if CONFIG["DEBUG"]:
+		return gen_error_response(failure_msg)
+	else:
+		return gen_error_response(internal_failure_message)
 
 @auth.verify_token
 def verify_token(token):
@@ -67,15 +76,11 @@ def add_event():
 @mod_api.route("/event/get/<id>", methods=["GET"])
 def get_event(id):
 	try:
-		event = EventEntry.objects(id=id)
-		if len(event) == 0:
-			return gen_error_response("No event with that id exists.")
-		if len(event) > 1:
-			# More than 1 event returned for the given ID, which is very bad
-			return gen_error_response(internal_error_text)
-		return gen_data_response(get_raw_event(event[0]));
+		event = controller.get_event(id)
+		return gen_data_response(get_raw_event(event));
 	except Exception as e:
-		return gen_error_response(str(e))
+		raise e
+		return gen_failure_response(str(e))
 
 @mod_api.route("/event/delete/<id>", methods=["DELETE"])
 def delete_event(id):
@@ -101,7 +106,7 @@ def delete_event(id):
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>/<start_datetime>")
-@auth.login_required
+#@auth.login_required
 def event_search(query, start_datetime):
 	try:
 		tokens = query.split()
