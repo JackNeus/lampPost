@@ -6,4 +6,5 @@ env/*
 # Sass
 .sass-cache/
 *.css.map
-test/*
+test/tmp/*
+tmp/*

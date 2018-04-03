@@ -1,0 +1,12 @@
+[{
+"title": "Test #1",
+"host": "LampPost Team",
+"creator": "jneus",
+"instances": [{
+	"location": "COS Building",
+	"start_datetime": "5pm April 20th 2030",
+	"end_datetime": "6pm April 20th 2030"
+}],
+"description": "This is the first test."
+}
+]
