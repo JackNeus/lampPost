@@ -34,7 +34,7 @@ def error(e):
 
 from app.mod_web.controllers import mod_web as web_module
 app.register_blueprint(web_module)
-from app.mod_api.controllers import mod_api as api_module
+from app.mod_api import api_module
 app.register_blueprint(api_module)
 from app.mod_user.views import mod_user as user_module
 app.register_blueprint(user_module)
