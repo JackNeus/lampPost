@@ -1,10 +1,12 @@
 # Testing
 Testing LampPost is semi-automatic.
+Currently, the tests are not quite unit tests. They are dependent on one another, and the order in which they are executed matters. 
+This should probably be redone when our app becomes massively successful and is being rolled out nationwide.
 
 ## Files
 ```test.sh``` sets up a local MongoDB instance and starts LampPost with the proper testing configuration file.
 
-```test.py``` runs the tests.
+```test.py``` includes the tests themselves and the code that executes them.
 
 ```test_config.public_cfg``` is the test configuration file. Because this contains no actual values, it is safe to commit it to the repository.
 
