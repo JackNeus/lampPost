@@ -151,12 +151,20 @@ $(document).ready(function(){
 	});
 
 	function fetchData(query) {
-		$.getJSON('http://localhost:5001/api/event/search/'+query, function(data){
+		var callback = function(data){
 		    if (data["status"] === "Success") 
 				event_data = data["data"];
 			else
 				event_data = null;
 			updateSearchResults();
+		};
+		$.ajax({
+			url: 'http://localhost:5001/api/event/search/'+query,
+			dataType: 'json',
+			headers: {
+				'Authorization': ('Token ' + $.cookie('api_token'))
+			},
+			success: callback
 		});
 	}
 	

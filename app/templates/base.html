@@ -39,9 +39,11 @@
     <!-- Time picker and date picker -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+    <script src="static/js/jquery.cookie.js"></script>
+
     <link rel="stylesheet" href="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.css">
     {% block header %}{% endblock %}
   </head>
@@ -75,7 +77,7 @@
           </li>
           <li class="nav-item">
             {% if current_user.is_authenticated %}
-            <a class="nav-link" href="/logout"> Logout ({{current_user.uid}}) </a>
+            <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
             {% else %}
              <a class="nav-link" href="/login"> Login </a>
             {% endif %}
