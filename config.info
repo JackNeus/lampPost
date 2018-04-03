@@ -13,3 +13,5 @@ DB_PASSWORD=
 
 # If set to True, will initialize data to data in static/mock_data/data.json
 USE_MOCK_DATA=
+# If set to True, will unprotect all API endpoints. Should only be used if absolutely needed.
+BYPASS_API_AUTH=

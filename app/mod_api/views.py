@@ -3,7 +3,6 @@ from flask import jsonify, make_response, request, render_template
 from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
 import json
-import re
 from app.mod_user.models import User
 from . import api_module as mod_api
 from . import controllers as controller
@@ -40,6 +39,10 @@ def gen_failure_response(failure_msg):
 
 @auth.verify_token
 def verify_token(token):
+	# TODO: Make this less scary.
+	if CONFIG["DEBUG"] and CONFIG["BYPASS_API_AUTH"]:
+		return True
+
 	user = User.verify_auth_token(token)
 	if user is None:
 		return False
@@ -52,6 +55,7 @@ def unauthorized():
 	return make_response(jsonify({'error': 'Unauthorized access'}), 403)
 
 @mod_api.route("/event/add", methods=["PUT"])
+@auth.login_required
 def add_event():
 	if not request.is_json:
 		return gen_error_response("Request was not JSON.")
@@ -75,6 +79,7 @@ def add_event():
 	# Return id of newly added event.
 
 @mod_api.route("/event/get/<id>", methods=["GET"])
+@auth.login_required
 def get_event(id):
 	try:
 		event = controller.get_event(id)
@@ -85,6 +90,7 @@ def get_event(id):
 		return gen_failure_response(str(e))
 
 @mod_api.route("/event/delete/<id>", methods=["DELETE"])
+@auth.login_required
 def delete_event(id):
 	try:
 		event = controller.delete_event(id)
@@ -92,32 +98,15 @@ def delete_event(id):
 			return gen_error_response("No event with that id exists.")
 		return gen_data_response(get_raw_event(event))
 	except Exception as e:
-		return gen_error_response(str(e))
+		return gen_failure_response(str(e))
 
-# Search works as follows:
-# The query is tokenized (whitespace delimited).
-# For each token, events with tokens (whitespace delimited) matching the token are aggregated.
-# The current event fields queried are title, location, and host.
-# The intersection of results for the tokens is returned.
-# Only events ending after start_datetime are included in search results.
-# Currently, if one or more instances of an event match the search terms, all instances are returned.
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>/<start_datetime>")
-#@auth.login_required
+@auth.login_required
 def event_search(query, start_datetime):
 	try:
-		tokens = query.split()
-		results = []
-		for token in tokens:
-			# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
-			token_re = re.compile("(\s*|^)" + token, re.IGNORECASE)
-			events = set()
-			events = events.union(set(EventEntry.objects(title = token_re, instances__end_datetime__gte = start_datetime)))
-			events = events.union(set(EventEntry.objects(host = token_re, instances__end_datetime__gte = start_datetime)))
-			events = events.union(set(EventEntry.objects(instances__location = token_re, instances__end_datetime__gte = start_datetime)))
-			results.append(events)
-		events = set.intersection(*results)
+		events = controller.search_events(query, start_datetime)
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
-		return gen_error_response(str(e))
+		return gen_failure_response(str(e))
