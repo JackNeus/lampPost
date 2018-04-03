@@ -1,16 +1,25 @@
 from flask import Flask, render_template
 from mongoengine import register_connection
+import sys
 
 class FlaskApp(Flask):
     def __init__(self):
         Flask.__init__(self, __name__)
 
 app = FlaskApp()
-
-try:
-    app.config.from_pyfile("../dev_config.cfg")
-except FileNotFoundError:
-    print("Development configuration not found.")
+# Use given config file.
+if len(sys.argv) > 1:
+    try:
+        app.config.from_pyfile("../" + sys.argv[1])
+        print("Running app in MANUAL mode.")
+    except:
+        print("Supplied configuration not found.")
+else:
+    try:
+        app.config.from_pyfile("../dev_config.cfg")
+        print("Running app in DEVELOPMENT mode.")
+    except FileNotFoundError:
+        print("Development configuration not found.")
 
 CONFIG = app.config
 
