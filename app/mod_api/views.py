@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import jsonify, make_response, request, render_template
 from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
-from json import dumps
+import json
 import re
 from app.mod_user.models import User
 from . import api_module as mod_api
@@ -62,15 +62,16 @@ def add_event():
 		return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
 	# Try to add new event
 	try:
-		new_event = EventEntry.from_json(json.dumps(data))
-		new_event.save()
+		new_event = controller.add_event(json.dumps(data))
 		return gen_data_response({"id": str(new_event.id)})
 	except NotUniqueError as e:
 		return gen_error_response("An event already exists with that title.")
 	except FieldDoesNotExist as e:
-		return gen_error_response("Your request included a field that does not exist.")
+		return gen_error_response("Request included a field that does not exist.")
+	except ValidationError as e:
+		return gen_error_response("Request was malformatted.")
 	except Exception as e:
-		return gen_error_response(str(e))
+		return gen_failure_response(str(e))
 	# Return id of newly added event.
 
 @mod_api.route("/event/get/<id>", methods=["GET"])
@@ -78,22 +79,18 @@ def get_event(id):
 	try:
 		event = controller.get_event(id)
 		return gen_data_response(get_raw_event(event));
+	except ValidationError as e:
+		return gen_error_response("Request was malformatted.")
 	except Exception as e:
-		raise e
 		return gen_failure_response(str(e))
 
 @mod_api.route("/event/delete/<id>", methods=["DELETE"])
 def delete_event(id):
 	try:
-		event = EventEntry.objects(id=id)
-		if len(event) == 0:
+		event = controller.delete_event(id)
+		if event is None:
 			return gen_error_response("No event with that id exists.")
-		if len(event) > 1:
-			# This cannot and should not ever happen.
-			return gen_error_response(internal_error_text);
-		# Delete event.
-		event[0].delete()
-		return gen_response(success_text)
+		return gen_data_response(get_raw_event(event))
 	except Exception as e:
 		return gen_error_response(str(e))
 
