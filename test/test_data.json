@@ -8,5 +8,26 @@
 	"end_datetime": "6pm April 20th 2030"
 }],
 "description": "This is the first test."
+},
+{
+"title": "Conference Series",
+"host": "LampPost Team",
+"creator": "tpollner",
+"instances": [{
+	"location": "COS Building",
+	"start_datetime": "5pm April 15th 2030",
+	"end_datetime": "6pm April 15th 2030"
+},
+{
+	"location": "Sherrard",
+	"start_datetime": "3:30pm April 16th 2030",
+	"end_datetime": "4:30pm April 16th 2030"
+},
+{
+	"location": "McCosh 50",
+	"start_datetime": "3:30pm April 16th 2030",
+	"end_datetime": "4:45pm April 16th 2030"
+}],
+"description": "This is an event with multiple instances."
 }
 ]

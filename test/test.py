@@ -1,4 +1,5 @@
 import dateutil.parser
+import functools
 import json
 import requests
 import os
@@ -21,24 +22,33 @@ def get_test_name(f):
 # For all fields in source, checks if the corresponding fields in record match.
 # Ignores extra fields in record.
 def compare_events(source, record):
-	source["instances"].sort()
-	record["instances"].sort()
 	for field in source:
 		if field == "instances":
 			# Source and record have different numbers of instances.
 			if len(source[field]) != len(record[field]):
 				return False
+
+			# Extra formatting for datetimes because we don't know what format 
+			# they're in in source.
+			for subfield in ["start_datetime", "end_datetime"]:
+				for i in range(len(source[field])):
+					source[field][i][subfield] = dateutil.parser.parse(source[field][i][subfield]).timestamp()
+					record[field][i][subfield] = dateutil.parser.parse(record[field][i][subfield]).timestamp()
+
+			def cmp(x, y):
+				if x["start_datetime"] == y["start_datetime"]:
+					return x["end_datetime"] - y["end_datetime"]
+				return x["start_datetime"] - y["start_datetime"]
+			source["instances"] = sorted(source["instances"], key=functools.cmp_to_key(cmp))
+			record["instances"] = sorted(record["instances"], key=functools.cmp_to_key(cmp))
+
 			# For each instance:
 			for i in range(len(source[field])):
 				# For each field in instance:
 				for subfield in source[field][i]:
 					source_value = source[field][i][subfield]
 					record_value = record[field][i][subfield]
-					# Special logic for datetimes because we don't know what format 
-					# they're in in source.
-					if subfield in ["start_datetime", "end_datetime"]:
-						source_value = dateutil.parser.parse(source_value)
-						record_value = dateutil.parser.parse(record_value)
+
 					# Fields not equal.
 					if source_value != record_value:
 						return False
