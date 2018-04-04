@@ -16,7 +16,7 @@ class InstanceEntry(EmbeddedDocument):
 class EventEntry(Document):
     title = StringField(required = True, unique = True)
     host = StringField(required = True)
-    instances = EmbeddedDocumentListField(InstanceEntry, required = True)
+    instances = EmbeddedDocumentListField(InstanceEntry, required = True, min_length = 1)
         
     description = StringField(required = True)
     visibility = IntField(required = True, default = 0) 
@@ -44,6 +44,8 @@ required_fields = [
 def has_field(obj, field):
     # If a field in instance/, need to check every instance for the field.
     if "/" in field:
+        if "instances" not in obj:
+            return False
         field = field.split("/")[1]
         for instance in obj["instances"]:
             if field not in instance:
@@ -63,6 +65,8 @@ def get_missing_fields(obj):
     return missing
 
 def get_raw_event(event_entry):
+    if event_entry is None:
+        return []
     raw = event_entry.to_mongo()
     raw["_id"] = str(raw["_id"])
     for i in range(len(raw["instances"])):
