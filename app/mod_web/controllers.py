@@ -4,6 +4,7 @@ from app.mod_web.forms import NameForm
 from app.mod_web.models import User
 from .models import *
 import json
+import urllib
 
 mod_web = Blueprint('web', __name__, url_prefix="")
 
@@ -39,8 +40,31 @@ def browser():
 			print("Error loading mock data.")
 	return render_template("web/browser.html")
 
-@mod_web.route('/addEvent')
+@mod_web.route('/addEvent', methods=['GET', 'POST'])
 def addEvent():
+	if request.method == 'POST':
+		eventData = {}
+		eventData['title'] = request.form['title']
+		eventData['description'] = request.form['description']
+		eventData['visibility'] = 0 # this is just a default, later let's actually let users determine this
+		
+		allLocations = request.form.getlist("location")
+		allDates = request.form.getlist("date")
+		allTimes = request.form.getlist("time")
+		showings = []
+		# get num of showings from iRO field, assumes that this number must be <= 9
+		numShowings = int(request.form['inlineRadioOptions'][-1])
+		for i in range(numShowings):
+			instanceDict = {}
+			instanceDict["location"] = allLocations[i]
+			instanceDict["start_datetime"] = allDates[2*i] + " " + allTimes[2*i]
+			instanceDict["end_datetime"] = allDates[2*i+1] + " " + allTimes[2*i+1]
+			showings.append(instanceDict)
+
+		eventData['instances'] = showings
+		eventDataJSON = json.dumps(eventData)
+
+		print(eventDataJSON)
 	return render_template("web/addEvent.html")
 
 @mod_web.route('/main')
@@ -82,5 +106,4 @@ def puppies():
 @mod_web.route('/hello', methods=['GET', 'POST'])
 def hello():
 	return render_template("web/hello.html")
-
 
