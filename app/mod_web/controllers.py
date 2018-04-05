@@ -8,6 +8,11 @@ import urllib
 
 mod_web = Blueprint('web', __name__, url_prefix="")
 
+# Homepage
+@mod_web.route('/')
+def home():
+	return render_template("web/home.html")
+
 @mod_web.route('/index', methods=['GET', 'POST'])
 def index():
 	form = NameForm(request.form)

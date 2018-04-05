@@ -20,47 +20,89 @@
 
 <html>
   <head>
-    <title>LampPost</title>
+    <title>lampPost</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
-    
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/static/css/merged.css?v=0">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="https://www.cs.princeton.edu/favicon" />
+    
+    <!-- Time picker and date picker -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="static/js/jquery.cookie.js"></script>
+
+    <link rel="stylesheet" href="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.css">
     {% block header %}{% endblock %}
   </head>
 
-  <body>  
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-inverse">
+        <a class="navbar-brand" href="#"><img src = "../../static/graphics/logoNavBar.svg" class="image-fluid logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="#navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-inverse">
+      <a class="navbar-brand" href="#"><img src = "../../static/graphics/logoNavBar.svg" class="image-fluid logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="#navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <nav class="navbar navbar-expand-sm navbar-dark">
-      <span class="mr-auto navbar-brand mb-0 h1"> LampPost </span>
-      <ul class="navbar-nav"> 
-          <li class="nav-item " id="navBarAddEvent">
-              <a class="nav-link " href="addEvent"> Add an Event! </a>
+      <div class="collapse navbar-collapse" id="navbarToggle">
+        <ul class="navbar-nav ml-auto mt-2 mt-md-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
           </li>
-          <li class="nav-item ">
-              <a class="nav-link" href="#"> About </a>
+          <!-- For the future: Home Search Add MyCal About Help Login -->
+          <li class="nav-item">
+            <a class="nav-link" href="/browser">Browser</a>
           </li>
-          <li class="nav-item ">
-              <a class="nav-link " href="#"> Help </a>
+          <li class="nav-item">
+            <a class="nav-link" href="/potato">Potato</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/puppies">Puppies</a>
+          </li>
+          </li>
+          <li class="nav-item">
+            {% if current_user.is_authenticated %}
+            <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
+            {% else %}
+             <a class="nav-link" href="/login"> Login </a>
+            {% endif %}
           </li>
         </ul>
+      </div>
     </nav>
-
-
-    {% if config.DEBUG %}
-      <h4 class="debug-data" id="global-debug-msg"></h4>
-    {% endif %}
-    {% block content %}{% endblock %}
+    <!-- Active link -->
+    <script>
+      // On click (for immediate response before page load)
+      $(".navbar-nav .nav-item").on("click", function(){
+        $(".navbar-nav").find(".active").removeClass("active");
+        $(this).addClass("active");
+      });
+      // On page load (for longterm highlight)
+      $(document).ready(function(){
+        var pathname = window.location.pathname;
+        $("a[href=\\" + pathname + "]").addClass('active');
+      });
+     </script>
+     {% if config.DEBUG %}
+       <h4 class="debug-data" id="global-debug-msg"></h4>
+     {% endif %}
+     {% block content %}{% endblock %}
   </body>
   {% block scripts %}{% endblock %}
-
 </html>
