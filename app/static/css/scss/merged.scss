@@ -41,8 +41,25 @@ html, body {
 }
 
 #searchBox {
-	padding-top: 2vh;
+	padding: 0;
 	margin: 0vh 2vh;
+	max-width: 100%;
+	width: 100%;
+	flex-shrink: 1000;
+}
+
+#searchSort {
+	border: 1px solid #AAA;
+	color: #555;
+	font-size: 0.75em;
+	overflow: hidden;
+	border-radius: 2px;
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin: 0vh 2vh;
+      flex-grow: 1000;
+      flex-shrink: 0;
 }
 
 .filters {
@@ -55,11 +72,6 @@ html, body {
 	input[type=text] {
 		font-size: 0.65em;
 	}
-	.btn {
-		line-height: 1;
-		font-size: 0.75em;
-	}
-	
 	.datetime {
 		display: none;
 	}
@@ -89,14 +101,30 @@ html, body {
 		padding-right: 0.8vw;
 		padding-top: 0.6vh;
 		padding-bottom: 0.6vh;
+		text-overflow: ellipsis;
 		overflow: hidden;
 			.resultTitle {
 				font-size: 0.9em;
 				font-weight: bold;
 			}
-			.resultLocation {
+			.resultFireBtn {
+				font-size: 24px;
+				font-family: FontAwesome;
+				color: white;
+				padding: 0;
+				&.selected {
+					color: orange;
+					&:hover {
+						color: orange;
+					}
+				}
+				&:hover {
+					color: rgba(255, 165, 0, 0.5);
+				}
+			}
+			.resultFavNum {
 				font-size: 0.85em;
-				color: rgba(0, 0, 0, 0.5);
+				font-weight: bold;
 			}
 			.resultTime {
 				font-size: 0.85em;

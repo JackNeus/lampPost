@@ -28,20 +28,20 @@ $(document).ready(function(){
 		});
 	}
 	
-	// calculates the number of days between date1 and date2
-	Date.daysBetween = function( date1, date2 ) {
+	// calculates the difference between date1 and date2 in ms, with an
+	// option to return the difference in a unit of days
+	Date.timeBetween = function( date1, date2, opt_days ) {
 	  // Get 1 day in milliseconds
-	  var one_day=1000*60*60*24;
+	  var one_day = 1000*60*60*24;
 
 	  // Convert both dates to milliseconds
 	  var date1_ms = date1.getTime();
 	  var date2_ms = date2.getTime();
-
-	  // Calculate the difference in milliseconds
 	  var difference_ms = date2_ms - date1_ms;
 	    
-	  // Convert back to days and return
-	  return Math.round(difference_ms/one_day); 
+	  // Return difference in days or seconds
+	  if (opt_days) return Math.round(difference_ms/one_day); 
+	  else return difference_ms/1000;
 	}
 	
 	// makes desired date string to be used in the search results
@@ -53,7 +53,7 @@ $(document).ready(function(){
 		// Special cases for dates within a week of current date
 		var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", 
 				    "Thursday", "Friday", "Saturday"];
-		var time_diff = Date.daysBetween(today, start_date);
+		var time_diff = Date.timeBetween(today, start_date, true);
 		
 		if (time_diff == -1)
 			var date_str = "Yesterday";
@@ -88,14 +88,14 @@ $(document).ready(function(){
 		// sort all instances of the event by date
 		for (var i = 0; i < event_data.length; i++) {
 			event_data[i].instances.sort(function(a, b) {
-				return Date.daysBetween(new Date(b.start_datetime), 
-								new Date(a.start_datetime));
+				return Date.timeBetween(new Date(b.start_datetime), 
+								new Date(a.start_datetime), false);
 			});
 		}
 		// sort the events by date (using the first instance of the event)
 		event_data.sort(function (a, b) {
-			return Date.daysBetween(new Date(b.instances[0].start_datetime), 
-						      new Date(a.instances[0].start_datetime));
+			return Date.timeBetween(new Date(b.instances[0].start_datetime), 
+						      new Date(a.instances[0].start_datetime), false);
 		});
 		
 		// create html code for each search result
