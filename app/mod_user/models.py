@@ -2,9 +2,7 @@ from app import app
 from flask_login import UserMixin
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 from mongoengine import *
-
-class UserEntry(Document):
-	netid = StringField(required = True, unique = True)
+from app.mod_api import controllers as mod_api_controllers
 
 class User(UserMixin):
 	def __init__(self, uid, netid):
@@ -34,9 +32,9 @@ class User(UserMixin):
 		except BadSignature:
 			return None  # Invalid token.
 		try:
-			user = UserEntry.objects(id=data['id'])
-		except:
-			return None
-		if user.count() != 1:
+			user = mod_api_controllers.get_user_by_uid(data['id'])
+		except Exception as e:
+			raise e
+		if user is None:
 			return None  # Something went wrong.
-		return user[0]
+		return user

@@ -24,6 +24,37 @@ def delete_event(id):
 		return None
 	event.delete()
 	return event
+
+def get_uid_with_netid(netid):
+	netid = netid.lower()
+	try:
+		entries = UserEntry.objects(netid = netid)
+		if entries.count() == 1:
+			return entries[0].id
+		elif entries.count() == 0:
+			return None
+		return None
+	except Exception as e:
+		raise e
+
+def get_user_by_uid(uid):
+	try:
+		entries = UserEntry.objects(id = uid)
+		if entries.count() == 1:
+			return entries[0]
+		return None
+	except Exception as e:
+		raise e
+
+# Add UserEntry for given netid.
+def add_user(netid):
+	netid = netid.lower()
+	entries = UserEntry.objects(netid = netid)
+	if entries.count() > 0:
+		raise UserExistsError
+	new_user = UserEntry(netid = netid)
+	new_user.save()
+	return new_user
 	
 # Search works as follows:
 # The query is tokenized (whitespace delimited).

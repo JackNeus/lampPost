@@ -1,6 +1,9 @@
 from dateutil.parser import *
 from mongoengine import *
 
+class UserEntry(Document):
+    netid = StringField(required = True, unique = True)
+
 class InstanceEntry(EmbeddedDocument):
     location = StringField(required = True, min_length=3)
     start_datetime = DateTimeField(required = True)
