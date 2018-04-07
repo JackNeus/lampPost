@@ -27,6 +27,7 @@ def delete_event(id):
 
 def edit_event(event):
 	event.save()
+	return None
 
 def get_uid_with_netid(netid):
 	netid = netid.lower()
@@ -58,6 +59,10 @@ def add_user(netid):
 	new_user = UserEntry(netid = netid)
 	new_user.save()
 	return new_user
+
+def edit_user(user):
+	user.save()
+	return None
 	
 # Search works as follows:
 # The query is tokenized (whitespace delimited).

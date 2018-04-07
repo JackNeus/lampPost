@@ -17,7 +17,6 @@ def load_user(user_id):
 			# Throw an error
 			raise UserDoesNotExistError
 		user = User(str(user_entry.id), user_entry.netid)
-		print(user.netid)
 		return user
 	except Exception as e:
 		raise e

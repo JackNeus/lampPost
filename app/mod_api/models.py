@@ -3,7 +3,7 @@ from mongoengine import *
 
 class UserEntry(Document):
     netid = StringField(required = True, unique = True)
-    favorites = ListField(required = True)
+    favorites = ListField()
 
 class InstanceEntry(EmbeddedDocument):
     location = StringField(required = True, min_length=3)

@@ -115,12 +115,32 @@ def event_search(query, start_datetime):
 @auth.login_required
 def add_event_fav(userid, eventid):
 	try:
-		# increment the event's number of favorites
 		event = controller.get_event(eventid)
-		event.favorites = event.favorites + 1
-		controller.edit_event(event)
 		# add eventid to list of user's favorite events
 		user = controller.get_user_by_uid(userid)
-		user.favorites.append(eventid)
+		if eventid not in user.favorites:
+			user.favorites.append(eventid)
+			# increment the event's number of favorites
+			event.favorites = event.favorites + 1
+			controller.edit_event(event)
+			controller.edit_user(user)
+		return jsonify(event.favorites)
+	except Exception as e:
+		return gen_failure_response(str(e))
+
+@mod_api.route("/user/fav/remove/<userid>/<eventid>")
+@auth.login_required
+def remove_event_fav(userid, eventid):
+	try:
+		event = controller.get_event(eventid)
+		user = controller.get_user_by_uid(userid)
+		if eventid in user.favorites:
+			user.favorites.remove(eventid)
+			controller.edit_user(user)
+			event.favorites = event.favorites - 1
+			controller.edit_event(event)
+		else:
+			return gen_error_response("You can't un-favorite an event that isn't in your favorites!")
+		return jsonify(event.favorites)
 	except Exception as e:
 		return gen_failure_response(str(e))
