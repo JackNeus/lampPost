@@ -110,3 +110,17 @@ def event_search(query, start_datetime):
 		return gen_data_response(events)
 	except Exception as e:
 		return gen_failure_response(str(e))
+
+@mod_api.route("/user/fav/add/<userid>/<eventid>")
+@auth.login_required
+def add_event_fav(userid, eventid):
+	try:
+		# increment the event's number of favorites
+		event = controller.get_event(eventid)
+		event.favorites = event.favorites + 1
+		controller.edit_event(event)
+		# add eventid to list of user's favorite events
+		user = controller.get_user_by_uid(userid)
+		user.favorites.append(eventid)
+	except Exception as e:
+		return gen_failure_response(str(e))

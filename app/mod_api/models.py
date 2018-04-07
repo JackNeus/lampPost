@@ -3,6 +3,7 @@ from mongoengine import *
 
 class UserEntry(Document):
     netid = StringField(required = True, unique = True)
+    favorites = ListField(required = True)
 
 class InstanceEntry(EmbeddedDocument):
     location = StringField(required = True, min_length=3)
@@ -23,6 +24,7 @@ class EventEntry(Document):
         
     description = StringField(required = True)
     visibility = IntField(required = True, default = 0) 
+    favorites = IntField(required = True, default = 0)
 
     # For internal use only.
     creator = StringField(required = True)

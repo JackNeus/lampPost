@@ -25,6 +25,9 @@ def delete_event(id):
 	event.delete()
 	return event
 
+def edit_event(event):
+	event.save()
+
 def get_uid_with_netid(netid):
 	netid = netid.lower()
 	try:
