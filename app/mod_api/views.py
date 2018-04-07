@@ -124,7 +124,7 @@ def add_event_fav(userid, eventid):
 			event.favorites = event.favorites + 1
 			controller.edit_event(event)
 			controller.edit_user(user)
-		return jsonify(event.favorites)
+		return jsonify(event.favorites) # need to return something or views gets angry
 	except Exception as e:
 		return gen_failure_response(str(e))
 
@@ -142,5 +142,14 @@ def remove_event_fav(userid, eventid):
 		else:
 			return gen_error_response("You can't un-favorite an event that isn't in your favorites!")
 		return jsonify(event.favorites)
+	except Exception as e:
+		return gen_failure_response(str(e))
+
+@mod_api.route("/user/fav/get/<userid>")
+@auth.login_required
+def get_favorites(userid):
+	try:
+		user = controller.get_user_by_uid(userid)
+		return json.dumps(user.favorites)
 	except Exception as e:
 		return gen_failure_response(str(e))
