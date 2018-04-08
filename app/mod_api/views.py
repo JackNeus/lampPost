@@ -64,6 +64,15 @@ def add_event():
 	missing_fields = get_missing_fields(data)
 	if len(missing_fields) > 0:
 		return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
+	
+	# Make sure creator matches authorized user.
+	try:
+		user = User.get_user_in_token(request)
+		if user is None or user.netid != data["creator"]:
+			return gen_error_response("Attempted to create event for different user.")
+	except:
+		return gen_error_response("Invalid authorization.")
+
 	# Try to add new event
 	try:
 		new_event = controller.add_event(json.dumps(data))

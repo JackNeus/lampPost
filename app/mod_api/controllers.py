@@ -24,7 +24,7 @@ def delete_event(id):
 		return None
 	event.delete()
 	return event
-	
+
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
 # For each token, events with tokens (whitespace delimited) matching the token are aggregated.
