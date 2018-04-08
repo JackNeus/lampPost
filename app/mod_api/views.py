@@ -111,13 +111,24 @@ def event_search(query, start_datetime):
 	except Exception as e:
 		return gen_failure_response(str(e))
 
+@mod_api.route("/user/get/created/<userid>")
+@auth.login_required
+def get_created_events(userid):
+	try:
+		user = controller.get_user(userid)
+		events = controller.creator_events(str(user.netid))
+		events = [get_raw_event(event) for event in events]
+		return gen_data_response(events)
+	except Exception as e:
+		return gen_failure_response(str(e))
+
 @mod_api.route("/user/fav/add/<userid>/<eventid>")
 @auth.login_required
 def add_event_fav(userid, eventid):
 	try:
 		event = controller.get_event(eventid)
 		# add eventid to list of user's favorite events
-		user = controller.get_user_by_uid(userid)
+		user = controller.get_user(userid)
 		if eventid not in user.favorites:
 			user.favorites.append(eventid)
 			# increment the event's number of favorites
@@ -133,7 +144,7 @@ def add_event_fav(userid, eventid):
 def remove_event_fav(userid, eventid):
 	try:
 		event = controller.get_event(eventid)
-		user = controller.get_user_by_uid(userid)
+		user = controller.get_user(userid)
 		if eventid in user.favorites:
 			user.favorites.remove(eventid)
 			controller.edit_user(user)
@@ -149,7 +160,7 @@ def remove_event_fav(userid, eventid):
 @auth.login_required
 def get_favorites(userid):
 	try:
-		user = controller.get_user_by_uid(userid)
+		user = controller.get_user(userid)
 		return json.dumps(user.favorites)
 	except Exception as e:
 		return gen_failure_response(str(e))

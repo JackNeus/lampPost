@@ -12,7 +12,7 @@ GenericMongoError = Exception("GenericMongoError")
 @login_manager.user_loader
 def load_user(user_id):
 	try:
-		user_entry = mod_api_controllers.get_user_by_uid(user_id)
+		user_entry = mod_api_controllers.get_user(user_id)
 		if user_entry is None:
 			# Throw an error
 			raise UserDoesNotExistError

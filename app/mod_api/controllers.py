@@ -29,6 +29,10 @@ def edit_event(event):
 	event.save()
 	return None
 
+def creator_events(netid):
+	events = EventEntry.objects(creator = netid)
+	return events
+
 def get_uid_with_netid(netid):
 	netid = netid.lower()
 	try:
@@ -41,7 +45,7 @@ def get_uid_with_netid(netid):
 	except Exception as e:
 		raise e
 
-def get_user_by_uid(uid):
+def get_user(uid):
 	try:
 		entries = UserEntry.objects(id = uid)
 		if entries.count() == 1:
