@@ -1,7 +1,7 @@
 // DEPENDENCIES: displaySearches.js, displayEvent.js
 
 // Event data for currently displayed data.
-var event_data;
+var event_data = [];
 
 // Allow for external population of event_data.
 // Currently only used for USE_MOCK_DATA flag.

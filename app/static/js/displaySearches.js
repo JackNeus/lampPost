@@ -11,16 +11,17 @@ var showSearchResults = function() {
 	
 	// create html code for each search result
 	for (var i = 0; i < event_data.length; i++) {
-		// put title and fire button on same row
+		// Title of event
 		var title = $('<p />').attr({
 			class: "resultTitle"
 		}).append(event_data[i].title);
 		
-		
+		// Fire icon
 		var fireIcon = $('<i />').attr({
 			class: "fas fa-fire",
 		});
 		
+		// Clickable fire button that displays "Favorite" when hovered over
 		var fireBtn = $('<div />').attr({
 			class: "resultFireBtn btn",
 			title: "Favorite",
@@ -29,13 +30,14 @@ var showSearchResults = function() {
 		
 		// TODO: get 'getFav' from backend
 		// var getFav = event_data[i].favorites;
-		var getFav = Math.floor(Math.random() * 100);
-		var favNum = $('<p />').attr({
-			class: "resultFavNum",
-			id: "resultFavNum" + (i + 1)
+		// Number of favorites an event has
+		var getFire = Math.floor(Math.random() * 100);
+		var fireNum = $('<p />').attr({
+			class: "resultFireNum",
+			id: "resultFireNum" + (i + 1)
 		}).append(getFav);
 		
-		// print multiple instances
+		// All dates/times of an event
 		var instances = event_data[i].instances;
 		var allTimes = $('<div />');
 		for (var j = 0; j < instances.length; j++) {
@@ -46,18 +48,22 @@ var showSearchResults = function() {
 			allTimes.append(time);
 		}
 		
-		var firstColumn = $('<div />').attr({
+		// Title/dates are left aligned
+		var leftColumn = $('<div />').attr({
 			class: "p-2 mr-auto"
 		}).append(title).append(allTimes);
 		
+		// Fire button and number of favorites are inlined with event title
 		var firstRow = $('<div />').attr({
 			class: "d-flex flex-row align-items-start"
-		}).append(firstColumn).append(fireBtn).append(favNum);
+		}).append(leftColumn).append(fireBtn).append(favNum);
 		
+		// Container holding the result contents
 		var smallDiv = $('<div >').attr({
 			class: "resultContents"
 		}).append(firstRow);
 		
+		// Container holding all event infor and the id of the event
 		var largeDiv = $('<div />').attr({
 			class: "smallSearchResult", id: "smallSearchResult" + (i + 1), 
 		}).append(smallDiv);
@@ -68,6 +74,7 @@ var showSearchResults = function() {
 	
 	// handle clicks of fire button
 	updateFireBtn();
+	// handle click of event
 	updateEventView();
 }
 
@@ -81,17 +88,17 @@ var updateFireBtn = function () {
 		fireBtn.classList.toggle("selected");
 		if (fireBtn.classList.contains("selected")) {
 			fireBtn.title = "Unfavorite";
-			var favChange = 1;
+			var change = 1;
 		}
 		else {
 			fireBtn.title = "Favorite";
-			var favChange = -1;
+			var change = -1;
 		}
 		
 		// update favorite information
-		var getFavs = document.getElementById("resultFavNum" + eventNum).innerText;
-		var newFavs = parseInt(getFavs) + favChange;
-		document.getElementById("resultFavNum" + eventNum).innerText = newFavs;
+		var getFireNum = document.getElementById("resultFireNum" + eventNum).innerText;
+		var newFireNum = parseInt(getFireNum) + change;
+		document.getElementById("resultFireNum" + eventNum).innerText = newFireNum;
 		
 		//TODO: send newFavs to backend
 		
