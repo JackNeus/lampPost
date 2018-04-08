@@ -25,6 +25,13 @@ def delete_event(id):
 	event.delete()
 	return event
 
+# Get [netid of] creator for event (by event id).
+def get_event_creator(id):
+	event = EventEntry.objects(id=id)
+	if len(event) == 0:
+		return None
+	return event[0].creator
+
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
 # For each token, events with tokens (whitespace delimited) matching the token are aggregated.

@@ -59,18 +59,21 @@ def unauthorized():
 def add_event():
 	if not request.is_json:
 		return gen_error_response("Request was not JSON.")
-	data = request.get_json()
-	# Check that the correct parameters have been given.
-	missing_fields = get_missing_fields(data)
-	if len(missing_fields) > 0:
-		return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
-	
+	try:
+		data = request.get_json()
+		# Check that the correct parameters have been given.
+		missing_fields = get_missing_fields(data)
+		if len(missing_fields) > 0:
+			return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
+	except Exception as e:
+		return gen_failure_response(str(e))
+
 	# Make sure creator matches authorized user.
 	try:
 		user = User.get_user_in_token(request)
 		if user is None or user.netid != data["creator"]:
 			return gen_error_response("Attempted to create event for different user.")
-	except:
+	except AuthorizationError:
 		return gen_error_response("Invalid authorization.")
 
 	# Try to add new event
@@ -102,6 +105,20 @@ def get_event(id):
 @auth.login_required
 def delete_event(id):
 	try:
+		event = controller.get_event(id)
+		if event is None:
+			return gen_error_response("No event with that id exists.")
+
+		# Make sure it is the creator that is deleting the event.
+		event_creator_netid = controller.get_event_creator(id)	
+		try:
+			user = User.get_user_in_token(request)
+			if user is None or user.netid != event_creator_netid:
+				return gen_error_response("Attempted to delete event for different user.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
+
+
 		event = controller.delete_event(id)
 		if event is None:
 			return gen_error_response("No event with that id exists.")
