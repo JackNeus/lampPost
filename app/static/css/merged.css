@@ -60,7 +60,18 @@ html, body {
     .smallSearchResult .resultContents .resultTitle {
       font-size: 0.9em;
       font-weight: bold; }
-    .smallSearchResult .resultContents .resultLocation {
+    .smallSearchResult .resultContents .resultFireBtn {
+      font-size: 24px;
+      font-family: FontAwesome;
+      color: white;
+      padding: 0; }
+      .smallSearchResult .resultContents .resultFireBtn.selected {
+        color: orange; }
+        .smallSearchResult .resultContents .resultFireBtn.selected:hover {
+          color: orange; }
+      .smallSearchResult .resultContents .resultFireBtn:hover {
+        color: rgba(255, 165, 0, 0.5); }
+    .smallSearchResult .resultContents .resultFavNum {
       font-size: 0.85em;
       color: rgba(0, 0, 0, 0.5); }
     .smallSearchResult .resultContents .resultTime {
