@@ -18,6 +18,10 @@ $(document).ready(function(){
 	if (event_data) {
 		showSearchResults();
 	}
+	
+	$('.homeLink').click(function () {
+    		document.getElementById('splashScreen').style.display = 'none';
+	});
 });
 
 // Sets up sort and filter functionality for search box

@@ -1,0 +1,57 @@
+$background-color: #eeeeee;
+$primary-color: #2d9eee;
+$font-stack: "Avenir-Medium";
+/* rgb values for primary-color */
+$primary-color-r: 29;
+$primary-color-g: 158;
+$primary-color-b: 238;
+
+html, body {
+	// Font Style
+	font: 100% $font-stack;
+	.h1 {
+		font-size:28px;
+	}
+
+	.splashScreen {
+		position: absolute;
+		margin: 0;
+		height: 100%;
+		width:100%;
+		background-color: $background-color;
+		background-image: url("../graphics/images/lampPost.jpg");
+		background-size: cover;
+		background-repeat: no-repeat;
+		text-align: center;
+		
+		.headerBox {
+			position: relative;
+			width: 100%;
+			text-align: center;
+			margin-top: 30vh;
+			.loginBox {
+				h1 {
+					font-weight: bold;
+					color: black;
+					margin-bottom: 1em;
+				}
+				a {
+					border: none;
+					background-color: $primary-color;
+					border-radius: 5px;
+					color: white;
+				  	margin-bottom: 1em;
+				  	max-width: 100%;
+				  	min-width: 300px;
+				  	overflow: hidden;
+				  	text-align: center;
+				  }
+				  
+				 p {
+				 	padding: 0;
+				 	margin: 0;
+				 }  
+			}
+		}
+	}
+}
