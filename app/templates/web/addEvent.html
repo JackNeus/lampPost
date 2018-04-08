@@ -1,7 +1,4 @@
 {% extends "base.html" %}
-
-
-
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="/static/css/addEvent.css">
@@ -13,7 +10,8 @@
 
 	// code for the date
 	$(document).ready(function(){
-      var date_input=$('input[name="date"]'); //our date input has the name "date"
+	  // selects from all fields with name containing the substring "Date"
+      var date_input=$('input[name*="Date"]'); 
       var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
       var options={
       	format: 'mm/dd/yyyy',
@@ -41,20 +39,20 @@
 
 	// add numbers to first showing (e.g. "Location" -> "Location 1")
 	function numberFirstShowing() {
-		$("#firstLocation").text("Location 1");
-		$("#firstDate1").text("Start Date 1");
-		$("#firstDate2").text("End Date 1");
-		$("#firstTime1").text("Start Time 1");
-		$("#firstTime2").text("End Time 1");
+		$("label[for='locations-0']").text("Location 1");
+		$("label[for='startDates-0']").text("Start Date 1");
+		$("label[for='endDates-0']").text("End Date 1");
+		$("label[for='startTimes-0']").text("Start Time 1");
+		$("label[for='endTimes-0']").text("End Time 1");
 	}
 
 	// remove numbers from first showing (e.g. "Location 1" -> "Location")
 	function unNumberFirstShowing() {
-		$("#firstLocation").text("Location");
-		$("#firstDate1").text("Start Date");
-		$("#firstDate2").text("End Date");
-		$("#firstTime1").text("Start Time");
-		$("#firstTime2").text("End Time");
+		$("label[for='locations-0']").text("Location");
+		$("label[for='startDates-0']").text("Start Date");
+		$("label[for='endDates-0']").text("End Date");
+		$("label[for='startTimes-0']").text("Start Time");
+		$("label[for='endTimes-0']").text("End Time");
 	}
 
 	function processClick( num ) {
@@ -81,7 +79,28 @@
 	}
 
 	$(document).ready(function(){
-		$('.nav-item').removeClass('active');
+		// initialize the first radio option (for number of showings) to be checked
+		$("#numShowings-0").attr("checked", "checked");
+
+		// number all our labels
+		// as far as I know, there is no good way to do this with wtforms (although it seems there should be)
+		$(".numbered").each(function(){
+			$(this).append(" " + (parseInt($(this).attr("for").substr(-1))+1).toString());
+		});
+
+		// now, let's unnumber the first row of the form (since we start w/ one row showing)
+		unNumberFirstShowing();
+
+		// make title and description required
+		$("#title").prop("required", true);
+		$("#description").prop("required", true);
+
+		// have endDate automatically update to the value in startDate when startDate is changed
+		$("input[name^='startDate']").change(function(){
+			var id = "#endDates-" + $(this).attr("name").substr(-1);
+			$(id).val($(this).val());
+		});
+
 
 		// make the forms visible
 		$("#form-row-2").removeClass("invisible");
@@ -97,19 +116,16 @@
 		
 		// when we click the circle for x showings, slide up all the forms instantly
 		// then, slide down the relevant ones slowly
-		$("#inlineRadio1").click(function() {
+		$("#numShowings-0").click(function() {
 			processClick(1);
 		});
-
-		$("#inlineRadio2").click(function() {
+		$("#numShowings-1").click(function() {
 			processClick(2);
 		});
-
-		$("#inlineRadio3").click(function() {
+		$("#numShowings-2").click(function() {
 			processClick(3);
 		});
-
-		$("#inlineRadio4").click(function() {
+		$("#numShowings-3").click(function() {
 			processClick(4);
 		});
 	});
@@ -127,140 +143,78 @@
 
 		</div>
 		<div class="col-md-7" id = "leftCol">
-			<h3 > Add your event by filling out the fields below. </h3>
+			<h3 style="text-align:center"> Add your event by filling out the fields below. </h3>
 
-			<form id="addEventForm" action="/addEvent" method="POST">
+			<form id="addEventForm" action="/addEvent" method="POST" role="form">
+				{{ form.csrf_token }}
+
 				<div class="form-group">
-					<label for="title" > Title </label>
-					<input type="text" name="title" class="form-control" id="titleInput" placeholder="The name of your event.">
-
+					{{ form.title.label }} 
+					{{ form.title(placeholder="The name of your event", class="form-control") }}
 				</div>
 				<div class="form-group">
-					<label for="description"> Description </label>
-					<textarea name="description" class="form-control" id="descriptionInput" rows="3" placeholder="A brief description of your event, and why people should come!"></textarea>
+					{{ form.description.label }} 
+					{{ form.description(placeholder="A brief description of your event, and why people should come!", class="form-control", rows="3") }}
 				</div>
 
+
 				<div class="form-group">
-					<label style="padding-right:1vw">  Number of showings: </label>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" checked="checked" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-						<label class="form-check-label" for="inlineRadio1" style="font-weight:normal">1</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" >
-						<label class="form-check-label" for="inlineRadio2" style="font-weight:normal">2</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-						<label class="form-check-label" for="inlineRadio3" style="font-weight:normal">3</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option3" >
-						<label class="form-check-label" for="inlineRadio4" style="font-weight:normal">4</label>
-					</div>
+					{{ form.numShowings.label(style="padding-right:1vw") }}
+					{% for subfield in form.numShowings %}
+    					<div class="form-check form-check-inline">
+	        				{{ subfield(class="form-check-input") }}
+	        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
+	        			</div>
+					{% endfor %}
 					<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!</small>
 				</div>
-				<div class="form-row" id="form-row-1">
-					<div class="form-group col-md-4">
-						<label id = "firstLocation"> Location</label>
-						<input name = "location" type="text" class="form-control">
-					</div>
-					<div class="form-group col-md-2">
-						<label id="firstDate1" > Start Date </label>
-						<input name="date" class="form-control" type="text">
-					</div>
-					<div class="form-group col-md-2">
-						<label for="inputZip" id="firstTime1"> Start Time </label>
-						<input name="time" type="time" class="form-control">
-					</div>
-					<div class="form-group col-md-2">
-						<label id = "firstDate2"> End Date </label>
-						<input name="date" class="form-control" type="text">
-					</div>
-					<div class="form-group col-md-2">
-						<label for="inputZip" id="firstTime2"> End Time </label>
-						<input name="time" type="time" class="form-control">
-					</div>
-				</div>
-				<div class="form-row invisible" id="form-row-2">
-					<div class="form-group col-md-4">
-						<label> Location 2</label>
-						<input type="text" class="form-control" name="location">
-					</div>
-					<div class="form-group col-md-2">
-						<label> Start Date 2 </label>
-						<input class="form-control" name="date" type="text">
-					</div>
-					<div class="form-group col-md-2">
-						<label> Start Time 2 </label>
-						<input type="time" class="form-control" name="time">
-					</div>
-					<div class="form-group col-md-2">
-						<label> End Date 2 </label>
-						<input class="form-control" name="date" type="text">
-					</div>
-					<div class="form-group col-md-2">
-						<label for="inputZip"> End Time 2</label>
-						<input type="time" class="form-control" name="time">
-					</div>
-				</div>
-				<div class="form-row invisible" id="form-row-3">
-					<div class="form-group col-md-4">
-						<label> Location 3</label>
-						<input type="text" class="form-control" name="location">
-					</div>
-					<div class="form-group col-md-2">
-						<label> Start Date 3 </label>
-						<input class="form-control" name="date" type="text">
-					</div>
-					<div class="form-group col-md-2">
-						<label> Start Time 3 </label>
-						<input type="time" class="form-control" name="time">
-					</div>
-					<div class="form-group col-md-2">
-						<label> End Date 3 </label>
-						<input class="form-control" name="date" type="text">
-					</div>
-					<div class="form-group col-md-2">
-						<label for="inputZip"> End Time 3</label>
-						<input type="time" class="form-control" name="time">
-					</div>
-				</div>
-				<div class="form-row invisible" id="form-row-4">
-					<div class="form-group col-md-4">
-						<label> Location 4</label>
-						<input type="text" class="form-control" name="location">
-					</div>
-					<div class="form-group col-md-2">
-						<label> Start Date 4 </label>
-						<input class="form-control" name="date" type="text">
-					</div>
-					<div class="form-group col-md-2">
-						<label> Start Time 4 </label>
-						<input type="time" class="form-control" name="time">
-					</div>
-					<div class="form-group col-md-2">
-						<label> End Date 4 </label>
-						<input class="form-control" name="date" type="text">
-					</div>
-					<div class="form-group col-md-2">
-						<label for="inputZip"> End Time 4</label>
-						<input type="time" class="form-control" name="time">
-					</div>
-				</div>
+
+				{% for i in range(form.locations.__len__()) %}
+					<div class="form-row" id="form-row-{{i+1}}"> 
+						<div class="form-group col-md-4">
+        					{{ form.locations.__getitem__(i).label(class="numbered") }}
+        					{{ form.locations.__getitem__(i)(class="form-control") }}
+        				</div>
+
+        				<div class="form-group col-md-2">
+							{{ form.startDates.__getitem__(i).label(class="numbered") }}
+							{{ form.startDates.__getitem__(i)(class="form-control") }}
+						</div>
+						<div class="form-group col-md-2">
+							{{ form.startTimes.__getitem__(i).label(class="numbered") }} 
+							{{ form.startTimes.__getitem__(i)(class="form-control") }}
+						</div>
+						<div class="form-group col-md-2">
+							{{ form.endDates.__getitem__(i).label(class="numbered") }}
+							{{ form.endDates.__getitem__(i)(class="form-control") }}
+						</div>
+						<div class="form-group col-md-2">
+							{{ form.endTimes.__getitem__(i).label(class="numbered") }}
+							{{ form.endTimes.__getitem__(i)(class="form-control") }}
+						</div>
+        			</div>
+    			{% endfor %}
+
 				<div class="form-group">
-					<label for="exampleInputFile"> Event Photo/Poster </label>
-					<input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+					{{ form.poster.label }}
+					{{ form.poster(class="form-control-file") }}
 					<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
 				</div>
 
 				<div class="form-group">
-					<label for="link"> Promo Video </label>
-					<input name="link" type="text" class="form-control" id="linkInput" placeholder="YouTube link to your video, if applicable.">
-
+					{{ form.link.label }} 
+					{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control") }}
 				</div>
 
 				<button type="submit" class="btn btn-primary">Submit!</button>
+
+				<div class="errors" style="text-align:center; color:red">
+					{% for i in errors %}
+						{{ i.capitalize() }}: {{errors[i][0]}} <br />
+					{% endfor %}
+				</div>
+
+
 			</form>
 
 		</div>
