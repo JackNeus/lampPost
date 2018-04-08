@@ -61,7 +61,7 @@ def add_event():
 		return gen_error_response("Request was not JSON.")
 	data = request.get_json()
 	# Check that the correct parameters have been given.
-	missing_fields = get_missing_fields(data)
+	missing_fields = []#get_missing_fields(data)
 	if len(missing_fields) > 0:
 		return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
 	# Try to add new event
