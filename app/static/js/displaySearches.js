@@ -28,14 +28,14 @@ var showSearchResults = function() {
 			id: "resultFireBtn" + (i + 1)
 		}).append(fireIcon);
 		
-		// TODO: get 'getFav' from backend
-		// var getFav = event_data[i].favorites;
+		// TODO: get 'getFire' from backend
+		// var getFire = event_data[i].favorites;
 		// Number of favorites an event has
 		var getFire = Math.floor(Math.random() * 100);
 		var fireNum = $('<p />').attr({
 			class: "resultFireNum",
 			id: "resultFireNum" + (i + 1)
-		}).append(getFav);
+		}).append(getFire);
 		
 		// All dates/times of an event
 		var instances = event_data[i].instances;
@@ -56,7 +56,7 @@ var showSearchResults = function() {
 		// Fire button and number of favorites are inlined with event title
 		var firstRow = $('<div />').attr({
 			class: "d-flex flex-row align-items-start"
-		}).append(leftColumn).append(fireBtn).append(favNum);
+		}).append(leftColumn).append(fireBtn).append(fireNum);
 		
 		// Container holding the result contents
 		var smallDiv = $('<div >').attr({
