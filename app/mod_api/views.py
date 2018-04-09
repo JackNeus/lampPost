@@ -124,24 +124,20 @@ def edit_event(id):
 		return gen_failure_response("Request was malformatted.")
 
 	# Make sure creator matches authorized user.
-	if not CONFIG["BYPASS_API_AUTH"]:
-		try:
-			event = controller.get_event(id)
-			if event is None:
-				return gen_error_response(event_dne_text)
-			user = User.get_user_in_token(request)
-			if user is None or user.netid != event.creator:
-				return gen_error_response("Attempted to edit event for different user.")
-		except AuthorizationError as e:
-			return gen_error_response("Invalid authorization.")
-
 	try:
+		event = controller.get_event(id)
+		if event is None:
+			return gen_error_response(event_dne_text)
+		user = User.get_user_in_token(request)
+		if user is None or user.netid != event.creator:
+			return gen_error_response("Attempted to edit event for different user.")
+
 		updated_event = controller.edit_event(id, data)
+	except AuthorizationError as e:
+		return gen_error_response("Invalid authorization.")
 	except KeyError as e:
 		return gen_error_response("Event object does not include field %s" % str(e))
 	except ValidationError as e:
-		print(data)
-		raise e
 		return gen_error_response("Request was malformatted.")
 	except Exception as e:
 		return gen_failure_response(str(e))

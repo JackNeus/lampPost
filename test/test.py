@@ -239,54 +239,99 @@ def test_delete_event_bad_id():
 	r = make_delete_event_request("bad_id_format")
 	assert is_error(r)
 
+# Base for edit tests.
+def make_edit_test(test_body):
+	# Setup
+	new_event = deepcopy(base_event)
+	creator_netid = new_event["creator"]
+	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
+	assert is_success(r)
+	event_id = r["data"]["id"]
+
+	test_body(new_event, event_id, creator_netid)
+
+	# Cleanup
+	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
+	assert is_success(r)
+
+
 # Valid event editing.
 def test_edit_event_valid():
-	# Setup
-	new_event = deepcopy(base_event)
-	creator_netid = new_event["creator"]
-	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
-	assert is_success(r)
-	event_id = r["data"]["id"]
-
-	event_edits = {"title": "Festival", "host": "LampPost Users",
-				  "description": "This event is A OK.",
-				  "instances": [{"start_datetime": "3pm April 2 2100",
-				  				 "end_datetime": "4pm April 2 2100",
-				  				 "location": "Princeton University"},
-				  				 {"start_datetime": "3pm April 2 2100",
-				  				 "end_datetime": "4pm April 2 2100",
-				  				 "location": "Yale University"}]}
-	# Try editing each field separately.
-	for field in event_edits:
-		edit = {field: event_edits[field]}
-		new_event[field] = deepcopy(event_edits[field])
-		r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
-		assert is_success(r)
-		assert compare_events(new_event, r["data"])
-
-	# Cleanup
-	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
-	assert is_success(r)
+	def test(new_event, event_id, creator_netid):
+		event_edits = {"title": "Festival", "host": "LampPost Users",
+					  "description": "This event is A OK.",
+					  "instances": [{"start_datetime": "3pm April 2 2100",
+					  				 "end_datetime": "4pm April 2 2100",
+					  				 "location": "Princeton University"},
+					  				 {"start_datetime": "3pm April 2 2100",
+					  				 "end_datetime": "4pm April 2 2100",
+					  				 "location": "Yale University"}]}
+		# Try editing each field separately.
+		for field in event_edits:
+			edit = {field: event_edits[field]}
+			new_event[field] = deepcopy(event_edits[field])
+			r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
+			assert is_success(r)
+			assert compare_events(new_event, r["data"])
+	make_edit_test(test)
 
 def test_edit_event_system_fields():
-	# Setup
-	new_event = deepcopy(base_event)
-	creator_netid = new_event["creator"]
-	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
-	assert is_success(r)
-	event_id = r["data"]["id"]
+	def test(new_event, event_id, creator_netid):
+		event_edit = {"creator":"victim", "id": "5ac579ff1b41577c54130835"}
+		r = make_edit_event_request(event_id, event_edit, generate_auth_token(creator_netid))
+		assert is_success(r)
+		# Event should not have changed.
+		assert compare_events(new_event, r["data"])
+	make_edit_test(test)
 
-	event_edit = {"creator":"victim", "id": "5ac579ff1b41577c54130835"}
-	r = make_edit_event_request(event_id, event_edit, generate_auth_token(creator_netid))
-	assert is_success(r)
-	# Event should not have changed.
-	assert compare_events(new_event, r["data"])
+def test_edit_event_extra_field():
+	def test(new_event, event_id, creator_netid):
+		# Extraneous fields.
+		extra_field = deepcopy(base_event)
+		extra_field["bad_field_does_not_exist"] = "uh oh"
+		r = make_edit_event_request(event_id, extra_field, generate_auth_token(creator_netid))
+		assert is_error(r)
+	make_edit_test(test)
 
-	# Cleanup
-	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
-	assert is_success(r)
+def test_edit_event_bad_type():	
+	def test(new_event, event_id, creator_netid):
+		# String fields type check.
+		for field in ["title", "host", "description"]:
+			# Incorrectly-typed value.
+			r = make_edit_event_request(event_id, {field: 123}, generate_auth_token(creator_netid))
+			assert is_error(r)
+			assert "malformatted" in r["error_msg"]
+	make_edit_test(test)
 
-# TODO: add more edit tests
+def test_edit_event_bad_field_length():	
+	def test(new_event, event_id, creator_netid):
+		# String fields length check.
+		for field, length in [("title", 5), ("host",3), ("description", 10)]:
+			# Insufficiently long value.
+			short_value = "A"*(length-1)
+			r = make_edit_event_request(event_id, {field: short_value}, generate_auth_token(creator_netid))
+			assert is_error(r)
+			assert "malformatted" in r["error_msg"]
+	make_edit_test(test)
+
+# Try to edit event that does not exist.
+def test_edit_event_event_dne():
+	r = make_edit_event_request("5ac579ff1b41577c54130835", {})
+	assert is_error(r)
+	assert "exist" in r["error_msg"]
+
+# Try to delete event with invalid id.
+def test_edit_event_bad_id():
+	r = make_edit_event_request("bad_id_format", {})
+	assert is_error(r)
+	assert "malformatted" in r["error_msg"]
+
+# Try to edit event that does not belong to us.
+def test_edit_event_different_creator():
+	def test(new_event, event_id, creator_netid):
+		r = make_edit_event_request(event_id, {"description":"My event sucks!"}, generate_auth_token("jneus"))
+		assert is_error(r)
+	make_edit_test(test)
 
 # TODO: add search tests
 
@@ -309,7 +354,13 @@ test_get_event_bad_id,
 test_delete_event_event_dne,
 test_delete_event_bad_id,
 test_edit_event_valid,
-test_edit_event_system_fields
+test_edit_event_system_fields,
+test_edit_event_extra_field,
+test_edit_event_bad_type,
+test_edit_event_bad_field_length,
+test_edit_event_event_dne,
+test_edit_event_bad_id,
+test_edit_event_different_creator
 ]
 
 if __name__ == '__main__':
