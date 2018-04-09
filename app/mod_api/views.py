@@ -15,6 +15,7 @@ success_text = "Success"
 error_text = "Error"
 failure_text = "Error"
 internal_failure_message = "Something went wrong. Please contact a developer."
+event_dne_text = "No event with that id exists."
 def gen_response(status):
 	response = {"status": status}
 	return response
@@ -59,9 +60,13 @@ def unauthorized():
 def add_event():
 	if not request.is_json:
 		return gen_error_response("Request was not JSON.")
-	data = request.get_json()
+	try:
+		data = request.get_json()
+	except:
+		return gen_error_response("Request was malformatted.")
+
 	# Check that the correct parameters have been given.
-	missing_fields = []#get_missing_fields(data)
+	missing_fields = get_missing_fields(data)
 	if len(missing_fields) > 0:
 		return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
 	# Try to add new event
@@ -83,11 +88,37 @@ def add_event():
 def get_event(id):
 	try:
 		event = controller.get_event(id)
+		if event is None:
+			return gen_error_response(event_dne_text)
 		return gen_data_response(get_raw_event(event));
 	except ValidationError as e:
 		return gen_error_response("Request was malformatted.")
 	except Exception as e:
 		return gen_failure_response(str(e))
+
+@mod_api.route("/event/edit/<id>", methods=["POST"])
+@auth.login_required
+def edit_event(id):
+	if not request.is_json:
+		return gen_error_response("Request was not JSON.")
+		
+	try:
+		data = request.get_json()
+	except Exception as e:
+		return gen_failure_response("Request was malformatted.")
+
+	try:
+		updated_event = controller.edit_event(id, data)
+	except KeyError as e:
+		return gen_error_response("Event object does not include field %s" % str(e))
+	except ValidationError as e:
+		return gen_error_response("Request was malformatted.")
+	except Exception as e:
+		return gen_failure_response(str(e))
+
+	if updated_event is None:
+		return gen_error_response(event_dne_text)
+	return gen_data_response(get_raw_event(updated_event))
 
 @mod_api.route("/event/delete/<id>", methods=["DELETE"])
 @auth.login_required
@@ -95,7 +126,7 @@ def delete_event(id):
 	try:
 		event = controller.delete_event(id)
 		if event is None:
-			return gen_error_response("No event with that id exists.")
+			return gen_error_response(event_dne_text)
 		return gen_data_response(get_raw_event(event))
 	except Exception as e:
 		return gen_failure_response(str(e))

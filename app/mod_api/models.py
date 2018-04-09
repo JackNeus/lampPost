@@ -55,12 +55,11 @@ def has_field(obj, field):
     return True
 
 def get_missing_fields(obj):
+    # TODO: Make sure obj is the right type, i.e. is a dict.
     missing = []
-    print(obj)
     for field in required_fields:
         if not has_field(obj, field):
             missing.append(field)
-    print(missing)
     return missing
 
 def get_raw_event(event_entry):

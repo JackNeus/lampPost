@@ -24,6 +24,20 @@ def delete_event(id):
 		return None
 	event.delete()
 	return event
+
+# Edits the event with given id.
+# Editing works as follows:
+# For each field in data, the corresponding field in the event is updated.
+# This ONLY works at the top-level -- if data contains "instances", for example,
+# the entire "instances" list will be replaced.
+def edit_event(id, data):
+	event = get_event(id)
+	if event is None:
+		return None
+	for field in data:
+		event[field] = data[field]
+	event.save()
+	return event
 	
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
