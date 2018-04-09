@@ -3,17 +3,7 @@
 <!--------------------------------- SCRIPTS ----------------------------------->
 
 {% block scripts %}
-<script src="/static/js/displaySearches.js?v=4"></script>
-<script src="/static/js/displayEvent.js?v=2"></script>
-<script src="/static/js/app.js?v=6"></script>
-
-{% if data %}
-<script>
-setData(JSON.parse('{{ data | tojson | safe}}'));
-$("#global-debug-msg").text("Page initialized with mock data. Search box will return actual data.");
-</script>
-{% endif %}
-
+<script src="/static/js/myevent.js?v=12"></script>
 {% endblock %}
 
 <!------------------------------ MAIN CONTENT --------------------------------->
@@ -22,37 +12,65 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
   	<div class="flex-container-row" id="bigRow">
   	
 	   <div class="flex-container-col" id = "leftCol">
-   		<form onsubmit="return false;">
-   			<div class="d-flex flex-row align-items-start">
-				<div class="form-group" id="searchBox">
-			    		<input id="search-box" class="form-control" 
-			    		placeholder="Search for events here!" value=""></input>
-				</div>
-			
-				<select class="ml-auto align-self-stretch" name="sort" id="searchSort">
-					<option value="Date">Sort By Date</option>
-					<option value="Popularity">Sort By Popularity</option>
-				</select>
-			</div>
-			
-			<div class="d-flex flex-row align-items-start justify-content-end filters">
-			  <div class="p-2 mr-auto datetime">
-				  <label for="datepicker">Search from date: </label>
-				  <input type="text" id="datepicker" 
-					   class="form-control" name="datepicker">
-			  </div>
-			  <div class="filter-button btn"  id="filter-btn" title="Filter">
-				  <i class="fas fa-filter"></i>
-			  </div>
-			 </div>
-		
-		</form>
-		
+	   
+	   	<h1>My Events</h1>
 			
 		<!-- Fills in with "search" results from events.json -->
-		<div class="flex-item-scroll" id="searches"></div>
-		
+		<div class="flex-item-scroll" id="searches">
+		<div class="d-flex flex-row align-items-start">
+		<div class="smallSearchResult" id="smallSearchResult1" style="flex-grow:1000; margin-right: 0;">
+			<div class="resultContents">
+				<div class="d-flex flex-row align-items-start">
+					<div class="p-2 mr-auto">
+						<p class="resultTitle">My Event 1</p>
+						<div><p class="resultTime">Tomorrow 1:30-4:30</p></div>
+					</div>
+					<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn1">
+						<i class="fas fa-fire"></i>
+					</div>
+				     <p class="resultFavNum" id="resultFavNum1">34</p>	
+			     </div>
+		      </div>
 	  	</div>
+	  	
+	  	<div class="d-flex flex-column justify-items-center">
+		  	<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn1" >
+		  		<i class="fas fa-trash-alt"></i>
+		  	</div>
+		  	<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn1" >
+		  		<i class="fas fa-pencil-alt"></i>
+		  	</div>
+	  	</div>
+	  	</div>
+	  	
+	  	<div class="d-flex flex-row align-items-start">
+	  	<div class="smallSearchResult" id="smallSearchResult2" style="flex-grow:1000; margin-right: 0;">
+			<div class="resultContents">
+				<div class="d-flex flex-row align-items-start">
+					<div class="p-2 mr-auto">
+						<p class="resultTitle">My Event 2</p>
+						<div><p class="resultTime">Tuesday 1:30-4:30</p></div>
+					</div>
+					<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn2">
+						<i class="fas fa-fire"></i>
+					</div>
+				     <p class="resultFavNum" id="resultFavNum2">34</p>	
+			     </div>
+		      </div>
+	  	</div>
+	  	
+	  	<div class="d-flex flex-column justify-items-center">
+		  	<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn2" >
+		  		<i class="fas fa-trash-alt"></i>
+		  	</div>
+		  	<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn2" >
+		  		<i class="fas fa-pencil-alt"></i>
+		  	</div>
+	  	</div>
+	  	</div>
+	  	
+	      </div>
+	    </div>
 		
 	 	<div class="flex-container-col" id = "rightCol"> 
 	 		<div class = "event-view" id = "event-view"> 

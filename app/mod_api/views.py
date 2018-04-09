@@ -40,8 +40,8 @@ def gen_failure_response(failure_msg):
 @auth.verify_token
 def verify_token(token):
 	# TODO: Make this less scary.
-	if CONFIG["DEBUG"] and CONFIG["BYPASS_API_AUTH"]:
-		return True
+	#if CONFIG["DEBUG"] and CONFIG["BYPASS_API_AUTH"]:
+	#	return True
 
 	user = User.verify_auth_token(token)
 	if user is None:
@@ -110,6 +110,7 @@ def event_search(query, start_datetime):
 		return gen_data_response(events)
 	except Exception as e:
 		return gen_failure_response(str(e))
+<<<<<<< HEAD
 
 @mod_api.route("/user/get/created/<userid>")
 @auth.login_required
@@ -164,3 +165,5 @@ def get_favorites(userid):
 		return json.dumps(user.favorites)
 	except Exception as e:
 		return gen_failure_response(str(e))
+=======
+>>>>>>> myeventpage

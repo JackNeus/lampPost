@@ -43,6 +43,10 @@ def browser():
 				return render_template("web/browser.html", data = data)
 			print("Error loading mock data.")
 	return render_template("web/browser.html")
+	
+@mod_web.route('/myevents')
+def myevents():
+	return render_template("web/myevents.html")
 
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():
