@@ -3,6 +3,9 @@ from flask_login import UserMixin
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 from mongoengine import *
 
+class AuthorizationError(Exception):
+	pass
+
 class UserEntry(Document):
 	netid = StringField(required = True, unique = True)
 
@@ -28,10 +31,13 @@ class User(UserMixin):
 	def verify_auth_token(token):
 		s = Serializer(app.config['SECRET_KEY'])
 		try:
+			print(token)
 			data = s.loads(token)
 		except SignatureExpired:
+			print("SignatureExpired")
 			return None  # Valid token, but expired.
 		except BadSignature:
+			print("BadSignature")
 			return None  # Invalid token.
 		try:
 			user = UserEntry.objects(id=data['id'])
@@ -40,3 +46,13 @@ class User(UserMixin):
 		if user.count() != 1:
 			return None  # Something went wrong.
 		return user[0]
+
+	@staticmethod
+	# Gets the user associated with the auth token in request.
+	def get_user_in_token(request):
+		if "Authorization" in request.headers:
+			auth_data = request.headers["Authorization"].split(None, 1)
+			if auth_data[0] != "Token":
+				raise AuthorizationError("Incorrect authorization scheme.")
+			return User.verify_auth_token(auth_data[1])
+		raise AuthorizationError("Request was missing authorization header.")

@@ -3,7 +3,7 @@ from flask import jsonify, make_response, request, render_template
 from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
 import json
-from app.mod_user.models import User
+from app.mod_user.models import AuthorizationError, User, UserEntry
 from . import api_module as mod_api
 from . import controllers as controller
 from .models import *
@@ -65,13 +65,28 @@ def add_event():
 	except:
 		return gen_error_response("Request was malformatted.")
 
-	# Check that the correct parameters have been given.
-	missing_fields = get_missing_fields(data)
-	if len(missing_fields) > 0:
-		return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
-	# Try to add new event
+	try:
+		# Check that the correct parameters have been given.
+		missing_fields = get_missing_fields(data)
+		if len(missing_fields) > 0:
+			return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
+	except Exception as e:
+		return gen_failure_response(str(e))
+
+	# Make sure creator matches authorized user.
+	try:
+		user = User.get_user_in_token(request)
+		if user is None:
+			return gen_error_response("Invalid authorization.")
+		if user.netid != data["creator"]:
+			return gen_error_response("Attempted to create event for different user.")
+	except AuthorizationError:
+		return gen_error_response("Invalid authorization.")
+
+	# Try to add new event.
 	try:
 		new_event = controller.add_event(json.dumps(data))
+		# Return id of newly added event.
 		return gen_data_response({"id": str(new_event.id)})
 	except NotUniqueError as e:
 		return gen_error_response("An event already exists with that title.")
@@ -81,7 +96,6 @@ def add_event():
 		return gen_error_response("Request was malformatted.")
 	except Exception as e:
 		return gen_failure_response(str(e))
-	# Return id of newly added event.
 
 @mod_api.route("/event/get/<id>", methods=["GET"])
 @auth.login_required
@@ -107,6 +121,17 @@ def edit_event(id):
 	except Exception as e:
 		return gen_failure_response("Request was malformatted.")
 
+	# Make sure creator matches authorized user.
+	try:
+		event = controller.get_event(id)
+		if event is None:
+			return gen_error_response(event_dne_text)
+		user = User.get_user_in_token(request)
+		if user is None or user.netid != event.creator:
+			return gen_error_response("Attempted to edit event for different user.")
+	except AuthorizationError as e:
+		return gen_error_response("Invalid authorization.")
+
 	try:
 		updated_event = controller.edit_event(id, data)
 	except KeyError as e:
@@ -124,6 +149,20 @@ def edit_event(id):
 @auth.login_required
 def delete_event(id):
 	try:
+		event = controller.get_event(id)
+		if event is None:
+			return gen_error_response("No event with that id exists.")
+
+		# Make sure it is the creator that is deleting the event.
+		event_creator_netid = controller.get_event_creator(id)	
+		try:
+			user = User.get_user_in_token(request)
+			if user is None or user.netid != event_creator_netid:
+				return gen_error_response("Attempted to delete event for different user.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
+
+
 		event = controller.delete_event(id)
 		if event is None:
 			return gen_error_response(event_dne_text)
