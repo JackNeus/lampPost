@@ -41,6 +41,7 @@ required_fields = [
 
 # List of system fields (i.e. fields that the user should not touch)
 system_fields = [
+"id",
 "creator"]
 
 # TODO: Make this more generic/less hacky/generally better.

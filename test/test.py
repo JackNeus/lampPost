@@ -244,12 +244,11 @@ def test_edit_event_valid():
 	# Setup
 	new_event = deepcopy(base_event)
 	creator_netid = new_event["creator"]
-
 	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
 	assert is_success(r)
 	event_id = r["data"]["id"]
 
-	event_edits = {"title": "Festival", "host":"LampPost Users",
+	event_edits = {"title": "Festival", "host": "LampPost Users",
 				  "description": "This event is A OK.",
 				  "instances": [{"start_datetime": "3pm April 2 2100",
 				  				 "end_datetime": "4pm April 2 2100",
@@ -268,6 +267,26 @@ def test_edit_event_valid():
 	# Cleanup
 	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
 	assert is_success(r)
+
+def test_edit_event_system_fields():
+	# Setup
+	new_event = deepcopy(base_event)
+	creator_netid = new_event["creator"]
+	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
+	assert is_success(r)
+	event_id = r["data"]["id"]
+
+	event_edit = {"creator":"victim", "id": "5ac579ff1b41577c54130835"}
+	r = make_edit_event_request(event_id, event_edit, generate_auth_token(creator_netid))
+	assert is_success(r)
+	# Event should not have changed.
+	assert compare_events(new_event, r["data"])
+
+	# Cleanup
+	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
+	assert is_success(r)
+
+# TODO: add more edit tests
 
 # TODO: add search tests
 
@@ -289,7 +308,8 @@ test_add_event_extra_field,
 test_get_event_bad_id,
 test_delete_event_event_dne,
 test_delete_event_bad_id,
-test_edit_event_valid
+test_edit_event_valid,
+test_edit_event_system_fields
 ]
 
 if __name__ == '__main__':
