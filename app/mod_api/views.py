@@ -110,7 +110,6 @@ def event_search(query, start_datetime):
 		return gen_data_response(events)
 	except Exception as e:
 		return gen_failure_response(str(e))
-<<<<<<< HEAD
 
 @mod_api.route("/user/get/created/<userid>")
 @auth.login_required
@@ -165,5 +164,3 @@ def get_favorites(userid):
 		return json.dumps(user.favorites)
 	except Exception as e:
 		return gen_failure_response(str(e))
-=======
->>>>>>> myeventpage

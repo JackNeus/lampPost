@@ -9,6 +9,8 @@ var showSearchResults = function() {
 	// sort events by either date or popularity
 	sortResults();
 	
+	console.log(even
+	
 	// create html code for each search result
 	for (var i = 0; i < event_data.length; i++) {
 		// put title and fire button on same row
@@ -27,9 +29,8 @@ var showSearchResults = function() {
 			id: "resultFireBtn" + (i + 1)
 		}).append(fireIcon);
 		
-		// TODO: get 'getFav' from backend
-		// var getFav = event_data[i].favorites;
-		var getFav = Math.floor(Math.random() * 100);
+		// number of favorites
+		var getFav = event_data[i].favorites;
 		var favNum = $('<p />').attr({
 			class: "resultFavNum",
 			id: "resultFavNum" + (i + 1)
