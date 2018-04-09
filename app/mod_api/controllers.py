@@ -35,7 +35,16 @@ def edit_event(id, data):
 	if event is None:
 		return None
 	for field in data:
-		event[field] = data[field]
+		# Don't allow user to modify system fields. 
+		if field in system_fields:
+			continue
+		field_data = data[field]
+		if field == "instances":
+			field_data = data[field]
+			field_data = [InstanceEntry(location = instance["location"],
+										start_datetime = instance["start_datetime"],
+										end_datetime = instance["end_datetime"]) for instance in field_data]
+		event[field] = field_data
 	event.save()
 	return event
 	

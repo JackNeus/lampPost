@@ -62,6 +62,9 @@ def add_event():
 		return gen_error_response("Request was not JSON.")
 	try:
 		data = request.get_json()
+		if isinstance(data, str):
+			# TODO: better error message
+			return gen_failure_response("Request must be JSON, not string.")
 	except:
 		return gen_error_response("Request was malformatted.")
 
@@ -115,28 +118,30 @@ def get_event(id):
 def edit_event(id):
 	if not request.is_json:
 		return gen_error_response("Request was not JSON.")
-		
 	try:
 		data = request.get_json()
 	except Exception as e:
 		return gen_failure_response("Request was malformatted.")
 
 	# Make sure creator matches authorized user.
-	try:
-		event = controller.get_event(id)
-		if event is None:
-			return gen_error_response(event_dne_text)
-		user = User.get_user_in_token(request)
-		if user is None or user.netid != event.creator:
-			return gen_error_response("Attempted to edit event for different user.")
-	except AuthorizationError as e:
-		return gen_error_response("Invalid authorization.")
+	if not CONFIG["BYPASS_API_AUTH"]:
+		try:
+			event = controller.get_event(id)
+			if event is None:
+				return gen_error_response(event_dne_text)
+			user = User.get_user_in_token(request)
+			if user is None or user.netid != event.creator:
+				return gen_error_response("Attempted to edit event for different user.")
+		except AuthorizationError as e:
+			return gen_error_response("Invalid authorization.")
 
 	try:
 		updated_event = controller.edit_event(id, data)
 	except KeyError as e:
 		return gen_error_response("Event object does not include field %s" % str(e))
 	except ValidationError as e:
+		print(data)
+		raise e
 		return gen_error_response("Request was malformatted.")
 	except Exception as e:
 		return gen_failure_response(str(e))

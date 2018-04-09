@@ -31,13 +31,10 @@ class User(UserMixin):
 	def verify_auth_token(token):
 		s = Serializer(app.config['SECRET_KEY'])
 		try:
-			print(token)
 			data = s.loads(token)
 		except SignatureExpired:
-			print("SignatureExpired")
 			return None  # Valid token, but expired.
 		except BadSignature:
-			print("BadSignature")
 			return None  # Invalid token.
 		try:
 			user = UserEntry.objects(id=data['id'])

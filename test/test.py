@@ -101,8 +101,11 @@ def make_delete_event_request(event_id, token=None):
 	assert r.status_code == 200
 	return get_data(r)
 
-def make_edit_event_request(event_id, data):
-	r = requests.delete(app_url + "/event/edit/" + event_id, json=data)
+def make_edit_event_request(event_id, data, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.post(app_url + "/event/edit/" + event_id, json=data, headers=headers)
 	assert r.status_code == 200
 	return get_data(r)
 
@@ -240,27 +243,30 @@ def test_delete_event_bad_id():
 def test_edit_event_valid():
 	# Setup
 	new_event = deepcopy(base_event)
-	r = make_add_event_request(new_event)
+	creator_netid = new_event["creator"]
+
+	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
 	assert is_success(r)
 	event_id = r["data"]["id"]
 
-	event_edits = {"title": "Festival", "host":"LampPost Users", "creator": "awk",
+	event_edits = {"title": "Festival", "host":"LampPost Users",
 				  "description": "This event is A OK.",
-				  "instances": [{"start_datetime": "3pm May 1 2100",
-				  				 "end_datetime": "4pm May 1 2100",
-				  				 "location": "Harvard University"},
-				  				 {"start_datetime": "3pm May 2 2100",
-				  				 "end_datetime": "4pm May 2 2100",
+				  "instances": [{"start_datetime": "3pm April 2 2100",
+				  				 "end_datetime": "4pm April 2 2100",
+				  				 "location": "Princeton University"},
+				  				 {"start_datetime": "3pm April 2 2100",
+				  				 "end_datetime": "4pm April 2 2100",
 				  				 "location": "Yale University"}]}
 	# Try editing each field separately.
 	for field in event_edits:
-		edit = {}
-		edit[field] = event_edits
-		r = make_edit_event_request(event_id, edit)
+		edit = {field: event_edits[field]}
+		new_event[field] = deepcopy(event_edits[field])
+		r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
 		assert is_success(r)
+		assert compare_events(new_event, r["data"])
 
 	# Cleanup
-	r = make_delete_event_request(event_id)
+	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
 	assert is_success(r)
 
 # TODO: add search tests
@@ -282,7 +288,8 @@ test_add_event_bad_instance_data,
 test_add_event_extra_field,
 test_get_event_bad_id,
 test_delete_event_event_dne,
-test_delete_event_bad_id
+test_delete_event_bad_id,
+test_edit_event_valid
 ]
 
 if __name__ == '__main__':

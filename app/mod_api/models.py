@@ -39,6 +39,10 @@ required_fields = [
 "instances/end_datetime",
 "description"]
 
+# List of system fields (i.e. fields that the user should not touch)
+system_fields = [
+"creator"]
+
 # TODO: Make this more generic/less hacky/generally better.
 def has_field(obj, field):
     # If a field in instance/, need to check every instance for the field.
