@@ -32,7 +32,7 @@ class User(UserMixin):
 		except BadSignature:
 			return None  # Invalid token.
 		try:
-			user = mod_api_controllers.get_user_by_uid(data['id'])
+			user = mod_api_controllers.get_user(data['id'])
 		except Exception as e:
 			raise e
 		if user is None:
