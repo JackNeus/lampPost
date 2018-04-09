@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block scripts %}
-<script src="/static/js/browser.js?v=3"></script>
+<script src="/static/js/displaySearches.js?v=1"></script>
+<script src="/static/js/displayEvent.js?v=1"></script>
+<script src="/static/js/app.js?v=1"></script>
 
 {% if data %}
 <script>
@@ -18,9 +20,16 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
   	
 	   <div class="flex-container-col" id = "leftCol">
 	   		<form onsubmit="return false;">
-				<div class="form-group" id="searchBox">
-			    		<input id="search-box" class="form-control" 
-			    		placeholder="Search for events here!" value=""></input>
+	   			<div class="d-flex flex-row align-items-start">
+					<div class="form-group" id="searchBox">
+				    		<input id="search-box" class="form-control" 
+				    		placeholder="Search for events here!" value=""></input>
+					</div>
+				
+						<select class="ml-auto align-self-stretch" name="sort" id="searchSort">
+							<option value="Date">Sort By Date</option>
+							<option value="Popularity">Sort By Popularity</option>
+						</select>
 				</div>
 				
 				<div class="d-flex flex-row align-items-start justify-content-end filters">
@@ -29,9 +38,8 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 					  <input type="text" id="datepicker" 
 						   class="form-control" name="datepicker">
 				  </div>
-				  <div class="p-2 filter-button">
-					  <button type="button" class="btn btn-xs" 
-					  id="filter-btn">Filters</button>
+				  <div class="filter-button btn"  id="filter-btn" title="Filter">
+					  <i class="fas fa-filter"></i>
 				  </div>
 				 </div>
 			
