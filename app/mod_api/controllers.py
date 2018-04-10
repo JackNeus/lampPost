@@ -25,15 +25,19 @@ def delete_event(id):
 	event.delete()
 	return event
 
-def edit_event(event):
+def edit_event_favorites(id, increment):
+	event = get_event(id)
+	if event is None:
+		return None
+	event.favorites = event.favorites + increment
 	event.save()
-	return None
+	return event.favorites
 
-def creator_events(netid):
+def get_events_by_creator(netid):
 	events = EventEntry.objects(creator = netid)
 	return events
 
-def get_uid_with_netid(netid):
+def get_user_by_netid(netid):
 	netid = netid.lower()
 	try:
 		entries = UserEntry.objects(netid = netid)
@@ -45,7 +49,7 @@ def get_uid_with_netid(netid):
 	except Exception as e:
 		raise e
 
-def get_user(uid):
+def get_user_by_uid(uid):
 	try:
 		entries = UserEntry.objects(id = uid)
 		if entries.count() == 1:
@@ -64,7 +68,13 @@ def add_user(netid):
 	new_user.save()
 	return new_user
 
-def edit_user(user):
+def add_user_favorite(user, eventid):
+	user.favorites.append(eventid)
+	user.save()
+	return None
+
+def remove_user_favorite(user, eventid):
+	user.favorites.remove(eventid)
 	user.save()
 	return None
 	

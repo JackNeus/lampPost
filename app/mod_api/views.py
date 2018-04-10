@@ -111,12 +111,14 @@ def event_search(query, start_datetime):
 	except Exception as e:
 		return gen_failure_response(str(e))
 
-@mod_api.route("/user/get/created/<userid>")
+@mod_api.route("/user/get_events/<userid>")
 @auth.login_required
 def get_created_events(userid):
 	try:
-		user = controller.get_user(userid)
-		events = controller.creator_events(str(user.netid))
+		user = controller.get_user_by_uid(userid)
+		if user is None:
+			return gen_error_response("No user with that id exists.")
+		events = controller.get_events_by_creator(str(user.netid))
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
@@ -127,14 +129,15 @@ def get_created_events(userid):
 def add_event_fav(userid, eventid):
 	try:
 		event = controller.get_event(eventid)
-		# add eventid to list of user's favorite events
-		user = controller.get_user(userid)
+		user = controller.get_user_by_uid(userid)
+		if event is None:
+			return gen_error_response("No event with that id exists.")
+		elif user is None:
+			return gen_error_response("No user with that id exists.")
 		if eventid not in user.favorites:
-			user.favorites.append(eventid)
+			controller.add_user_favorite(user, eventid)
 			# increment the event's number of favorites
-			event.favorites = event.favorites + 1
-			controller.edit_event(event)
-			controller.edit_user(user)
+			controller.edit_event_favorites(eventid, 1)
 		return jsonify(event.favorites) # need to return something or views gets angry
 	except Exception as e:
 		return gen_failure_response(str(e))
@@ -144,12 +147,14 @@ def add_event_fav(userid, eventid):
 def remove_event_fav(userid, eventid):
 	try:
 		event = controller.get_event(eventid)
-		user = controller.get_user(userid)
+		user = controller.get_user_by_uid(userid)
+		if event is None:
+			return gen_error_response("No event with that id exists.")
+		elif user is None:
+			return gen_error_response("No user with that id exists.")
 		if eventid in user.favorites:
-			user.favorites.remove(eventid)
-			controller.edit_user(user)
-			event.favorites = event.favorites - 1
-			controller.edit_event(event)
+			controller.remove_user_favorite(user, eventid)
+			controller.edit_event_favorites(event, -1)
 		else:
 			return gen_error_response("You can't un-favorite an event that isn't in your favorites!")
 		return jsonify(event.favorites)
@@ -160,7 +165,9 @@ def remove_event_fav(userid, eventid):
 @auth.login_required
 def get_favorites(userid):
 	try:
-		user = controller.get_user(userid)
+		user = controller.get_user_by_uid(userid)
+		if user is None:
+			return gen_error_response("No user with that id exists.")
 		return json.dumps(user.favorites)
 	except Exception as e:
 		return gen_failure_response(str(e))
