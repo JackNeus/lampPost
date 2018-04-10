@@ -2,22 +2,22 @@ from flask_wtf import FlaskForm
 from wtforms_components import TimeField
 from wtforms import StringField, TextAreaField, RadioField, FieldList, DateField, FileField, validators
 from wtforms.validators import DataRequired
-from flask import Blueprint, request, render_template
+from flask import Blueprint, request, render_template, flash, redirect
+from flask_login import current_user
 from app import CONFIG
 from app.mod_web.forms import NameForm
 from app.mod_web.models import User
 from .models import *
 import json
-import urllib
 import requests
 
 
 mod_web = Blueprint('web', __name__, url_prefix="")
 
 class EventForm(FlaskForm):
-	#, validators=[DataRequired()]
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
+    host = StringField('Host', validators=[DataRequired()])
     numShowings = RadioField('Number of Showings:', choices=[("1","1"),("2","2"),("3","3"),("4","4")])
     locations = FieldList(StringField('Location'), min_entries=4)
     startDates = FieldList(DateField('Start Date', format='%m/%d/%Y', validators=(validators.Optional(),)), min_entries=4)
@@ -65,19 +65,19 @@ def browser():
 			print("Error loading mock data.")
 	return render_template("web/browser.html")
 
-@mod_web.route('/addEvent', methods=['GET', 'POST'])
+@mod_web.route('/add', methods=['GET', 'POST'])
 def addEvent():
 	if request.method == "POST":
-		print("hi")
 		form = EventForm(request.form)
 		if not form.validate_on_submit():
 			print(form.errors)
-			return render_template("web/addEvent.html", form=form, errors=form.errors)
+			return render_template("web/add.html", form=form, errors=form.errors)
 		else:
 			eventData = {}
 			eventData['title'] = form.title.data
 			eventData['description'] = form.description.data
-			eventData['visibility'] = 0 # this is just a default, later let's actually let users determine this
+			# TODO: let's actually let users determine this
+			eventData['visibility'] = 0
 
 			showings = []
 			for i in range(int(form.numShowings.data)):
@@ -89,19 +89,24 @@ def addEvent():
 
 			eventData['instances'] = showings
 
-			# FIX THIS
-			eventData['creator'] = 'tpollner'
-			eventData['host'] = 'Melville'
+			eventData['creator'] = current_user.netid
+			eventData['host'] = form.host.data
 
-			eventDataJSON = json.dumps(eventData)
-			print(eventDataJSON)
+			if (form.link.data != ""):
+				eventData['trailer'] = form.link.data
+
 			
 			# make API request
 			r = requests.put("http://localhost:5001/api/event/add", json=eventData)
 			print(r.text)
-			return render_template("web/addEvent.html", form=form)
+			if json.loads(r.text)["status"] == "Success":
+				flash("Success! Your event has been added.")
+				return redirect("add")
+			else:
+				flash("Error. " + json.loads(r.text)["error_msg"])
+				return render_template("web/add.html", form=EventForm())
 	else:
-		return render_template("web/addEvent.html", form=EventForm())
+		return render_template("web/add.html", form=EventForm())
 
 @mod_web.route('/main')
 def main():
