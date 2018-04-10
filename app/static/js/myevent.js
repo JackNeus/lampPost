@@ -22,6 +22,7 @@ var loadEvents = function() {
 	}
 	$.ajax({
 		url: 'http://localhost:5001/api/user/get/created/'+userId,
+		method: 'get',
 		dataType: 'json',
 		headers: {
 			'Authorization': ('Token ' + $.cookie('api_token'))
@@ -43,6 +44,7 @@ var changeMyEvents = function() {
 			}
 			$.ajax({
 				url: 'http://localhost:5001/api/event/delete/' + eventId,
+				method: 'delete',
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))
