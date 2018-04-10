@@ -1,5 +1,7 @@
 // DEPENDENCIES: displaySearches.js, displayEvent.js
 
+var base_url;
+
 // Event data for currently displayed data.
 var event_data = [];
 
@@ -63,7 +65,7 @@ var setupDataRetrieval = function() {
 			showSearchResults();
 		};
 		$.ajax({
-			url: 'http://localhost:5001/api/event/search/'+query,
+			url: base_url+'api/event/search/'+query,
 			dataType: 'json',
 			headers: {
 				'Authorization': ('Token ' + $.cookie('api_token'))
