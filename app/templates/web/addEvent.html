@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/addEvent.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+
+<script>
+
+	// code for the date
+	$(document).ready(function(){
+	  // selects from all fields with name containing the substring "Date"
+      var date_input=$('input[name*="Date"]'); 
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+      	format: 'mm/dd/yyyy',
+      	container: container,
+      	todayHighlight: true,
+      	autoclose: true,
+      };
+      date_input.datepicker(options);
+  	})
+
+	// where we don't have a textarea, ignore the enter key (don't let users submit)
+	$(document).on("keypress", ":input:not(textarea)", function(event) {
+    return event.keyCode != 13;
+	});
+</script>
+
+<script> 
+
+</script>	
+
+<script> 
+
+	var currentNumShowing = 1;
+	var maxShowings = 4;
+
+	// add numbers to first showing (e.g. "Location" -> "Location 1")
+	function numberFirstShowing() {
+		$("label[for='locations-0']").text("Location 1");
+		$("label[for='startDates-0']").text("Start Date 1");
+		$("label[for='endDates-0']").text("End Date 1");
+		$("label[for='startTimes-0']").text("Start Time 1");
+		$("label[for='endTimes-0']").text("End Time 1");
+	}
+
+	// remove numbers from first showing (e.g. "Location 1" -> "Location")
+	function unNumberFirstShowing() {
+		$("label[for='locations-0']").text("Location");
+		$("label[for='startDates-0']").text("Start Date");
+		$("label[for='endDates-0']").text("End Date");
+		$("label[for='startTimes-0']").text("Start Time");
+		$("label[for='endTimes-0']").text("End Time");
+	}
+
+	function processClick( num ) {
+		// this is a special case, because we need to introduce numbering
+		if (currentNumShowing == 1) {
+			numberFirstShowing();
+		}
+		// another special case, because then we need we need to remove numbering
+		if (num == 1) {
+			unNumberFirstShowing();
+		}
+
+
+		// remove the bigger ones instantly
+		for (i = num + 1; i <= maxShowings; i++) {
+			$("#form-row-" + i.toString()).slideUp("slow");
+		}
+		// slide down relevant ones
+		for (i = currentNumShowing + 1; i <= num; i++) {
+			$("#form-row-" + i.toString()).slideDown("slow");
+		}
+		// change currentNumShowing
+		currentNumShowing = num;
+	}
+
+	$(document).ready(function(){
+		// initialize the first radio option (for number of showings) to be checked
+		$("#numShowings-0").attr("checked", "checked");
+
+		// number all our labels
+		// as far as I know, there is no good way to do this with wtforms (although it seems there should be)
+		$(".numbered").each(function(){
+			$(this).append(" " + (parseInt($(this).attr("for").substr(-1))+1).toString());
+		});
+
+		// now, let's unnumber the first row of the form (since we start w/ one row showing)
+		unNumberFirstShowing();
+
+		// make title and description required
+		$("#title").prop("required", true);
+		$("#description").prop("required", true);
+
+		// have endDate automatically update to the value in startDate when startDate is changed
+		$("input[name^='startDate']").change(function(){
+			var id = "#endDates-" + $(this).attr("name").substr(-1);
+			$(id).val($(this).val());
+		});
+
+
+		// make the forms visible
+		$("#form-row-2").removeClass("invisible");
+		$("#form-row-3").removeClass("invisible");
+		$("#form-row-4").removeClass("invisible");
+
+		// slide these forms (which are currently invisible) up, to make
+		// compatible with the slideDown's needed later
+		$("#form-row-2").slideUp(0);
+		$("#form-row-3").slideUp(0);
+		$("#form-row-4").slideUp(0);
+
+		
+		// when we click the circle for x showings, slide up all the forms instantly
+		// then, slide down the relevant ones slowly
+		$("#numShowings-0").click(function() {
+			processClick(1);
+		});
+		$("#numShowings-1").click(function() {
+			processClick(2);
+		});
+		$("#numShowings-2").click(function() {
+			processClick(3);
+		});
+		$("#numShowings-3").click(function() {
+			processClick(4);
+		});
+	});
+
+	function setNavBar() {
+		document.getElementById("navBarAddEvent").classList.add("active");
+	}
+
+</script>
+
+<body onload="setNavBar()">
+
+	<div class="row" id = "bigRowAddEvent">
+		<div class="col-md-3" id = "leftCol">
+
+		</div>
+		<div class="col-md-7" id = "leftCol">
+			<h3 style="text-align:center"> Add your event by filling out the fields below. </h3>
+
+			<form id="addEventForm" action="/addEvent" method="POST" role="form">
+				{{ form.csrf_token }}
+
+				<div class="form-group">
+					{{ form.title.label }} 
+					{{ form.title(placeholder="The name of your event", class="form-control") }}
+				</div>
+				<div class="form-group">
+					{{ form.description.label }} 
+					{{ form.description(placeholder="A brief description of your event, and why people should come!", class="form-control", rows="3") }}
+				</div>
+
+
+				<div class="form-group">
+					{{ form.numShowings.label(style="padding-right:1vw") }}
+					{% for subfield in form.numShowings %}
+    					<div class="form-check form-check-inline">
+	        				{{ subfield(class="form-check-input") }}
+	        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
+	        			</div>
+					{% endfor %}
+					<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!</small>
+				</div>
+
+				{% for i in range(form.locations.__len__()) %}
+					<div class="form-row" id="form-row-{{i+1}}"> 
+						<div class="form-group col-md-4">
+        					{{ form.locations.__getitem__(i).label(class="numbered") }}
+        					{{ form.locations.__getitem__(i)(class="form-control") }}
+        				</div>
+
+        				<div class="form-group col-md-2">
+							{{ form.startDates.__getitem__(i).label(class="numbered") }}
+							{{ form.startDates.__getitem__(i)(class="form-control") }}
+						</div>
+						<div class="form-group col-md-2">
+							{{ form.startTimes.__getitem__(i).label(class="numbered") }} 
+							{{ form.startTimes.__getitem__(i)(class="form-control") }}
+						</div>
+						<div class="form-group col-md-2">
+							{{ form.endDates.__getitem__(i).label(class="numbered") }}
+							{{ form.endDates.__getitem__(i)(class="form-control") }}
+						</div>
+						<div class="form-group col-md-2">
+							{{ form.endTimes.__getitem__(i).label(class="numbered") }}
+							{{ form.endTimes.__getitem__(i)(class="form-control") }}
+						</div>
+        			</div>
+    			{% endfor %}
+
+				<div class="form-group">
+					{{ form.poster.label }}
+					{{ form.poster(class="form-control-file") }}
+					<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
+				</div>
+
+				<div class="form-group">
+					{{ form.link.label }} 
+					{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control") }}
+				</div>
+
+				<button type="submit" class="btn btn-primary">Submit!</button>
+
+				<div class="errors" style="text-align:center; color:red">
+					{% for i in errors %}
+						{{ i.capitalize() }}: {{errors[i][0]}} <br />
+					{% endfor %}
+				</div>
+
+
+			</form>
+
+		</div>
+		<div class="col-md-3" id = "leftCol">
+
+		</div>
+
+	</body>
+	{% endblock %}
