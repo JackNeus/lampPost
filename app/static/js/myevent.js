@@ -2,6 +2,7 @@ var event_data = [];
 var user_fav_data = [];
 
 $(document).ready(function(){
+	setupUserFavorites();
 	loadEvents();
 });
 
