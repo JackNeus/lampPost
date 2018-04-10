@@ -3,7 +3,10 @@
 <!--------------------------------- SCRIPTS ----------------------------------->
 
 {% block scripts %}
-<script src="/static/js/myevent.js?v=12"></script>
+<script src="/static/js/displaySearches.js?v=0"></script>
+<script src="/static/js/displayEvent.js?v=0"></script>
+<script src="/static/js/createEventHtml.js?v=0"></script>
+<script src="/static/js/myevent.js?v=0"></script>
 {% endblock %}
 
 <!------------------------------ MAIN CONTENT --------------------------------->
@@ -16,61 +19,9 @@
 	   	<h1>My Events</h1>
 			
 		<!-- Fills in with "search" results from events.json -->
-		<div class="flex-item-scroll" id="searches">
-		<div class="d-flex flex-row align-items-start">
-		<div class="smallSearchResult" id="smallSearchResult1" style="flex-grow:1000; margin-right: 0;">
-			<div class="resultContents">
-				<div class="d-flex flex-row align-items-start">
-					<div class="p-2 mr-auto">
-						<p class="resultTitle">My Event 1</p>
-						<div><p class="resultTime">Tomorrow 1:30-4:30</p></div>
-					</div>
-					<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn1">
-						<i class="fas fa-fire"></i>
-					</div>
-				     <p class="resultFavNum" id="resultFavNum1">34</p>	
-			     </div>
-		      </div>
-	  	</div>
-	  	
-	  	<div class="d-flex flex-column justify-items-center">
-		  	<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn1" >
-		  		<i class="fas fa-trash-alt"></i>
-		  	</div>
-		  	<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn1" >
-		  		<i class="fas fa-pencil-alt"></i>
-		  	</div>
-	  	</div>
-	  	</div>
-	  	
-	  	<div class="d-flex flex-row align-items-start">
-	  	<div class="smallSearchResult" id="smallSearchResult2" style="flex-grow:1000; margin-right: 0;">
-			<div class="resultContents">
-				<div class="d-flex flex-row align-items-start">
-					<div class="p-2 mr-auto">
-						<p class="resultTitle">My Event 2</p>
-						<div><p class="resultTime">Tuesday 1:30-4:30</p></div>
-					</div>
-					<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn2">
-						<i class="fas fa-fire"></i>
-					</div>
-				     <p class="resultFavNum" id="resultFavNum2">34</p>	
-			     </div>
-		      </div>
-	  	</div>
-	  	
-	  	<div class="d-flex flex-column justify-items-center">
-		  	<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn2" >
-		  		<i class="fas fa-trash-alt"></i>
-		  	</div>
-		  	<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn2" >
-		  		<i class="fas fa-pencil-alt"></i>
-		  	</div>
-	  	</div>
-	  	</div>
-	  	
-	      </div>
-	    </div>
+		<div class="flex-item-scroll" id="searches"></div>
+		
+	   </div>
 		
 	 	<div class="flex-container-col" id = "rightCol"> 
 	 		<div class = "event-view" id = "event-view"> 
@@ -153,4 +104,10 @@ $(document).ready(function(){
   $("a[href=\\" + pathname + "]").addClass('active');
 });
 </script>
+{% endblock %}
+
+<!---------------------------- JINJA VARIABLES -------------------------------->
+{% block user_data %}
+<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}"
+	data-favorites="{{current_user.favorites}}">
 {% endblock %}

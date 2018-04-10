@@ -1,7 +1,8 @@
 // DEPENDENCIES: displaySearches.js, displayEvent.js
 
 // Event data for currently displayed data.
-var event_data;
+var event_data = [];
+var user_fav_data = [];
 
 // Allow for external population of event_data.
 // Currently only used for USE_MOCK_DATA flag.
@@ -12,6 +13,7 @@ function setData(data) {
 $(document).ready(function(){
 	// setup search bar functionality
 	setupSearch();
+	setupUserFavorites();
 	setupDataRetrieval();
 	
 	// populate page if event data is initialized
@@ -19,6 +21,7 @@ $(document).ready(function(){
 		showSearchResults();
 	}
 	
+	// remove splash screen once user clicks 'log in' or 'continue as guest'
 	$('.homeLink').click(function () {
     		document.getElementById('splashScreen').style.display = 'none';
 	});
@@ -38,7 +41,7 @@ var setupSearch = function() {
 	$("#searchSort").change(function() {
 		showSearchResults();
 	});
-}
+};
 
 // Updates search results after input to search box or change in filters
 var setupDataRetrieval = function() {
@@ -64,6 +67,7 @@ var setupDataRetrieval = function() {
 				event_data = data["data"];
 			else
 				event_data = null;
+			setupUserFavorites();
 			showSearchResults();
 		};
 		$.ajax({
@@ -75,6 +79,22 @@ var setupDataRetrieval = function() {
 			success: callback
 		});
 	}
+};
+
+// Get list of events which user has favorited
+var setupUserFavorites = function() {
+	var userId = $("#userData").data("uid");
+	var callback = function(data) {
+		user_fav_data = data;
+	};
+	$.ajax({
+			url: 'http://localhost:5001/api/user/fav/get/'+ userId,
+			dataType: 'json',
+			headers: {
+				'Authorization': ('Token ' + $.cookie('api_token'))
+			},
+			success: callback
+	});
 }
 
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/

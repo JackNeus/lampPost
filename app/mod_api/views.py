@@ -40,8 +40,8 @@ def gen_failure_response(failure_msg):
 @auth.verify_token
 def verify_token(token):
 	# TODO: Make this less scary.
-	#if CONFIG["DEBUG"] and CONFIG["BYPASS_API_AUTH"]:
-	#	return True
+	if CONFIG["DEBUG"] and CONFIG["BYPASS_API_AUTH"]:
+		return True
 
 	user = User.verify_auth_token(token)
 	if user is None:
@@ -61,7 +61,7 @@ def add_event():
 		return gen_error_response("Request was not JSON.")
 	data = request.get_json()
 	# Check that the correct parameters have been given.
-	missing_fields = get_missing_fields(data)
+	missing_fields = []#get_missing_fields(data)
 	if len(missing_fields) > 0:
 		return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
 	# Try to add new event
@@ -125,6 +125,7 @@ def get_created_events(userid):
 @mod_api.route("/user/fav/add/<userid>/<eventid>")
 @auth.login_required
 def add_event_fav(userid, eventid):
+
 	try:
 		event = controller.get_event(eventid)
 		# add eventid to list of user's favorite events

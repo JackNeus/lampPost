@@ -3,9 +3,10 @@
 <!--------------------------------- SCRIPTS ----------------------------------->
 
 {% block scripts %}
-<script src="/static/js/displaySearches.js?v=6"></script>
-<script src="/static/js/displayEvent.js?v=2"></script>
-<script src="/static/js/app.js?v=7"></script>
+<script src="/static/js/displaySearches.js?v=44"></script>
+<script src="/static/js/displayEvent.js?v=5"></script>
+<script src="/static/js/createEventHtml.js?v=4"></script>
+<script src="/static/js/app.js?v=13"></script>
 
 {% if data %}
 <script>
@@ -135,4 +136,10 @@ $(document).ready(function(){
   $("a[href=\\" + pathname + "]").addClass('active');
 });
 </script>
+{% endblock %}
+
+<!---------------------------- JINJA VARIABLES -------------------------------->
+{% block user_data %}
+<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}"
+	data-favorites="{{current_user.favorites}}">
 {% endblock %}

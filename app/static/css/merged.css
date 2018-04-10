@@ -85,7 +85,8 @@ html, body {
           color: orange; }
       .smallSearchResult .resultContents .resultFireBtn:hover {
         color: rgba(255, 165, 0, 0.5); }
-    .smallSearchResult .resultContents .resultFavNum {
+    .smallSearchResult .resultContents .resultFireNum {
+
       font-size: 0.85em;
       font-weight: bold; }
     .smallSearchResult .resultContents .resultTime {

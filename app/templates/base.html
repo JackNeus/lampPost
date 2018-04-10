@@ -51,6 +51,7 @@
   </head>
 
   <body>
+     {% block user_data %}{% endblock %}
      {% block navbar %}{% endblock %}
      {% if not current_user.is_authenticated %}
       	{% block splashScreen %}{% endblock %}
