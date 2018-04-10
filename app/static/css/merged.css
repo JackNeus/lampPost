@@ -120,6 +120,29 @@ html, body {
   overflow: hidden;
   float: left; }
 
+.footer {
+  color:white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align:center;
+  height: 6.4vh;
+}
+
+.successFlash {
+  background-color:#00b300;
+}
+
+.errorFlash {
+  background-color:red;
+}
+
+#flashedMessage {
+  font-size:22px;
+  padding-top:1.5vh;
+}
+
 @media screen and (max-width: 600px) {
   .flex-container-row {
     flex-direction: column; } }

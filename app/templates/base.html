@@ -70,7 +70,7 @@
             <a class="nav-link" href="/browser">Browser</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/addEvent">Add Event!</a>
+            <a class="nav-link" href="/add">Add Event!</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/puppies">Puppies</a>
@@ -98,11 +98,40 @@
         var pathname = window.location.pathname;
         $("a[href=\\" + pathname + "]").addClass('active');
       });
+
+      function slideFooter(){
+        $(".footer").slideUp(0);
+        $(".footer").slideDown("slow");
+      }
+
      </script>
      {% if config.DEBUG %}
        <h4 class="debug-data" id="global-debug-msg"></h4>
      {% endif %}
      {% block content %}{% endblock %}
+
+     
+     {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% if messages[0][0:3] == "Suc" %}
+        <div class="footer successFlash">
+          <p id="flashedMessage"> {{ messages[0] }} </p>
+          <script type="text/javascript">
+            slideFooter();
+          </script>
+        </div>
+        {% else %}
+        <div class="footer errorFlash">
+          <p id="flashedMessage"> {{ messages[0] }} </p>
+          <script type="text/javascript">
+            slideFooter();
+          </script>
+        </div>
+        {% endif %}
+      {% endif %}
+    {% endwith %}
+    
+
   </body>
   {% block scripts %}{% endblock %}
 </html>

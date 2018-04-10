@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<link rel="stylesheet" type="text/css" href="/static/css/addEvent.css">
+<link rel="stylesheet" type="text/css" href="/static/css/add.css">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
@@ -10,21 +10,21 @@
 
 	// code for the date
 	$(document).ready(function(){
-	  // selects from all fields with name containing the substring "Date"
-      var date_input=$('input[name*="Date"]'); 
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options={
-      	format: 'mm/dd/yyyy',
-      	container: container,
-      	todayHighlight: true,
-      	autoclose: true,
-      };
-      date_input.datepicker(options);
-  	})
+		// selects from all fields with name containing the substring "Date"
+	    var date_input=$('input[name*="Date"]'); 
+	    var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+	    var options={
+	      	format: 'mm/dd/yyyy',
+	    	container: container,
+	      	todayHighlight: true,
+	      	autoclose: true,
+	    };
+    	date_input.datepicker(options);
+  	});
 
 	// where we don't have a textarea, ignore the enter key (don't let users submit)
 	$(document).on("keypress", ":input:not(textarea)", function(event) {
-    return event.keyCode != 13;
+    	return event.keyCode != 13;
 	});
 </script>
 
@@ -91,9 +91,16 @@
 		// now, let's unnumber the first row of the form (since we start w/ one row showing)
 		unNumberFirstShowing();
 
-		// make title and description required
+		// make title, description, and host required
 		$("#title").prop("required", true);
 		$("#description").prop("required", true);
+		$("#host").prop("required", true);
+		// make first row of location/datetimes required
+		$("#locations-0").prop("required", true);
+		$("#startDates-0").prop("required", true);
+		$("#startTimes-0").prop("required", true);
+		$("#endDates-0").prop("required", true);
+		$("#endTimes-0").prop("required", true);
 
 		// have endDate automatically update to the value in startDate when startDate is changed
 		$("input[name^='startDate']").change(function(){
@@ -130,10 +137,6 @@
 		});
 	});
 
-	function setNavBar() {
-		document.getElementById("navBarAddEvent").classList.add("active");
-	}
-
 </script>
 
 <body onload="setNavBar()">
@@ -145,21 +148,26 @@
 		<div class="col-md-7" id = "leftCol">
 			<h3 style="text-align:center"> Add your event by filling out the fields below. </h3>
 
-			<form id="addEventForm" action="/addEvent" method="POST" role="form">
+			<form id="addEventForm" action="/add" method="POST" role="form">
 				{{ form.csrf_token }}
 
 				<div class="form-group">
-					{{ form.title.label }} 
+					{{ form.title.label(class="req") }} 
 					{{ form.title(placeholder="The name of your event", class="form-control") }}
 				</div>
 				<div class="form-group">
-					{{ form.description.label }} 
-					{{ form.description(placeholder="A brief description of your event, and why people should come!", class="form-control", rows="3") }}
+					{{ form.description.label(class="req") }} 
+					{{ form.description(placeholder="A brief description of your event, and why people should come!", class="form-control", rows="4") }}
+				</div>
+
+				<div class="form-group">
+					{{ form.host.label(class="req") }} 
+					{{ form.host(placeholder="(e.g. Bodyhype, Whig-Clio)", class="form-control") }}
 				</div>
 
 
 				<div class="form-group">
-					{{ form.numShowings.label(style="padding-right:1vw") }}
+					{{ form.numShowings.label(style="padding-right:1vw", class="req") }}
 					{% for subfield in form.numShowings %}
     					<div class="form-check form-check-inline">
 	        				{{ subfield(class="form-check-input") }}
@@ -172,24 +180,24 @@
 				{% for i in range(form.locations.__len__()) %}
 					<div class="form-row" id="form-row-{{i+1}}"> 
 						<div class="form-group col-md-4">
-        					{{ form.locations.__getitem__(i).label(class="numbered") }}
+        					{{ form.locations.__getitem__(i).label(class="numbered req") }}
         					{{ form.locations.__getitem__(i)(class="form-control") }}
         				</div>
 
         				<div class="form-group col-md-2">
-							{{ form.startDates.__getitem__(i).label(class="numbered") }}
+							{{ form.startDates.__getitem__(i).label(class="numbered req") }}
 							{{ form.startDates.__getitem__(i)(class="form-control") }}
 						</div>
 						<div class="form-group col-md-2">
-							{{ form.startTimes.__getitem__(i).label(class="numbered") }} 
+							{{ form.startTimes.__getitem__(i).label(class="numbered req") }} 
 							{{ form.startTimes.__getitem__(i)(class="form-control") }}
 						</div>
 						<div class="form-group col-md-2">
-							{{ form.endDates.__getitem__(i).label(class="numbered") }}
+							{{ form.endDates.__getitem__(i).label(class="numbered req") }}
 							{{ form.endDates.__getitem__(i)(class="form-control") }}
 						</div>
 						<div class="form-group col-md-2">
-							{{ form.endTimes.__getitem__(i).label(class="numbered") }}
+							{{ form.endTimes.__getitem__(i).label(class="numbered req") }}
 							{{ form.endTimes.__getitem__(i)(class="form-control") }}
 						</div>
         			</div>
