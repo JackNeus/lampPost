@@ -45,6 +45,7 @@ var changeMyEvents = function() {
 			}
 			$.ajax({
 				url: 'http://localhost:5001/api/event/delete/' + eventId,
+				method: 'delete',
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))

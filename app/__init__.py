@@ -1,3 +1,4 @@
+import sys
 from flask import Flask, render_template
 from mongoengine import register_connection
 import sys
@@ -7,7 +8,7 @@ class FlaskApp(Flask):
         Flask.__init__(self, __name__)
 
 app = FlaskApp()
-# Use given config file.
+
 if len(sys.argv) > 1:
     try:
         app.config.from_pyfile("../" + sys.argv[1])
@@ -17,7 +18,6 @@ if len(sys.argv) > 1:
 else:
     try:
         app.config.from_pyfile("../dev_config.cfg")
-        print("Running app in DEVELOPMENT mode.")
     except FileNotFoundError:
         print("Development configuration not found.")
 
@@ -33,7 +33,7 @@ try:
         host = CONFIG["DB_HOST"],
         port = CONFIG["DB_PORT"]
     )
-except Exception:
+except Exception as e:
     print("Database could not be configured.")
     pass
 
