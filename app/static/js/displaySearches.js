@@ -38,6 +38,7 @@ var showUserFavorites = function () {
 	}
 };
 
+
 // Update the popularity of an event when the fire button is clicked
 var updateFireBtn = function () {
 	$(".resultFireBtn").click( function(e) {

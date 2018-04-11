@@ -25,34 +25,35 @@ def delete_event(id):
 	event.delete()
 	return event
 
-def edit_event(event):
-	event.save()
-	return None
-
-def creator_events(netid):
+# Get list of events by creator's netid.
+def get_events_by_creator(netid):
 	events = EventEntry.objects(creator = netid)
 	return events
 
-def get_uid_with_netid(netid):
+# Get [netid of] creator for event (by event id).
+def get_event_creator(id):
+	event = EventEntry.objects(id=id)
+	if len(event) == 0:
+		return None
+	return event[0].creator
+
+def get_user_by_netid(netid):
 	netid = netid.lower()
 	try:
 		entries = UserEntry.objects(netid = netid)
 		if entries.count() == 1:
-			return entries[0].id
+			return entries[0]
 		elif entries.count() == 0:
 			return None
 		return None
 	except Exception as e:
 		raise e
 
-def get_user(uid):
-	try:
-		entries = UserEntry.objects(id = uid)
-		if entries.count() == 1:
-			return entries[0]
-		return None
-	except Exception as e:
-		raise e
+def get_user_by_uid(uid):
+	entries = UserEntry.objects(id = uid)
+	if entries.count() == 1:
+		return entries[0]
+	return None
 
 # Add UserEntry for given netid.
 def add_user(netid):
@@ -64,10 +65,24 @@ def add_user(netid):
 	new_user.save()
 	return new_user
 
-def edit_user(user):
+def edit_event_favorites(id, increment):
+	event = get_event(id)
+	if event is None:
+		return None
+	event.favorites = event.favorites + increment
+	event.save()
+	return event.favorites
+
+def add_user_favorite(user, eventid):
+	user.favorites.append(eventid)
+	edit_event_favorites(eventid, 1)
 	user.save()
-	return None
-	
+
+def remove_user_favorite(user, eventid):
+	user.favorites.remove(eventid)
+	edit_event_favorites(eventid, -1)
+	user.save()
+
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
 # For each token, events with tokens (whitespace delimited) matching the token are aggregated.

@@ -17,6 +17,7 @@
 
 <!DOCTYPE html>
 
+
 <html>
   <head>
     <title>lampPost</title>
@@ -24,7 +25,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/merged.css?v=2">
+<<<<<<< HEAD
     <link rel="stylesheet" type="text/css" href="/static/css/splashpage.css?v=77">
+=======
+>>>>>>> master
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -56,10 +60,33 @@
      {% if not current_user.is_authenticated %}
       	{% block splashScreen %}{% endblock %}
      {% endif %}
+
      {% if config.DEBUG %}
        <h4 class="debug-data" id="global-debug-msg"></h4>
      {% endif %}
      {% block content %}{% endblock %}
+     
+     {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% if messages[0][0:3] == "Suc" %}
+        <div class="footer successFlash">
+          <p id="flashedMessage"> {{ messages[0] }} </p>
+          <script type="text/javascript">
+            slideFooter();
+          </script>
+        </div>
+        {% else %}
+        <div class="footer errorFlash">
+          <p id="flashedMessage"> {{ messages[0] }} </p>
+          <script type="text/javascript">
+            slideFooter();
+          </script>
+        </div>
+        {% endif %}
+      {% endif %}
+    {% endwith %}
+    
+
   </body>
   {% block scripts %}{% endblock %}
 </html>
