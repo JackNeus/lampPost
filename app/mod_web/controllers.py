@@ -1,32 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms_components import TimeField
-from wtforms import StringField, TextAreaField, RadioField, FieldList, DateField, FileField, validators
-from wtforms.validators import DataRequired
 from flask import Blueprint, request, render_template, flash, redirect
 from flask_login import current_user
 from app import CONFIG
 from app.mod_web.forms import NameForm
 from app.mod_web.models import User
 from .models import *
+from .forms import *
 import json
 import requests
 
 
 mod_web = Blueprint('web', __name__, url_prefix="")
-
-class EventForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    host = StringField('Host', validators=[DataRequired()])
-    numShowings = RadioField('Number of Showings:', choices=[("1","1"),("2","2"),("3","3"),("4","4")])
-    locations = FieldList(StringField('Location'), min_entries=4)
-    startDates = FieldList(DateField('Start Date', format='%m/%d/%Y', validators=(validators.Optional(),)), min_entries=4)
-    startTimes = FieldList(TimeField('Start Time', validators=(validators.Optional(),)), min_entries=4)
-    endDates = FieldList(StringField('End Date', validators=(validators.Optional(),)), min_entries=4)
-    endTimes = FieldList(TimeField('End Time', validators=(validators.Optional(),)), min_entries=4)
-    poster = FileField('Event Photo/Poster')
-    link = StringField('Promo Video')
-
 
 # Homepage
 @mod_web.route('/')
@@ -89,13 +73,15 @@ def addEvent():
 
 			eventData['instances'] = showings
 
+			eventData['poster'] = form.poster.data
+			print(eventData['poster'])
+
 			eventData['creator'] = current_user.netid
 			eventData['host'] = form.host.data
 
 			if (form.link.data != ""):
 				eventData['trailer'] = form.link.data
 
-			
 			# make API request
 			r = requests.put("http://localhost:5001/api/event/add", json=eventData)
 			print(r.text)
