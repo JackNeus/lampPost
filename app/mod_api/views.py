@@ -60,6 +60,7 @@ def unauthorized():
 def add_event():
 	if not request.is_json:
 		return gen_error_response("Request was not JSON.")
+
 	try:
 		data = request.get_json()
 		if isinstance(data, str):
@@ -151,6 +152,21 @@ def edit_event(id):
 def delete_event(id):
 	try:
 		event = controller.get_event(id)
+
+		if event is None:
+			return gen_error_response("No event with that id exists.")
+
+		# Make sure it is the creator that is deleting the event.
+		event_creator_netid = controller.get_event_creator(id)	
+		try:
+			user = User.get_user_in_token(request)
+			if user is None or user.netid != event_creator_netid:
+				return gen_error_response("Attempted to delete event for different user.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
+
+
+		event = controller.delete_event(id)
 		if event is None:
 			return gen_error_response("No event with that id exists.")
 
