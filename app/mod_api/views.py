@@ -59,6 +59,7 @@ def unauthorized():
 def add_event():
 	if not request.is_json:
 		return gen_error_response("Request was not JSON.")
+
 	try:
 		data = request.get_json()
 		# Check that the correct parameters have been given.

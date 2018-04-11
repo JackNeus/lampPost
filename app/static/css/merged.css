@@ -21,8 +21,24 @@ html, body {
   color: red; }
 
 #searchBox {
-  padding-top: 2vh;
-  margin: 0vh 2vh; }
+  padding: 0;
+  margin: 0vh 2vh;
+  max-width: 100%;
+  width: 100%;
+  flex-shrink: 1000; }
+
+#searchSort {
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: 0.75em;
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0vh 2vh;
+  flex-grow: 1000;
+  flex-shrink: 0; }
 
 .filters {
   margin: 0vh 2vh; }
@@ -30,9 +46,6 @@ html, body {
     font-size: 0.75em; }
   .filters input[type=text] {
     font-size: 0.65em; }
-  .filters .btn {
-    line-height: 1;
-    font-size: 0.75em; }
   .filters .datetime {
     display: none; }
 
@@ -56,13 +69,25 @@ html, body {
     padding-right: 0.8vw;
     padding-top: 0.6vh;
     padding-bottom: 0.6vh;
+    text-overflow: ellipsis;
     overflow: hidden; }
     .smallSearchResult .resultContents .resultTitle {
       font-size: 0.9em;
       font-weight: bold; }
-    .smallSearchResult .resultContents .resultLocation {
+    .smallSearchResult .resultContents .resultFireBtn {
+      font-size: 24px;
+      font-family: FontAwesome;
+      color: white;
+      padding: 0; }
+      .smallSearchResult .resultContents .resultFireBtn.selected {
+        color: orange; }
+        .smallSearchResult .resultContents .resultFireBtn.selected:hover {
+          color: orange; }
+      .smallSearchResult .resultContents .resultFireBtn:hover {
+        color: rgba(255, 165, 0, 0.5); }
+    .smallSearchResult .resultContents .resultFireNum {
       font-size: 0.85em;
-      color: rgba(0, 0, 0, 0.5); }
+      font-weight: bold; }
     .smallSearchResult .resultContents .resultTime {
       font-size: 0.85em;
       color: rgba(0, 0, 0, 0.5);
@@ -119,6 +144,29 @@ html, body {
   flex: 70%;
   overflow: hidden;
   float: left; }
+
+.footer {
+  color:white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align:center;
+  height: 6.4vh;
+}
+
+.successFlash {
+  background-color:#00b300;
+}
+
+.errorFlash {
+  background-color:red;
+}
+
+#flashedMessage {
+  font-size:22px;
+  padding-top:1.5vh;
+}
 
 @media screen and (max-width: 600px) {
   .flex-container-row {
