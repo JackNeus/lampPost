@@ -143,6 +143,13 @@ def event_search(query, start_datetime):
 def get_created_events(userid):
 	try:
 		user = controller.get_user_by_uid(userid)
+		# Make sure creator matches authorized user.
+		try:
+			token_user = User.get_user_in_token(request)
+			if token_user is None or token_user.netid != user.netid:
+				return gen_error_response("Attempted to get created events for different user.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
 		if user is None:
 			return gen_error_response("No user with that id exists.")
 		events = controller.get_events_by_creator(str(user.netid))
@@ -157,6 +164,13 @@ def add_event_fav(userid, eventid):
 	try:
 		event = controller.get_event(eventid)
 		user = controller.get_user_by_uid(userid)
+		# Make sure favoriter matches authorized user.
+		try:
+			token_user = User.get_user_in_token(request)
+			if token_user is None or token_user.netid != user.netid:
+				return gen_error_response("Attempted to add a favorite for different user.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
 		if event is None:
 			return gen_error_response("No event with that id exists.")
 		elif user is None:
@@ -175,6 +189,11 @@ def remove_event_fav(userid, eventid):
 	try:
 		event = controller.get_event(eventid)
 		user = controller.get_user_by_uid(userid)
+		# Make sure favoriter matches authorized user.
+		try:
+			token_user = User.get_user_in_token(request)
+			if token_user is None or token_user.netid != user.netid:
+				return gen_error_response("Attempted to remove a favorite for different user.")
 		if event is None:
 			return gen_error_response("No event with that id exists.")
 		elif user is None:
@@ -193,6 +212,11 @@ def remove_event_fav(userid, eventid):
 def get_favorites(userid):
 	try:
 		user = controller.get_user_by_uid(userid)
+		# Make sure caller matches authorized user.
+		try:
+			token_user = User.get_user_in_token(request)
+			if token_user is None or token_user.netid != user.netid:
+				return gen_error_response("Attempted to get a different user's favorites.")
 		if user is None:
 			return gen_error_response("No user with that id exists.")
 		return json.dumps(user.favorites)
