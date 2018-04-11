@@ -4,6 +4,11 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSign
 from mongoengine import *
 from app.mod_api import controllers as mod_api_controllers
 
+AuthorizationError = Exception("AuthorizationError")
+
+class UserEntry(Document):
+	netid = StringField(required = True, unique = True)
+
 class User(UserMixin):
 	def __init__(self, uid, netid):
 		self.uid = str(uid)
@@ -37,4 +42,14 @@ class User(UserMixin):
 			raise e
 		if user is None:
 			return None  # Something went wrong.
-		return user
+		return user[0]
+
+	@staticmethod
+	# Gets the user associated with the auth token in request.
+	def get_user_in_token(request):
+		if "Authorization" in request.headers:
+			auth_data = request.headers["Authorization"].split(None, 1)
+			if auth_data[0] != "Token":
+				raise AuthorizationError("Incorrect authorization scheme.")
+			return User.verify_auth_token(auth_data[1])
+		return AuthorizationError("Request was missing authorization header.")

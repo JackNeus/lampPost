@@ -6,16 +6,20 @@ html, body {
   html .navbar-default, body .navbar-default {
     background-color: #2d9eee;
     color: white; }
-    html .navbar-default .nav-item, body .navbar-default .nav-item {
+    html .navbar .nav-item, body .navbar .nav-item {
+      color: white;
       padding-left: 1vw;
       padding-right: 1vw; }
-    html .navbar-default .nav-link, body .navbar-default .nav-link {
+    html .navbar .nav-link, body .navbar .nav-link {
       color: white; }
   html h1, body h1 {
     text-align: center; }
   html #bigRow, body #bigRow {
     padding-left: 0vw;
     padding-right: 0vw; }
+
+#addEventForm {
+  padding-top: 2vh; }
 
 .debug-data {
   color: red; }

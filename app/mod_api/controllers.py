@@ -33,9 +33,17 @@ def edit_event_favorites(id, increment):
 	event.save()
 	return event.favorites
 
+# Get list of events by creator's netid.
 def get_events_by_creator(netid):
 	events = EventEntry.objects(creator = netid)
 	return events
+
+# Get [netid of] creator for event (by event id).
+def get_event_creator(id):
+	event = EventEntry.objects(id=id)
+	if len(event) == 0:
+		return None
+	return event[0].creator
 
 def get_user_by_netid(netid):
 	netid = netid.lower()
@@ -77,7 +85,7 @@ def remove_user_favorite(user, eventid):
 	user.favorites.remove(eventid)
 	user.save()
 	return None
-	
+
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
 # For each token, events with tokens (whitespace delimited) matching the token are aggregated.
