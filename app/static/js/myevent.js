@@ -6,7 +6,6 @@ $(document).ready(function(){
 	loadEvents();
 });
 
-
 // load user events
 var loadEvents = function() {
 	var userId = $("#userData").data("uid");
@@ -19,6 +18,7 @@ var loadEvents = function() {
 		setupUserFavorites();
 		showMyEvents();
 		changeMyEvents();
+		editMyEvents();
 	}
 	$.ajax({
 		url: 'http://localhost:5001/api/user/get/created/'+userId,
@@ -54,6 +54,23 @@ var changeMyEvents = function() {
 		}
 	});
 }
+
+// allow user to change events
+var editMyEvents = function() {
+	$(".editBtn").click( function() { 
+
+		// toggle highlighting in search results
+		// when the user clicks the edit button, we'll highlight that event
+		$(".smallSearchResult").removeClass("selected");
+		num = $(this).attr('id').substr("editBtn".length, );
+		$("#smallSearchResult"+num).addClass("selected");
+
+		// display the form, prefilled with the relevant values
+		populateForm()
+
+	});
+}
+
 
 // Get list of events which user has favorited
 var setupUserFavorites = function() {
