@@ -1,6 +1,12 @@
 from dateutil.parser import *
 from mongoengine import *
 
+class UserEntry(Document):
+    netid = StringField(required = True, unique = True)
+    favorites = ListField()
+
+    meta = { "strict": False}
+
 class InstanceEntry(EmbeddedDocument):
     location = StringField(required = True, min_length = 3)
     start_datetime = DateTimeField(required = True)
@@ -19,6 +25,7 @@ class EventEntry(Document):
         
     description = StringField(required = True, min_length = 10)
     visibility = IntField(required = True, default = 0) 
+    favorites = IntField(required = True, default = 0)
 
     # For internal use only.
     creator = StringField(required = True)
@@ -76,4 +83,3 @@ def get_raw_event(event_entry):
         raw["instances"][i]["start_datetime"] = str(raw["instances"][i]["start_datetime"])
         raw["instances"][i]["end_datetime"] = str(raw["instances"][i]["end_datetime"])
     return raw
-
