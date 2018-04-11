@@ -5,6 +5,8 @@ class UserEntry(Document):
     netid = StringField(required = True, unique = True)
     favorites = ListField()
 
+    meta: { "strict": False}
+
 class InstanceEntry(EmbeddedDocument):
     location = StringField(required = True, min_length = 3)
     start_datetime = DateTimeField(required = True)
@@ -77,4 +79,3 @@ def get_raw_event(event_entry):
         raw["instances"][i]["start_datetime"] = str(raw["instances"][i]["start_datetime"])
         raw["instances"][i]["end_datetime"] = str(raw["instances"][i]["end_datetime"])
     return raw
-

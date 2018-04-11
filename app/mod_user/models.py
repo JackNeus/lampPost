@@ -4,7 +4,8 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSign
 from mongoengine import *
 from app.mod_api import controllers as mod_api_controllers
 
-AuthorizationError = Exception("AuthorizationError")
+class AuthorizationError(Exception):
+	pass
 
 class UserEntry(Document):
 	netid = StringField(required = True, unique = True)
@@ -36,13 +37,10 @@ class User(UserMixin):
 			return None  # Valid token, but expired.
 		except BadSignature:
 			return None  # Invalid token.
-		try:
-			user = mod_api_controllers.get_user_by_uid(data['id'])
-		except Exception as e:
-			raise e
+		user = mod_api_controllers.get_user_by_uid(data['id'])
 		if user is None:
 			return None  # Something went wrong.
-		return user[0]
+		return user
 
 	@staticmethod
 	# Gets the user associated with the auth token in request.
@@ -52,4 +50,4 @@ class User(UserMixin):
 			if auth_data[0] != "Token":
 				raise AuthorizationError("Incorrect authorization scheme.")
 			return User.verify_auth_token(auth_data[1])
-		return AuthorizationError("Request was missing authorization header.")
+		raise AuthorizationError("Request was missing authorization header.")
