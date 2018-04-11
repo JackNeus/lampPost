@@ -23,7 +23,7 @@ var loadEvents = function() {
 		changeMyEvents();
 	}
 	$.ajax({
-		url: 'http://localhost:5001/api/user/get/created/'+userId,
+		url: 'http://localhost:5001/api/user/get_events/'+userId,
 		dataType: 'json',
 		headers: {
 			'Authorization': ('Token ' + $.cookie('api_token'))
