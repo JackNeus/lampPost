@@ -1,4 +1,4 @@
-// DEPENDENCIES: displayEvent.js
+// DEPENDENCIES: displayEvent.js, createEventHtml.js
 
 // Populate search result panel with event_data sorted by date.
 var showSearchResults = function() {
@@ -6,20 +6,11 @@ var showSearchResults = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 	
-	// sort events by either date or popularity
-	sortResults();
-	
-	// create html code for each search result
-	createSearchResults();
-	
-	// highlight user favorites
-	showUserFavorites();
-	
-	// handle clicks of fire button
-	updateFireBtn();
-	
-	// handle click of event
-	updateEventView();
+	sortResults(); 		// sort by date or popularity
+	createSearchResults();	// create html code for each search result
+	showUserFavorites(); 	// highlight user favorites
+	updateFireBtn(); 		// handle clicks of fire button
+	updateEventView(); 	// handle click of event
 }
 
 // Populate search result panel with event_data sorted by date.
@@ -28,20 +19,11 @@ var showMyEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 	
-	// sort events by either date or popularity
-	sortResults();
-	
-	// create html code for each search result
-	createMyEventResults();
-	
-	// highlight user favorites
-	showUserFavorites();
-	
-	// handle clicks of fire button
-	updateFireBtn();
-	
-	// handle click of event
-	updateEventView();
+	sortEventsByDate(); 	// sort events by date
+	createMyEventResults(); // create html code for each created event
+	showUserFavorites(); 	// highlight user favorites
+	updateFireBtn(); 		// handle clicks of fire button
+	updateEventView(); 	// handle click of event
 }
 
 // Show which events a user has favorited
@@ -126,20 +108,8 @@ var sortResults = function () {
 		});
 	}
 	
-	if (sortByDate) {
-		// sort the events by date (using the first instance of the event)
-		event_data.sort(function (a, b) {
-			return Date.timeBetween(new Date(b.instances[0].start_datetime), 
-							new Date(a.instances[0].start_datetime), 
-							'seconds');
-		});
-	}
-	else {
-		// sort the events by popularity
-		event_data.sort(function (a, b) {
-			return parseInt(b.favorites) - parseInt(a.favorites);
-		});
-	}
+	if (sortByDate) 	sortEventsByDate();
+	else 			sortEventsByPopularity();
 }
 
 /*----------------------------- UTILITY FUNCTIONS ----------------------------*/
@@ -155,6 +125,22 @@ function eventIsFav(eventId) {
 		if (eventId == user_fav_data[i]) return true;
 	}
 	return false;
+}
+
+// sort the events by date (using the first instance of the event)
+function sortEventsByDate() {
+	event_data.sort(function (a, b) {
+		return Date.timeBetween(new Date(b.instances[0].start_datetime), 
+						new Date(a.instances[0].start_datetime), 
+						'seconds');
+	});
+}
+
+// sort the events by popularity
+function sortEventsByPopularity() {
+	event_data.sort(function (a, b) {
+		return parseInt(b.favorites) - parseInt(a.favorites);
+	});
 }
 
 // calculates the difference between date1 and date2 in ms, with an

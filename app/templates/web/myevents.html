@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-<!--------------------------------- SCRIPTS ----------------------------------->
+<!--****************************** SCRIPTS **********************************-->
 
 {% block scripts %}
 <script src="/static/js/displaySearches.js?v=0"></script>
@@ -9,7 +9,7 @@
 <script src="/static/js/myevent.js?v=0"></script>
 {% endblock %}
 
-<!------------------------------ MAIN CONTENT --------------------------------->
+<!--****************************** MAIN CONTENT *****************************-->
 {% block content %}
 <div class="container-fluid">
   	<div class="flex-container-row" id="bigRow">
@@ -40,7 +40,7 @@
 </div>
 {% endblock %}
 
-<!------------------------------- SPLASH PAGE --------------------------------->
+<!--****************************** SPLASH PAGE ******************************-->
 
 {% block splashScreen %}
 <div class="splashScreen" id="splashScreen">
@@ -55,7 +55,7 @@
 </div>
 {% endblock %}
 
-<!--------------------------------- NAVBAR ------------------------------------>
+<!--********************************** NAVBAR *******************************-->
 
 {% block navbar %}
 <!-- Navbar -->
@@ -106,8 +106,7 @@ $(document).ready(function(){
 </script>
 {% endblock %}
 
-<!---------------------------- JINJA VARIABLES -------------------------------->
+<!--**************************** JINJA VARIABLES ****************************-->
 {% block user_data %}
-<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}"
-	data-favorites="{{current_user.favorites}}">
+<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}">
 {% endblock %}
