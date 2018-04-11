@@ -5,7 +5,7 @@ class UserEntry(Document):
     netid = StringField(required = True, unique = True)
     favorites = ListField()
 
-    meta: { "strict": False}
+    meta = { "strict": False}
 
 class InstanceEntry(EmbeddedDocument):
     location = StringField(required = True, min_length = 3)
