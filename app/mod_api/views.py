@@ -154,7 +154,7 @@ def remove_event_fav(userid, eventid):
 			return gen_error_response("No user with that id exists.")
 		if eventid in user.favorites:
 			controller.remove_user_favorite(user, eventid)
-			controller.edit_event_favorites(event, -1)
+			controller.edit_event_favorites(eventid, -1)
 		else:
 			return gen_error_response("You can't un-favorite an event that isn't in your favorites!")
 		return jsonify(event.favorites)
