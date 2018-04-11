@@ -130,7 +130,9 @@ def edit_event(id):
 		if event is None:
 			return gen_error_response(event_dne_text)
 		user = User.get_user_in_token(request)
-		if user is None or user.netid != event.creator:
+		if user is None:
+			return gen_error_response("Invalid authorization.")
+		if user.netid != event.creator:
 			return gen_error_response("Attempted to edit event for different user.")
 
 		updated_event = controller.edit_event(id, data)
@@ -160,25 +162,12 @@ def delete_event(id):
 		event_creator_netid = controller.get_event_creator(id)	
 		try:
 			user = User.get_user_in_token(request)
-			if user is None or user.netid != event_creator_netid:
+			if user is None:
+				return gen_error_response("Invalid authorization.")
+			if user.netid != event_creator_netid:
 				return gen_error_response("Attempted to delete event for different user.")
 		except AuthorizationError:
 			return gen_error_response("Invalid authorization.")
-
-
-		event = controller.delete_event(id)
-		if event is None:
-			return gen_error_response("No event with that id exists.")
-
-		# Make sure it is the creator that is deleting the event.
-		event_creator_netid = controller.get_event_creator(id)	
-		try:
-			user = User.get_user_in_token(request)
-			if user is None or user.netid != event_creator_netid:
-				return gen_error_response("Attempted to delete event for different user.")
-		except AuthorizationError:
-			return gen_error_response("Invalid authorization.")
-
 
 		event = controller.delete_event(id)
 		if event is None:
