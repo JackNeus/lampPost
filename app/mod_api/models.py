@@ -8,6 +8,9 @@ class InstanceEntry(EmbeddedDocument):
 
     # Override save() method to add custom validation
     def clean(self):
+        self.start_datetime = parse(self.start_datetime)
+        self.end_datetime = parse(self.end_datetime)
+        
         # End datetime cannot be before start datetime.
         if self.end_datetime < self.start_datetime:
             raise ValidationError("End time is earlier than start time.")

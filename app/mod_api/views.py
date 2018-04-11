@@ -60,6 +60,7 @@ def add_event():
 	if not request.is_json:
 		return gen_error_response("Request was not JSON.")
 	data = request.get_json()
+
 	# Check that the correct parameters have been given.
 	missing_fields = []#get_missing_fields(data)
 	if len(missing_fields) > 0:
