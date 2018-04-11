@@ -179,7 +179,7 @@ def add_event_fav(userid, eventid):
 			controller.add_user_favorite(user, eventid)
 			# increment the event's number of favorites
 			controller.edit_event_favorites(eventid, 1)
-		return jsonify(event.favorites) # need to return something or views gets angry
+		return gen_data_response(event.favorites) # need to return something or views gets angry
 	except Exception as e:
 		return gen_failure_response(str(e))
 
@@ -203,7 +203,7 @@ def remove_event_fav(userid, eventid):
 			controller.edit_event_favorites(eventid, -1)
 		else:
 			return gen_error_response("You can't un-favorite an event that isn't in your favorites!")
-		return jsonify(event.favorites)
+		return gen_data_response(event.favorites)
 	except Exception as e:
 		return gen_failure_response(str(e))
 
@@ -219,6 +219,6 @@ def get_favorites(userid):
 				return gen_error_response("Attempted to get a different user's favorites.")
 		if user is None:
 			return gen_error_response("No user with that id exists.")
-		return json.dumps(user.favorites)
+		return gen_data_response(user.favorites)
 	except Exception as e:
 		return gen_failure_response(str(e))
