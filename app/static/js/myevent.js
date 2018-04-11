@@ -59,7 +59,10 @@ var changeMyEvents = function() {
 var setupUserFavorites = function() {
 	var userId = $("#userData").data("uid");
 	var callback = function(data) {
-		user_fav_data = data;
+		if (data["status"] === "Success") 
+			user_fav_data = data["data"];
+		else
+			user_fav_data = null;
 	};
 	$.ajax({
 			url: 'http://localhost:5001/api/user/fav/get/'+ userId,

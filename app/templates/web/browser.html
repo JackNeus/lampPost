@@ -3,10 +3,10 @@
 <!--****************************** SCRIPTS **********************************-->
 
 {% block scripts %}
-<script src="/static/js/displaySearches.js?v=0"></script>
-<script src="/static/js/displayEvent.js?v=0"></script>
-<script src="/static/js/createEventHtml.js?v=0"></script>
-<script src="/static/js/app.js?v=0"></script>
+<script src="/static/js/displaySearches.js?v=1"></script>
+<script src="/static/js/displayEvent.js?v=1"></script>
+<script src="/static/js/createEventHtml.js?v=1"></script>
+<script src="/static/js/app.js?v=1"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -114,6 +114,9 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
     </li>
     <li class="nav-item">
       <a class="nav-link" href="/myevents">My Events</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/add">Add Events!</a>
     </li>
     </li>
     <li class="nav-item">
