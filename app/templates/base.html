@@ -17,6 +17,7 @@
 
 <!DOCTYPE html>
 
+
 <html>
   <head>
     <title>lampPost</title>
@@ -24,7 +25,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/merged.css?v=2">
+<<<<<<< HEAD
     <link rel="stylesheet" type="text/css" href="/static/css/splashpage.css?v=77">
+=======
+>>>>>>> master
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -56,10 +60,87 @@
      {% if not current_user.is_authenticated %}
       	{% block splashScreen %}{% endblock %}
      {% endif %}
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-inverse">
+      <a class="navbar-brand" href="#"><img src = "../../static/graphics/logoNavBar.svg" class="image-fluid logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="#navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarToggle">
+        <ul class="navbar-nav ml-auto mt-2 mt-md-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <!-- For the future: Home Search Add MyCal About Help Login -->
+          <li class="nav-item">
+            <a class="nav-link" href="/browser">Browser</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/add">Add Event!</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/puppies">Puppies</a>
+          </li>
+          </li>
+          <li class="nav-item">
+            {% if current_user.is_authenticated %}
+            <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
+            {% else %}
+             <a class="nav-link" href="/login"> Login </a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- Active link -->
+    <script>
+      // On click (for immediate response before page load)
+      $(".navbar-nav .nav-item").on("click", function(){
+        $(".navbar-nav").find(".active").removeClass("active");
+        $(this).addClass("active");
+      });
+      // On page load (for longterm highlight)
+      $(document).ready(function(){
+        var pathname = window.location.pathname;
+        $("a[href=\\" + pathname + "]").addClass('active');
+      });
+
+      function slideFooter(){
+        //$(".footer").slideUp(0);
+        $(".footer").slideDown("slow");
+      }
+
+     </script>
+
      {% if config.DEBUG %}
        <h4 class="debug-data" id="global-debug-msg"></h4>
      {% endif %}
      {% block content %}{% endblock %}
+
+     
+     {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% if messages[0][0:3] == "Suc" %}
+        <div class="footer successFlash">
+          <p id="flashedMessage"> {{ messages[0] }} </p>
+          <script type="text/javascript">
+            slideFooter();
+          </script>
+        </div>
+        {% else %}
+        <div class="footer errorFlash">
+          <p id="flashedMessage"> {{ messages[0] }} </p>
+          <script type="text/javascript">
+            slideFooter();
+          </script>
+        </div>
+        {% endif %}
+      {% endif %}
+    {% endwith %}
+    
+
   </body>
   {% block scripts %}{% endblock %}
 </html>

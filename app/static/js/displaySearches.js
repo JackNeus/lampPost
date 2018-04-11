@@ -18,6 +18,70 @@ var showSearchResults = function() {
 	// handle clicks of fire button
 	updateFireBtn();
 	
+	for (var i = 0; i < event_data.length; i++) {
+		// Title of event
+		var title = $('<p />').attr({
+			class: "resultTitle"
+		}).append(event_data[i].title);
+		
+		// Fire icon
+		var fireIcon = $('<i />').attr({
+			class: "fas fa-fire",
+		});
+		
+		// Clickable fire button that displays "Favorite" when hovered over
+		var fireBtn = $('<div />').attr({
+			class: "resultFireBtn btn",
+			title: "Favorite",
+			id: "resultFireBtn" + (i + 1)
+		}).append(fireIcon);
+		
+		// TODO: get 'getFire' from backend
+		// var getFire = event_data[i].favorites;
+		// Number of favorites an event has
+		var getFire = Math.floor(Math.random() * 100);
+		var fireNum = $('<p />').attr({
+			class: "resultFireNum",
+			id: "resultFireNum" + (i + 1)
+		}).append(getFire);
+		
+		// All dates/times of an event
+		var instances = event_data[i].instances;
+		var allTimes = $('<div />');
+		for (var j = 0; j < instances.length; j++) {
+			var time = $('<p />').attr({
+				class: "resultTime"
+			}).append(makeDate(instances[j].start_datetime, 
+					       instances[j].end_datetime));
+			allTimes.append(time);
+		}
+		
+		// Title/dates are left aligned
+		var leftColumn = $('<div />').attr({
+			class: "p-2 mr-auto"
+		}).append(title).append(allTimes);
+		
+		// Fire button and number of favorites are inlined with event title
+		var firstRow = $('<div />').attr({
+			class: "d-flex flex-row align-items-start"
+		}).append(leftColumn).append(fireBtn).append(fireNum);
+		
+		// Container holding the result contents
+		var smallDiv = $('<div >').attr({
+			class: "resultContents"
+		}).append(firstRow);
+		
+		// Container holding all event infor and the id of the event
+		var largeDiv = $('<div />').attr({
+			class: "smallSearchResult", id: "smallSearchResult" + (i + 1), 
+		}).append(smallDiv);
+		
+		// Add the list of search results
+		$("#searches").append(largeDiv);
+	}
+	
+	// handle clicks of fire button
+	updateFireBtn();
 	// handle click of event
 	updateEventView();
 }
@@ -100,11 +164,12 @@ var updateFireBtn = function () {
 			unfavoriteEvent();
 		}
 		
-		// update favorite number information
+		// update favorite information
 		var getFireNum = document.getElementById("resultFireNum" + eventNum).innerText;
 		var newFireNum = parseInt(getFireNum) + change;
 		document.getElementById("resultFireNum" + eventNum).innerText = newFireNum;
 		
+		//TODO: send newFavs to backend		
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
 	});
