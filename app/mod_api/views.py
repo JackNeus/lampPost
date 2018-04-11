@@ -3,7 +3,7 @@ from flask import jsonify, make_response, request, render_template
 from flask_httpauth import HTTPTokenAuth
 from flask_login import login_required
 import json
-from app.mod_user.models import User
+from app.mod_user.models import AuthorizationError, User
 from . import api_module as mod_api
 from . import controllers as controller
 from .models import *
@@ -119,7 +119,6 @@ def delete_event(id):
 		except AuthorizationError:
 			return gen_error_response("Invalid authorization.")
 
-
 		event = controller.delete_event(id)
 		if event is None:
 			return gen_error_response("No event with that id exists.")
@@ -136,4 +135,101 @@ def event_search(query, start_datetime):
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
+		return gen_failure_response(str(e))
+
+@mod_api.route("/user/get_events/<userid>")
+@auth.login_required
+def get_created_events(userid):
+	try:
+		user = controller.get_user_by_uid(userid)
+		if user is None:
+			return gen_error_response("No user with that id exists.")
+
+		# Make sure creator matches authorized user.
+		try:
+			token_user = User.get_user_in_token(request)
+			if token_user is None or token_user.netid != user.netid:
+				return gen_error_response("Attempted to get created events for different user.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
+
+		events = controller.get_events_by_creator(str(user.netid))
+		events = [get_raw_event(event) for event in events]
+		return gen_data_response(events)
+	except Exception as e:
+		return gen_failure_response(str(e))
+
+@mod_api.route("/user/fav/add/<userid>/<eventid>")
+@auth.login_required
+def add_event_fav(userid, eventid):
+	try:
+		event = controller.get_event(eventid)
+		user = controller.get_user_by_uid(userid)
+		if event is None:
+			return gen_error_response("No event with that id exists.")
+		elif user is None:
+			return gen_error_response("No user with that id exists.")
+
+		# Make sure favoriter matches authorized user.
+		try:
+			token_user = User.get_user_in_token(request)
+			if token_user is None or token_user.netid != user.netid:
+				return gen_error_response("Attempted to add a favorite for different user.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
+
+		if eventid not in user.favorites:
+			controller.add_user_favorite(user, eventid)
+		return gen_data_response(event.favorites) # need to return something or views gets angry
+	except Exception as e:
+		return gen_failure_response(str(e))
+
+@mod_api.route("/user/fav/remove/<userid>/<eventid>")
+@auth.login_required
+def remove_event_fav(userid, eventid):
+	try:
+		event = controller.get_event(eventid)
+		user = controller.get_user_by_uid(userid)
+		if event is None:
+			return gen_error_response("No event with that id exists.")
+		elif user is None:
+			return gen_error_response("No user with that id exists.")
+
+		# Make sure favoriter matches authorized user.
+		try:
+			token_user = User.get_user_in_token(request)
+			if token_user is None or token_user.netid != user.netid:
+				return gen_error_response("Attempted to remove a favorite for different user.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
+
+		if eventid in user.favorites:
+			controller.remove_user_favorite(user, eventid)
+		else:
+			return gen_error_response("You can't un-favorite an event that isn't in your favorites!")
+		return gen_data_response(event.favorites)
+	except Exception as e:
+		return gen_failure_response(str(e))
+
+@mod_api.route("/user/fav/get/<userid>")
+@auth.login_required
+def get_favorites(userid):
+	try:
+		user = controller.get_user_by_uid(userid)
+		if user is None:
+			return gen_error_response("No user with that id exists.")
+
+		# Make sure caller matches authorized user.
+		try:
+			token_user = User.get_user_in_token(request)
+			if token_user is None or token_user.netid != user.netid:
+				print("user: " + user.netid)
+				print("token: " + token_user.netid)
+				return gen_error_response("Attempted to get a different user's favorites.")
+		except AuthorizationError:
+			return gen_error_response("Invalid authorization.")
+		
+		return gen_data_response(user.favorites)
+	except Exception as e:
+		raise e
 		return gen_failure_response(str(e))
