@@ -133,7 +133,7 @@ html #bigRow, body #bigRow {
   min-width: 30vh;
   overflow: hidden;
   display: none;
-  color: #333333;
+  color: #404040;
 }
 .event-view .event-view-header {
   padding: 10px;

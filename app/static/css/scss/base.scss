@@ -1,5 +1,7 @@
 $background-color: #eeeeee;
 $primary-color: #2d9eee;
+$dark-color: #404040;
+$med-color: #666666;
 $font-light: "Avenir-Light";
 $font-med: "Avenir-Medium";
 $font-heavy: "Avenir-Heavy";
@@ -16,17 +18,17 @@ html, body {
 	// Base font
 	font: 100% $font-light;
 	// Headers
-	.h1 {
+	.h1, h1 {
 		font: 100% $font-heavy;
 		font-size:32px;
 	}
 
-	.h2 {
+	.h2, h2 {
 		font: 100% $font-heavy;
 		font-size:24px;
 	}
 
-	.h3 {
+	.h3, h3 {
 		font: 100% $font-med;
 		font-size:18px;
 	}
@@ -44,7 +46,8 @@ html, body {
 		background-color: $primary-color;
 	}
 	.nav-link {
-		font-size: 20px;
+		font: 100% $font-med;
+		font-size:24px;
 	}
 
 	#bigRow {
@@ -56,12 +59,13 @@ html, body {
 
 // Debug Style
 .debug-data {
+	display: none;
 	color: red;
 }
 
 #searchBox {
 	padding: 0;
-	margin: 0vh 2vh;
+	margin: 2vh 2vh;
 	max-width: 100%;
 	width: 100%;
 	flex-shrink: 1000;
@@ -76,7 +80,7 @@ html, body {
 	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin: 0vh 2vh;
+      margin: 2vh 2vh;
       flex-grow: 1000;
       flex-shrink: 0;
 }
@@ -154,33 +158,71 @@ html, body {
 }
 
 
-
+// Event event
+// TODO: Move to seperate file?
 .event-view {
   height: 80vh;
   min-width: 30vh;
   overflow: hidden;
-  background-color: white;
-  margin: 2vh 2vw;
   display: none;
+  color: $dark-color;
 
-	.event-result-title {
-		font-family: serif;
-		font-size: 40px;
-		color: black;
-		text-align: center;
+	.event-view-header {
+		padding: 10px;
+    	background-color: $background-color;
+		// Shadow
+		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+		position: relative;
+    	z-index: 500;
+	}
+	.event-view-title {
+		margin: 0;
+		line-height: normal;
+	}
+	.event-view-host {
+		/// TODO: FIX THIS!!!!
+		padding-top: 16px;
+		margin: 0;
+		line-height: normal;
+	}
+	.event-view-subtitle{
+		margin: 0;
+		line-height: normal;
+	}
+	.eventFireBtn {
+		font-size: 38px;
+		font-family: FontAwesome;
+		color: $med-color;
+		padding: 0;
+		&.selected {
+			color: orange;
+			&:hover {
+				color: orange;
+			}
+		}
+		&:hover {
+			color: rgba(255, 165, 0, 0.5);
+		}
+	}
+	.eventFireNum {
+		font-size: 0.85em;
 		font-weight: bold;
 	}
-	.event-result-info {
+	.event-view-info {
+		padding: 10px;
+		padding-top: 20px;
 		width: 100%;
-		font-size: 20px;
-		color: black;
-		margin: 1em 0.5em;
+		font-size: 18px;
+	    background-color: white;
 	}
 	img {
 		float: right;
 		width: 40%;
 		margin: 0em 1em;
 		height: auto;
+	}
+	.eventSection {
+		 border-bottom: 2px solid $primary-color;
 	}
 }
 
@@ -209,7 +251,7 @@ html, body {
 #leftCol {
 	flex: 30%;
     	float: left;
-    	border-right: 5px solid black;
+    	border-right: 5px solid $primary-color;
 }
 #rightCol {
 	flex: 70%;
