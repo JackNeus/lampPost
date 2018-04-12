@@ -1,19 +1,20 @@
 /* rgb values for primary-color */
 html, body {
   font: 100% "Avenir-Light";
+  font-size: 20px;
   background-color: #eeeeee;
 }
 html .h1, html h1, body .h1, body h1 {
   font: 100% "Avenir-Heavy";
-  font-size: 32px;
+  font-size: 36px;
 }
 html .h2, html h2, body .h2, body h2 {
   font: 100% "Avenir-Heavy";
-  font-size: 24px;
+  font-size: 26px;
 }
 html .h3, html h3, body .h3, body h3 {
   font: 100% "Avenir-Medium";
-  font-size: 18px;
+  font-size: 20px;
 }
 
 html .logo, body .logo {
@@ -147,17 +148,18 @@ html #bigRow, body #bigRow {
   line-height: normal;
 }
 .event-view .event-view-host {
-  padding-top: 16px;
   margin: 0;
-  line-height: normal;
+  line-height: 30px;
+  font-size: 15px;
 }
 .event-view .event-view-subtitle {
   margin: 0;
   line-height: normal;
 }
 .event-view .eventFireBtn {
-  font-size: 38px;
+  font-size: 45px;
   font-family: FontAwesome;
+  line-height: 0 !important;
   color: #666666;
   padding: 0;
 }
@@ -175,10 +177,8 @@ html #bigRow, body #bigRow {
   font-weight: bold;
 }
 .event-view .event-view-info {
-  padding: 10px;
   padding-top: 20px;
   width: 100%;
-  font-size: 18px;
   background-color: white;
 }
 .event-view img {
@@ -188,6 +188,7 @@ html #bigRow, body #bigRow {
   height: auto;
 }
 .event-view .eventSection {
+  margin: 0;
   border-bottom: 2px solid #2d9eee;
 }
 

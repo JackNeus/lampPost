@@ -40,14 +40,15 @@ function populateEventViewPanel(num) {
 	document.getElementById("welcome").style.display="none";
 	document.getElementById("eventTitle").innerHTML =
 		event_data[num].title;
-	document.getElementById("eventFire").innerHTML = "";
-	$("#eventFire").append(fireBtn).append(fireNum);
+	$("#eventFireBtn").remove();
+	$("#eventFireNum").remove();
+	$("#mainHeaderLine").append(fireBtn).append(fireNum);
 	document.getElementById("eventSubtitle").innerHTML =
 		event_data[num]["instances"][0].location + " | ";
 	document.getElementById("eventHost").innerHTML =
 		"by " + event_data[num].host;
 	document.getElementById("eventSubtitle").innerHTML +=
-		event_data[num]["instances"][0].start_datetime;
+		event_data[num]["instances"][0].start_datetime; 
 	document.getElementById("eventDescription").innerHTML =
 		event_data[num].description;
 

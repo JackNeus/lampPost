@@ -17,20 +17,21 @@ html, body {
 
 	// Base font
 	font: 100% $font-light;
+	font-size: 20px;
 	// Headers
 	.h1, h1 {
 		font: 100% $font-heavy;
-		font-size:32px;
+		font-size:36px;
 	}
 
 	.h2, h2 {
 		font: 100% $font-heavy;
-		font-size:24px;
+		font-size:26px;
 	}
 
 	.h3, h3 {
 		font: 100% $font-med;
-		font-size:18px;
+		font-size:20px;
 	}
 
 	// Other Style
@@ -180,18 +181,18 @@ html, body {
 		line-height: normal;
 	}
 	.event-view-host {
-		/// TODO: FIX THIS!!!!
-		padding-top: 16px;
 		margin: 0;
-		line-height: normal;
+		line-height: 30px;
+		font-size: 15px;
 	}
 	.event-view-subtitle{
 		margin: 0;
 		line-height: normal;
 	}
 	.eventFireBtn {
-		font-size: 38px;
+		font-size: 45px;
 		font-family: FontAwesome;
+		line-height: 0 !important;
 		color: $med-color;
 		padding: 0;
 		&.selected {
@@ -209,10 +210,8 @@ html, body {
 		font-weight: bold;
 	}
 	.event-view-info {
-		padding: 10px;
 		padding-top: 20px;
 		width: 100%;
-		font-size: 18px;
 	    background-color: white;
 	}
 	img {
@@ -222,7 +221,8 @@ html, body {
 		height: auto;
 	}
 	.eventSection {
-		 border-bottom: 2px solid $primary-color;
+		margin: 0;
+		border-bottom: 2px solid $primary-color;
 	}
 }
 
