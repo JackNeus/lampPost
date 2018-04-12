@@ -1,12 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms_components import TimeField
-from wtforms import StringField, TextAreaField, RadioField, FieldList, DateField, FileField, validators
-from wtforms.validators import DataRequired
+
 from flask import Blueprint, request, render_template, flash, redirect
-from flask_login import current_user
+from flask_login import current_user, login_required
 from app import CONFIG
 from app.mod_web.forms import NameForm
 from app.mod_web.models import User
+from .forms import *
 from .models import *
 import json
 import requests
@@ -14,45 +13,10 @@ import requests
 
 mod_web = Blueprint('web', __name__, url_prefix="")
 
-class EventForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    host = StringField('Host', validators=[DataRequired()])
-    numShowings = RadioField('Number of Showings:', choices=[("1","1"),("2","2"),("3","3"),("4","4")])
-    locations = FieldList(StringField('Location'), min_entries=4)
-    startDates = FieldList(DateField('Start Date', format='%m/%d/%Y', validators=(validators.Optional(),)), min_entries=4)
-    startTimes = FieldList(TimeField('Start Time', validators=(validators.Optional(),)), min_entries=4)
-    endDates = FieldList(StringField('End Date', validators=(validators.Optional(),)), min_entries=4)
-    endTimes = FieldList(TimeField('End Time', validators=(validators.Optional(),)), min_entries=4)
-    poster = FileField('Event Photo/Poster')
-    link = StringField('Promo Video')
-
-
 # Homepage
 @mod_web.route('/')
 def home():
 	return render_template("web/home.html")
-
-@mod_web.route('/index', methods=['GET', 'POST'])
-def index():
-	form = NameForm(request.form)
-	if form.validate_on_submit():
-		name = form.name.data
-		msg = "Hello, "+name
-		return render_template("web/index.html", msg=msg)
-	return render_template("web/index.html", form=form)
-
-@mod_web.route('/spud', methods=['GET'])
-@mod_web.route('/spuds', methods=['GET'])
-@mod_web.route('/potato', methods=['GET'])
-def potato():
-	print("This is the server speaking!")
-	print(request.args)
-	if "msg" in request.args:
-		my_message = request.args["msg"]
-	else:
-		my_message = None
-	return render_template("web/potato.html", my_message=my_message)
 
 @mod_web.route('/browser')
 def browser():
@@ -108,6 +72,7 @@ def myevents():
 		return render_template("web/myevents.html", form=EventForm(), display=False)
 
 @mod_web.route('/add', methods=['GET', 'POST'])
+@login_required
 def addEvent():
 	if request.method == "POST":
 		form = EventForm(request.form)
@@ -136,28 +101,25 @@ def addEvent():
 
 			if (form.link.data != ""):
 				eventData['trailer'] = form.link.data
-
 			
 			# make API request
-			r = requests.put("http://localhost:5001/api/event/add", json=eventData)
-			print(r.text)
-			if json.loads(r.text)["status"] == "Success":
+			headers = { "Authorization" : "Token %s" % current_user.token }
+			r = requests.put(CONFIG["BASE_URL"]+"/api/event/add", 
+				json = eventData,
+				headers = headers)
+
+			if r.status_code != 200:
+				flash("Something went wrong. Please contact a developer.")
+				return render_template("web/add.html", form=EventForm())
+			r = json.loads(r.text)
+			if r["status"] == "Success":
 				flash("Success! Your event has been added.")
 				return redirect("add")
 			else:
-				flash("Error. " + json.loads(r.text)["error_msg"])
+				flash("Error. " + r["error_msg"])
 				return render_template("web/add.html", form=EventForm())
 	else:
 		return render_template("web/add.html", form=EventForm())
-
-@mod_web.route('/main')
-def main():
-	with open('app/static/carrot/events.json', 'r') as fid:
-		data = json.load(fid)
-	if data:
-		return render_template("web/main.html", data=data)
-	else:
-		return render_template("web/main.html")
 
 @mod_web.route('/puppies', methods=['GET', 'POST'])
 def puppies():
