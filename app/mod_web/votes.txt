@@ -1,4 +1,4 @@
-Siberian Husky:1
+Siberian Husky:2
 Black Lab:1
 Chocolate Lab:2
 Golden Retriever:0
