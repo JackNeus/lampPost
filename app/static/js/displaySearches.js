@@ -7,8 +7,9 @@ var showSearchResults = function() {
 	currentSearches.innerHTML = "";
 	
 	sortResults(); 		// sort by date or popularity
-	createSearchResults();	// create html code for each search result
+	createSearchResults();	// create html code for each search result and display them
 	showUserFavorites(); 	// highlight user favorites
+	// declare event handlers for "fireBtn" and "smallSearchResult"
 	updateFireBtn(); 		// handle clicks of fire button
 	updateEventView(); 	// handle click of event
 }
@@ -20,8 +21,9 @@ var showMyEvents = function() {
 	currentSearches.innerHTML = "";
 	
 	sortEventsByDate(); 	// sort events by date
-	createMyEventResults(); // create html code for each created event
+	createMyEventResults(); // create html code for each created event and display them
 	showUserFavorites(); 	// highlight user favorites
+	// declare event handlers for "fireBtn" and "smallSearchResult"
 	updateFireBtn(); 		// handle clicks of fire button
 	updateEventView(); 	// handle click of event
 }
@@ -50,7 +52,7 @@ var updateFireBtn = function () {
 		// update database after favoriting event
 		var favoriteEvent = function() {
 			$.ajax({
-				url: 'http://localhost:5001/api/user/fav/add/'+ userId + "/" + eventId,
+				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))
@@ -61,7 +63,7 @@ var updateFireBtn = function () {
 		// update database after unfavoriting event
 		var unfavoriteEvent = function() {
 			$.ajax({
-				url: 'http://localhost:5001/api/user/fav/remove/'+ userId + "/" + eventId,
+				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))

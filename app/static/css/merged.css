@@ -49,7 +49,7 @@ html, body {
   .filters .datetime {
     display: none; }
 
-.smallSearchResult {
+.searchResults .smallSearchResult, .myEvents .smallSearchResult {
   height: 10vh;
   border: 1px solid silver;
   border-radius: 5px;
@@ -57,41 +57,51 @@ html, body {
   margin: 0vh 2vh;
   overflow: hidden;
   background: rgba(29, 158, 238, 0.25); }
-  .smallSearchResult.selected {
+  .searchResults .smallSearchResult.selected, .myEvents .smallSearchResult.selected {
     color: white;
     background-color: rgba(29, 158, 238, 0.55); }
-    .smallSearchResult.selected:hover {
+    .searchResults .smallSearchResult.selected:hover, .myEvents .smallSearchResult.selected:hover {
       background-color: rgba(29, 158, 238, 0.52); }
-  .smallSearchResult:hover {
+  .searchResults .smallSearchResult:hover, .myEvents .smallSearchResult:hover {
     background-color: rgba(29, 158, 238, 0.22); }
-  .smallSearchResult .resultContents {
+  .searchResults .smallSearchResult .resultContents, .myEvents .smallSearchResult .resultContents {
     padding-left: 0.8vw;
     padding-right: 0.8vw;
     padding-top: 0.6vh;
     padding-bottom: 0.6vh;
     text-overflow: ellipsis;
     overflow: hidden; }
-    .smallSearchResult .resultContents .resultTitle {
+    .searchResults .smallSearchResult .resultContents .resultTitle, .myEvents .smallSearchResult .resultContents .resultTitle {
       font-size: 0.9em;
       font-weight: bold; }
-    .smallSearchResult .resultContents .resultFireBtn {
+    .searchResults .smallSearchResult .resultContents .resultFireBtn, .myEvents .smallSearchResult .resultContents .resultFireBtn {
       font-size: 24px;
       font-family: FontAwesome;
       color: white;
       padding: 0; }
-      .smallSearchResult .resultContents .resultFireBtn.selected {
+      .searchResults .smallSearchResult .resultContents .resultFireBtn.selected, .myEvents .smallSearchResult .resultContents .resultFireBtn.selected {
         color: orange; }
-        .smallSearchResult .resultContents .resultFireBtn.selected:hover {
+        .searchResults .smallSearchResult .resultContents .resultFireBtn.selected:hover, .myEvents .smallSearchResult .resultContents .resultFireBtn.selected:hover {
           color: orange; }
-      .smallSearchResult .resultContents .resultFireBtn:hover {
+      .searchResults .smallSearchResult .resultContents .resultFireBtn:hover, .myEvents .smallSearchResult .resultContents .resultFireBtn:hover {
         color: rgba(255, 165, 0, 0.5); }
-    .smallSearchResult .resultContents .resultFireNum {
+    .searchResults .smallSearchResult .resultContents .resultFireNum, .myEvents .smallSearchResult .resultContents .resultFireNum {
       font-size: 0.85em;
       font-weight: bold; }
-    .smallSearchResult .resultContents .resultTime {
+    .searchResults .smallSearchResult .resultContents .resultTime, .myEvents .smallSearchResult .resultContents .resultTime {
       font-size: 0.85em;
       color: rgba(0, 0, 0, 0.5);
       margin-bottom: 0.1em; }
+
+.myEvents .smallSearchResult {
+  flex-grow: 1000;
+  margin-right: 0; }
+.myEvents .deleteBtn {
+  padding-top: 0;
+  padding-bottom: 0; }
+.myEvents .editBtn {
+  padding-top: 0;
+  padding-bottom: 0; }
 
 .event-view {
   height: 80vh;
@@ -144,29 +154,6 @@ html, body {
   flex: 70%;
   overflow: hidden;
   float: left; }
-
-.footer {
-  color:white;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align:center;
-  height: 6.4vh;
-}
-
-.successFlash {
-  background-color:#00b300;
-}
-
-.errorFlash {
-  background-color:red;
-}
-
-#flashedMessage {
-  font-size:22px;
-  padding-top:1.5vh;
-}
 
 @media screen and (max-width: 600px) {
   .flex-container-row {

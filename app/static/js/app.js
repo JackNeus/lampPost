@@ -76,7 +76,7 @@ var setupDataRetrieval = function() {
 			showSearchResults();
 		};
 		$.ajax({
-			url: base_url+'/api/event/search/'+query,
+			url: base_url + '/api/event/search/' + query,
 			dataType: 'json',
 			headers: {
 				'Authorization': ('Token ' + $.cookie('api_token'))
@@ -96,7 +96,7 @@ var setupUserFavorites = function() {
 			user_fav_data = null;
 	};
 	$.ajax({
-			url: 'http://localhost:5001/api/user/fav/get/'+ userId,
+			url: base_url + '/api/user/fav/get/'+ userId,
 			dataType: 'json',
 			headers: {
 				'Authorization': ('Token ' + $.cookie('api_token'))

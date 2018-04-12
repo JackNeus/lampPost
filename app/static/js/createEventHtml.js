@@ -9,7 +9,7 @@ var createSearchResults = function() {
 		+	`<div class="d-flex flex-row align-items-start">`
 		+	   `<div class="p-2 mr-auto">`
 		+	      `<p class="resultTitle">` + event_data[i].title + `</p>`
-		+	      `<div id="allTimes"></div>`
+		+	      `<div id="eventInstances"></div>`
 		+	   `</div>`
 		+	   `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
 		+	      `<i class="fas fa-fire"></i>`
@@ -19,10 +19,14 @@ var createSearchResults = function() {
 		+   `</div>`
 	  	+`</div>`;
 	  	
+	  	// add the created html to the "searches" element in browser.html
 	  	$("#searches").append(searchResult);
+	  	// number the given ids to match the event number so that the elements
+	  	// can be differentiated
 	  	numberIds(["smallSearchResult", "resultFireBtn", "resultFireNum", 
-	  			"allTimes"], i); 	// number the important ids
-	  	addInstances(i);			// add in all the event instances
+	  			"eventInstances"], i); 	
+	  	// add in all the event instances (dates and times) to the "eventInstances" div
+	  	addEventInstances(i);			
 	
 	}
 };
@@ -34,13 +38,13 @@ var createMyEventResults = function() {
 		var searchResult = "";
 		
 		searchResult = 
-		 `<div class="d-flex flex-row align-items-stretch" style="flex-grow:1000; flex-shrink:0;">`
-		+ `<div class="smallSearchResult" id="smallSearchResult" style="flex-grow:1000; margin-right: 0;">`
+		 `<div class="d-flex flex-row align-items-stretch">`
+		+ `<div class="smallSearchResult" id="smallSearchResult">`
 		+   `<div class="resultContents">`
 		+	 `<div class="d-flex flex-row align-items-start">`
 		+	    `<div class="p-2 mr-auto">`
 		+	       `<p class="resultTitle">` + event_data[i].title + `</p>`
-		+		 `<div id="allTimes"></div>`
+		+		 `<div id="eventInstances"></div>`
 		+	    `</div>`
 		+	    `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
 		+		 `<i class="fas fa-fire"></i>`
@@ -50,19 +54,23 @@ var createMyEventResults = function() {
 		+       `</div>`
 		+   `</div>`
 		+ `<div class="d-flex flex-column">`
-		+    `<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn" style="padding-top: 0; padding-bottom: 0;">`
+		+    `<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn">`
 		+  	  `<i class="fas fa-trash-alt"></i>`
 		+    `</div>`
-		+    `<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn" style="padding-top: 0; padding-bottom: 0;">`
+		+    `<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn">`
 		+       `<i class="fas fa-pencil-alt"></i>`
 		+    `</div>`
 	  	+  `</div>`
 	  	+ `</div>`;
 	  	
+	  	// add the created html to the "searches" element in myevent.html
 	  	$("#searches").append(searchResult);
+	  	// number the given ids to match the event number so that elements can
+	  	// be differentiated
 	  	numberIds(["smallSearchResult", "resultFireBtn", "resultFireNum", 
-	  			"allTimes", "deleteBtn", "editBtn"], i); 	// number the important ids
-	  	addInstances(i);	    						// add in all the event instances
+	  			"eventInstances", "deleteBtn", "editBtn"], i);
+	      // add in all the event instances (dates and times) to the "eventInstances" div
+	  	addEventInstances(i);	    						
 	  }
 };
 
@@ -74,7 +82,7 @@ var numberIds = function(elementNames, i) {
 }
 
 // append the event data/time to the appropriate my event result
-var addInstances = function(i) {
+var addEventInstances = function(i) {
 	var instances = event_data[i].instances;
 	
 	for (var j = 0; j < instances.length; j++) {
@@ -82,6 +90,6 @@ var addInstances = function(i) {
 				class: "resultTime"
 			}).append(makeDate(instances[j].start_datetime, 
 					       instances[j].end_datetime));
-		$("#allTimes" + (i+1)).append(time);
+		$("#eventInstances" + (i+1)).append(time);
 	}
 }

@@ -1,7 +1,6 @@
 import sys
 from flask import Flask, render_template
 from mongoengine import register_connection
-import sys
 
 class FlaskApp(Flask):
     def __init__(self):

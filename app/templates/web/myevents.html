@@ -7,6 +7,9 @@
 <script src="/static/js/displayEvent.js?v=1"></script>
 <script src="/static/js/createEventHtml.js?v=1"></script>
 <script src="/static/js/myevent.js?v=1"></script>
+<script>
+setBaseUrl("{{ config.BASE_URL }}");
+</script>
 {% endblock %}
 
 <!--****************************** MAIN CONTENT *****************************-->
@@ -19,7 +22,7 @@
 	   	<h1>My Events</h1>
 			
 		<!-- Fills in with "search" results from events.json -->
-		<div class="flex-item-scroll" id="searches"></div>
+		<div class="flex-item-scroll myEvents" id="searches"></div>
 		
 	   </div>
 		
@@ -38,78 +41,4 @@
 		</div>	
 	</div>
 </div>
-{% endblock %}
-
-<!--****************************** SPLASH PAGE ******************************-->
-
-{% block splashScreen %}
-<div class="splashScreen" id="splashScreen">
-	<div class="headerBox">
-		<div class="loginBox">
-			<h1 class="lamppostTitle">lampPost - search for events</h1>
-			<a class="homeLink btn btn-primary btn-lg" href="/login">Login</a>
-			<p></p>
-			<a class="homeLink btn btn-primary btn-lg" href="#">Continue as Guest</a>
-		</div>
-	</div>
-</div>
-{% endblock %}
-
-<!--********************************** NAVBAR *******************************-->
-
-{% block navbar %}
-<!-- Navbar -->
-<nav class="navbar navbar-expand-md navbar-dark bg-inverse">
-<a class="navbar-brand" href="#">
-  <img src = "../../static/graphics/logoNavBar.svg" class="image-fluid logo">
-</a>
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" 
-	  aria-controls="#navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
-</button>
-
-<div class="collapse navbar-collapse" id="navbarToggle">
-  <ul class="navbar-nav ml-auto mt-2 mt-md-0">
-    <li class="nav-item">
-      <a class="nav-link" href="/">Home</a>
-    </li>
-    <!-- For the future: Home Search Add MyCal About Help Login -->
-    <li class="nav-item">
-      <a class="nav-link" href="/browser">Search</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/myevents">My Events</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/add">Add Events!</a>
-    </li>
-    </li>
-    <li class="nav-item">
-      {% if current_user.is_authenticated %}
-      <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
-      {% else %}
-       <a class="nav-link" href="/login"> Login </a>
-      {% endif %}
-    </li>
-  </ul>
-</div>
-</nav>
-<!-- Active link -->
-<script>
-// On click (for immediate response before page load)
-$(".navbar-nav .nav-item").on("click", function(){
-  $(".navbar-nav").find(".active").removeClass("active");
-  $(this).addClass("active");
-});
-// On page load (for longterm highlight)
-$(document).ready(function(){
-  var pathname = window.location.pathname;
-  $("a[href=\\" + pathname + "]").addClass('active');
-});
-</script>
-{% endblock %}
-
-<!--**************************** JINJA VARIABLES ****************************-->
-{% block user_data %}
-<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}">
 {% endblock %}
