@@ -60,7 +60,7 @@ def myevents():
 				eventData['trailer'] = form.link.data
 
 			# make API request
-			r = requests.put("http://localhost:5001/api/event/add", json=eventData)
+			r = requests.put(CONFIG["BASE_URL"] + "/api/event/add", json=eventData)
 			print(r.text)
 			if json.loads(r.text)["status"] == "Success":
 				flash("Success! Your event has been added.")
