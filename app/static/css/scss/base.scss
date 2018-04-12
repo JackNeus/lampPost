@@ -1,68 +1,96 @@
 $background-color: #eeeeee;
 $primary-color: #2d9eee;
-$font-stack: "Arial";
+$font-light: "Avenir-Light";
+$font-med: "Avenir-Medium";
+$font-heavy: "Avenir-Heavy";
+/* rgb values for primary-color */
+$primary-color-r: 29;
+$primary-color-g: 158;
+$primary-color-b: 238;
 
+
+// Page style
 html, body {
 	// Font Style
-	font: 100% $font-stack;
+
+	// Base font
+	font: 100% $font-light;
+	// Headers
 	.h1 {
-		font-size:28px;
+		font: 100% $font-heavy;
+		font-size:32px;
 	}
 
+	.h2 {
+		font: 100% $font-heavy;
+		font-size:24px;
+	}
+
+	.h3 {
+		font: 100% $font-med;
+		font-size:18px;
+	}
+
+	// Other Style
 	background-color: $background-color;
+}
 
-	.navbar {
-		background-color: $primary-color;
-		color: white;
-		.nav-item {
-			color: white;
-			padding-left: 1vw;
-			padding-right: 1vw;
-		}
-		.nav-link {
-			color: white;
-		}
+// Navbar style
+html, body {
+	.logo {
+		width: 200px;
 	}
-
-	h1 {
-		text-align: center;
+	.navbar-expand-md {
+		background-color: $primary-color;
+	}
+	.nav-link {
+		font-size: 20px;
 	}
 
 	#bigRow {
 		padding-left: 0vw;
 		padding-right: 0vw;
+		margin-bottom: 2vh;
 	}
 }
 
-#addEventForm {
-	padding-top: 2vh;
-}
-
+// Debug Style
 .debug-data {
 	color: red;
 }
 
 #searchBox {
-	padding-top: 2vh;
+	padding: 0;
 	margin: 0vh 2vh;
+	max-width: 100%;
+	width: 100%;
+	flex-shrink: 1000;
+}
+
+#searchSort {
+	border: 1px solid #AAA;
+	color: #555;
+	font-size: 0.75em;
+	overflow: hidden;
+	border-radius: 2px;
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin: 0vh 2vh;
+      flex-grow: 1000;
+      flex-shrink: 0;
 }
 
 .filters {
 	margin: 0vh 2vh;
-	
+
 	label {
 		font-size: 0.75em;
 	}
-	 
+
 	input[type=text] {
 		font-size: 0.65em;
 	}
-	
-	.btn {
-		line-height: 1;
-		font-size: 0.75em;
-	}
-	
 	.datetime {
 		display: none;
 	}
@@ -70,43 +98,59 @@ html, body {
 
 
 .smallSearchResult {
- 	height: 13vh;
- 	border: 1px solid $primary-color;
+ 	height: 10vh;
+ 	border: 1px solid silver;
  	border-radius: 5px;
  	cursor: pointer;
  	margin: 0vh 2vh;
  	overflow: hidden;
- 	background: rgba(0, 191, 255, 0.25);
+ 	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.25);
  	&.selected {
 		color: white;
-		background-color: rgba(0, 191, 255, 0.54);
+		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.55);
 		&:hover {
-			background-color: rgba(0, 191, 255, 0.44);
+			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.52);
 		}
  	}
  	&:hover {
- 		background-color: rgba(0, 191, 255, 0.22);
+ 		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.22);
  	}
 	.resultContents {
 		padding-left: 0.8vw;
 		padding-right: 0.8vw;
 		padding-top: 0.6vh;
 		padding-bottom: 0.6vh;
-		font-size: 0.75em;
+		text-overflow: ellipsis;
 		overflow: hidden;
 			.resultTitle {
+				font-size: 0.9em;
 				font-weight: bold;
 			}
-			.resultLocation {
+			.resultFireBtn {
+				font-size: 24px;
+				font-family: FontAwesome;
+				color: white;
+				padding: 0;
+				&.selected {
+					color: orange;
+					&:hover {
+						color: orange;
+					}
+				}
+				&:hover {
+					color: rgba(255, 165, 0, 0.5);
+				}
+			}
+			.resultFireNum {
 				font-size: 0.85em;
-				color: rgba(0, 0, 0, 0.5);
+				font-weight: bold;
 			}
 			.resultTime {
 				font-size: 0.85em;
 				color: rgba(0, 0, 0, 0.5);
 				margin-bottom: 0.1em;
 			}
-	}	
+	}
 }
 
 
@@ -118,23 +162,23 @@ html, body {
   background-color: white;
   margin: 2vh 2vw;
   display: none;
-	
+
 	.event-result-title {
 		font-family: serif;
 		font-size: 40px;
-		color: $primary-color;
+		color: black;
 		text-align: center;
 		font-weight: bold;
 	}
 	.event-result-info {
 		width: 100%;
 		font-size: 20px;
-		color: $primary-color;
+		color: black;
 		margin: 1em 0.5em;
 	}
 	img {
 		float: right;
-		width: 40%; 
+		width: 40%;
 		margin: 0em 1em;
 		height: auto;
 	}
@@ -158,7 +202,7 @@ html, body {
     flex-basis: auto;
     overflow: auto;
     	#searches {
-    		min-width:12em;	
+    		min-width:12em;
 	}
 }
 
@@ -174,10 +218,7 @@ html, body {
 }
 
 @media screen and (max-width: 600px) {
-    .flex-container-row {   
+    .flex-container-row {
         flex-direction: column;
     }
 }
-
-
-
