@@ -38,6 +38,10 @@ html #bigRow, body #bigRow {
   color: red;
 }
 
+#searches {
+  border-top: 5px solid #555555;
+}
+
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
@@ -46,9 +50,13 @@ html #bigRow, body #bigRow {
   flex-shrink: 1000;
 }
 
+#search-box {
+  font-size: 16px !important;
+}
+
 #searchSort {
   border: 1px solid #AAA;
-  color: #555;
+  color: # #333333;
   font-size: 0.75em;
   overflow: hidden;
   border-radius: 2px;
@@ -78,7 +86,7 @@ html #bigRow, body #bigRow {
   border: 1px solid silver;
   border-radius: 5px;
   cursor: pointer;
-  margin: 0vh 2vh;
+  margin: 2vh 2vh;
   overflow: hidden;
   background: rgba(29, 158, 238, 0.25);
 }
@@ -98,6 +106,7 @@ html #bigRow, body #bigRow {
   padding-top: 0.6vh;
   padding-bottom: 0.6vh;
   text-overflow: ellipsis;
+  color: #333333;
   overflow: hidden;
 }
 .smallSearchResult .resultContents .resultTitle {
@@ -134,7 +143,7 @@ html #bigRow, body #bigRow {
   min-width: 30vh;
   overflow: hidden;
   display: none;
-  color: #404040;
+  color: #999999;
 }
 .event-view .event-view-header {
   padding: 10px;
@@ -144,23 +153,26 @@ html #bigRow, body #bigRow {
   z-index: 500;
 }
 .event-view .event-view-title {
+  color: #333333;
   margin: 0;
   line-height: normal;
 }
 .event-view .event-view-host {
+  color: #555555;
   margin: 0;
   line-height: 30px;
   font-size: 15px;
 }
 .event-view .event-view-subtitle {
+  color: #555555;
   margin: 0;
   line-height: normal;
 }
 .event-view .eventFireBtn {
+  color: #999999;
   font-size: 45px;
   font-family: FontAwesome;
   line-height: 0 !important;
-  color: #666666;
   padding: 0;
 }
 .event-view .eventFireBtn.selected {
@@ -173,6 +185,7 @@ html #bigRow, body #bigRow {
   color: rgba(255, 165, 0, 0.5);
 }
 .event-view .eventFireNum {
+  color: #333333;
   font-size: 0.85em;
   font-weight: bold;
 }
@@ -188,6 +201,7 @@ html #bigRow, body #bigRow {
   height: auto;
 }
 .event-view .eventSection {
+  color: #555555;
   margin: 0;
   border-bottom: 2px solid #2d9eee;
 }
