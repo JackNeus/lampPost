@@ -49,7 +49,6 @@ function processClick( num ) {
 		unNumberFirstShowing();
 	}
 
-
 	// remove the bigger ones instantly
 	for (i = num + 1; i <= maxShowings; i++) {
 		$("#form-row-" + i.toString()).slideUp("slow");

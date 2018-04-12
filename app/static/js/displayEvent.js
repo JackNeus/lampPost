@@ -3,15 +3,18 @@
 // Shows large event view when search result is clicked
 var updateEventView = function() {
 		$(".smallSearchResult").click( function(){
+			// hide the form view
+			$("#event-form").hide();
 			// toggle highlighting in search results.
-		    	$(".smallSearchResult").removeClass("selected");
-		    	$(this).addClass("selected");
+		    $(".smallSearchResult").removeClass("selected");
+		    $(this).addClass("selected");
 		    	
-		    	// populate and display event view.
+		    // populate and display event view.
 			$(".event-view").hide();
 			var eventNum = getNum($(this).attr("id"), "smallSearchResult") - 1;
 			populateEventViewPanel(eventNum);
 			$("#event-view").show();
+
 		});
 }
 

@@ -1,0 +1,14 @@
+.invisible {
+  display: none; }
+
+label {
+  font-weight: bold; 
+}
+
+
+.req:after {
+	content: " *";
+	color:red;
+ }
+
+/*# sourceMappingURL=addEvent.css.map */

@@ -55,6 +55,15 @@ def get_user_by_uid(uid):
 		return entries[0]
 	return None
 
+def get_user(uid):
+	try:
+		entries = UserEntry.objects(id = uid)
+		if entries.count() == 1:
+			return entries[0]
+		return None
+	except Exception as e:
+		raise e
+
 # Add UserEntry for given netid.
 def add_user(netid):
 	netid = netid.lower()
