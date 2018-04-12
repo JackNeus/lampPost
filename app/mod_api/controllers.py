@@ -25,6 +25,29 @@ def delete_event(id):
 	event.delete()
 	return event
 
+# Edits the event with given id.
+# Editing works as follows:
+# For each field in data, the corresponding field in the event is updated.
+# This ONLY works at the top-level -- if data contains "instances", for example,
+# the entire "instances" list will be replaced.
+def edit_event(id, data):
+	event = get_event(id)
+	if event is None:
+		return None
+	for field in data:
+		# Don't allow user to modify system fields. 
+		if field in system_fields:
+			continue
+		field_data = data[field]
+		if field == "instances":
+			field_data = data[field]
+			field_data = [InstanceEntry(location = instance["location"],
+										start_datetime = instance["start_datetime"],
+										end_datetime = instance["end_datetime"]) for instance in field_data]
+		event[field] = field_data
+	event.save()
+	return event
+	
 # Get list of events by creator's netid.
 def get_events_by_creator(netid):
 	events = EventEntry.objects(creator = netid)

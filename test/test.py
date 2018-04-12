@@ -1,9 +1,11 @@
 from copy import deepcopy
 import dateutil.parser
 import functools
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import json
 import requests
 import os
+from subprocess import call, check_output
 import traceback
 import unittest
 
@@ -59,6 +61,14 @@ def compare_events(source, record):
 				return False
 	return True
 
+# Function I stole from the app. This is pretty janky.
+def generate_auth_token(netid, expiration = 3600 * 24 * 7):
+	uid = user_ids[netid]
+	s = Serializer("this_secret_key_is_for_testing_only", expires_in = expiration)
+	token = s.dumps({'id': uid})
+	# Hack found after 3 hours of debugging.
+	return str(token)[2:-1]
+
 def is_success(r):
 	return r["status"] == "Success"
 
@@ -67,28 +77,59 @@ def is_error(r):
 
 app_url = "http://localhost:5002/api"
 
-def make_add_event_request(event_data):
-	r = requests.put(app_url + "/event/add", json=event_data)
+def make_add_event_request(event_data, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.put(app_url + "/event/add", json=event_data, headers=headers)
 	assert r.status_code == 200
 	return get_data(r)
 
-def make_get_event_request(event_id):
-	r = requests.get(app_url + "/event/get/" + event_id)
+def make_get_event_request(event_id, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.get(app_url + "/event/get/" + event_id, headers=headers)
 	assert r.status_code == 200
 	return get_data(r)
 
-def make_delete_event_request(event_id):
-	r = requests.delete(app_url + "/event/delete/" + event_id)
+def make_delete_event_request(event_id, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.delete(app_url + "/event/delete/" + event_id, headers=headers)
 	assert r.status_code == 200
 	return get_data(r)
 
+def make_edit_event_request(event_id, data, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.post(app_url + "/event/edit/" + event_id, json=data, headers=headers)
+	assert r.status_code == 200
+	return get_data(r)
+
+user_ids = {}
+
+def setup():
+	def add_user(netid):
+		r = check_output('echo "use lamppost\n%s" | mongo --port 12345' % ("db.user_entry.insert({\'netid\':\'%s\'})" % netid),
+				 shell = True)
+		r = check_output('echo "use lamppost\n%s" | mongo --port 12345' % ("db.user_entry.find({\'netid\':\'%s\'})" % netid),
+				 shell = True)
+		user_id_line = str(r.split(b'\n')[-3]).split(",", 1)[0]
+		user_id = user_id_line[user_id_line.index("ObjectId")+10:-2]
+		return user_id
+	global user_ids
+	for user in ["jneus", "tpollner", "bwk"]:
+		user_ids[user] = add_user(user)
 valid_events = {}
 
 def test_add_valid_events():
 	with open('test/test_data.json', 'r') as f:
 		data = json.load(f)
 	for event in data:
-		r = make_add_event_request(event)
+		r = make_add_event_request(event, generate_auth_token(event["creator"]))
 		assert is_success(r)
 		valid_events[r["data"]["id"]] = event
 
@@ -100,7 +141,8 @@ def test_get_valid_events():
 
 def test_delete_valid_events():
 	for event_id in valid_events:
-		r = make_delete_event_request(event_id)
+		creator_netid = valid_events[event_id]["creator"]
+		r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
 		assert compare_events(valid_events[event_id], r["data"])
 
@@ -180,8 +222,7 @@ def test_add_event_extra_field():
 # Try to get event that does not exist.
 def test_get_event_event_dne():
 	r = make_get_event_request("5ac579ff1b41577c54130835")
-	assert is_success(r)
-	assert len(r["data"]) == 0
+	assert is_error(r)
 
 # Try to get event with invalid id.
 def test_get_event_bad_id():
@@ -197,6 +238,100 @@ def test_delete_event_event_dne():
 def test_delete_event_bad_id():
 	r = make_delete_event_request("bad_id_format")
 	assert is_error(r)
+
+# Base for edit tests.
+def make_edit_test(test_body):
+	# Setup
+	new_event = deepcopy(base_event)
+	creator_netid = new_event["creator"]
+	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
+	assert is_success(r)
+	event_id = r["data"]["id"]
+
+	test_body(new_event, event_id, creator_netid)
+
+	# Cleanup
+	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
+	assert is_success(r)
+
+
+# Valid event editing.
+def test_edit_event_valid():
+	def test(new_event, event_id, creator_netid):
+		event_edits = {"title": "Festival", "host": "LampPost Users",
+					  "description": "This event is A OK.",
+					  "instances": [{"start_datetime": "3pm April 2 2100",
+					  				 "end_datetime": "4pm April 2 2100",
+					  				 "location": "Princeton University"},
+					  				 {"start_datetime": "3pm April 2 2100",
+					  				 "end_datetime": "4pm April 2 2100",
+					  				 "location": "Yale University"}]}
+		# Try editing each field separately.
+		for field in event_edits:
+			edit = {field: event_edits[field]}
+			new_event[field] = deepcopy(event_edits[field])
+			r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
+			assert is_success(r)
+			assert compare_events(new_event, r["data"])
+	make_edit_test(test)
+
+def test_edit_event_system_fields():
+	def test(new_event, event_id, creator_netid):
+		event_edit = {"creator":"victim", "id": "5ac579ff1b41577c54130835"}
+		r = make_edit_event_request(event_id, event_edit, generate_auth_token(creator_netid))
+		assert is_success(r)
+		# Event should not have changed.
+		assert compare_events(new_event, r["data"])
+	make_edit_test(test)
+
+def test_edit_event_extra_field():
+	def test(new_event, event_id, creator_netid):
+		# Extraneous fields.
+		extra_field = deepcopy(base_event)
+		extra_field["bad_field_does_not_exist"] = "uh oh"
+		r = make_edit_event_request(event_id, extra_field, generate_auth_token(creator_netid))
+		assert is_error(r)
+	make_edit_test(test)
+
+def test_edit_event_bad_type():	
+	def test(new_event, event_id, creator_netid):
+		# String fields type check.
+		for field in ["title", "host", "description"]:
+			# Incorrectly-typed value.
+			r = make_edit_event_request(event_id, {field: 123}, generate_auth_token(creator_netid))
+			assert is_error(r)
+			assert "malformatted" in r["error_msg"]
+	make_edit_test(test)
+
+def test_edit_event_bad_field_length():	
+	def test(new_event, event_id, creator_netid):
+		# String fields length check.
+		for field, length in [("title", 5), ("host",3), ("description", 10)]:
+			# Insufficiently long value.
+			short_value = "A"*(length-1)
+			r = make_edit_event_request(event_id, {field: short_value}, generate_auth_token(creator_netid))
+			assert is_error(r)
+			assert "malformatted" in r["error_msg"]
+	make_edit_test(test)
+
+# Try to edit event that does not exist.
+def test_edit_event_event_dne():
+	r = make_edit_event_request("5ac579ff1b41577c54130835", {})
+	assert is_error(r)
+	assert "exist" in r["error_msg"]
+
+# Try to delete event with invalid id.
+def test_edit_event_bad_id():
+	r = make_edit_event_request("bad_id_format", {})
+	assert is_error(r)
+	assert "malformatted" in r["error_msg"]
+
+# Try to edit event that does not belong to us.
+def test_edit_event_different_creator():
+	def test(new_event, event_id, creator_netid):
+		r = make_edit_event_request(event_id, {"description":"My event sucks!"}, generate_auth_token("jneus"))
+		assert is_error(r)
+	make_edit_test(test)
 
 # TODO: add search tests
 
@@ -217,10 +352,19 @@ test_add_event_bad_instance_data,
 test_add_event_extra_field,
 test_get_event_bad_id,
 test_delete_event_event_dne,
-test_delete_event_bad_id
+test_delete_event_bad_id,
+test_edit_event_valid,
+test_edit_event_system_fields,
+test_edit_event_extra_field,
+test_edit_event_bad_type,
+test_edit_event_bad_field_length,
+test_edit_event_event_dne,
+test_edit_event_bad_id,
+test_edit_event_different_creator
 ]
 
 if __name__ == '__main__':
+	setup()
 	failed = 0
 	for test in tests:
 		try:

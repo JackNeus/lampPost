@@ -28,15 +28,11 @@ class CASClient:
       return None
 
    def ServiceURL(self):
-      if 'REQUEST_URI' in os.environ:
-         ret = 'http://' + os.environ['HTTP_HOST'] + os.environ['REQUEST_URI']
-         ret = re.sub(r'ticket=[^&]*&?', '', ret)
-         ret = re.sub(r'\?&?$|&$', '', ret)
-         return ret
-      elif CONFIG["DEBUG"]:
-         ret = "http://localhost:" + str(CONFIG["PORT"]) + "/login"
-         return ret
-      return "something is badly wrong"
+      ret = CONFIG["BASE_URL"] + "/login"
+      ret = re.sub(r'ticket=[^&]*&?', '', ret)
+      ret = re.sub(r'\?&?$|&$', '', ret)
+      return ret
+
 
 def main():
   print("CASClient does not run standalone")
