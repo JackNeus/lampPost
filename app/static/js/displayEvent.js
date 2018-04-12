@@ -37,7 +37,7 @@ function populateEventViewPanel(num) {
 		class: "eventFireNum",
 		id: "eventFireNum"
 	}).append(getFire);
-
+	document.getElementById("welcome").style.display="none";
 	document.getElementById("eventTitle").innerHTML =
 		event_data[num].title;
 	document.getElementById("eventFire").innerHTML = "";
