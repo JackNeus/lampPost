@@ -43,12 +43,19 @@ function populateEventViewPanel(num) {
 	$("#eventFireBtn").remove();
 	$("#eventFireNum").remove();
 	$("#mainHeaderLine").append(fireBtn).append(fireNum);
-	document.getElementById("eventSubtitle").innerHTML =
-		event_data[num]["instances"][0].location + " | ";
+	document.getElementById("eventSubtitle").innerHTML = "";
+	var instances = event_data[num].instances;
+	for (var i = 0; i < instances.length; i++) {
+		// Locatiom
+		document.getElementById("eventSubtitle").innerHTML +=
+			instances[i].location + "&nbsp|&nbsp";
+		// Time
+		document.getElementById("eventSubtitle").innerHTML +=
+			makeDate(instances[i].start_datetime, instances[i].end_datetime);
+		document.getElementById("eventSubtitle").innerHTML += "<br>";
+	}
 	document.getElementById("eventHost").innerHTML =
 		"by " + event_data[num].host;
-	document.getElementById("eventSubtitle").innerHTML +=
-		event_data[num]["instances"][0].start_datetime; 
 	document.getElementById("eventDescription").innerHTML =
 		event_data[num].description;
 
