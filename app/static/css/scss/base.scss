@@ -271,6 +271,24 @@ html, body {
 	}
 }
 
+.footer {
+  color:white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align:center;
+  height: 6.4vh;
+}
+
+.successFlash {
+  background-color:#00b300;
+}
+
+.errorFlash {
+  background-color:red;
+
+
 #leftCol {
 	max-height: 88vh;
 	flex: 30%;

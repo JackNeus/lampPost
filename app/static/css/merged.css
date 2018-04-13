@@ -294,12 +294,7 @@ html #bigRow, body #bigRow {
 #rightCol {
   flex: 70%;
   overflow: hidden;
-<<<<<<< HEAD
-  float: left;
-}
-=======
   float: left; }
->>>>>>> master
 
 @media screen and (max-width: 600px) {
   .flex-container-row {
