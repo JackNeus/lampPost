@@ -2,22 +2,18 @@
   display: none; }
 
 label {
-  font-weight: bold; 
-}
-
+  font-weight: bold; }
 
 .req:after {
-	content: " *";
-	color:red;
- }
+  content: " *";
+  color: red; }
 
 .col-md-10 {
- 	padding-left: 11vw;
- }
+  padding-left: 11vw; }
 
- #rightCol {
- 	height: 85vh;
-    overflow: scroll;
- }
+#rightCol {
+  max-height: 88vh; }
 
 /*# sourceMappingURL=addEvent.css.map */
+
+/*# sourceMappingURL=myevents.css.map */

@@ -1,8 +1,10 @@
+$primary-color: #2d9eee;
+
 .invisible {
   display: none; }
 
 label {
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 .req:after {
@@ -10,9 +12,20 @@ label {
 	color:red;
  }
 
- #formCol {
- 	height: 85vh;
+#formCol {
+	height: 85vh;
     overflow: scroll;
- }
+}
+
+.submitAddButton:hover  {
+    border-color: $primary-color;
+    color: white;
+    background-color: $primary-color;
+}
+.submitAddButton{
+    border-color: $primary-color;
+    color: $primary-color;
+    background-color: white;
+}
 
 /*# sourceMappingURL=addEvent.css.map */

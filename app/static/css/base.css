@@ -64,62 +64,64 @@ html #bigRow, body #bigRow {
   .filters .datetime {
     display: none; }
 
-.searchPost {
-  background-color: #2d9eee;
-  z-index: 1;
-  position: absolute;
-  height: 100px; }
-
 .smallSearchResult {
-  height: 10vh;
-  border: 1px solid silver;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 2vh 2vh;
-  overflow: hidden;
   flex-grow: 1000;
-  background: rgba(29, 158, 238, 0.25); }
+  min-height: 10vh;
+  border: 3px solid #2d9eee;
+  border-radius: 0px 10px 10px 0px;
+  cursor: pointer;
+  margin: 0vh 2vh 0vh 0vh;
+  overflow: hidden;
+  background: white;
+  color: #333333; }
+  .smallSearchResult .resultTitle {
+    font-size: 1.2em; }
+  .smallSearchResult .resultTime {
+    font-size: 1em;
+    color: #999999;
+    margin-bottom: 0.3em; }
   .smallSearchResult.selected {
-    color: white;
-    background-color: rgba(29, 158, 238, 0.55); }
+    border-radius: 0px;
+    background-color: #2d9eee;
+    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+    z-index: 1;
+    position: relative; }
+    .smallSearchResult.selected .resultTitle {
+      color: white; }
+    .smallSearchResult.selected .resultTime {
+      color: white; }
     .smallSearchResult.selected:hover {
-      background-color: rgba(29, 158, 238, 0.52); }
+      background-color: rgba(29, 158, 238, 0.7);
+      border: 3px solid rgba(29, 158, 238, 0.3); }
   .smallSearchResult:hover {
-    background-color: rgba(29, 158, 238, 0.22); }
+    background-color: rgba(29, 158, 238, 0.1);
+    border: 3px solid rgba(29, 158, 238, 0.3); }
   .smallSearchResult .resultContents {
     padding-left: 0.8vw;
     padding-right: 0.8vw;
     padding-top: 0.6vh;
     padding-bottom: 0.6vh;
     text-overflow: ellipsis;
-    color: #333333;
     overflow: hidden; }
-    .smallSearchResult .resultContents .resultTitle {
-      font-size: 0.9em;
-      font-weight: bold; }
     .smallSearchResult .resultContents .resultFireBtn {
       font-size: 24px;
       font-family: FontAwesome;
-      color: white;
+      color: #eeeeee;
       padding: 0; }
       .smallSearchResult .resultContents .resultFireBtn.selected {
-        color: orange; }
+        color: #ee7f2d; }
         .smallSearchResult .resultContents .resultFireBtn.selected:hover {
-          color: orange; }
+          color: #ee7f2d; }
       .smallSearchResult .resultContents .resultFireBtn:hover {
         color: rgba(255, 165, 0, 0.5); }
-    .smallSearchResult .resultContents .resultFireNum {
-      font-size: 0.85em;
-      font-weight: bold; }
-    .smallSearchResult .resultContents .resultTime {
-      font-size: 0.85em;
-      color: rgba(0, 0, 0, 0.5);
-      margin-bottom: 0.1em; }
+      .smallSearchResult .resultContents .resultFireBtn .resultFireNum {
+        color: #333333 !important;
+        font-size: 0.85em;
+        font-weight: bold; }
 
 .event-view {
   max-height: 100%;
   min-width: 30vh;
-  overflow: hidden;
   display: none;
   color: #999999; }
   .event-view .event-view-header {
@@ -148,9 +150,9 @@ html #bigRow, body #bigRow {
     line-height: 0 !important;
     padding: 0; }
     .event-view .eventFireBtn.selected {
-      color: orange; }
+      color: #ee7f2d; }
       .event-view .eventFireBtn.selected:hover {
-        color: orange; }
+        color: #ee7f2d; }
     .event-view .eventFireBtn:hover {
       color: rgba(255, 165, 0, 0.5); }
   .event-view .eventFireNum {
@@ -158,15 +160,18 @@ html #bigRow, body #bigRow {
     font-size: 0.85em;
     font-weight: bold; }
   .event-view .event-view-info {
-    padding-top: 20px;
     width: 100%;
-    background-color: white; }
+    background-color: white;
+    height: 75vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-bottom: 2vh; }
   .event-view img {
-    float: right;
-    width: 40%;
-    margin: 0em 1em;
+    float: top;
+    width: 100%;
     height: auto; }
   .event-view .eventSection {
+    padding-top: 20px;
     color: #555555;
     margin: 0;
     border-bottom: 2px solid #2d9eee; }
@@ -185,7 +190,7 @@ html #bigRow, body #bigRow {
   flex-grow: 0;
   flex-shrink: 10000;
   flex-basis: auto;
-  max-height: 100%;
+  height: 100%;
   overflow-x: hidden;
   overflow-y: scroll; }
   .flex-container-scroll #searches {
@@ -215,7 +220,6 @@ html #bigRow, body #bigRow {
 #rightCol {
   max-height: 88vh;
   flex: 70%;
-  overflow: hidden;
   float: left; }
 
 @media screen and (max-width: 600px) {

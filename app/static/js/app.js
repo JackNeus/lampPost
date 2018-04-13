@@ -20,12 +20,12 @@ $(document).ready(function(){
 	setupSearch();
 	setupUserFavorites();
 	setupDataRetrieval();
-	
+
 	// populate page if event data is initialized
 	if (event_data) {
 		showSearchResults();
 	}
-	
+
 	// remove splash screen once user clicks 'log in' or 'continue as guest'
 	$('.homeLink').click(function () {
     		document.getElementById('splashScreen').style.display = 'none';
@@ -41,7 +41,7 @@ var setupSearch = function() {
 	$('#filter-btn').click(function() {
 		$('.datetime').slideToggle(200);
 	});
-	
+
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
 		showSearchResults();
@@ -52,23 +52,23 @@ var setupSearch = function() {
 var setupDataRetrieval = function() {
 	// searches each time a key is typed in search box
 	$("#search-box").keyup(function() {
-		if ($("#datepicker").val()) 
+		if ($("#datepicker").val())
 			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
 		else query = $(this).val()
-		
+
 		fetchData(query);
 	});
-	
+
 	// fetch data after date chosen in datepicker filter
 	$("#datepicker").change(function() {
 		var date_py = java2py_date($(this).val());
 	  	fetchData($("#search-box").val() + "/" + date_py);
 	});
-	
+
 	// fetch data given a query string
 	function fetchData(query) {
 		var callback = function(data){
-		    	if (data["status"] === "Success") 
+		    	if (data["status"] === "Success")
 				event_data = data["data"];
 			else
 				event_data = null;
@@ -90,7 +90,7 @@ var setupDataRetrieval = function() {
 var setupUserFavorites = function() {
 	var userId = $("#userData").data("uid");
 	var callback = function(data) {
-		if (data["status"] === "Success") 
+		if (data["status"] === "Success")
 			user_fav_data = data["data"];
 		else
 			user_fav_data = null;
@@ -111,11 +111,11 @@ var setupUserFavorites = function() {
 function java2py_date( date_java ){
 	var today = new Date();
 	var date_split = date_java.split('/');
-	
+
 	var date_py = "";
 	if (date_split.length == 3)
 		date_py = date_split[2] + "-" + date_split[0] + "-" + date_split[1];
 	else return;
-	
+
 	return date_py;
 }

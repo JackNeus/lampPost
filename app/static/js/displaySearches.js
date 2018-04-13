@@ -5,7 +5,7 @@ var showSearchResults = function() {
 	// clear previous search results
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
-	
+
 	sortResults(); 		// sort by date or popularity
 	createSearchResults();	// create html code for each search result and display them
 	showUserFavorites(); 	// highlight user favorites
@@ -19,7 +19,7 @@ var showMyEvents = function() {
 	// clear previous search results
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
-	
+
 	sortEventsByDate(); 	// sort events by date
 	createMyEventResults(); // create html code for each created event and display them
 	showUserFavorites(); 	// highlight user favorites
@@ -33,7 +33,7 @@ var showUserFavorites = function () {
 	for (var i = 0; i < event_data.length; i++) {
 		// Event id
 		var eventId = event_data[i]._id;
-		
+
 		// Color in fire button if user has favorited an event
 		var fireBtnElement = document.getElementById("resultFireBtn" + (i + 1));
 		if (eventIsFav(eventId)) fireBtnElement.classList.toggle("selected");
@@ -46,9 +46,10 @@ var updateFireBtn = function () {
 	$(".resultFireBtn").click( function(e) {
 		// get event id and user id
 		var eventNum = getNum($(this).attr("id"), "resultFireBtn");
+		var fireBtn = document.getElementById($(this).attr("id"));
 		var eventId = event_data[eventNum-1]._id
 		var userId = $("#userData").data("uid");
-		
+
 		// update database after favoriting event
 		var favoriteEvent = function() {
 			$.ajax({
@@ -59,7 +60,7 @@ var updateFireBtn = function () {
 				}
 			});
 		};
-		
+
 		// update database after unfavoriting event
 		var unfavoriteEvent = function() {
 			$.ajax({
@@ -70,7 +71,6 @@ var updateFireBtn = function () {
 				}
 			});
 		};
-		
 		// toggle color/title
 		var fireBtn = document.getElementById($(this).attr("id"));
 		fireBtn.classList.toggle("selected");
@@ -90,6 +90,23 @@ var updateFireBtn = function () {
 		var newFireNum = parseInt(getFireNum) + change;
 		document.getElementById("resultFireNum" + eventNum).innerText = newFireNum;
 		
+		// update favorite button on event-view if the current event-view is the same as
+		// the search that's been favorited
+		if (selected_event !== null && selected_event._id == eventId) {
+			// update event view fireBtn
+			var eventFireBtn = document.getElementById("eventFireBtn");
+			
+			eventFireBtn.classList.toggle("selected");
+			if (eventFireBtn.classList.contains("selected")) {
+				eventFireBtn.title = "Unfavorite";
+			}
+			else {
+				eventFireBtn.title = "Favorite";
+			}
+			// update favorite number information
+			document.getElementById("eventFireNum").innerText = newFireNum;
+		}
+
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
 	});
@@ -101,16 +118,16 @@ var sortResults = function () {
 	if ($("#searchSort option:selected").text() == "Sort By Date")
 		sortByDate = true;
 	else  sortByDate = false;
-		
+
 	// sort all instances of the event by date
 	for (var i = 0; i < event_data.length; i++) {
 		event_data[i].instances.sort(function(a, b) {
-			return Date.timeBetween(new Date(b.start_datetime), 
-							new Date(a.start_datetime), 
+			return Date.timeBetween(new Date(b.start_datetime),
+							new Date(a.start_datetime),
 							'seconds');
 		});
 	}
-	
+
 	if (sortByDate) 	sortEventsByDate();
 	else 			sortEventsByPopularity();
 }
@@ -133,8 +150,8 @@ function eventIsFav(eventId) {
 // sort the events by date (using the first instance of the event)
 function sortEventsByDate() {
 	event_data.sort(function (a, b) {
-		return Date.timeBetween(new Date(b.instances[0].start_datetime), 
-						new Date(a.instances[0].start_datetime), 
+		return Date.timeBetween(new Date(b.instances[0].start_datetime),
+						new Date(a.instances[0].start_datetime),
 						'seconds');
 	});
 }
@@ -158,7 +175,7 @@ Date.timeBetween = function( date1, date2, units ) {
 	var difference_ms = date2_ms - date1_ms;
 
 	// Return difference in days or seconds
-	if (units == 'days') return Math.round(difference_ms/one_day); 
+	if (units == 'days') return Math.round(difference_ms/one_day);
 	else return difference_ms/1000;
 }
 
@@ -167,32 +184,59 @@ function makeDate(start, end) {
 	var start_date = new Date(start);
 	var end_date = new Date(end);
 	var today = new Date();
-	
+
 	// Special cases for dates within a week of current date
-	var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", 
-			    "Thursday", "Friday", "Saturday"];
+	var weekdays = ["Sun", "Mon", "Tue", "Wed",
+			    "Thu", "Fri", "Sat"];
 	var time_diff = Date.timeBetween(today, start_date, 'days');
-	
+
+	var date_str = weekdays[start_date.getDay()] += " ";
+	date_str += (start_date.getMonth() + 1) + '/' + start_date.getDate();
+
 	if (time_diff == -1)
-		var date_str = "Yesterday";
+		date_str += " (Yesterday) ";
 	else if (time_diff == 0)
-		var date_str = "Today";
+		date_str += " (Today) ";
 	else if (time_diff == 1)
-		var date_str = "Tomorrow";
-	else if (1 < time_diff && time_diff < 7) 
-		var date_str = weekdays[start_date.getDay()];
-	else
-		var date_str = (start_date.getMonth() + 1) + '/' + start_date.getDate();
-		
+		date_str += " (Tomorrow) ";
+
+
 	// don't show year unless year is different than current year
-	if (start_date.getFullYear() != today.getFullYear()) 
+	if (start_date.getFullYear() != today.getFullYear())
 		date_str += "/" + (start_date.getFullYear());
-		
+
 	// create time strings in hh:mm format
-	start_time = start_date.getHours() + ":" + 
+	var start_hour = start_date.getHours();
+	var end_hour = end_date.getHours();
+
+	// Convert from military hours to a more readable format
+	var suffix = "am";
+	if (start_hour == 0) {
+		start_hour = 12;
+	}
+	if (start_hour > 12) {
+		start_hour -= 12;
+	}
+	if (end_hour == 0) {
+		end_hour = 12;
+	}
+	else if (end_hour == 12) {
+		suffix = "pm";
+	}
+	else if (end_hour > 12) {
+		suffix = "pm";
+		end_hour -= 12;
+	}
+	// minutes
+	start_time = start_hour + ":" +
 			("0" + start_date.getMinutes()).slice(-2);
-	end_time = end_date.getHours() + ":" + 
+	end_time = end_hour + ":" +
 			("0" + end_date.getMinutes()).slice(-2);
-	
-	return date_str + " " + start_time + "-" + end_time;
+
+	if (start_time === end_time) {
+		return date_str + " @" + start_time + suffix;
+	}
+	else {
+		return date_str + " " + start_time + "-" + end_time + suffix;
+	}
 }
