@@ -1,7 +1,8 @@
 $background-color: #eeeeee;
 $primary-color: #2d9eee;
-$dark-color: #404040;
-$med-color: #666666;
+$dark-color: #333333;
+$med-color: #555555;
+$light-color: #999999;
 $font-light: "Avenir-Light";
 $font-med: "Avenir-Medium";
 $font-heavy: "Avenir-Heavy";
@@ -64,6 +65,10 @@ html, body {
 	color: red;
 }
 
+#searches {
+	border-top: 5px solid $med-color;
+}
+
 #searchBox {
 	padding: 0;
 	margin: 2vh 2vh;
@@ -72,9 +77,13 @@ html, body {
 	flex-shrink: 1000;
 }
 
+#search-box {
+	font-size: 16px !important;
+}
+
 #searchSort {
 	border: 1px solid #AAA;
-	color: #555;
+	color: #$dark-color;
 	font-size: 0.75em;
 	overflow: hidden;
 	border-radius: 2px;
@@ -101,13 +110,19 @@ html, body {
 	}
 }
 
+.searchPost {
+	background-color: $primary-color;
+	z-index: 1;
+	position: absolute;;
+	height: 100px;
+}
 
 .smallSearchResult {
  	height: 10vh;
  	border: 1px solid silver;
  	border-radius: 5px;
  	cursor: pointer;
- 	margin: 0vh 2vh;
+ 	margin: 2vh 2vh;
  	overflow: hidden;
  	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.25);
  	&.selected {
@@ -126,6 +141,7 @@ html, body {
 		padding-top: 0.6vh;
 		padding-bottom: 0.6vh;
 		text-overflow: ellipsis;
+		color: $dark-color;
 		overflow: hidden;
 			.resultTitle {
 				font-size: 0.9em;
@@ -162,11 +178,11 @@ html, body {
 // Event event
 // TODO: Move to seperate file?
 .event-view {
-  height: 80vh;
+  max-height: 100%;
   min-width: 30vh;
   overflow: hidden;
   display: none;
-  color: $dark-color;
+  color: $light-color;
 
 	.event-view-header {
 		padding: 10px;
@@ -177,23 +193,26 @@ html, body {
     	z-index: 500;
 	}
 	.event-view-title {
+	    color: $dark-color;
 		margin: 0;
 		line-height: normal;
 	}
 	.event-view-host {
+		color: $med-color;
 		margin: 0;
 		line-height: 30px;
 		font-size: 15px;
 	}
 	.event-view-subtitle{
+	    color: $med-color;
 		margin: 0;
 		line-height: normal;
 	}
 	.eventFireBtn {
+	    color: $light-color;
 		font-size: 45px;
 		font-family: FontAwesome;
 		line-height: 0 !important;
-		color: $med-color;
 		padding: 0;
 		&.selected {
 			color: orange;
@@ -206,6 +225,7 @@ html, body {
 		}
 	}
 	.eventFireNum {
+		color: $dark-color;
 		font-size: 0.85em;
 		font-weight: bold;
 	}
@@ -221,6 +241,7 @@ html, body {
 		height: auto;
 	}
 	.eventSection {
+		color: $med-color;
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
 	}
@@ -242,21 +263,25 @@ html, body {
     flex-grow: 0;
     flex-shrink: 10000;
     flex-basis: auto;
-    overflow: auto;
-    	#searches {
-    		min-width:12em;
+	max-height: 100%;
+    overflow-x: hidden;
+	overflow-y: scroll;
+    #searches {
+    	min-width:12em;
 	}
 }
 
 #leftCol {
+	max-height: 88vh;
 	flex: 30%;
-    	float: left;
-    	border-right: 5px solid $primary-color;
+    float: left;
+    border-right: 5px solid $primary-color;
 }
 #rightCol {
+	max-height: 88vh;
 	flex: 70%;
-    	overflow: hidden;
-    	float: left;
+    overflow: hidden;
+    float: left;
 }
 
 @media screen and (max-width: 600px) {

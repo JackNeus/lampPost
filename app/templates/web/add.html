@@ -1,13 +1,11 @@
 {% extends "base.html" %}
-{% block content %}
 
-<link rel="stylesheet" type="text/css" href="/static/css/add.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-
-
+{% block scripts %}
 <script src="/static/js/add.js"> </script>
+{% endblock %}
 
+<!--****************************** MAIN CONTENT *****************************-->
+{% block content %}
 <body onload="setNavBar()">
 
 	<div class="row" id = "bigRowAddEvent">
@@ -100,4 +98,4 @@
 		</div>
 
 	</body>
-	{% endblock %}
+{% endblock %}
