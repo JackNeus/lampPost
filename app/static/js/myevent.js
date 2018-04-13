@@ -91,7 +91,8 @@ var editMyEvents = function() {
 		// toggle highlighting in search results
 		// when the user clicks the edit button, we'll highlight that event
 		$(".smallSearchResult").removeClass("selected");
-		num = $(this).attr('id').substr("editBtn".length, );
+		num = getNum($(this).attr('id'), "editBtn");
+		//num = $(this).attr('id').substr("editBtn".length, );
 		$("#smallSearchResult"+num).addClass("selected");
 
 		// hide the event display
@@ -182,7 +183,3 @@ var setupUserFavorites = function() {
 			success: callback
 	});
 };
-
-function convertTime() {
-	return "2:00 PM";
-}
