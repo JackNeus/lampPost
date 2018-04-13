@@ -1,19 +1,20 @@
 /* rgb values for primary-color */
 html, body {
   font: 100% "Avenir-Light";
+  font-size: 20px;
   background-color: #eeeeee;
 }
 html .h1, html h1, body .h1, body h1 {
   font: 100% "Avenir-Heavy";
-  font-size: 32px;
+  font-size: 36px;
 }
 html .h2, html h2, body .h2, body h2 {
   font: 100% "Avenir-Heavy";
-  font-size: 24px;
+  font-size: 26px;
 }
 html .h3, html h3, body .h3, body h3 {
   font: 100% "Avenir-Medium";
-  font-size: 18px;
+  font-size: 20px;
 }
 
 html .logo, body .logo {
@@ -72,14 +73,13 @@ html #bigRow, body #bigRow {
   display: none;
 }
 
-.searchResults .smallSearchResult, .myEvents .smallSearchResult {
+.smallSearchResult {
   height: 10vh;
   border: 1px solid silver;
   border-radius: 5px;
   cursor: pointer;
   margin: 0vh 2vh;
   overflow: hidden;
-<<<<<<< HEAD
   background: rgba(29, 158, 238, 0.25);
 }
 .smallSearchResult.selected {
@@ -128,61 +128,13 @@ html #bigRow, body #bigRow {
   color: rgba(0, 0, 0, 0.5);
   margin-bottom: 0.1em;
 }
-=======
-  background: rgba(29, 158, 238, 0.25); }
-  .searchResults .smallSearchResult.selected, .myEvents .smallSearchResult.selected {
-    color: white;
-    background-color: rgba(29, 158, 238, 0.55); }
-    .searchResults .smallSearchResult.selected:hover, .myEvents .smallSearchResult.selected:hover {
-      background-color: rgba(29, 158, 238, 0.52); }
-  .searchResults .smallSearchResult:hover, .myEvents .smallSearchResult:hover {
-    background-color: rgba(29, 158, 238, 0.22); }
-  .searchResults .smallSearchResult .resultContents, .myEvents .smallSearchResult .resultContents {
-    padding-left: 0.8vw;
-    padding-right: 0.8vw;
-    padding-top: 0.6vh;
-    padding-bottom: 0.6vh;
-    text-overflow: ellipsis;
-    overflow: hidden; }
-    .searchResults .smallSearchResult .resultContents .resultTitle, .myEvents .smallSearchResult .resultContents .resultTitle {
-      font-size: 0.9em;
-      font-weight: bold; }
-    .searchResults .smallSearchResult .resultContents .resultFireBtn, .myEvents .smallSearchResult .resultContents .resultFireBtn {
-      font-size: 24px;
-      font-family: FontAwesome;
-      color: white;
-      padding: 0; }
-      .searchResults .smallSearchResult .resultContents .resultFireBtn.selected, .myEvents .smallSearchResult .resultContents .resultFireBtn.selected {
-        color: orange; }
-        .searchResults .smallSearchResult .resultContents .resultFireBtn.selected:hover, .myEvents .smallSearchResult .resultContents .resultFireBtn.selected:hover {
-          color: orange; }
-      .searchResults .smallSearchResult .resultContents .resultFireBtn:hover, .myEvents .smallSearchResult .resultContents .resultFireBtn:hover {
-        color: rgba(255, 165, 0, 0.5); }
-    .searchResults .smallSearchResult .resultContents .resultFireNum, .myEvents .smallSearchResult .resultContents .resultFireNum {
-      font-size: 0.85em;
-      font-weight: bold; }
-    .searchResults .smallSearchResult .resultContents .resultTime, .myEvents .smallSearchResult .resultContents .resultTime {
-      font-size: 0.85em;
-      color: rgba(0, 0, 0, 0.5);
-      margin-bottom: 0.1em; }
->>>>>>> master
-
-.myEvents .smallSearchResult {
-  flex-grow: 1000;
-  margin-right: 0; }
-.myEvents .deleteBtn {
-  padding-top: 0;
-  padding-bottom: 0; }
-.myEvents .editBtn {
-  padding-top: 0;
-  padding-bottom: 0; }
 
 .event-view {
   height: 80vh;
   min-width: 30vh;
   overflow: hidden;
   display: none;
-  color: #333333;
+  color: #404040;
 }
 .event-view .event-view-header {
   padding: 10px;
@@ -196,17 +148,18 @@ html #bigRow, body #bigRow {
   line-height: normal;
 }
 .event-view .event-view-host {
-  padding-top: 16px;
   margin: 0;
-  line-height: normal;
+  line-height: 30px;
+  font-size: 15px;
 }
 .event-view .event-view-subtitle {
   margin: 0;
   line-height: normal;
 }
 .event-view .eventFireBtn {
-  font-size: 38px;
+  font-size: 45px;
   font-family: FontAwesome;
+  line-height: 0 !important;
   color: #666666;
   padding: 0;
 }
@@ -224,10 +177,8 @@ html #bigRow, body #bigRow {
   font-weight: bold;
 }
 .event-view .event-view-info {
-  padding: 10px;
   padding-top: 20px;
   width: 100%;
-  font-size: 18px;
   background-color: white;
 }
 .event-view img {
@@ -237,6 +188,7 @@ html #bigRow, body #bigRow {
   height: auto;
 }
 .event-view .eventSection {
+  margin: 0;
   border-bottom: 2px solid #2d9eee;
 }
 
@@ -262,29 +214,6 @@ html #bigRow, body #bigRow {
   min-width: 12em;
 }
 
-.footer {
-  color:white;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align:center;
-  height: 6.4vh;
-}
-
-.successFlash {
-  background-color:#00b300;
-}
-
-.errorFlash {
-  background-color:red;
-}
-
-#flashedMessage {
-  font-size:22px;
-  padding-top:1.5vh;
-}
-
 #leftCol {
   flex: 30%;
   float: left;
@@ -294,12 +223,8 @@ html #bigRow, body #bigRow {
 #rightCol {
   flex: 70%;
   overflow: hidden;
-<<<<<<< HEAD
   float: left;
 }
-=======
-  float: left; }
->>>>>>> master
 
 @media screen and (max-width: 600px) {
   .flex-container-row {
