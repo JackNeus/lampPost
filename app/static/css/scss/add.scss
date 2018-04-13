@@ -1,0 +1,18 @@
+.invisible {
+  display: none; }
+
+label {
+  font-weight: bold; 
+}
+
+.req:after {
+	content: " *";
+	color:red;
+ }
+
+ #formCol {
+ 	height: 85vh;
+    overflow: scroll;
+ }
+
+/*# sourceMappingURL=addEvent.css.map */
