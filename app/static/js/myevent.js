@@ -60,6 +60,9 @@ var changeMyEvents = function() {
 	$(".deleteBtn").click( function() {
 		var result = confirm("Are you sure you would like to delete this event?");
 		if (result) {
+			// hide the event display
+			$(".event-view").hide();
+			
 			var eventNum = getNum($(this).attr("id"), "deleteBtn");
 			var eventId = event_data[eventNum - 1]._id;
 			

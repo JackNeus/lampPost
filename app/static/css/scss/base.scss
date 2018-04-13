@@ -124,6 +124,7 @@ html, body {
  	cursor: pointer;
  	margin: 2vh 2vh;
  	overflow: hidden;
+ 	flex-grow: 1000;
  	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.25);
  	&.selected {
 		color: white;
