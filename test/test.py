@@ -221,7 +221,6 @@ def test_add_event_extra_field():
 
 def test_add_event_in_past():
 	# Tests events with endtimes that have already happened.
-
 	old_event = deepcopy(base_event)
 
 	days_ago = 7
