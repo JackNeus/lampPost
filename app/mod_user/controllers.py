@@ -24,9 +24,10 @@ def load_user(user_id):
 # views calls this in views.login()
 def login(netid):
 	# Create the user
-	uid = mod_api_controllers.get_user_by_netid(netid).id
-	if uid is None:
-		uid = mod_api_controllers.add_user(netid).id
+	user = mod_api_controllers.get_user_by_netid(netid)
+	if user is None:
+		user = mod_api_controllers.add_user(netid)
+	uid = user.id
 	user = load_user(uid)
 	if user != None:
 		login_user(user)
