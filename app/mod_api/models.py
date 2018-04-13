@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from dateutil.parser import *
 from mongoengine import *
 
@@ -14,9 +15,19 @@ class InstanceEntry(EmbeddedDocument):
 
     # Override save() method to add custom validation
     def clean(self):
-        self.start_datetime = parse(self.start_datetime)
-        self.end_datetime = parse(self.end_datetime)
+        if type(self.start_datetime) is not datetime:
+            self.start_datetime = parse(self.start_datetime)
+        if type(self.end_datetime) is not datetime:
+            self.end_datetime = parse(self.end_datetime)
         
+        # This is a sort of grace period.
+        # Users can create events that occurred in the last day.
+        cutoff_time = datetime.today() - timedelta(days=1)
+
+        # End datetime cannot have already passed.
+        if self.end_datetime < cutoff_time:
+            raise ValidationError("End time has already passed.")
+
         # End datetime cannot be before start datetime.
         if self.end_datetime < self.start_datetime:
             raise ValidationError("End time is earlier than start time.")

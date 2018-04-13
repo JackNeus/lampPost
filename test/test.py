@@ -1,4 +1,5 @@
 from copy import deepcopy
+from datetime import datetime, timedelta
 import dateutil.parser
 import functools
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -215,7 +216,21 @@ def test_add_event_extra_field():
 	extra_field = deepcopy(base_event)
 	extra_field["bad_field_does_not_exist"] = "uh oh"
 	r = make_add_event_request(extra_field)
-	print(r)
+	assert is_error(r)
+	assert "malformatted" in r["error_msg"]
+
+def test_add_event_in_past():
+	# Tests events with endtimes that have already happened.
+
+	old_event = deepcopy(base_event)
+
+	days_ago = 7
+	start_datetime = str(datetime.today() - timedelta(days=days_ago))
+	end_datetime = str(datetime.today() - timedelta(days=days_ago-1))
+	old_event["instances"] = [{"location": "Location",
+							  "start_datetime": start_datetime,
+							  "end_datetime": end_datetime}]
+	r = make_add_event_request(old_event, generate_auth_token(old_event["creator"]))
 	assert is_error(r)
 	assert "malformatted" in r["error_msg"]
 
@@ -290,7 +305,6 @@ def test_edit_event_extra_field():
 		extra_field = deepcopy(base_event)
 		extra_field["bad_field_does_not_exist"] = "uh oh"
 		r = make_edit_event_request(event_id, extra_field, generate_auth_token(creator_netid))
-		assert is_error(r)
 	make_edit_test(test)
 
 def test_edit_event_bad_type():	
@@ -333,6 +347,21 @@ def test_edit_event_different_creator():
 		assert is_error(r)
 	make_edit_test(test)
 
+def test_edit_event_in_past():
+	# Tests an event edit where the edit includes an instance with endtimes 
+	# that have already happened.
+	def test(new_event, event_id, creator_netid):
+		days_ago = 7
+		start_datetime = str(datetime.today() - timedelta(days=days_ago))
+		end_datetime = str(datetime.today() - timedelta(days=days_ago-1))
+		edits = {"instances": [{"location": "Location",
+							   "start_datetime": start_datetime,
+							  "end_datetime": end_datetime}]}
+		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
+		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
+	make_edit_test(test)
+
 # TODO: add search tests
 
 # Execution order of tests.
@@ -360,7 +389,9 @@ test_edit_event_bad_type,
 test_edit_event_bad_field_length,
 test_edit_event_event_dne,
 test_edit_event_bad_id,
-test_edit_event_different_creator
+test_edit_event_different_creator,
+test_add_event_in_past,
+test_edit_event_in_past
 ]
 
 if __name__ == '__main__':
