@@ -5,6 +5,10 @@ var updateEventView = function() {
 		$(".smallSearchResult").click( function(){
 			// hide the form view
 			$("#event-form").hide();
+
+			//hide the footer if it exists
+			$(".footer").hide();
+
 			// toggle highlighting in search results.
 		    $(".smallSearchResult").removeClass("selected");
 		    $(this).addClass("selected");

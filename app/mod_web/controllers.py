@@ -52,7 +52,6 @@ def myevents():
 				showings.append(instanceDict)
 
 			eventData['instances'] = showings
-
 			eventData['creator'] = current_user.netid
 			eventData['host'] = form.host.data
 
@@ -60,16 +59,20 @@ def myevents():
 				eventData['trailer'] = form.link.data
 
 			# make API request
-			r = requests.put(CONFIG["BASE_URL"] + "/api/event/add", json=eventData)
-			print(r.text)
-			if json.loads(r.text)["status"] == "Success":
-				flash("Success! Your event has been added.")
-				return redirect("add")
+			headers = { "Authorization" : "Token %s" % current_user.token }
+			print("hello testing")
+			print(request.form)
+			print(request.form['event-id'])
+			r = requests.post(CONFIG["BASE_URL"] + "/api/event/edit/"+request.form['event-id'], json=eventData, headers=headers)
+			r = json.loads(r.text)
+			if r["status"] == "Success":
+				flash("Success! Your event has been edited.")
+				return redirect("myevents")
 			else:
-				flash("Error. " + json.loads(r.text)["error_msg"])
-				return render_template("web/myevents.html", form=EventForm(), display=True)
+				flash("Error. " + r["error_msg"])
+				return render_template("web/myevents.html", form=EventForm(), display=True, numRows=len(showings))
 	else:
-		return render_template("web/myevents.html", form=EventForm(), display=False)
+		return render_template("web/myevents.html", form=EventForm(), display=False, numRows=1)
 
 @mod_web.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -101,13 +104,14 @@ def addEvent():
 
 			if (form.link.data != ""):
 				eventData['trailer'] = form.link.data
+
+			print(eventData)
 			
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
 			r = requests.put(CONFIG["BASE_URL"]+"/api/event/add", 
-				json = eventData,
-				headers = headers)
-
+				json = eventData, headers = headers)
+			print(r.text)
 			if r.status_code != 200:
 				flash("Something went wrong. Please contact a developer.")
 				return render_template("web/add.html", form=EventForm())

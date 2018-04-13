@@ -61,9 +61,29 @@ function processClick( num ) {
 	currentNumShowing = num;
 }
 
-$(document).ready(function(){
-	// initialize the first radio option (for number of showings) to be checked
-	$("#numShowings-0").attr("checked", "checked");
+
+$(document).ready(function(){	
+
+	// change the time inputs to have type=time
+	$("input[id*='Time']").prop('type', 'time');
+
+	// if the form passes us a number of showings, initialize the radio button to that
+	// otherwise, initialize the first radio option (for number of showings) to be checked
+	var i = $("#numRowsEventForm").length;
+	if (i > 0) {
+		currentNumShowing = parseInt($("#numRowsEventForm").text());
+		$("#numShowings-"+(currentNumShowing-1).toString()).attr("checked", "checked");
+		console.log(currentNumShowing);
+	} else {
+		$("#numShowings-0").attr("checked", "checked");
+		currentNumShowing = 1;
+	}
+
+	// hide the rows that we don't need
+	for (var i = currentNumShowing + 1; i <= 4; i++) {
+		$("#form-row-"+i.toString()).hide();
+	}
+
 
 	// number all our labels
 	// as far as I know, there is no good way to do this with wtforms (although it seems there should be)
@@ -71,8 +91,10 @@ $(document).ready(function(){
 		$(this).append(" " + (parseInt($(this).attr("for").substr(-1))+1).toString());
 	});
 
-	// now, let's unnumber the first row of the form (since we start w/ one row showing)
-	unNumberFirstShowing();
+	// if one row showing, unnumber the first row of the form
+	if (currentNumShowing == 1) {
+		unNumberFirstShowing();
+	}
 
 	// make title, description, and host required
 	$("#title").prop("required", true);
@@ -90,18 +112,6 @@ $(document).ready(function(){
 		var id = "#endDates-" + $(this).attr("name").substr(-1);
 		$(id).val($(this).val());
 	});
-
-
-	// make the forms visible
-	$("#form-row-2").removeClass("invisible");
-	$("#form-row-3").removeClass("invisible");
-	$("#form-row-4").removeClass("invisible");
-
-	// slide these forms (which are currently invisible) up, to make
-	// compatible with the slideDown's needed later
-	$("#form-row-2").slideUp(0);
-	$("#form-row-3").slideUp(0);
-	$("#form-row-4").slideUp(0);
 
 	
 	// when we click the circle for x showings, slide up all the forms instantly

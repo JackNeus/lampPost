@@ -1,7 +1,11 @@
 var event_data = [];
 var user_fav_data = [];
-var currentNumShowing = 1;
+var currentRows = 0;
 
+var base_url;
+function setBaseUrl(url) {
+	base_url = url;
+}
 
 $(document).ready(function(){
 	setupUserFavorites();
@@ -10,7 +14,6 @@ $(document).ready(function(){
 	$("#event-form").hide();
 	// slide up all the rows of locations/times
 	// $("[id ^= 'form-row']").slideUp();
-	console.log("I'm alive");
 	checkDisplay();
 });
 
@@ -76,6 +79,9 @@ var editMyEvents = function() {
 
 	$(".editBtn").click( function() { 
 
+		// hide the footer
+		$(".footer").hide();
+
 		// toggle highlighting in search results
 		// when the user clicks the edit button, we'll highlight that event
 		$(".smallSearchResult").removeClass("selected");
@@ -86,17 +92,37 @@ var editMyEvents = function() {
 		$(".event-view").hide();
 
 		// fill the form with the correct values
+		console.log(event_data[parseInt(num)-1]._id);
+		$("#event-id").val(event_data[parseInt(num)-1]._id);
 		$("#title").val(event_data[parseInt(num)-1].title);
 		$("#description").val(event_data[parseInt(num)-1].description);
 		$("#host").val(event_data[parseInt(num)-1].host);
 		var numShowings = event_data[parseInt(num)-1].instances.length;
 		$("#numShowings-" + (numShowings - 1).toString()).prop("checked", true);
-		
-		// slide down the correct number of form rows
-		for (var i = 1; i <= numShowings; i++) {
-			$("#form-row-"+i.toString()).slideDown("slow");
+
+		// to avoid flickering, if we haven't loaded anything yet, do this special case
+		if (currentRows == 0) {
+			for (var i = 1; i <= numShowings; i++) {
+				$("#form-row-"+i.toString()).show();
+			}
+			currentRows = numShowings;
+		}
+		// otherwise, do the standard
+		else {
+			// show the correct number of form rows, by sliding down any extra we might need
+			for (var i = currentRows; i <= numShowings; i++) {
+				$("#form-row-"+i.toString()).slideDown();
+			}
+
+			currentRows = numShowings;
+
+			// slide up any extra form rows
+			for (var i = numShowings + 1; i <= 4; i++) {
+				$("#form-row-"+i.toString()).slideUp();
+			}
 		}
 
+		// fill in correct values in any relevant form rows
 		for (var i = 1; i <= numShowings; i++) {
 			$("#locations-" + (i-1).toString()).val(event_data[parseInt(num-1)].instances[i-1]["location"]);
 			starts = event_data[parseInt(num-1)].instances[i-1]["start_datetime"].split(" ");
@@ -111,7 +137,15 @@ var editMyEvents = function() {
 			timeE = ends[1];
 			$("#startTimes-" + (i-1).toString()).val(timeS);
 			$("#endTimes-" + (i-1).toString()).val(timeE);
-		
+		}
+
+		// empty the values in all the other form rows
+		for (var i = numShowings + 1; i <= 4; i++) {
+			$("#locations-" + (i-1).toString()).val("");
+			$("#startDates-" + (i-1).toString()).val("");
+			$("#endDates-" + (i-1).toString()).val("");
+			$("#startTimes-" + (i-1).toString()).val("");
+			$("#endTimes-" + (i-1).toString()).val("");
 		}
 		
 		$("#link").val(event_data[parseInt(num)-1].trailer);

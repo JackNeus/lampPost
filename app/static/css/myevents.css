@@ -11,4 +11,13 @@ label {
 	color:red;
  }
 
+.col-md-10 {
+ 	padding-left: 11vw;
+ }
+
+ #rightCol {
+ 	height: 85vh;
+    overflow: scroll;
+ }
+
 /*# sourceMappingURL=addEvent.css.map */
