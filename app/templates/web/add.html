@@ -1,18 +1,20 @@
 {% extends "base.html" %}
-
-{% block scripts %}
-<script src="/static/js/add.js"> </script>
-{% endblock %}
-
-<!--****************************** MAIN CONTENT *****************************-->
 {% block content %}
-<body onload="setNavBar()">
+
+<link rel="stylesheet" type="text/css" href="/static/css/add.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+
+<script src="/static/js/add.js"> </script>
+
+<body>
 
 	<div class="row" id = "bigRowAddEvent">
 		<div class="col-md-3" id = "leftCol">
 
 		</div>
-		<div class="col-md-7" id = "leftCol">
+		<div class="col-md-6" id = "formCol">
 			<h3 style="text-align:center"> Add your event by filling out the fields below. </h3>
 
 			<form id="addEventForm" action="/add" method="POST" role="form">
@@ -93,9 +95,9 @@
 			</form>
 
 		</div>
-		<div class="col-md-3" id = "leftCol">
+		<div class="col-md-3" id = "rightCol">
 
 		</div>
 
 	</body>
-{% endblock %}
+	{% endblock %}

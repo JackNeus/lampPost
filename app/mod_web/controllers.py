@@ -29,9 +29,48 @@ def browser():
 			print("Error loading mock data.")
 	return render_template("web/browser.html")
 	
-@mod_web.route('/myevents')
+@mod_web.route('/myevents', methods=['GET', 'POST'])
 def myevents():
-	return render_template("web/myevents.html")
+	if request.method == "POST":
+		form = EventForm(request.form)
+		# TODO: Put the form parsing code in a separate function
+		if not form.validate_on_submit():
+			print(form.errors)
+			return render_template("web/myevents.html", form=form, errors=form.errors, display=True)
+		else:
+			eventData = {}
+			eventData['title'] = form.title.data
+			eventData['description'] = form.description.data
+			# TODO: let's actually let users determine this
+			eventData['visibility'] = 0
+
+			showings = []
+			for i in range(int(form.numShowings.data)):
+				instanceDict = {}
+				instanceDict["location"] = form.locations.data[i]
+				instanceDict["start_datetime"] = str(form.startDates.data[i]) + " " + str(form.startTimes.data[i])
+				instanceDict["end_datetime"] = str(form.endDates.data[i]) + " " + str(form.endTimes.data[i])
+				showings.append(instanceDict)
+
+			eventData['instances'] = showings
+			eventData['creator'] = current_user.netid
+			eventData['host'] = form.host.data
+
+			if (form.link.data != ""):
+				eventData['trailer'] = form.link.data
+
+			# make API request
+			headers = { "Authorization" : "Token %s" % current_user.token }
+			r = requests.post(CONFIG["BASE_URL"] + "/api/event/edit/"+request.form['event-id'], json=eventData, headers=headers)
+			r = json.loads(r.text)
+			if r["status"] == "Success":
+				flash("Success! Your event has been edited.")
+				return redirect("myevents")
+			else:
+				flash("Error. " + r["error_msg"])
+				return render_template("web/myevents.html", form=EventForm(), display=True, numRows=len(showings))
+	else:
+		return render_template("web/myevents.html", form=EventForm(), display=False, numRows=1)
 
 @mod_web.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -67,8 +106,7 @@ def addEvent():
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
 			r = requests.put(CONFIG["BASE_URL"]+"/api/event/add", 
-				json = eventData,
-				headers = headers)
+				json = eventData, headers = headers)
 
 			if r.status_code != 200:
 				flash("Something went wrong. Please contact a developer.")
