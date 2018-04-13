@@ -1,4 +1,4 @@
-// DEPENDENCIES: displayEvent.js
+// DEPENDENCIES: displayEvent.js, createEventHtml.js
 
 // Populate search result panel with event_data sorted by date.
 var showSearchResults = function() {
@@ -6,101 +6,94 @@ var showSearchResults = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	// sort events by either date or popularity
-	sortResults();
-
-	// create html code for each search result
-	for (var i = 0; i < event_data.length; i++) {
-		// Title of event
-		var title = $('<p />').attr({
-			class: "resultTitle"
-		}).append(event_data[i].title);
-
-		// Fire icon
-		var fireIcon = $('<i />').attr({
-			class: "fas fa-fire",
-		});
-
-		// Clickable fire button that displays "Favorite" when hovered over
-		var fireBtn = $('<div />').attr({
-			class: "resultFireBtn btn",
-			title: "Favorite",
-			id: "resultFireBtn" + (i + 1)
-		}).append(fireIcon);
-
-		// TODO: get 'getFire' from backend
-		// var getFire = event_data[i].favorites;
-		// Number of favorites an event has
-		var getFire = Math.floor(Math.random() * 100);
-		var fireNum = $('<p />').attr({
-			class: "resultFireNum",
-			id: "resultFireNum" + (i + 1)
-		}).append(getFire);
-
-		// All dates/times of an event
-		var instances = event_data[i].instances;
-		var allTimes = $('<div />');
-		for (var j = 0; j < instances.length; j++) {
-			var time = $('<p />').attr({
-				class: "resultTime"
-			}).append(makeDate(instances[j].start_datetime,
-					       instances[j].end_datetime));
-			allTimes.append(time);
-		}
-
-		// Title/dates are left aligned
-		var leftColumn = $('<div />').attr({
-			class: "p-2 mr-auto"
-		}).append(title).append(allTimes);
-
-		// Fire button and number of favorites are inlined with event title
-		var firstRow = $('<div />').attr({
-			class: "d-flex flex-row align-items-start"
-		}).append(leftColumn).append(fireBtn).append(fireNum);
-
-		// Container holding the result contents
-		var smallDiv = $('<div >').attr({
-			class: "resultContents"
-		}).append(firstRow);
-
-		// Container holding all event infor and the id of the event
-		var largeDiv = $('<div />').attr({
-			class: "smallSearchResult", id: "smallSearchResult" + (i + 1),
-		}).append(smallDiv);
-
-		// Add the list of search results
-		$("#searches").append(largeDiv);
-	}
-
-	// handle clicks of fire button
-	updateFireBtn();
-	// handle click of event
-	updateEventView();
+	sortResults(); 		// sort by date or popularity
+	createSearchResults();	// create html code for each search result and display them
+	showUserFavorites(); 	// highlight user favorites
+	// declare event handlers for "fireBtn" and "smallSearchResult"
+	updateFireBtn(); 		// handle clicks of fire button
+	updateEventView(); 	// handle click of event
 }
+
+// Populate search result panel with event_data sorted by date.
+var showMyEvents = function() {
+	// clear previous search results
+	var currentSearches = document.getElementById("searches");
+	currentSearches.innerHTML = "";
+
+	sortEventsByDate(); 	// sort events by date
+	createMyEventResults(); // create html code for each created event and display them
+	showUserFavorites(); 	// highlight user favorites
+	// declare event handlers for "fireBtn" and "smallSearchResult"
+	updateFireBtn(); 		// handle clicks of fire button
+	updateEventView(); 	// handle click of event
+}
+
+// Show which events a user has favorited
+var showUserFavorites = function () {
+	for (var i = 0; i < event_data.length; i++) {
+		// Event id
+		var eventId = event_data[i]._id;
+
+		// Color in fire button if user has favorited an event
+		var fireBtnElement = document.getElementById("resultFireBtn" + (i + 1));
+		if (eventIsFav(eventId)) fireBtnElement.classList.toggle("selected");
+	}
+};
+
 
 // Update the popularity of an event when the fire button is clicked
 var updateFireBtn = function () {
 	$(".resultFireBtn").click( function(e) {
+		// get event id and user id
 		var eventNum = getNum($(this).attr("id"), "resultFireBtn");
+<<<<<<< HEAD
 		var fireBtn = document.getElementById($(this).attr("id"));
 
+=======
+		var eventId = event_data[eventNum-1]._id
+		var userId = $("#userData").data("uid");
+
+		// update database after favoriting event
+		var favoriteEvent = function() {
+			$.ajax({
+				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
+				dataType: 'json',
+				headers: {
+					'Authorization': ('Token ' + $.cookie('api_token'))
+				}
+			});
+		};
+
+		// update database after unfavoriting event
+		var unfavoriteEvent = function() {
+			$.ajax({
+				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,
+				dataType: 'json',
+				headers: {
+					'Authorization': ('Token ' + $.cookie('api_token'))
+				}
+			});
+		};
+
+>>>>>>> 9404b7237d47efe105d3f86eb47ff0175e8d0635
 		// toggle color/title
+		var fireBtn = document.getElementById($(this).attr("id"));
 		fireBtn.classList.toggle("selected");
 		if (fireBtn.classList.contains("selected")) {
 			fireBtn.title = "Unfavorite";
 			var change = 1;
+			favoriteEvent();
 		}
 		else {
 			fireBtn.title = "Favorite";
 			var change = -1;
+			unfavoriteEvent();
 		}
 
-		// update favorite information
+		// update favorite number information
 		var getFireNum = document.getElementById("resultFireNum" + eventNum).innerText;
 		var newFireNum = parseInt(getFireNum) + change;
 		document.getElementById("resultFireNum" + eventNum).innerText = newFireNum;
-
-		//TODO: send newFavs to backend
 
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
@@ -123,21 +116,8 @@ var sortResults = function () {
 		});
 	}
 
-	if (sortByDate) {
-		// sort the events by date (using the first instance of the event)
-		event_data.sort(function (a, b) {
-			return Date.timeBetween(new Date(b.instances[0].start_datetime),
-							new Date(a.instances[0].start_datetime),
-							'seconds');
-		});
-	}
-	else {
-		// TODO: Make sure this works with backend
-		// sort the events by popularity
-		event_data.sort(function (a, b) {
-			return a.favorites - b.favorites;
-		});
-	}
+	if (sortByDate) 	sortEventsByDate();
+	else 			sortEventsByPopularity();
 }
 
 /*----------------------------- UTILITY FUNCTIONS ----------------------------*/
@@ -145,6 +125,30 @@ var sortResults = function () {
 // Given an id of the form 'smallSearchResultX', return X.
 function getNum(searchId, titleSplit) {
 	return searchId.split(titleSplit).pop();
+}
+
+// Returns true if event is in list of user favorites, false otherwise
+function eventIsFav(eventId) {
+	for (var i = 0; i < user_fav_data.length; i++) {
+		if (eventId == user_fav_data[i]) return true;
+	}
+	return false;
+}
+
+// sort the events by date (using the first instance of the event)
+function sortEventsByDate() {
+	event_data.sort(function (a, b) {
+		return Date.timeBetween(new Date(b.instances[0].start_datetime),
+						new Date(a.instances[0].start_datetime),
+						'seconds');
+	});
+}
+
+// sort the events by popularity
+function sortEventsByPopularity() {
+	event_data.sort(function (a, b) {
+		return parseInt(b.favorites) - parseInt(a.favorites);
+	});
 }
 
 // calculates the difference between date1 and date2 in ms, with an
@@ -216,6 +220,6 @@ function makeDate(start, end) {
 			("0" + start_date.getMinutes()).slice(-2);
 	end_time = end_hour + ":" +
 			("0" + end_date.getMinutes()).slice(-2);
-			
-	return date_str + " @" + start_time + "–" + end_time + suffix;
+
+	return date_str + " " + start_time + "-" + end_time;
 }

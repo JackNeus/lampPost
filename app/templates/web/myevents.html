@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+<!-- SCRIPTS -->
+
+{% block scripts %}
+<script src="/static/js/displaySearches.js?v=0"></script>
+<script src="/static/js/displayEvent.js?v=0"></script>
+<script src="/static/js/createEventHtml.js?v=0"></script>
+<script src="/static/js/myevent.js?v=0"></script>
+<script src="/static/js/add.js?v=0"></script>
+<script>
+setBaseUrl("{{ config.BASE_URL }}");
+</script>
+{% endblock %}
+
+<!--*************************** MAIN CONTENT *****************************-->
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/myevents.css">
+
+
+<div class="container-fluid">
+  	<div class="flex-container-row" id="bigRow">
+  	
+	   <div class="flex-container-col" id = "leftCol">
+	   
+	   	<h1>My Events</h1>
+			
+		<!-- Fills in with "search" results from events.json -->
+		<div class="flex-item-scroll myEvents" id="searches"></div>
+		
+	   </div>
+		
+	 	<div class="flex-container-col" id = "rightCol"> 
+	 		<div class = "event-view" id = "event-view"> 
+		   		<p class="event-result-title" id = "eventTitle"></p>
+		   		<div class = "event-result-info">
+		   			<div id="eventPhoto"> </div>
+		   			<p id="eventLocation"> </p>
+		   			<p id="eventDescription"> </p>
+		   			<p id="eventHost"> </p>
+		   			<p id="eventTime"> </p>
+		   			<p id="eventLikes"> </p>
+		   		</div>
+			</div>
+
+			<!-- Hacky, but I can't think of a better way. 
+			If this element exists, then we will force the form to display with jQuery. -->
+			{% if display %}
+				<a id="displayEventForm"> </a>
+			{% endif %}
+
+			<!-- Same deal. If this exists, the form will have this number of rows. -->
+			{% if numRows %}
+				<a id="numRowsEventForm" style="display:none"> {{ numRows }} </a>
+			{% endif %}
+
+
+			<div class = "event-form" id = "event-form" style="display:none">
+				<div class="col-md-10">
+					<h3 style="text-align:center"> Edit your event by changing the fields below. </h3>
+
+					<form id="addEventForm" action="/myevents" method="POST" role="form">
+						{{ form.csrf_token }}
+
+						<!-- Hidden event id, populated by jquery -->
+						<input style="display:none" id="event-id" type="text" name="event-id"> </input>
+
+						<div class="form-group">
+							{{ form.title.label(class="req") }} 
+							{{ form.title(class="form-control") }}
+						</div>
+						<div class="form-group">
+							{{ form.description.label(class="req") }} 
+							{{ form.description(class="form-control", rows="4") }}
+						</div>
+
+						<div class="form-group">
+							{{ form.host.label(class="req") }} 
+							{{ form.host(class="form-control") }}
+						</div>
+
+						<div class="form-group">
+							{{ form.numShowings.label(style="padding-right:1vw", class="req") }}
+							{% for subfield in form.numShowings %}
+		    					<div class="form-check form-check-inline">
+			        				{{ subfield(class="form-check-input") }}
+			        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
+			        			</div>
+							{% endfor %}
+							<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!</small>
+						</div>
+
+						{% for i in range(form.locations.__len__()) %}
+							<div class="form-row" id="form-row-{{i+1}}"> 
+								<div class="form-group col-md-4">
+		        					{{ form.locations.__getitem__(i).label(class="numbered req") }}
+		        					{{ form.locations.__getitem__(i)(class="form-control") }}
+		        				</div>
+
+		        				<div class="form-group col-md-2">
+									{{ form.startDates.__getitem__(i).label(class="numbered req") }}
+									{{ form.startDates.__getitem__(i)(class="form-control") }}
+								</div>
+								<div class="form-group col-md-2">
+									{{ form.startTimes.__getitem__(i).label(class="numbered req") }} 
+									{{ form.startTimes.__getitem__(i)(class="form-control") }}
+								</div>
+								<div class="form-group col-md-2">
+									{{ form.endDates.__getitem__(i).label(class="numbered req") }}
+									{{ form.endDates.__getitem__(i)(class="form-control") }}
+								</div>
+								<div class="form-group col-md-2">
+									{{ form.endTimes.__getitem__(i).label(class="numbered req") }}
+									{{ form.endTimes.__getitem__(i)(class="form-control") }}
+								</div>
+		        			</div>
+		    			{% endfor %}
+
+						<div class="form-group">
+							{{ form.poster.label }}
+							{{ form.poster(class="form-control-file") }}
+							<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
+						</div>
+
+						<div class="form-group">
+							{{ form.link.label }} 
+							{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control") }}
+						</div>
+
+						<button type="submit" class="btn btn-primary">Submit!</button>
+
+
+
+						<div class="errors" style="text-align:center; color:red">
+							{% for i in errors %}
+								{{ i.capitalize() }}: {{errors[i][0]}} <br />
+							{% endfor %}
+						</div>
+
+
+					</form>
+
+				</div>
+				
+			</div>
+
+		</div>	
+	</div>
+</div>
+{% endblock %}

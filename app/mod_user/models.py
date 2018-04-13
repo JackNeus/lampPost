@@ -10,10 +10,13 @@ class AuthorizationError(Exception):
 class UserEntry(Document):
 	netid = StringField(required = True, unique = True)
 
+	meta = { "strict": False }
+
 class User(UserMixin):
 	def __init__(self, uid, netid):
 		self.uid = str(uid)
 		self.netid = netid
+		self.token = self.generate_auth_token()
 
 	def is_authenticated(self):
 		return True
@@ -26,7 +29,7 @@ class User(UserMixin):
 	# TODO: Figure out the exact CAS expiration time.
 	def generate_auth_token(self, expiration = 3600 * 24 * 7):
 		s = Serializer(app.config['SECRET_KEY'], expires_in = expiration)
-		return s.dumps({'id': self.uid})
+		return str(s.dumps({'id': self.uid}))[2:-1]
 
 	@staticmethod
 	def verify_auth_token(token):
@@ -36,8 +39,10 @@ class User(UserMixin):
 		except SignatureExpired:
 			return None  # Valid token, but expired.
 		except BadSignature:
-			return None  # Invalid token.
+			return None  # Invalid token
+
 		user = mod_api_controllers.get_user_by_uid(data['id'])
+
 		if user is None:
 			return None  # Something went wrong.
 		return user

@@ -78,6 +78,7 @@ def get_user_by_uid(uid):
 		return entries[0]
 	return None
 
+
 # Add UserEntry for given netid.
 def add_user(netid):
 	netid = netid.lower()

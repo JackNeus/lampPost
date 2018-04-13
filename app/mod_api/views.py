@@ -212,6 +212,7 @@ def get_created_events(userid):
 @mod_api.route("/user/fav/add/<userid>/<eventid>")
 @auth.login_required
 def add_event_fav(userid, eventid):
+
 	try:
 		event = controller.get_event(eventid)
 		user = controller.get_user_by_uid(userid)

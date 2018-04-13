@@ -77,61 +77,77 @@ html, body {
 	}
 }
 
-
-.smallSearchResult {
- 	height: 10vh;
- 	border: 1px solid silver;
- 	border-radius: 5px;
- 	cursor: pointer;
- 	margin: 0vh 2vh;
- 	overflow: hidden;
- 	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.25);
- 	&.selected {
-		color: white;
-		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.55);
-		&:hover {
-			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.52);
-		}
- 	}
- 	&:hover {
- 		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.22);
- 	}
-	.resultContents {
-		padding-left: 0.8vw;
-		padding-right: 0.8vw;
-		padding-top: 0.6vh;
-		padding-bottom: 0.6vh;
-		text-overflow: ellipsis;
-		overflow: hidden;
-			.resultTitle {
-				font-size: 0.9em;
-				font-weight: bold;
+.searchResults, .myEvents {
+	.smallSearchResult {
+	 	height: 10vh;
+	 	border: 1px solid silver;
+	 	border-radius: 5px;
+	 	cursor: pointer;
+	 	margin: 0vh 2vh;
+	 	overflow: hidden;
+	 	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.25);
+	 	&.selected {
+			color: white;
+			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.55);
+			&:hover {
+				background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.52);
 			}
-			.resultFireBtn {
-				font-size: 24px;
-				font-family: FontAwesome;
-				color: white;
-				padding: 0;
-				&.selected {
-					color: orange;
-					&:hover {
+	 	}
+	 	&:hover {
+	 		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.22);
+	 	}
+		.resultContents {
+			padding-left: 0.8vw;
+			padding-right: 0.8vw;
+			padding-top: 0.6vh;
+			padding-bottom: 0.6vh;
+			text-overflow: ellipsis;
+			overflow: hidden;
+				.resultTitle {
+					font-size: 0.9em;
+					font-weight: bold;
+				}
+				.resultFireBtn {
+					font-size: 24px;
+					font-family: FontAwesome;
+					color: white;
+					padding: 0;
+					&.selected {
 						color: orange;
+						&:hover {
+							color: orange;
+						}
+					}
+					&:hover {
+						color: rgba(255, 165, 0, 0.5);
 					}
 				}
-				&:hover {
-					color: rgba(255, 165, 0, 0.5);
+				.resultFireNum {
+					font-size: 0.85em;
+					font-weight: bold;
 				}
-			}
-			.resultFireNum {
-				font-size: 0.85em;
-				font-weight: bold;
-			}
-			.resultTime {
-				font-size: 0.85em;
-				color: rgba(0, 0, 0, 0.5);
-				margin-bottom: 0.1em;
-			}
-	}	
+				.resultTime {
+					font-size: 0.85em;
+					color: rgba(0, 0, 0, 0.5);
+					margin-bottom: 0.1em;
+				}
+		}	
+	}
+}
+
+.myEvents {
+	.smallSearchResult {
+		flex-grow:1000; 
+		margin-right: 0;
+	}
+	.deleteBtn {
+		padding-top: 0; 
+		padding-bottom: 0;
+	}
+	.editBtn {
+		padding-top: 0; 
+		padding-bottom: 0;
+	}
 }
 
 
@@ -196,6 +212,24 @@ html, body {
 	flex: 70%;
     	overflow: hidden;
     	float: left;
+}
+
+.footer {
+  color:white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align:center;
+  height: 6.4vh;
+}
+
+.successFlash {
+  background-color:#00b300;
+}
+
+.errorFlash {
+  background-color:red;
 }
 
 @media screen and (max-width: 600px) {

@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
+<!--****************************** SCRIPTS **********************************-->
+
 {% block scripts %}
 <script src="/static/js/displaySearches.js?v=1"></script>
 <script src="/static/js/displayEvent.js?v=1"></script>
+<script src="/static/js/createEventHtml.js?v=1"></script>
 <script src="/static/js/app.js?v=1"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
@@ -17,6 +20,8 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 {% endblock %}
 
+
+<!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
 <div class="flex-container-row" id="bigRow">
    <div class="flex-container-col" id="leftCol">
