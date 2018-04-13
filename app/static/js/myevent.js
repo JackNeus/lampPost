@@ -99,7 +99,6 @@ var editMyEvents = function() {
 		$(".event-view").hide();
 
 		// fill the form with the correct values
-		console.log(event_data[parseInt(num)-1]._id);
 		$("#event-id").val(event_data[parseInt(num)-1]._id);
 		$("#title").val(event_data[parseInt(num)-1].title);
 		$("#description").val(event_data[parseInt(num)-1].description);
