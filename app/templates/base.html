@@ -24,7 +24,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/static/css/merged.css?v=1">
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css?v=1">
     <link rel="stylesheet" type="text/css" href="/static/css/splashpage.css?v=1">
     <link rel="stylesheet" type="text/css" href="/static/css/add.css?v=1">
 
@@ -39,7 +39,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no, user-scalable=0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="icon" href="https://www.cs.princeton.edu/favicon" />
-    
+
     <!-- Time picker and date picker -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -61,11 +61,11 @@
 	<a class="navbar-brand" href="#">
 	  <img src = "../../static/graphics/logoNavBar.svg" class="image-fluid logo">
 	</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" 
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
 		  aria-controls="#navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
 	  <span class="navbar-toggler-icon"></span>
 	</button>
-    
+
     <div class="collapse navbar-collapse" id="navbarToggle">
         <ul class="navbar-nav ml-auto mt-2 mt-md-0">
           <li class="nav-item">
@@ -107,7 +107,7 @@
         $("a[href=\\" + pathname + "]").addClass('active');
       });
   </script>
-	
+
 	<!--****************************** SPLASH PAGE ******************************-->
 	{% if not current_user.is_authenticated %}
 	<div class="splashScreen" id="splashScreen">
@@ -122,10 +122,10 @@
 	</div>
 	{% endif %}
 
-      
+
 	<!-- JINJA VARIABLES -->
 	<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}">
-	
+
 	{% if config.DEBUG %}
 	 <h4 class="debug-data" id="global-debug-msg"></h4>
 	{% endif %}
@@ -150,7 +150,7 @@
 	  {% endif %}
 	{% endif %}
 	{% endwith %}
-    
+
 
   </body>
   {% block scripts %}{% endblock %}
