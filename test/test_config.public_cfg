@@ -1,5 +1,6 @@
 DEBUG=True
 PORT=5002
+BASE_URL="http://localhost:5002"
 
 SECRET_KEY="this_secret_key_is_for_testing_only"
 

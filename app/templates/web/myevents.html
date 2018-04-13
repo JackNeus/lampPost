@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+<!--****************************** SCRIPTS **********************************-->
+
+{% block scripts %}
+<script src="/static/js/displaySearches.js?v=1"></script>
+<script src="/static/js/displayEvent.js?v=1"></script>
+<script src="/static/js/createEventHtml.js?v=1"></script>
+<script src="/static/js/myevent.js?v=1"></script>
+<script>
+setBaseUrl("{{ config.BASE_URL }}");
+</script>
+{% endblock %}
+
+<!--****************************** MAIN CONTENT *****************************-->
+{% block content %}
+<div class="container-fluid">
+  	<div class="flex-container-row" id="bigRow">
+  	
+	   <div class="flex-container-col" id = "leftCol">
+	   
+	   	<h1>My Events</h1>
+			
+		<!-- Fills in with "search" results from events.json -->
+		<div class="flex-item-scroll myEvents" id="searches"></div>
+		
+	   </div>
+		
+	 	<div class="flex-container-col" id = "rightCol"> 
+	 		<div class = "event-view" id = "event-view"> 
+		   		<p class="event-result-title" id = "eventTitle"></p>
+		   		<div class = "event-result-info">
+		   			<div id="eventPhoto"> </div>
+		   			<p id="eventLocation"> </p>
+		   			<p id="eventDescription"> </p>
+		   			<p id="eventHost"> </p>
+		   			<p id="eventTime"> </p>
+		   			<p id="eventLikes"> </p>
+		   		</div>
+			</div>
+		</div>	
+	</div>
+</div>
+{% endblock %}
