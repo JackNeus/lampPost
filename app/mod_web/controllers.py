@@ -33,6 +33,7 @@ def browser():
 def myevents():
 	if request.method == "POST":
 		form = EventForm(request.form)
+		# TODO: Put the form parsing code in a separate function
 		if not form.validate_on_submit():
 			print(form.errors)
 			return render_template("web/myevents.html", form=form, errors=form.errors, display=True)
@@ -60,9 +61,6 @@ def myevents():
 
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
-			print("hello testing")
-			print(request.form)
-			print(request.form['event-id'])
 			r = requests.post(CONFIG["BASE_URL"] + "/api/event/edit/"+request.form['event-id'], json=eventData, headers=headers)
 			r = json.loads(r.text)
 			if r["status"] == "Success":
@@ -104,14 +102,12 @@ def addEvent():
 
 			if (form.link.data != ""):
 				eventData['trailer'] = form.link.data
-
-			print(eventData)
 			
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
 			r = requests.put(CONFIG["BASE_URL"]+"/api/event/add", 
 				json = eventData, headers = headers)
-			print(r.text)
+
 			if r.status_code != 200:
 				flash("Something went wrong. Please contact a developer.")
 				return render_template("web/add.html", form=EventForm())

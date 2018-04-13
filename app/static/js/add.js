@@ -73,7 +73,6 @@ $(document).ready(function(){
 	if (i > 0) {
 		currentNumShowing = parseInt($("#numRowsEventForm").text());
 		$("#numShowings-"+(currentNumShowing-1).toString()).attr("checked", "checked");
-		console.log(currentNumShowing);
 	} else {
 		$("#numShowings-0").attr("checked", "checked");
 		currentNumShowing = 1;
