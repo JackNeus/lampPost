@@ -84,6 +84,10 @@ var updateFireBtn = function () {
 			var change = -1;
 			unfavoriteEvent();
 		}
+		
+		// TODO: update favorite button on event-view if the current event-view is the same as
+		// the search that's been favorited
+		
 
 		// update favorite number information
 		var getFireNum = document.getElementById("resultFireNum" + eventNum).innerText;

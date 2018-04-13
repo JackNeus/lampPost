@@ -23,6 +23,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 <!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
+<div class="container-fluid">
 <div class="flex-container-row" id="bigRow">
    <div class="flex-container-col" id="leftCol">
    		<form onsubmit="return false;">
@@ -85,5 +86,6 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 		</div>
         <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/explore.png" style="width: 100%;">
 	</div>
+</div>
 </div>
 {% endblock %}

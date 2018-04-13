@@ -84,7 +84,7 @@ html, body {
 
 #searchSort {
 	border: 1px solid #AAA;
-	color: #$dark-color;
+	color: $dark-color;
 	font-size: 0.75em;
 	overflow: hidden;
 	border-radius: 2px;
@@ -235,9 +235,12 @@ html, body {
 		font-weight: bold;
 	}
 	.event-view-info {
-		width: 100%;
+	    width: 100%;
 	    background-color: white;
-		overflow-y: scroll;
+	    height: 75vh;
+	    overflow-y: scroll;
+	    overflow-x: hidden;
+	    padding-bottom: 2vh;
 	}
 	img {
 		float: top;
@@ -268,9 +271,9 @@ html, body {
     flex-grow: 0;
     flex-shrink: 10000;
     flex-basis: auto;
-	height: 100%;
+    height: 100%;
     overflow-x: hidden;
-	overflow-y: scroll;
+    overflow-y: scroll;
     #searches {
     	min-width:12em;
 	}

@@ -58,6 +58,15 @@ var loadEvents = function() {
 // allow user to delete events
 var changeMyEvents = function() {
 	$(".deleteBtn").click( function() {
+		// hide the footer
+		$(".footer").hide();
+
+		// toggle highlighting in search results
+		// when the user clicks the edit button, we'll highlight that event
+		$(".smallSearchResult").removeClass("selected");
+		num = getNum($(this).attr('id'), "deleteBtn");
+		$("#smallSearchResult" + num).addClass("selected");
+		
 		var result = confirm("Are you sure you would like to delete this event?");
 		if (result) {
 			// hide the event display
@@ -85,7 +94,6 @@ var changeMyEvents = function() {
 // allow user to change events
 var editMyEvents = function() {
 
-
 	$(".editBtn").click( function() { 
 
 		// hide the footer
@@ -95,7 +103,6 @@ var editMyEvents = function() {
 		// when the user clicks the edit button, we'll highlight that event
 		$(".smallSearchResult").removeClass("selected");
 		num = getNum($(this).attr('id'), "editBtn");
-		//num = $(this).attr('id').substr("editBtn".length, );
 		$("#smallSearchResult"+num).addClass("selected");
 
 		// hide the event display

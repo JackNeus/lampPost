@@ -5,7 +5,6 @@ label {
   font-weight: bold; 
 }
 
-
 .req:after {
 	content: " *";
 	color:red;
@@ -16,8 +15,7 @@ label {
  }
 
  #rightCol {
- 	height: 85vh;
-    overflow: scroll;
+ 	max-height: 88vh;
  }
 
 /*# sourceMappingURL=addEvent.css.map */
