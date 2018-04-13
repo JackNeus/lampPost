@@ -10,9 +10,13 @@ var updateEventView = function() {
 			$(".footer").hide();
 
 			// toggle highlighting in search results.
+			$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
 		    $(".smallSearchResult").removeClass("selected");
 		    $(this).addClass("selected");
-		    
+
+			// Animate selection
+			$(this).animate({"margin-right": '0vh'});
+
 		    // populate and display event view.
 			$(".event-view").hide();
 			var eventNum = getNum($(this).attr("id"), "smallSearchResult") - 1;
@@ -65,6 +69,12 @@ function populateEventViewPanel(num) {
 		"by " + event_data[num].host;
 	document.getElementById("eventDescription").innerHTML =
 		event_data[num].description;
+
+	// Add C&H image
+	var photoNum = Math.floor(Math.random() * 81); + 1;
+	document.getElementById("eventPhoto").innerHTML =
+		"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
+		+ photoNum + ".png\">";
 
 	// handle clicks of fire button
 	updateEventFireBtn();

@@ -46,10 +46,7 @@ var updateFireBtn = function () {
 	$(".resultFireBtn").click( function(e) {
 		// get event id and user id
 		var eventNum = getNum($(this).attr("id"), "resultFireBtn");
-<<<<<<< HEAD
 		var fireBtn = document.getElementById($(this).attr("id"));
-
-=======
 		var eventId = event_data[eventNum-1]._id
 		var userId = $("#userData").data("uid");
 
@@ -74,8 +71,6 @@ var updateFireBtn = function () {
 				}
 			});
 		};
-
->>>>>>> 9404b7237d47efe105d3f86eb47ff0175e8d0635
 		// toggle color/title
 		var fireBtn = document.getElementById($(this).attr("id"));
 		fireBtn.classList.toggle("selected");
@@ -174,8 +169,8 @@ function makeDate(start, end) {
 	var today = new Date();
 
 	// Special cases for dates within a week of current date
-	var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday",
-			    "Thursday", "Friday", "Saturday"];
+	var weekdays = ["Sun", "Mon", "Tue", "Wed",
+			    "Thu", "Fri", "Sat"];
 	var time_diff = Date.timeBetween(today, start_date, 'days');
 
 	var date_str = weekdays[start_date.getDay()] += " ";
@@ -221,5 +216,10 @@ function makeDate(start, end) {
 	end_time = end_hour + ":" +
 			("0" + end_date.getMinutes()).slice(-2);
 
-	return date_str + " " + start_time + "-" + end_time;
+	if (start_time === end_time) {
+		return date_str + " @" + start_time + suffix;
+	}
+	else {
+		return date_str + " " + start_time + "-" + end_time + suffix;
+	}
 }

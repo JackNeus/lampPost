@@ -21,16 +21,16 @@
 				{{ form.csrf_token }}
 
 				<div class="form-group">
-					{{ form.title.label(class="req") }} 
+					{{ form.title.label(class="req") }}
 					{{ form.title(placeholder="The name of your event", class="form-control") }}
 				</div>
 				<div class="form-group">
-					{{ form.description.label(class="req") }} 
+					{{ form.description.label(class="req") }}
 					{{ form.description(placeholder="A brief description of your event, and why people should come!", class="form-control", rows="4") }}
 				</div>
 
 				<div class="form-group">
-					{{ form.host.label(class="req") }} 
+					{{ form.host.label(class="req") }}
 					{{ form.host(placeholder="(e.g. Bodyhype, Whig-Clio)", class="form-control") }}
 				</div>
 
@@ -47,7 +47,7 @@
 				</div>
 
 				{% for i in range(form.locations.__len__()) %}
-					<div class="form-row" id="form-row-{{i+1}}"> 
+					<div class="form-row" id="form-row-{{i+1}}">
 						<div class="form-group col-md-4">
         					{{ form.locations.__getitem__(i).label(class="numbered req") }}
         					{{ form.locations.__getitem__(i)(class="form-control") }}
@@ -58,7 +58,7 @@
 							{{ form.startDates.__getitem__(i)(class="form-control") }}
 						</div>
 						<div class="form-group col-md-2">
-							{{ form.startTimes.__getitem__(i).label(class="numbered req") }} 
+							{{ form.startTimes.__getitem__(i).label(class="numbered req") }}
 							{{ form.startTimes.__getitem__(i)(class="form-control") }}
 						</div>
 						<div class="form-group col-md-2">
@@ -79,11 +79,11 @@
 				</div>
 
 				<div class="form-group">
-					{{ form.link.label }} 
+					{{ form.link.label }}
 					{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control") }}
 				</div>
 
-				<button type="submit" class="btn btn-primary">Submit!</button>
+				<button type="submit" class="btn btn-primary submitAddButton">Submit!</button>
 
 				<div class="errors" style="text-align:center; color:red">
 					{% for i in errors %}

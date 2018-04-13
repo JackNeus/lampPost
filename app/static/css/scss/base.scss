@@ -3,7 +3,7 @@ $primary-color: #2d9eee;
 $dark-color: #333333;
 $med-color: #555555;
 $light-color: #999999;
-$orange: #ee7f2d
+$orange: #ee7f2d;
 $font-light: "Avenir-Light";
 $font-med: "Avenir-Medium";
 $font-heavy: "Avenir-Heavy";
@@ -111,30 +111,44 @@ html, body {
 	}
 }
 
-.searchPost {
-	background-color: $primary-color;
-	z-index: 1;
-	position: absolute;;
-	height: 100px;
-}
-
 .smallSearchResult {
- 	height: 10vh;
- 	border: 1px solid silver;
- 	border-radius: 5px;
- 	cursor: pointer;
- 	margin: 2vh 2vh;
+	flex-grow: 1000;
+ 	min-height: 10vh;
+ 	border: 3px solid $primary-color;
+	border-radius: 0px 10px 10px 0px;
+	cursor: pointer;
+	margin: 0vh 2vh 0vh 0vh;
  	overflow: hidden;
- 	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.25);
+ 	background: white;
+	color: $dark-color;
+	.resultTitle {
+		font-size: 1.2em;
+	}
+	.resultTime {
+		font-size: 1em;
+		color: $light-color;
+		margin-bottom: 0.3em;
+	}
  	&.selected {
-		color: white;
-		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.55);
+		.resultTitle {
+			color: white;
+		}
+		.resultTime {
+			color: white;
+		}
+		border-radius: 0px;
+		background-color: $primary-color;
+		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+		z-index: 1;
+		position: relative;
 		&:hover {
-			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.52);
+			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.7);
+		 	border: 3px solid rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.3);
 		}
  	}
  	&:hover {
- 		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.22);
+ 		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.1);
+		border: 3px solid rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.3);
  	}
 	.resultContents {
 		padding-left: 0.8vw;
@@ -142,36 +156,27 @@ html, body {
 		padding-top: 0.6vh;
 		padding-bottom: 0.6vh;
 		text-overflow: ellipsis;
-		color: $dark-color;
 		overflow: hidden;
-			.resultTitle {
-				font-size: 0.9em;
-				font-weight: bold;
-			}
-			.resultFireBtn {
-				font-size: 24px;
-				font-family: FontAwesome;
-				color: white;
-				padding: 0;
-				&.selected {
-					color: orange;
-					&:hover {
-						color: orange;
-					}
-				}
+		.resultFireBtn {
+			font-size: 24px;
+			font-family: FontAwesome;
+			color: $background-color;
+			padding: 0;
+			&.selected {
+				color: $orange;
 				&:hover {
-					color: rgba(255, 165, 0, 0.5);
+					color: $orange;
 				}
+			}
+			&:hover {
+				color: rgba(255, 165, 0, 0.5);
 			}
 			.resultFireNum {
+				color: $dark-color !important;
 				font-size: 0.85em;
 				font-weight: bold;
 			}
-			.resultTime {
-				font-size: 0.85em;
-				color: rgba(0, 0, 0, 0.5);
-				margin-bottom: 0.1em;
-			}
+		}
 	}
 }
 
@@ -181,7 +186,6 @@ html, body {
 .event-view {
   max-height: 100%;
   min-width: 30vh;
-  overflow: hidden;
   display: none;
   color: $light-color;
 
@@ -216,9 +220,9 @@ html, body {
 		line-height: 0 !important;
 		padding: 0;
 		&.selected {
-			color: orange;
+			color: $orange;
 			&:hover {
-				color: orange;
+				color: $orange;
 			}
 		}
 		&:hover {
@@ -231,17 +235,17 @@ html, body {
 		font-weight: bold;
 	}
 	.event-view-info {
-		padding-top: 20px;
 		width: 100%;
 	    background-color: white;
+		overflow-y: scroll;
 	}
 	img {
-		float: right;
-		width: 40%;
-		margin: 0em 1em;
+		float: top;
+		width: 100%;
 		height: auto;
 	}
 	.eventSection {
+		padding-top: 20px;
 		color: $med-color;
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
@@ -264,7 +268,7 @@ html, body {
     flex-grow: 0;
     flex-shrink: 10000;
     flex-basis: auto;
-	max-height: 100%;
+	height: 100%;
     overflow-x: hidden;
 	overflow-y: scroll;
     #searches {
@@ -281,7 +285,6 @@ html, body {
 #rightCol {
 	max-height: 88vh;
 	flex: 70%;
-    overflow: hidden;
     float: left;
 }
 
