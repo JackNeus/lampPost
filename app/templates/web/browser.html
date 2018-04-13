@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-<!-- SCRIPTS -->
+<!--****************************** SCRIPTS **********************************-->
 
 {% block scripts %}
-<script src="/static/js/displaySearches.js?v=44"></script>
-<script src="/static/js/displayEvent.js?v=5"></script>
-<script src="/static/js/createEventHtml.js?v=4"></script>
-<script src="/static/js/app.js?v=13"></script>
+<script src="/static/js/displaySearches.js?v=1"></script>
+<script src="/static/js/displayEvent.js?v=1"></script>
+<script src="/static/js/createEventHtml.js?v=1"></script>
+<script src="/static/js/app.js?v=1"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -20,7 +20,8 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 {% endblock %}
 
-<!-- MAIN CONTENT -->
+
+<!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
 <div class="container-fluid">
   	<div class="flex-container-row" id="bigRow">
@@ -54,7 +55,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 		
 			
 		<!-- Fills in with "search" results from events.json -->
-		<div class="flex-item-scroll" id="searches"></div>
+		<div class="flex-item-scroll searchResults" id="searches"></div>
 		
 	  	</div>
 		
@@ -73,26 +74,4 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 		</div>	
 	</div>
 </div>
-{% endblock %}
-
-<!-- SPLASH PAGE -->
-
-{% block splashScreen %}
-<div class="splashScreen" id="splashScreen">
-	<div class="headerBox">
-		<div class="loginBox">
-			<h1 class="lamppostTitle">lampPost - search for events</h1>
-			<a class="homeLink btn btn-primary btn-lg" href="/login">Login</a>
-			<p></p>
-			<a class="homeLink btn btn-primary btn-lg" href="#">Continue as Guest</a>
-		</div>
-	</div>
-</div>
-{% endblock %}
-
-
-<!-- JINJA VARIABLES -->
-{% block user_data %}
-<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}"
-	data-favorites="{{current_user.favorites}}">
 {% endblock %}

@@ -39,11 +39,10 @@ class User(UserMixin):
 		except SignatureExpired:
 			return None  # Valid token, but expired.
 		except BadSignature:
-			return None  # Invalid token.
-		try:
-			user = mod_api_controllers.get_user(data['id'])
-		except Exception as e:
-			raise e
+			return None  # Invalid token
+
+		user = mod_api_controllers.get_user_by_uid(data['id'])
+
 		if user is None:
 			return None  # Something went wrong.
 		return user

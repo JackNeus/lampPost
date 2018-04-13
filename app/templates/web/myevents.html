@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 
 
 <!-- SCRIPTS -->
@@ -10,9 +11,12 @@
 <script src="/static/js/createEventHtml.js?v=0"></script>
 <script src="/static/js/myevent.js?v=0"></script>
 <script src="/static/js/add.js?v=0"></script>
+<script>
+setBaseUrl("{{ config.BASE_URL }}");
+</script>
 {% endblock %}
 
-<!-- MAIN CONTENT -->
+<!--*************************** MAIN CONTENT *****************************-->
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="/static/css/myevents.css">
@@ -26,7 +30,7 @@
 	   	<h1>My Events</h1>
 			
 		<!-- Fills in with "search" results from events.json -->
-		<div class="flex-item-scroll" id="searches"></div>
+		<div class="flex-item-scroll myEvents" id="searches"></div>
 		
 	   </div>
 		
@@ -147,26 +151,4 @@
 		</div>	
 	</div>
 </div>
-{% endblock %}
-
-<!-- SPLASH PAGE -->
-
-{% block splashScreen %}
-<div class="splashScreen" id="splashScreen">
-	<div class="headerBox">
-		<div class="loginBox">
-			<h1 class="lamppostTitle">lampPost - search for events</h1>
-			<a class="homeLink btn btn-primary btn-lg" href="/login">Login</a>
-			<p></p>
-			<a class="homeLink btn btn-primary btn-lg" href="#">Continue as Guest</a>
-		</div>
-	</div>
-</div>
-{% endblock %}
-
-
-<!--JINJA VARIABLES -->
-{% block user_data %}
-<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}"
-	data-favorites="{{current_user.favorites}}">
 {% endblock %}

@@ -1,3 +1,10 @@
+// DEPENDENCIES: displaySearches.js, createEventHtml.js
+
+var base_url;
+function setBaseUrl(url) {
+	base_url = url;
+}
+
 var event_data = [];
 var user_fav_data = [];
 var currentRows = 0;
@@ -39,8 +46,7 @@ var loadEvents = function() {
 		editMyEvents();
 	}
 	$.ajax({
-		url: 'http://localhost:5001/api/user/get_events/'+userId,
-		method: 'get',
+		url: base_url + '/api/user/get_events/'+userId,
 		dataType: 'json',
 		headers: {
 			'Authorization': ('Token ' + $.cookie('api_token'))
@@ -61,7 +67,7 @@ var changeMyEvents = function() {
 				loadEvents();
 			}
 			$.ajax({
-				url: 'http://localhost:5001/api/event/delete/' + eventId,
+				url: base_url + '/api/event/delete/' + eventId,
 				method: 'delete',
 				dataType: 'json',
 				headers: {
@@ -162,10 +168,13 @@ var editMyEvents = function() {
 var setupUserFavorites = function() {
 	var userId = $("#userData").data("uid");
 	var callback = function(data) {
-		user_fav_data = data;
+		if (data["status"] === "Success") 
+			user_fav_data = data["data"];
+		else
+			user_fav_data = null;
 	};
 	$.ajax({
-			url: 'http://localhost:5001/api/user/fav/get/'+ userId,
+			url: base_url + '/api/user/fav/get/'+ userId,
 			dataType: 'json',
 			headers: {
 				'Authorization': ('Token ' + $.cookie('api_token'))

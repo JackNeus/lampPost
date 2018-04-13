@@ -68,7 +68,7 @@ var setupDataRetrieval = function() {
 	// fetch data given a query string
 	function fetchData(query) {
 		var callback = function(data){
-		    if (data["status"] === "Success") 
+		    	if (data["status"] === "Success") 
 				event_data = data["data"];
 			else
 				event_data = null;
@@ -76,7 +76,7 @@ var setupDataRetrieval = function() {
 			showSearchResults();
 		};
 		$.ajax({
-			url: base_url+'/api/event/search/'+query,
+			url: base_url + '/api/event/search/' + query,
 			dataType: 'json',
 			headers: {
 				'Authorization': ('Token ' + $.cookie('api_token'))
@@ -90,10 +90,13 @@ var setupDataRetrieval = function() {
 var setupUserFavorites = function() {
 	var userId = $("#userData").data("uid");
 	var callback = function(data) {
-		user_fav_data = data;
+		if (data["status"] === "Success") 
+			user_fav_data = data["data"];
+		else
+			user_fav_data = null;
 	};
 	$.ajax({
-			url: 'http://localhost:5001/api/user/fav/get/'+ userId,
+			url: base_url + '/api/user/fav/get/'+ userId,
 			dataType: 'json',
 			headers: {
 				'Authorization': ('Token ' + $.cookie('api_token'))
