@@ -1,5 +1,7 @@
 // TODO: add all of Reilly's code pertaining to the large event layout here
 
+var selected_event = null;
+
 // Shows large event view when search result is clicked
 var updateEventView = function() {
 		$(".smallSearchResult").click( function(){
@@ -20,6 +22,7 @@ var updateEventView = function() {
 		    // populate and display event view.
 			$(".event-view").hide();
 			var eventNum = getNum($(this).attr("id"), "smallSearchResult") - 1;
+			selected_event = event_data[eventNum];
 			populateEventViewPanel(eventNum);
 			$("#event-view").show();
 		});
@@ -139,4 +142,17 @@ var updateEventFireBtn = function (eventNum) {
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
 	});
+}
+
+// Get event id of currently selected event.
+function getSelectedEvent() {
+	if (selected_event == null) {
+		return null;
+	}
+	return selected_event;
+}
+
+// Hide event view panel.
+function hideEventViewPanel() {
+	$(".event-view").hide();
 }

@@ -77,6 +77,11 @@ var changeMyEvents = function() {
 			
 			var callback = function() {
 				loadEvents();
+				// If the event is selected, hide the view after it is deleted.
+				var selected_event = getSelectedEvent();
+				if (selected_event !== null && selected_event._id == eventId) {
+					hideEventViewPanel();
+				}
 			}
 			$.ajax({
 				url: base_url + '/api/event/delete/' + eventId,
