@@ -139,10 +139,10 @@ var editMyEvents = function() {
 		}
 
 		// fill in correct values in any relevant form rows
-		for (var i = 1; i <= numShowings; i++) {
-			$("#locations-" + i).val(event_data[eventNum - 1].instances[i - 1]["location"]);
-			starts = event_data[eventNum - 1].instances[i - 1]["start_datetime"].split(" ");
-			ends = event_data[eventNum - 1].instances[i - 1]["end_datetime"].split(" ");
+		for (var i = 0; i < numShowings; i++) {
+			$("#locations-" + i).val(event_data[eventNum - 1].instances[i]["location"]);
+			starts = event_data[eventNum - 1].instances[i]["start_datetime"].split(" ");
+			ends = event_data[eventNum - 1].instances[i]["end_datetime"].split(" ");
 
 			yearMonDayS = starts[0].split("-")
 			yearMonDayE = ends[0].split("-")
@@ -156,7 +156,7 @@ var editMyEvents = function() {
 		}
 
 		// empty the values in all the other form rows
-		for (var i = numShowings + 1; i <= 4; i++) {
+		for (var i = numShowings; i < 4; i++) {
 			$("#locations-" + i).val("");
 			$("#startDates-" + i).val("");
 			$("#endDates-" + i).val("");
