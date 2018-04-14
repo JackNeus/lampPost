@@ -17,6 +17,11 @@ mod_web = Blueprint('web', __name__, url_prefix="")
 @mod_web.route('/')
 def home():
 	return render_template("web/home.html")
+	
+# Splash page
+@mod_web.route('/welcome')
+def welcome():
+	return render_template("web/splashpage.html")
 
 @mod_web.route('/browser')
 def browser():
