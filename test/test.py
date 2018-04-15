@@ -162,17 +162,19 @@ def test_add_event_missing_field():
 		# Remove field.
 		no_value = deepcopy(base_event)
 		del no_value[field]
-		r = make_add_event_request(no_value)
+		r = make_add_event_request(no_value, generate_auth_token(base_event["creator"]))
 		assert is_error(r)
+		assert "missing" in r["error_msg"]
 
 def test_add_event_bad_type():		
 	# String fields type check.
-	for field in ["title", "host", "creator", "description"]:
+	for field in ["title", "host", "description"]:
 		# Incorrectly-typed value.
 		bad_value = deepcopy(base_event)
 		bad_value[field] = 123
-		r = make_add_event_request(bad_value)
+		r = make_add_event_request(bad_value, generate_auth_token(base_event["creator"]))
 		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
 
 def test_add_event_bad_field_length():		
 	# String fields length check.
@@ -180,10 +182,10 @@ def test_add_event_bad_field_length():
 		# Insufficiently long value.
 		short_value = deepcopy(base_event)
 		short_value[field] = "A"*(length-1)
-		r = make_add_event_request(short_value)
+		r = make_add_event_request(short_value, generate_auth_token(base_event["creator"]))
 		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
 	
-
 def test_add_event_bad_instance_data():
 	# Instances tests.
 
@@ -191,22 +193,25 @@ def test_add_event_bad_instance_data():
 	time_swap = deepcopy(base_event)
 	time_swap["instances"][0]["start_datetime"] = base_event["instances"][0]["end_datetime"]
 	time_swap["instances"][0]["end_datetime"] = base_event["instances"][0]["start_datetime"]
-	r = make_add_event_request(time_swap)
+	r = make_add_event_request(time_swap, generate_auth_token(base_event["creator"]))
 	assert is_error(r)
+	assert "malformatted" in r["error_msg"]
 	
 	# Missing required fields.
 	for field in ["location", "start_datetime", "end_datetime"]:
 		no_value = deepcopy(base_event)
 		del no_value["instances"][0][field]
-		r = make_add_event_request(no_value)
+		r = make_add_event_request(no_value, generate_auth_token(base_event["creator"]))
 		assert is_error(r)
+		assert "missing" in r["error_msg"]
 
 	# Insufficiently long value.
 	short_value = deepcopy(base_event)
 	short_value["instances"][0]["location"] = "AB"
-	r = make_add_event_request(short_value)
+	r = make_add_event_request(short_value, generate_auth_token(base_event["creator"]))
 	assert is_error(r)
-
+	assert "malformatted" in r["error_msg"]
+ 
 def test_add_event_extra_field():
 	# This test is currently disabled because the EventEntry type has
 	# meta: strict disabled and extra fields are quietly ignored.
