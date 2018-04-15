@@ -2,6 +2,7 @@ from .models import *
 from app import CONFIG, app
 
 from flask_login import current_user
+from werkzeug.utils import secure_filename
 
 def form_to_event_object(form):
 	eventData = {}
@@ -24,4 +25,21 @@ def form_to_event_object(form):
 
 	if (form.link.data != ""):
 		eventData['trailer'] = form.link.data
+
 	return eventData
+
+def make_edit_request(event_id, edits):
+	headers = { "Authorization" : "Token %s" % current_user.token }
+	return requests.post(CONFIG["BASE_URL"] + "/api/event/edit/"+event_id, json=edits, headers=headers)
+			
+def upload_file(event_id, file):
+	if not allowed_file_type(file.filename): 
+		raise BadFileTypeExtension("File must be .jpg, .jpeg, .png, or .gif.")
+	file.filename = secure_filename(event_id+"."+get_file_type(file.filename))
+	print(file.filename)
+	print(upload_file_to_s3(file))
+	return None
+
+def add_image_to_event(event_id, file):
+	file_url = upload_file(event_id, file)
+	r = make_edit_request(event_id, {'poster': file_url})

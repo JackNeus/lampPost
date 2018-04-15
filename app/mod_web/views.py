@@ -3,7 +3,6 @@ from flask import Blueprint, request, render_template, flash, redirect
 from flask_login import login_required, current_user
 from app import CONFIG
 from app.mod_web.forms import NameForm
-from app.mod_web.models import User
 from . import web_module as mod_web
 from . import controllers as controller
 from .forms import *
@@ -39,8 +38,11 @@ def myevents():
 			eventData = controller.form_to_event_object(form)
 
 			# make API request
-			headers = { "Authorization" : "Token %s" % current_user.token }
-			r = requests.post(CONFIG["BASE_URL"] + "/api/event/edit/"+request.form['event-id'], json=eventData, headers=headers)
+			r = controller.make_edit_request(request.form['event-id'], eventData)
+
+			if r.status_code != 200:
+				flash("Something went wrong. Please contact a developer.")
+				return render_template("web/add.html", form=EventForm())
 			r = json.loads(r.text)
 			if r["status"] == "Success":
 				flash("Success! Your event has been edited.")
@@ -61,7 +63,10 @@ def addEvent():
 			return render_template("web/add.html", form=form, errors=form.errors)
 		else:
 			eventData = controller.form_to_event_object(form)
-			
+			print(request.files)
+			if "poster" in request.files:
+				print("Adding image...")
+				controller.add_image_to_event(None, request.files["poster"])
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
 			r = requests.put(CONFIG["BASE_URL"]+"/api/event/add", 
@@ -72,6 +77,7 @@ def addEvent():
 				return render_template("web/add.html", form=EventForm())
 			r = json.loads(r.text)
 			if r["status"] == "Success":
+				
 				flash("Success! Your event has been added.")
 				return redirect("add")
 			else:
