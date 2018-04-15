@@ -361,6 +361,15 @@ def test_edit_event_in_past():
 		assert "malformatted" in r["error_msg"]
 	make_edit_test(test)
 
+def test_edit_event_bad_poster_url():
+	# Events whose poster URLs do not start with 'http://princeton-lamppost.s3.amazonaws.com/'
+	# are invalid.
+	def test(new_event, event_id, creator_netid):
+		edits = {"poster": "http://www.google.com/logo.jpg"}
+		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
+		assert is_error(r)
+	make_edit_test(test)
+
 # TODO: add search tests
 
 # Execution order of tests.
@@ -390,7 +399,8 @@ test_edit_event_event_dne,
 test_edit_event_bad_id,
 test_edit_event_different_creator,
 test_add_event_in_past,
-test_edit_event_in_past
+test_edit_event_in_past,
+test_edit_event_bad_poster_url
 ]
 
 if __name__ == '__main__':

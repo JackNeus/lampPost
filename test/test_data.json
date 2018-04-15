@@ -7,7 +7,8 @@
 	"start_datetime": "5pm April 20th 2030",
 	"end_datetime": "6pm April 20th 2030"
 }],
-"description": "This is the first test."
+"description": "This is the first test.",
+"poster": "http://princeton-lamppost.s3.amazonaws.com/my_image.jpg"
 },
 {
 "title": "Conference Series #2",

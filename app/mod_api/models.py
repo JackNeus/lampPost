@@ -53,7 +53,7 @@ class EventEntry(Document):
     def clean(self):
         if self.poster is not None and not self.poster.startswith(CONFIG["S3_LOCATION"]):
             raise ValidationError("Poster URL did not point to an authorized location.")
-            
+        
     meta = {'strict': False}
         
 # List of fields that MUST be supplied by user.
