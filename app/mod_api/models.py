@@ -4,6 +4,12 @@ from mongoengine import *
 from app import CONFIG, app
 
 
+class UserEntry(Document):
+    netid = StringField(required = True, unique = True)
+    favorites = ListField()
+
+    meta = { "strict": False}
+
 class InstanceEntry(EmbeddedDocument):
     location = StringField(required = True, min_length = 3)
     start_datetime = DateTimeField(required = True)
@@ -11,6 +17,9 @@ class InstanceEntry(EmbeddedDocument):
 
     # Override save() method to add custom validation
     def clean(self):
+        self.start_datetime = parse(self.start_datetime)
+        self.end_datetime = parse(self.end_datetime)
+        
         # End datetime cannot be before start datetime.
         if self.end_datetime < self.start_datetime:
             raise ValidationError("End time is earlier than start time.")
@@ -22,6 +31,7 @@ class EventEntry(Document):
         
     description = StringField(required = True, min_length = 10)
     visibility = IntField(required = True, default = 0) 
+    favorites = IntField(required = True, default = 0)
 
     # For internal use only.
     creator = StringField(required = True)
@@ -42,6 +52,11 @@ required_fields = [
 "instances/end_datetime",
 "description"]
 
+# List of system fields (i.e. fields that the user should not touch)
+system_fields = [
+"id",
+"creator"]
+
 # TODO: Make this more generic/less hacky/generally better.
 def has_field(obj, field):
     # If a field in instance/, need to check every instance for the field.
@@ -58,12 +73,11 @@ def has_field(obj, field):
     return True
 
 def get_missing_fields(obj):
+    # TODO: Make sure obj is the right type, i.e. is a dict.
     missing = []
-    print(obj)
     for field in required_fields:
         if not has_field(obj, field):
             missing.append(field)
-    print(missing)
     return missing
 
 def get_raw_event(event_entry):

@@ -1,0 +1,19 @@
+.invisible {
+  display: none; }
+
+label {
+  font-weight: bold; }
+
+.req:after {
+  content: " *";
+  color: red; }
+
+.col-md-10 {
+  padding-left: 11vw; }
+
+#rightCol {
+  max-height: 88vh; }
+
+/*# sourceMappingURL=addEvent.css.map */
+
+/*# sourceMappingURL=myevents.css.map */

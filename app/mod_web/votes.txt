@@ -1,4 +1,0 @@
-Siberian Husky:1
-Black Lab:1
-Chocolate Lab:2
-Golden Retriever:0
