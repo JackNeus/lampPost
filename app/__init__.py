@@ -40,9 +40,9 @@ except Exception as e:
 def error(e):
     return render_template("404.html"), 404
 
-from app.mod_web.controllers import mod_web as web_module
+from app.mod_web import web_module
 app.register_blueprint(web_module)
 from app.mod_api import api_module
 app.register_blueprint(api_module)
-from app.mod_user.views import mod_user as user_module
+from app.mod_user import user_module
 app.register_blueprint(user_module)
