@@ -29,6 +29,10 @@ def browser():
 			print("Error loading mock data.")
 	return render_template("web/browser.html")
 	
+@mod_web.route('/myfavorites')
+def myfavorites():
+	return render_template("web/myfavorites.html")
+	
 @mod_web.route('/myevents', methods=['GET', 'POST'])
 def myevents():
 	if request.method == "POST":

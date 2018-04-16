@@ -1,31 +1,27 @@
 .invisible {
-  display: none;
-}
+  display: none; }
 
 label {
-  font-weight: bold;
-}
+  font-weight: bold; }
 
 .req:after {
   content: " *";
-  color: red;
-}
+  color: red; }
 
 #formCol {
-  height: 85vh;
-  overflow: scroll;
-}
+  height: 88vh;
+  overflow: scroll; }
 
 .submitAddButton:hover {
   border-color: #2d9eee;
   color: white;
-  background-color: #2d9eee;
-}
+  background-color: #2d9eee; }
 
 .submitAddButton {
   border-color: #2d9eee;
   color: #2d9eee;
-  background-color: white;
-}
+  background-color: white; }
 
 /*# sourceMappingURL=addEvent.css.map */
+
+/*# sourceMappingURL=add.css.map */

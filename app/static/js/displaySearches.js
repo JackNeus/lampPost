@@ -21,8 +21,8 @@ var showMyEvents = function() {
 	currentSearches.innerHTML = "";
 
 	sortEventsByDate(); 	// sort events by date
-	createMyEventResults(); // create html code for each created event and display them
-	showUserFavorites(); 	// highlight user favorites
+	createSearchResults(); // create html code for each created event and display them
+	onlyShowUserFavorites(); 	// highlight user favorites
 	// declare event handlers for "fireBtn" and "smallSearchResult"
 	updateFireBtn(); 		// handle clicks of fire button
 	updateEventView(); 	// handle click of event
@@ -37,6 +37,19 @@ var showUserFavorites = function () {
 		// Color in fire button if user has favorited an event
 		var fireBtnElement = document.getElementById("resultFireBtn" + (i + 1));
 		if (eventIsFav(eventId)) fireBtnElement.classList.toggle("selected");
+	}
+};
+
+// Show which events a user has favorited
+var onlyShowUserFavorites = function () {
+	for (var i = 0; i < event_data.length; i++) {
+		// Event id
+		var eventId = event_data[i]._id;
+
+		// Color in fire button if user has favorited an event
+		var fireBtnElement = document.getElementById("resultFireBtn" + (i + 1));
+		if (eventIsFav(eventId)) fireBtnElement.classList.toggle("selected");
+		else $("#smallSearchResult" + (i + 1)).hide();
 	}
 };
 

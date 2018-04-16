@@ -1,10 +1,5 @@
 // DEPENDENCIES: displaySearches.js, createEventHtml.js
 
-var base_url;
-function setBaseUrl(url) {
-	base_url = url;
-}
-
 var event_data = [];
 var user_fav_data = [];
 var currentRows = 0;
