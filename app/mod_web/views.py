@@ -30,7 +30,7 @@ def browser():
 def myevents():
 	if request.method == "POST":
 		form = EventForm(request.form)
-		# TODO: Put the form parsing code in a separate function
+
 		if not form.validate_on_submit():
 			print(form.errors)
 			return render_template("web/myevents.html", form=form, errors=form.errors, display=True)
@@ -63,10 +63,7 @@ def addEvent():
 			return render_template("web/add.html", form=form, errors=form.errors)
 		else:
 			eventData = controller.form_to_event_object(form)
-			print(request.files)
-			if "poster" in request.files:
-				print("Adding image...")
-				controller.add_image_to_event(None, request.files["poster"])
+
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
 			r = requests.put(CONFIG["BASE_URL"]+"/api/event/add", 
@@ -77,7 +74,18 @@ def addEvent():
 				return render_template("web/add.html", form=EventForm())
 			r = json.loads(r.text)
 			if r["status"] == "Success":
-				
+				event_id = r["data"]["id"]
+				# If event was successfully added, upload poster & update event.
+				try:
+					if "poster" in request.files:
+						controller.add_image_to_event(event_id, request.files["poster"])
+				except Exception as e:
+					# If adding the image fail, delete the event and pretend like
+					# nothing happened.
+					controller.make_delete_request(event_id)
+					flash("Error. " + str(e))
+					return render_template("web/add.html", form=EventForm())
+
 				flash("Success! Your event has been added.")
 				return redirect("add")
 			else:

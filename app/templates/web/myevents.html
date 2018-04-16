@@ -32,30 +32,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 	   </div>
 		
 	 	<div class="flex-container-col" id = "rightCol">
- 		<div class = "event-view" id = "event-view">
-	   		<div class="event-view-header" id="event-view-header">
-                <div class="flex-container-col">
-                    <div class="d-flex flex-row align-items-start" id="mainHeaderLine">
-                        <h1 class="event-view-title mr-auto" id="eventTitle"></h1>
-                        <div class="eventFireBtn btn" title="Favorite" id="eventFireBtn"></div>
-                        <p class="eventFireNum" id="eventFireNum">32</p>
-                    </div>
-                    <div class="d-flex flex-row align-items-start">
-         	   		    <h3 class="event-view-subtitle mr-auto" id="eventSubtitle"></h3>
-                        <p class="event-view-host" id="eventHost"></p>
-                    </div>
-                </div>
-            </div>
-	   		<div class="event-view-info">
-	   			<div id="eventPhoto"></div>
-                <div class="d-inline-flex p-2">
-                    <h2 class="eventSection">Description</h2>
-                </div>
-                <div class="d-inline-flex p-2">
-	   			    <p id="eventDescription"></p>
-	   			</div>
-	   		</div>
-		</div>
+ 			{% include "web/eventview.html" %}
 			
 			<!-- TODO: this element is not really necessary, only referenced
 			in displayEvent.js so maybe we should fix at some point, but not a 

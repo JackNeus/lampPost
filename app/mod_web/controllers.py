@@ -3,6 +3,7 @@ from app import CONFIG, app
 
 from flask_login import current_user
 from werkzeug.utils import secure_filename
+import requests
 
 def form_to_event_object(form):
 	eventData = {}
@@ -31,15 +32,24 @@ def form_to_event_object(form):
 def make_edit_request(event_id, edits):
 	headers = { "Authorization" : "Token %s" % current_user.token }
 	return requests.post(CONFIG["BASE_URL"] + "/api/event/edit/"+event_id, json=edits, headers=headers)
-			
+		
+def make_delete_request(event_id):
+	headers = { "Authorization" : "Token %s" % current_user.token }
+	return requests.post(CONFIG["BASE_URL"] + "/api/event/delete/"+event_id, headers=headers)
+		
+
 def upload_file(event_id, file):
 	if not allowed_file_type(file.filename): 
-		raise BadFileTypeExtension("File must be .jpg, .jpeg, .png, or .gif.")
+		raise BadFileTypeException("File must be .jpg, .jpeg, .png, or .gif.")
 	file.filename = secure_filename(event_id+"."+get_file_type(file.filename))
 	print(file.filename)
-	print(upload_file_to_s3(file))
-	return None
+	url = upload_file_to_s3(file)
+	return url
 
 def add_image_to_event(event_id, file):
+	# Upload image to S3.
 	file_url = upload_file(event_id, file)
-	r = make_edit_request(event_id, {'poster': file_url})
+	# Update event with image URL.
+	
+	# TODO: Handle failures better.
+	make_edit_request(event_id, {'poster': file_url})

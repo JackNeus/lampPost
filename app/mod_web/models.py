@@ -31,9 +31,7 @@ def upload_file_to_s3(file, acl="public-read"):
         )
 
     except Exception as e:
-        # This is a catch all exception, edit this part to fit your needs.
-        print("Something Happened: ", e)
-        return e
+        raise e
 
     return "{}{}".format(CONFIG["S3_LOCATION"], file.filename)
 
