@@ -41,15 +41,11 @@ def make_delete_request(event_id):
 def upload_file(event_id, file):
 	if not allowed_file_type(file.filename): 
 		raise BadFileTypeException("File must be .jpg, .jpeg, .png, or .gif.")
-	file.filename = secure_filename(event_id+"."+get_file_type(file.filename))
-	print(file.filename)
+
+	# TODO: Some sort of resolution/file size requirement.
+
+	# Currently all files are suffixed with -0. This is to make it easier for when
+	# we support multiple images.
+	file.filename = secure_filename(event_id+"-0."+get_file_type(file.filename))
 	url = upload_file_to_s3(file)
 	return url
-
-def add_image_to_event(event_id, file):
-	# Upload image to S3.
-	file_url = upload_file(event_id, file)
-	# Update event with image URL.
-	
-	# TODO: Handle failures better.
-	make_edit_request(event_id, {'poster': file_url})

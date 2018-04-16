@@ -68,12 +68,20 @@ function populateEventViewPanel(eventNum) {
 	document.getElementById("eventDescription").innerHTML =
 		event_data[eventNum].description;
 
-	// Add C&H image
-	var photoNum = Math.floor(Math.random() * 81); + 1;
-	document.getElementById("eventPhoto").innerHTML =
-		"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
-		+ photoNum + ".png\">";
-	
+
+	// If the event has a poster, display that.
+	if ("poster" in event_data[eventNum]) {
+		document.getElementById("eventPhoto").innerHTML =
+		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum].poster+"\">";
+	}
+	else {
+		// Add C&H image
+		var photoNum = Math.floor(Math.random() * 81); + 1;
+		document.getElementById("eventPhoto").innerHTML =
+			"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
+			+ photoNum + ".png\">";
+	}
+
 	// Color in fire button if user has favorited an event
 	var eventId = event_data[eventNum]._id;
 	var eventFireBtnElement = document.getElementById("eventFireBtn");

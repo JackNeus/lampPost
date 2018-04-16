@@ -37,6 +37,17 @@ def myevents():
 		else:
 			eventData = controller.form_to_event_object(form)
 
+			try:
+				if "poster" in request.files:
+					# Upload image to S3.
+					file_url = controller.upload_file(request.form['event-id'], request.files["poster"])
+					# Update event with image URL.
+					
+					eventData["poster"] = file_url
+			except Exception as e:
+				flash("Error: " + str(e))
+				return render_template("web/myevents.html", form=EventForm())
+
 			# make API request
 			r = controller.make_edit_request(request.form['event-id'], eventData)
 
@@ -78,7 +89,12 @@ def addEvent():
 				# If event was successfully added, upload poster & update event.
 				try:
 					if "poster" in request.files:
-						controller.add_image_to_event(event_id, request.files["poster"])
+						# Upload image to S3.
+						file_url = controller.upload_file(event_id, request.files["poster"])
+						# Update event with image URL.
+						
+						# TODO: Handle failures better (or at all).
+						controller.make_edit_request(event_id, {'poster': file_url})
 				except Exception as e:
 					# If adding the image fail, delete the event and pretend like
 					# nothing happened.
