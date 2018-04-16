@@ -13,7 +13,7 @@ def login():
 		print("HERE")
 		controller.login(auth_attempt["netid"])
 		# TODO: Redirect to where user came from.
-		response = make_response(redirect("/browser"))
+		response = make_response(redirect("/browse"))
 		# Generate Authorization Token for API use.
 		response.set_cookie('api_token', current_user.token)
 		return response
@@ -27,7 +27,7 @@ def login():
 @mod_user.route('/logout', methods=['GET', 'POST'])
 def logout():
 	controller.logout()
-	response = make_response(redirect("/browser"))
+	response = make_response(redirect("/browse"))
 	# Remove cookie.
 	response.set_cookie('api_token', '', expires=0)
 	return response
