@@ -85,14 +85,27 @@ var updateFireBtn = function () {
 			unfavoriteEvent();
 		}
 		
-		// TODO: update favorite button on event-view if the current event-view is the same as
-		// the search that's been favorited
-		
-
 		// update favorite number information
 		var getFireNum = document.getElementById("resultFireNum" + eventNum).innerText;
 		var newFireNum = parseInt(getFireNum) + change;
 		document.getElementById("resultFireNum" + eventNum).innerText = newFireNum;
+		
+		// update favorite button on event-view if the current event-view is the same as
+		// the search that's been favorited
+		if (selected_event !== null && selected_event._id == eventId) {
+			// update event view fireBtn
+			var eventFireBtn = document.getElementById("eventFireBtn");
+			
+			eventFireBtn.classList.toggle("selected");
+			if (eventFireBtn.classList.contains("selected")) {
+				eventFireBtn.title = "Unfavorite";
+			}
+			else {
+				eventFireBtn.title = "Favorite";
+			}
+			// update favorite number information
+			document.getElementById("eventFireNum").innerText = newFireNum;
+		}
 
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
