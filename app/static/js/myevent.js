@@ -57,32 +57,34 @@ var changeMyEvents = function() {
 		$(".footer").hide();
 
 		// toggle highlighting in search results
-		// when the user clicks the edit button, we'll highlight that event
-		$(".smallSearchResult").removeClass("selected");
-		num = getNum($(this).attr('id'), "deleteBtn");
-		$("#smallSearchResult" + num).addClass("selected");
+		eventNum = getNum($(this).attr('id'), "deleteBtn");
+		highlightSelectedSearchResult(eventNum);
 		
-		var result = confirm("Are you sure you would like to delete this event?");
-		if (result) {
-			// hide the event display
-			$(".event-view").hide();
+		// delete event if user confirms deletion
+		$("#smallSearchResult" + eventNum).show(function () {
+			var result = confirm("Are you sure you would like to delete this event?");
+			if (result) {
+				// hide the event display if current event view is the event to be
+				// deleted
+				if (selected_event._id == event_data[eventNum - 1]._id)
+					$(".event-view").hide();
 			
-			var eventNum = getNum($(this).attr("id"), "deleteBtn");
-			var eventId = event_data[eventNum - 1]._id;
+				var eventId = event_data[eventNum - 1]._id;
 			
-			var callback = function() {
-				loadEvents();
+				var callback = function() {
+					loadEvents();
+				}
+				$.ajax({
+					url: base_url + '/api/event/delete/' + eventId,
+					method: 'delete',
+					dataType: 'json',
+					headers: {
+						'Authorization': ('Token ' + $.cookie('api_token'))
+					},
+					success: callback
+				});
 			}
-			$.ajax({
-				url: base_url + '/api/event/delete/' + eventId,
-				method: 'delete',
-				dataType: 'json',
-				headers: {
-					'Authorization': ('Token ' + $.cookie('api_token'))
-				},
-				success: callback
-			});
-		}
+		});
 	});
 }
 
@@ -95,26 +97,24 @@ var editMyEvents = function() {
 		$(".footer").hide();
 
 		// toggle highlighting in search results
-		// when the user clicks the edit button, we'll highlight that event
-		$(".smallSearchResult").removeClass("selected");
-		num = getNum($(this).attr('id'), "editBtn");
-		$("#smallSearchResult"+num).addClass("selected");
+		eventNum = getNum($(this).attr('id'), "editBtn");
+		highlightSelectedSearchResult(eventNum);
 
 		// hide the event display
 		$(".event-view").hide();
 
 		// fill the form with the correct values
-		$("#event-id").val(event_data[parseInt(num)-1]._id);
-		$("#title").val(event_data[parseInt(num)-1].title);
-		$("#description").val(event_data[parseInt(num)-1].description);
-		$("#host").val(event_data[parseInt(num)-1].host);
-		var numShowings = event_data[parseInt(num)-1].instances.length;
-		$("#numShowings-" + (numShowings - 1).toString()).prop("checked", true);
+		$("#event-id").val(event_data[eventNum - 1]._id);
+		$("#title").val(event_data[eventNum - 1].title);
+		$("#description").val(event_data[eventNum - 1].description);
+		$("#host").val(event_data[eventNum - 1].host);
+		var numShowings = event_data[eventNum - 1].instances.length;
+		$("#numShowings-" + (numShowings - 1)).prop("checked", true);
 
 		// to avoid flickering, if we haven't loaded anything yet, do this special case
 		if (currentRows == 0) {
 			for (var i = 1; i <= numShowings; i++) {
-				$("#form-row-"+i.toString()).show();
+				$("#form-row-" + i).show();
 			}
 			currentRows = numShowings;
 		}
@@ -122,44 +122,44 @@ var editMyEvents = function() {
 		else {
 			// show the correct number of form rows, by sliding down any extra we might need
 			for (var i = currentRows; i <= numShowings; i++) {
-				$("#form-row-"+i.toString()).slideDown();
+				$("#form-row-" + i).slideDown();
 			}
 
 			currentRows = numShowings;
 
 			// slide up any extra form rows
 			for (var i = numShowings + 1; i <= 4; i++) {
-				$("#form-row-"+i.toString()).slideUp();
+				$("#form-row-" + i).slideUp();
 			}
 		}
 
 		// fill in correct values in any relevant form rows
-		for (var i = 1; i <= numShowings; i++) {
-			$("#locations-" + (i-1).toString()).val(event_data[parseInt(num-1)].instances[i-1]["location"]);
-			starts = event_data[parseInt(num-1)].instances[i-1]["start_datetime"].split(" ");
-			ends = event_data[parseInt(num-1)].instances[i-1]["end_datetime"].split(" ");
+		for (var i = 0; i < numShowings; i++) {
+			$("#locations-" + i).val(event_data[eventNum - 1].instances[i]["location"]);
+			starts = event_data[eventNum - 1].instances[i]["start_datetime"].split(" ");
+			ends = event_data[eventNum - 1].instances[i]["end_datetime"].split(" ");
 
 			yearMonDayS = starts[0].split("-")
 			yearMonDayE = ends[0].split("-")
-			$("#startDates-" + (i-1).toString()).val(yearMonDayS[1] + "/" + yearMonDayS[2] + "/" + yearMonDayS[0]);
-			$("#endDates-" + (i-1).toString()).val(yearMonDayE[1] + "/" + yearMonDayE[2] + "/" + yearMonDayE[0]);
+			$("#startDates-" + i).val(yearMonDayS[1] + "/" + yearMonDayS[2] + "/" + yearMonDayS[0]);
+			$("#endDates-" + i).val(yearMonDayE[1] + "/" + yearMonDayE[2] + "/" + yearMonDayE[0]);
 
 			timeS = starts[1];
 			timeE = ends[1];
-			$("#startTimes-" + (i-1).toString()).val(timeS);
-			$("#endTimes-" + (i-1).toString()).val(timeE);
+			$("#startTimes-" + i).val(timeS);
+			$("#endTimes-" + i).val(timeE);
 		}
 
 		// empty the values in all the other form rows
-		for (var i = numShowings + 1; i <= 4; i++) {
-			$("#locations-" + (i-1).toString()).val("");
-			$("#startDates-" + (i-1).toString()).val("");
-			$("#endDates-" + (i-1).toString()).val("");
-			$("#startTimes-" + (i-1).toString()).val("");
-			$("#endTimes-" + (i-1).toString()).val("");
+		for (var i = numShowings; i < 4; i++) {
+			$("#locations-" + i).val("");
+			$("#startDates-" + i).val("");
+			$("#endDates-" + i).val("");
+			$("#startTimes-" + i).val("");
+			$("#endTimes-" + i).val("");
 		}
 		
-		$("#link").val(event_data[parseInt(num)-1].trailer);
+		$("#link").val(event_data[eventNum - 1].trailer);
 
 
 		// display the form
