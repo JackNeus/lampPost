@@ -81,6 +81,7 @@
           <li class="nav-item">
           	<a class="nav-link" id="userProfileLink" href="#">My Profile</a>
           	   <div class="dropdown-content" id="userProfileDropdown">
+          	   	<!-- TODO: only show 'my Events' if user has events -->
 		      <a class="nav-link" href="/myevents">Manage My Events</a>
 		      <a class="nav-link" href="/myfavorites">Favorite Events</a>
 		      {% if current_user.is_authenticated %}

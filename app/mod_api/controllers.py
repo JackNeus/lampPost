@@ -17,6 +17,21 @@ def get_event(id):
 		# More than 1 event returned for the given ID, which is very bad.
 		raise InternalError("More than one event exists for that id.")
 	return event[0]
+	
+# Returns event objects for all event ids in ids
+def get_favorite_events(ids):
+	events = []
+	for id in ids:
+		#with get_event(id) as event: [TODO: This doesn't seem to work Jack]
+		#	events.append(event)
+		event = EventEntry.objects(id=id)
+		if len(event) == 0:
+			return None
+		if len(event) != 1:
+			# More than 1 event returned for the given ID, which is very bad.
+			raise InternalError("More than one event exists for that id.")
+		events.append(event[0])
+	return events
 
 def delete_event(id):
 	event = get_event(id)

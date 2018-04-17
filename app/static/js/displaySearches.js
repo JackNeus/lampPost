@@ -8,7 +8,7 @@ var showSearchResults = function() {
 
 	sortResults(); 		// sort by date or popularity
 	createSearchResults();	// create html code for each search result and display them
-	showUserFavorites(); 	// highlight user favorites
+	highlightUserFavorites(); 	// highlight user favorites
 	// declare event handlers for "fireBtn" and "smallSearchResult"
 	updateFireBtn(); 		// handle clicks of fire button
 	updateEventView(); 	// handle click of event
@@ -21,15 +21,15 @@ var showMyEvents = function() {
 	currentSearches.innerHTML = "";
 
 	sortEventsByDate(); 	// sort events by date
-	createSearchResults(); // create html code for each created event and display them
-	onlyShowUserFavorites(); 	// highlight user favorites
+	createMyEventResults(); // create html code for each created event and display them
+	highlightUserFavorites(); 	// highlight user favorites
 	// declare event handlers for "fireBtn" and "smallSearchResult"
 	updateFireBtn(); 		// handle clicks of fire button
 	updateEventView(); 	// handle click of event
 }
 
-// Show which events a user has favorited
-var showUserFavorites = function () {
+// Color in fire button for events a user has favorited
+var highlightUserFavorites = function () {
 	for (var i = 0; i < event_data.length; i++) {
 		// Event id
 		var eventId = event_data[i]._id;
@@ -39,20 +39,6 @@ var showUserFavorites = function () {
 		if (eventIsFav(eventId)) fireBtnElement.classList.toggle("selected");
 	}
 };
-
-// Show which events a user has favorited
-var onlyShowUserFavorites = function () {
-	for (var i = 0; i < event_data.length; i++) {
-		// Event id
-		var eventId = event_data[i]._id;
-
-		// Color in fire button if user has favorited an event
-		var fireBtnElement = document.getElementById("resultFireBtn" + (i + 1));
-		if (eventIsFav(eventId)) fireBtnElement.classList.toggle("selected");
-		else $("#smallSearchResult" + (i + 1)).hide();
-	}
-};
-
 
 // Update the popularity of an event when the fire button is clicked
 var updateFireBtn = function () {
@@ -98,9 +84,6 @@ var updateFireBtn = function () {
 			unfavoriteEvent();
 		}
 		
-		// TODO: update favorite button on event-view if the current event-view is the same as
-		// the search that's been favorited
-		
 
 		// update favorite number information
 		var getFireNum = document.getElementById("resultFireNum" + eventNum).innerText;
@@ -142,7 +125,7 @@ function getNum(searchId, titleSplit) {
 // Returns true if event is in list of user favorites, false otherwise
 function eventIsFav(eventId) {
 	for (var i = 0; i < user_fav_data.length; i++) {
-		if (eventId == user_fav_data[i]) return true;
+		if (eventId == user_fav_data[i]._id) return true;
 	}
 	return false;
 }
