@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask import Blueprint, request, render_template, flash, redirect
+from flask import Blueprint, request, render_template, flash, redirect, session
 from flask_login import login_required, current_user
 from app import CONFIG
 from app.mod_web.forms import NameForm
@@ -14,9 +14,20 @@ import requests
 # Homepage
 @mod_web.route('/')
 def home():
-	return render_template("web/home.html")
+	# User is not logged in.
+	if not current_user.is_authenticated and "guest_mode" not in session:
+		return redirect("/welcome")
+	return redirect("/browse")
+	
+# Splash page
+@mod_web.route('/welcome')
+def welcome():
+	if "proceed" in request.args:
+		session["guest_mode"] = True
+		return redirect("/browse")
+	return render_template("web/splashpage.html")
 
-@mod_web.route('/browser')
+@mod_web.route('/browse')
 def browser():
 	if "USE_MOCK_DATA" in CONFIG and CONFIG["USE_MOCK_DATA"]:
 		# Ignore USE_MOCK_DATA flag if not in DEBUG mode.

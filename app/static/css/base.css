@@ -32,9 +32,6 @@ html #bigRow, body #bigRow {
   padding-right: 0vw;
   margin-bottom: 2vh; }
 
-.show {
-  display: block; }
-
 .debug-data {
   display: none;
   color: red; }
