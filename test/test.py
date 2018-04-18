@@ -110,6 +110,14 @@ def make_edit_event_request(event_id, data, token=None):
 	assert r.status_code == 200
 	return get_data(r)
 
+def make_add_fav_request(user_id, event_id, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.get(app_url + "/user/fav/add/" + user_id + "/" + event_id, headers=headers)
+	assert r.status_code == 200
+	return get_data(r)
+
 user_ids = {}
 
 def setup():
@@ -382,6 +390,13 @@ def make_fav_test(test_body):
 	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
 	assert is_success(r)
 
+# Try to add a valid favorite.
+def test_add_valid_fav():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+	make_fav_test(test)
+
 # TODO: add search tests
 
 # Execution order of tests.
@@ -411,7 +426,8 @@ test_edit_event_event_dne,
 test_edit_event_bad_id,
 test_edit_event_different_creator,
 test_add_event_in_past,
-test_edit_event_in_past
+test_edit_event_in_past,
+test_add_valid_fav
 ]
 
 if __name__ == '__main__':
