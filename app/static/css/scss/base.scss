@@ -69,8 +69,6 @@ html, body {
 	}
 }
 
-.show {display:block;}
-
 // Debug Style
 .debug-data {
 	display: none;
@@ -316,12 +314,14 @@ html, body {
 
 #leftCol {
 	max-height: 88vh;
+	height: 88vh;
 	flex: 30%;
     float: left;
     border-right: 5px solid $primary-color;
 }
 #rightCol {
 	max-height: 88vh;
+	height: 88vh;
 	flex: 70%;
     float: left;
 }

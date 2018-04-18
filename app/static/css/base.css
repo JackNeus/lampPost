@@ -32,9 +32,6 @@ html #bigRow, body #bigRow {
   padding-right: 0vw;
   margin-bottom: 2vh; }
 
-.show {
-  display: block; }
-
 .debug-data {
   display: none;
   color: red; }
@@ -229,12 +226,14 @@ html #bigRow, body #bigRow {
 
 #leftCol {
   max-height: 88vh;
+  height: 88vh;
   flex: 30%;
   float: left;
   border-right: 5px solid #2d9eee; }
 
 #rightCol {
   max-height: 88vh;
+  height: 88vh;
   flex: 70%;
   float: left; }
 

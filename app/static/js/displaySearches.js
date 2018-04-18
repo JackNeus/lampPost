@@ -45,66 +45,82 @@ var updateFireBtn = function () {
 	$(".resultFireBtn").click( function(e) {
 		// get event id and user id
 		var eventNum = getNum($(this).attr("id"), "resultFireBtn");
-		var fireBtn = document.getElementById($(this).attr("id"));
 		var eventId = event_data[eventNum-1]._id
 		var userId = $("#userData").data("uid");
 
 		// update database after favoriting event
 		var favoriteEvent = function() {
+			var callback = function(data) {
+				if (data["status"] === "Success") {
+					// toggle view of fire button
+					fireBtn.classList.toggle("selected");
+					fireBtn.title = "Unfavorite";
+					updateFireNum(1);
+					updateEventViewFire(1);
+				}
+			};
 			$.ajax({
 				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))
-				}
+				},
+				success: callback
 			});
 		};
 
 		// update database after unfavoriting event
 		var unfavoriteEvent = function() {
+			var callback = function(data) {
+				if (data["status"] === "Success") {
+					// toggle view of fire button
+					fireBtn.classList.toggle("selected");
+					fireBtn.title = "Favorite";
+					updateFireNum(-1);
+					updateEventViewFire(-1);
+				}
+			};
 			$.ajax({
 				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))
-				}
+				},
+				success: callback
 			});
 		};
-		// toggle color/title
-		var fireBtn = document.getElementById($(this).attr("id"));
-		fireBtn.classList.toggle("selected");
-		if (fireBtn.classList.contains("selected")) {
-			fireBtn.title = "Unfavorite";
-			var change = 1;
-			favoriteEvent();
-		}
-		else {
-			fireBtn.title = "Favorite";
-			var change = -1;
-			unfavoriteEvent();
-		}
 		
 		// update favorite number information
-		var getFireNum = document.getElementById("resultFireNum" + eventNum).innerText;
-		var newFireNum = parseInt(getFireNum) + change;
-		document.getElementById("resultFireNum" + eventNum).innerText = newFireNum;
+		var updateFireNum = function(change) {
+			var getFireNum = $("#resultFireNum" + eventNum).text();
+			var newFireNum = parseInt(getFireNum) + change;
+			$("#resultFireNum" + eventNum).text(newFireNum);
+		}
+		
+		// update database with new favorite
+		var fireBtn = document.getElementById($(this).attr("id"));
+		if (fireBtn.classList.contains("selected")) unfavoriteEvent();
+		else favoriteEvent();
 		
 		// update favorite button on event-view if the current event-view is the same as
 		// the search that's been favorited
-		if (selected_event !== null && selected_event._id == eventId) {
-			// update event view fireBtn
-			var eventFireBtn = document.getElementById("eventFireBtn");
-			
-			eventFireBtn.classList.toggle("selected");
-			if (eventFireBtn.classList.contains("selected")) {
-				eventFireBtn.title = "Unfavorite";
+		var updateEventViewFire = function(change) {
+			if (selected_event !== null && selected_event._id == eventId) {
+				// toggle color/highlighting
+				var eventFireBtn = document.getElementById("eventFireBtn");
+				eventFireBtn.classList.toggle("selected");
+				if (eventFireBtn.classList.contains("selected")) {
+					eventFireBtn.title = "Unfavorite";
+				}
+				else {
+					eventFireBtn.title = "Favorite";
+				}
+				// update favorite number information
+				var getFireNum = $("#eventFireNum").text();
+				var newFireNum = parseInt(getFireNum) + change;
+				$("#eventFireNum").text(newFireNum);
 			}
-			else {
-				eventFireBtn.title = "Favorite";
-			}
-			// update favorite number information
-			document.getElementById("eventFireNum").innerText = newFireNum;
-		}
+		};
 
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
