@@ -47,7 +47,7 @@ def myevents():
 			print(form.errors)
 			return render_template("web/myevents.html", form=form, errors=form.errors, display=True)
 		else:
-			eventData = controller.form_to_event_object(form)
+			eventData, numShowings = controller.form_to_event_object(form)
 
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
@@ -58,7 +58,7 @@ def myevents():
 				return redirect("myevents")
 			else:
 				flash("Error. " + r["error_msg"])
-				return render_template("web/myevents.html", form=EventForm(), display=True, numRows=len(showings))
+				return render_template("web/myevents.html", form=EventForm(), display=True, numRows=numShowings)
 	else:
 		return render_template("web/myevents.html", form=EventForm(), display=False, numRows=1)
 
@@ -71,7 +71,7 @@ def addEvent():
 			print(form.errors)
 			return render_template("web/add.html", form=form, errors=form.errors)
 		else:
-			eventData = controller.form_to_event_object(form)
+			eventData, numShowings = controller.form_to_event_object(form)
 			
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
