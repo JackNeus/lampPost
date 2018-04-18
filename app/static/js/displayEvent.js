@@ -105,9 +105,9 @@ var updateEventFireBtn = function (eventNum) {
 			var callback = function(data) {
 				if (data["status"] === "Success") {
 					// toggle view of fire button
-					fireBtn.classList.toggle("selected");
+					eventFireBtn.classList.toggle("selected");
 					resultFireBtn.classList.toggle("selected");
-					fireBtn.title = "Unfavorite";
+					eventFireBtn.title = "Unfavorite";
 					resultFireBtn.title = "Unfavorite";
 					updateFireNum(1);
 				}
@@ -127,9 +127,9 @@ var updateEventFireBtn = function (eventNum) {
 			var callback = function(data) {
 				if (data["status"] === "Success") {
 					// toggle view of fire button
-					fireBtn.classList.toggle("selected");
+					eventFireBtn.classList.toggle("selected");
 					resultFireBtn.classList.toggle("selected");
-					fireBtn.title = "Favorite";
+					eventFireBtn.title = "Favorite";
 					resultFireBtn.title = "Unfavorite";
 					updateFireNum(-1);
 				}
@@ -155,8 +155,8 @@ var updateEventFireBtn = function (eventNum) {
 		// update database with new favorite
 		var eventFireBtn = document.getElementById($(this).attr("id"));
 		var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
-		if (eventFireBtn.classList.contains("selected")) favoriteEvent();
-		else unfavoriteEvent();
+		if (eventFireBtn.classList.contains("selected")) unfavoriteEvent();
+		else favoriteEvent();
 
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
