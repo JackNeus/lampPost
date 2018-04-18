@@ -122,7 +122,7 @@ def setup():
 		user_id = user_id_line[user_id_line.index("ObjectId")+10:-2]
 		return user_id
 	global user_ids
-	for user in ["jneus", "tpollner", "bwk"]:
+	for user in ["jneus", "tpollner", "bwk", "rrliu"]:
 		user_ids[user] = add_user(user)
 valid_events = {}
 
@@ -155,7 +155,13 @@ base_event = {"title": "Party", "host":"LampPost Team", "creator": "bwk",
 				  				 {"start_datetime": "3pm April 2 2100",
 				  				 "end_datetime": "4pm April 2 2100",
 				  				 "location": "Princeton University"}]}
-	
+
+fav_event = {"title": "Favorites", "host": "LampPost Team", "creator": "rrliu",
+"instances": [{"location": "COS Building","start_datetime": "5pm April 20th 2030",
+"end_datetime": "6pm April 20th 2030"}],
+"description": "This event has favorites.",
+"favorites": 10}
+
 def test_add_event_missing_field():
 	# Missing required fields.
 	for field in ["title", "host", "creator", "description", "instances"]:
@@ -360,6 +366,21 @@ def test_edit_event_in_past():
 		assert is_error(r)
 		assert "malformatted" in r["error_msg"]
 	make_edit_test(test)
+
+# Base for favorite tests.
+def make_fav_test(test_body):
+	# Setup
+	new_event = deepcopy(fav_event)
+	creator_netid = new_event["creator"]
+	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
+	assert is_success(r)
+	event_id = r["data"]["id"]
+
+	test_body(new_event, event_id, creator_netid)
+
+	# Cleanup
+	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
+	assert is_success(r)
 
 # TODO: add search tests
 
