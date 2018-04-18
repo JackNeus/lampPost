@@ -25,7 +25,6 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/base.css?v=1">
-    <link rel="stylesheet" type="text/css" href="/static/css/splashpage.css?v=1">
     <link rel="stylesheet" type="text/css" href="/static/css/add.css?v=1">
 
     <!-- Bootstrap JS -->
@@ -65,15 +64,11 @@
       <div class="collapse navbar-collapse" id="navbarToggle">
         <ul class="navbar-nav ml-auto mt-2 mt-md-0">
           <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          <!-- For the future: Home Search Add MyCal About Help Login -->
-          <li class="nav-item">
-            <a class="nav-link" href="/browser"> Search </a>
+            <a class="nav-link" href="/browse">Browse</a>
           </li>
           {% if current_user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="/add">Add Event!</a>
+            <a class="nav-link" href="/add">Add Event</a>
           </li>
           {% endif %}
           </li>
@@ -125,21 +120,6 @@
 	  }
 	}
   </script>
-
-	<!--****************************** SPLASH PAGE ******************************-->
-	{% if not current_user.is_authenticated %}
-	<div class="splashScreen" id="splashScreen">
-		<div class="headerBox">
-			<div class="loginBox">
-                <!-- TODO: Delete when splash page is fixed by Lauren -->
-				<h1 class="lamppostTitle" style="color: white; text-shadow: 2px 2px #000000;">lampPost - search for events</h1>
-				<a class="homeLink btn btn-primary btn-lg" href="/login">Login</a>
-				<p></p>
-				<a class="homeLink btn btn-primary btn-lg" href="#">Continue as Guest</a>
-			</div>
-		</div>
-	</div>
-	{% endif %}
 
 
 	<!-- JINJA VARIABLES -->

@@ -20,8 +20,9 @@ html, body {
       margin-top: 30vh; }
       html .splashScreen .headerBox .loginBox h1, body .splashScreen .headerBox .loginBox h1 {
         font-weight: bold;
-        color: black;
-        margin-bottom: 1em; }
+        margin-bottom: 1em;
+        color: white;
+        text-shadow: 2px 2px #000000; }
       html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
         border: none;
         background-color: #2d9eee;

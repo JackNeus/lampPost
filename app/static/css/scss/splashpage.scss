@@ -32,9 +32,11 @@ html, body {
 			.loginBox {
 				h1 {
 					font-weight: bold;
-					color: black;
 					margin-bottom: 1em;
+					color: white; 
+					text-shadow: 2px 2px #000000;
 				}
+		
 				a {
 					border: none;
 					background-color: $primary-color;
