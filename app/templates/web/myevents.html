@@ -86,16 +86,16 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 						<div class="form-group">
 							{{ form.title.label(class="req") }} 
-							{{ form.title(class="form-control") }}
+							{{ form.title(class="form-control", maxlength="100") }}
 						</div>
 						<div class="form-group">
 							{{ form.description.label(class="req") }} 
-							{{ form.description(class="form-control", rows="4") }}
+							{{ form.description(class="form-control", rows="4", maxlength="3000") }}
 						</div>
 
 						<div class="form-group">
 							{{ form.host.label(class="req") }} 
-							{{ form.host(class="form-control") }}
+							{{ form.host(class="form-control", maxlength="100") }}
 						</div>
 
 						<div class="form-group">
@@ -113,7 +113,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 							<div class="form-row" id="form-row-{{i+1}}"> 
 								<div class="form-group col-md-4">
 		        					{{ form.locations.__getitem__(i).label(class="numbered req") }}
-		        					{{ form.locations.__getitem__(i)(class="form-control") }}
+		        					{{ form.locations.__getitem__(i)(class="form-control", maxlength="100") }}
 		        				</div>
 
 		        				<div class="form-group col-md-2">
@@ -143,7 +143,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 						<div class="form-group">
 							{{ form.link.label }} 
-							{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control") }}
+							{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control", maxlength="100") }}
 						</div>
 
 						<button type="submit" class="btn btn-primary">Submit!</button>
