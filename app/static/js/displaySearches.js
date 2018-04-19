@@ -57,6 +57,7 @@ var updateFireBtn = function () {
 					fireBtn.title = "Unfavorite";
 					updateFireNum(1);
 					updateEventViewFire(1);
+					checkReloadFavoritePage();
 				}
 			};
 			$.ajax({
@@ -78,6 +79,7 @@ var updateFireBtn = function () {
 					fireBtn.title = "Favorite";
 					updateFireNum(-1);
 					updateEventViewFire(-1);
+					checkReloadFavoritePage();
 				}
 			};
 			$.ajax({
@@ -90,6 +92,11 @@ var updateFireBtn = function () {
 			});
 		};
 		
+		// update database with new favorite
+		var fireBtn = document.getElementById($(this).attr("id"));
+		if (fireBtn.classList.contains("selected")) unfavoriteEvent();
+		else favoriteEvent();
+		
 		// update favorite number information
 		var updateFireNum = function(change) {
 			var getFireNum = $("#resultFireNum" + eventNum).text();
@@ -97,10 +104,14 @@ var updateFireBtn = function () {
 			$("#resultFireNum" + eventNum).text(newFireNum);
 		}
 		
-		// update database with new favorite
-		var fireBtn = document.getElementById($(this).attr("id"));
-		if (fireBtn.classList.contains("selected")) unfavoriteEvent();
-		else favoriteEvent();
+		// if on favorite page, reload the page
+		var checkReloadFavoritePage = function() {
+			if (window.location.href.indexOf('myfavorites') != -1) {
+				setupUserFavorites();
+				if (!fireBtn.classList.contains("selected") && selected_event._id == eventId)
+					$(".event-view").hide();
+			}
+		};
 		
 		// update favorite button on event-view if the current event-view is the same as
 		// the search that's been favorited

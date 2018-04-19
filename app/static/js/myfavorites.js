@@ -14,6 +14,7 @@ $(document).ready(function(){
 
 // Get list of events which user has favorited
 var setupUserFavorites = function() {
+	user_fav_data = [];
 	var userId = $("#userData").data("uid");
 	var callback = function(data) {
 		if (data["status"] === "Success") {
