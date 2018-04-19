@@ -1,31 +1,33 @@
 .invisible {
-  display: none;
-}
+  display: none; }
 
 label {
-  font-weight: bold;
-}
+  font-weight: bold; }
 
 .req:after {
   content: " *";
-  color: red;
-}
+  color: red; }
+
+.eventFormView {
+  padding-top: 2vh;
+  padding-right: 2vh;
+  margin-left: 2vh;
+  height: 88vh;
+  overflow-y: scroll; }
 
 #formCol {
-  height: 85vh;
-  overflow: scroll;
-}
+  border-right: 5px solid #2d9eee; }
 
 .submitAddButton:hover {
   border-color: #2d9eee;
   color: white;
-  background-color: #2d9eee;
-}
+  background-color: #2d9eee; }
 
 .submitAddButton {
   border-color: #2d9eee;
   color: #2d9eee;
-  background-color: white;
-}
+  background-color: white; }
 
 /*# sourceMappingURL=addEvent.css.map */
+
+/*# sourceMappingURL=add.css.map */

@@ -12,9 +12,17 @@ label {
 	color:red;
  }
 
-#formCol {
+.eventFormView {
+	padding-top: 2vh;
+	padding-right: 2vh;
+	margin-left: 2vh;
 	height: 88vh;
-    overflow: scroll;
+      overflow-y: scroll;
+      
+}
+
+#formCol {
+	border-right: 5px solid $primary-color;
 }
 
 .submitAddButton:hover  {
