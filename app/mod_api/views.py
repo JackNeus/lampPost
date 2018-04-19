@@ -181,7 +181,12 @@ def delete_event(id):
 @auth.login_required
 def event_search(query, start_datetime):
 	try:
-		events = controller.search_events(query, start_datetime)
+		user = User.get_user_in_token(request)
+	except AuthorizationError:
+		pass
+			
+	try:
+		events = controller.search_events(query, start_datetime, user)
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
