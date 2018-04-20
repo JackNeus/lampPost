@@ -69,9 +69,6 @@ def add_event():
 	except:
 		return gen_error_response("Request was malformatted.")
 
-	print("asdf")
-	print(data)
-	print(get_missing_fields(data))
 	try:
 		# Check that the correct parameters have been given.
 		missing_fields = get_missing_fields(data)
@@ -92,7 +89,7 @@ def add_event():
 
 	# Try to add new event.
 	try:
-		new_event = controller.add_event(json.dumps(data))
+		new_event = controller.add_event(data)
 		# Return id of newly added event.
 		return gen_data_response({"id": str(new_event.id)})
 	except NotUniqueError as e:
@@ -102,6 +99,7 @@ def add_event():
 	except ValidationError as e:
 		return gen_error_response("Request was malformatted.")
 	except Exception as e:
+		raise e
 		return gen_failure_response(str(e))
 
 @mod_api.route("/event/get/<id>", methods=["GET"])
@@ -177,6 +175,8 @@ def delete_event(id):
 		if event is None:
 			return gen_error_response(event_dne_text)
 		return gen_data_response(get_raw_event(event))
+	except ValidationError as e:
+		return gen_error_response("Request was malformatted.")
 	except Exception as e:
 		return gen_failure_response(str(e))
 

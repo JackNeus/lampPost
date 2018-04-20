@@ -1,11 +1,32 @@
+from datetime import datetime, timedelta
+from dateutil.parser import *
+import json
 import re
 from .models import *
 from app import CONFIG, app
 
 InternalError = Exception("InternalError")
 
+# Makes sure that no end_datetimes occur [too far] in the past.
+def check_instance_times(event):
+    # This is a sort of grace period.
+    # Users can create events that occurred in the last day.
+	cutoff_time = datetime.today() - timedelta(days=1)
+
+	# Make sure event being created is not too far in the past.
+	if "instances" in event:
+		for instance in event["instances"]:
+			print(instance)
+			if "end_datetime" not in instance:
+				continue
+			if type(instance["end_datetime"]) is not datetime:
+				end_datetime = parse(instance["end_datetime"])
+			if end_datetime < cutoff_time:
+				raise ValidationError("End time has already passed.")
+
 def add_event(data):
-	new_event = EventEntry.from_json(data)
+	check_instance_times(data)
+	new_event = EventEntry.from_json(json.dumps(data))
 	new_event.save()
 	return new_event
 
@@ -34,6 +55,10 @@ def edit_event(id, data):
 	event = get_event(id)
 	if event is None:
 		return None
+	# Make sure new dates don't occur too far in past.
+	# TODO: Fix this. Ideally we keep track of creation time and limit based on that.
+	# Maybe. I don't really know.
+	check_instance_times(data)
 	for field in data:
 		# Don't allow user to modify system fields. 
 		if field in system_fields:

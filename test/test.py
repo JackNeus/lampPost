@@ -136,7 +136,7 @@ def test_add_valid_events():
 
 def test_get_valid_events():
 	for event_id in valid_events:
-		r = make_get_event_request(event_id)
+		r = make_get_event_request(event_id, generate_auth_token("bwk"))
 		assert is_success(r)
 		assert compare_events(valid_events[event_id], r["data"])
 
@@ -162,8 +162,9 @@ def test_add_event_missing_field():
 		# Remove field.
 		no_value = deepcopy(base_event)
 		del no_value[field]
-		r = make_add_event_request(no_value)
+		r = make_add_event_request(no_value, generate_auth_token(base_event["creator"]))
 		assert is_error(r)
+		assert "missing" in r["error_msg"]
 
 def test_add_event_bad_type():		
 	# String fields type check.
@@ -171,8 +172,12 @@ def test_add_event_bad_type():
 		# Incorrectly-typed value.
 		bad_value = deepcopy(base_event)
 		bad_value[field] = 123
-		r = make_add_event_request(bad_value)
+		r = make_add_event_request(bad_value, generate_auth_token(base_event["creator"]))
 		assert is_error(r)
+		if field == "creator":
+			assert "different" in r["error_msg"]
+		else:
+			assert "malformatted" in r["error_msg"]
 
 def test_add_event_bad_field_length():		
 	# String fields length check.
@@ -180,8 +185,9 @@ def test_add_event_bad_field_length():
 		# Insufficiently long value.
 		short_value = deepcopy(base_event)
 		short_value[field] = "A"*(length-1)
-		r = make_add_event_request(short_value)
+		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
 	
 
 def test_add_event_bad_instance_data():
@@ -191,21 +197,24 @@ def test_add_event_bad_instance_data():
 	time_swap = deepcopy(base_event)
 	time_swap["instances"][0]["start_datetime"] = base_event["instances"][0]["end_datetime"]
 	time_swap["instances"][0]["end_datetime"] = base_event["instances"][0]["start_datetime"]
-	r = make_add_event_request(time_swap)
+	r = make_add_event_request(time_swap, generate_auth_token(time_swap["creator"]))
 	assert is_error(r)
+	assert "malformatted" in r["error_msg"]
 	
 	# Missing required fields.
 	for field in ["location", "start_datetime", "end_datetime"]:
 		no_value = deepcopy(base_event)
 		del no_value["instances"][0][field]
-		r = make_add_event_request(no_value)
+		r = make_add_event_request(no_value, generate_auth_token(no_value["creator"]))
 		assert is_error(r)
+		assert "missing" in r["error_msg"]
 
 	# Insufficiently long value.
 	short_value = deepcopy(base_event)
 	short_value["instances"][0]["location"] = "AB"
-	r = make_add_event_request(short_value)
+	r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 	assert is_error(r)
+	assert "malformatted" in r["error_msg"]
 
 def test_add_event_extra_field():
 	# This test is currently disabled because the EventEntry type has
@@ -235,28 +244,36 @@ def test_add_event_in_past():
 
 # Try to get event that does not exist.
 def test_get_event_event_dne():
-	r = make_get_event_request("5ac579ff1b41577c54130835")
+	r = make_get_event_request("5ac579ff1b41577c54130835", generate_auth_token("bwk"))
 	assert is_error(r)
+	assert "exist" in r["error_msg"]
 
 # Try to get event with invalid id.
 def test_get_event_bad_id():
-	r = make_get_event_request("bad_id_format")
+	r = make_get_event_request("bad_id_format", generate_auth_token("bwk"))
 	assert is_error(r)
+	assert "malformatted" in r["error_msg"]
 
 # Try to delete event that does not exist.
 def test_delete_event_event_dne():
-	r = make_delete_event_request("5ac579ff1b41577c54130835")
+	r = make_delete_event_request("5ac579ff1b41577c54130835", generate_auth_token("bwk"))
 	assert is_error(r)
+	assert "exist" in r["error_msg"]
 
 # Try to delete event with invalid id.
 def test_delete_event_bad_id():
-	r = make_delete_event_request("bad_id_format")
+	r = make_delete_event_request("bad_id_format", generate_auth_token("bwk"))
 	assert is_error(r)
+	assert "malformatted" in r["error_msg"]
 
 # Base for edit tests.
-def make_edit_test(test_body):
+# If event_to_add is not None, that event will be used.
+def make_edit_test(test_body, event_to_add = None):
 	# Setup
-	new_event = deepcopy(base_event)
+	if event_to_add is not None:
+		new_event = deepcopy(event_to_add)
+	else:
+		new_event = deepcopy(base_event)
 	creator_netid = new_event["creator"]
 	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
 	assert is_success(r)
@@ -329,13 +346,13 @@ def test_edit_event_bad_field_length():
 
 # Try to edit event that does not exist.
 def test_edit_event_event_dne():
-	r = make_edit_event_request("5ac579ff1b41577c54130835", {})
+	r = make_edit_event_request("5ac579ff1b41577c54130835", {}, generate_auth_token("bwk"))
 	assert is_error(r)
 	assert "exist" in r["error_msg"]
 
 # Try to delete event with invalid id.
 def test_edit_event_bad_id():
-	r = make_edit_event_request("bad_id_format", {})
+	r = make_edit_event_request("bad_id_format", {}, generate_auth_token("bwk"))
 	assert is_error(r)
 	assert "malformatted" in r["error_msg"]
 
@@ -346,9 +363,9 @@ def test_edit_event_different_creator():
 		assert is_error(r)
 	make_edit_test(test)
 
-def test_edit_event_in_past():
+def test_edit_event_in_past_bad_times():
 	# Tests an event edit where the edit includes an instance with endtimes 
-	# that have already happened.
+	# that have already happened. This should not be allowed.
 	def test(new_event, event_id, creator_netid):
 		days_ago = 7
 		start_datetime = str(datetime.today() - timedelta(days=days_ago))
@@ -361,6 +378,15 @@ def test_edit_event_in_past():
 		assert "malformatted" in r["error_msg"]
 	make_edit_test(test)
 
+def test_edit_event_in_past_other_fields():
+	# Tests an event edit where the edit does not change times at all.
+	# This is allowed.
+	def test(new_event, event_id, creator_netid):
+		edits = {"description": "This event is t-t-t-totally tubular!"}
+		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
+		assert is_success(r)
+	make_edit_test(test)
+
 # TODO: add search tests
 
 # Execution order of tests.
@@ -368,6 +394,7 @@ def test_edit_event_in_past():
 # Please do not modify the order of the tests.
 # If adding a new test, add to the beginning or end of the list.
 # Yes, I know this is a little janky.
+
 tests = [
 test_get_event_event_dne,  # This test should run first to ensure no event with ID exists.
 test_add_valid_events,  # Related
@@ -390,8 +417,8 @@ test_edit_event_event_dne,
 test_edit_event_bad_id,
 test_edit_event_different_creator,
 test_add_event_in_past,
-test_edit_event_in_past
-]
+test_edit_event_in_past_bad_times,
+test_edit_event_in_past_other_fields]
 
 if __name__ == '__main__':
 	setup()
