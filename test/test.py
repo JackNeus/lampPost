@@ -110,6 +110,38 @@ def make_edit_event_request(event_id, data, token=None):
 	assert r.status_code == 200
 	return get_data(r)
 
+def make_add_fav_request(user_id, event_id, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.get(app_url + "/user/fav/add/" + user_id + "/" + event_id, headers=headers)
+	assert r.status_code == 200
+	return get_data(r)
+
+def make_del_fav_request(user_id, event_id, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.get(app_url + "/user/fav/remove/" + user_id + "/" + event_id, headers=headers)
+	assert r.status_code == 200
+	return get_data(r)
+
+def make_get_fav_request(user_id, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.get(app_url + "/user/fav/get/" + user_id, headers=headers)
+	assert r.status_code == 200
+	return get_data(r)
+
+def make_get_created_events_request(user_id, token=None):
+	headers = None
+	if token is not None:
+		headers = {"Authorization": "Token %s" % token}
+	r = requests.get(app_url + "/user/get_events/" + user_id, headers=headers)
+	assert r.status_code == 200
+	return get_data(r)
+
 user_ids = {}
 
 def setup():
@@ -122,7 +154,7 @@ def setup():
 		user_id = user_id_line[user_id_line.index("ObjectId")+10:-2]
 		return user_id
 	global user_ids
-	for user in ["jneus", "tpollner", "bwk"]:
+	for user in ["jneus", "tpollner", "bwk", "rrliu"]:
 		user_ids[user] = add_user(user)
 valid_events = {}
 
@@ -155,7 +187,13 @@ base_event = {"title": "Party", "host":"LampPost Team", "creator": "bwk",
 				  				 {"start_datetime": "3pm April 2 2100",
 				  				 "end_datetime": "4pm April 2 2100",
 				  				 "location": "Princeton University"}]}
-	
+
+fav_event = {"title": "Favorites", "host": "LampPost Team", "creator": "rrliu",
+"instances": [{"location": "COS Building","start_datetime": "5pm April 20th 2030",
+"end_datetime": "6pm April 20th 2030"}],
+"description": "This event has favorites.",
+"favorites": 10}
+
 def test_add_event_missing_field():
 	# Missing required fields.
 	for field in ["title", "host", "creator", "description", "instances"]:
@@ -386,6 +424,98 @@ def test_edit_event_in_past_other_fields():
 		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
 		assert is_success(r)
 	make_edit_test(test)
+  
+# Base for favorite tests.
+def make_fav_test(test_body):
+	# Setup
+	new_event = deepcopy(fav_event)
+	creator_netid = new_event["creator"]
+	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
+	assert is_success(r)
+	event_id = r["data"]["id"]
+
+	test_body(new_event, event_id, creator_netid)
+
+	# Cleanup
+	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
+	assert is_success(r)
+
+# Try to add a valid favorite.
+def test_add_valid_fav():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+	make_fav_test(test)
+
+# Try to add a favorite to a different user.
+def test_add_fav_wrong_user():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids["bwk"], event_id, generate_auth_token(creator_netid))
+		assert is_error(r)
+	make_fav_test(test)
+
+# Try to favorite an event twice. Event should stay favorited.
+def test_add_double_favorite():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+	make_fav_test(test)
+
+# Try to add a favorite to an invalid event id.
+def test_add_fav_bad_event():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], "5ac579ff1b41577c54130835", generate_auth_token(creator_netid))
+		assert is_error(r)
+	make_fav_test(test)
+
+# Try to delete a valid favorite.
+def test_del_valid_fav():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+		r = make_del_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+	make_fav_test(test)
+
+# Try to delete a favorite without authorization.
+def test_del_fav_no_auth():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+		r = make_del_fav_request(user_ids[creator_netid], event_id)
+		assert is_error(r)
+	make_fav_test(test)
+
+# Try to delete a favorite that doesn't exist.
+def test_del_fav_no_fav():
+	def test(new_event, event_id, creator_netid):
+		r = make_del_fav_request(user_ids[creator_netid], event_id)
+		assert is_error(r)
+	make_fav_test(test)
+
+# Try to get a valid user's favorites.
+def test_get_valid_fav():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+		r = make_get_fav_request(user_ids[creator_netid], generate_auth_token(creator_netid))
+		assert is_success(r)
+	make_fav_test(test)
+
+# Try to get a different user's favorites.
+def test_get_fav_wrong_user():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+		r = make_get_fav_request(user_ids["bwk"], generate_auth_token(creator_netid))
+		assert is_error(r)
+	make_fav_test(test)
+
+def test_get_created_events_wrong_token():
+	r = make_get_created_events_request(user_ids["bwk"], generate_auth_token("jneus"))
+	assert is_error(r)
 
 # TODO: add search tests
 
@@ -418,7 +548,19 @@ test_edit_event_bad_id,
 test_edit_event_different_creator,
 test_add_event_in_past,
 test_edit_event_in_past_bad_times,
-test_edit_event_in_past_other_fields]
+test_edit_event_in_past_other_fields,
+test_edit_event_in_past,
+test_add_valid_fav,
+test_add_fav_wrong_user,
+test_add_double_favorite,
+test_add_fav_bad_event,
+test_del_valid_fav,
+test_del_fav_no_auth,
+test_del_fav_no_fav,
+test_get_valid_fav,
+test_get_fav_wrong_user,
+test_get_created_events_wrong_token
+]
 
 if __name__ == '__main__':
 	setup()

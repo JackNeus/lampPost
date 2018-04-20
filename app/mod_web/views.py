@@ -90,4 +90,8 @@ def addEvent():
 				return render_template("web/add.html", form=EventForm())
 	else:
 		return render_template("web/add.html", form=EventForm())
+		
+@mod_web.route('/myfavorites')
+def myfavorites():
+	return render_template("web/myfavorites.html")
 
