@@ -105,6 +105,7 @@ var updateEventFireBtn = function (eventNum) {
 			var callback = function(data) {
 				if (data["status"] === "Success") {
 					// toggle view of fire button
+					checkReloadFavoritePage();
 					eventFireBtn.classList.toggle("selected");
 					resultFireBtn.classList.toggle("selected");
 					eventFireBtn.title = "Unfavorite";
@@ -127,11 +128,13 @@ var updateEventFireBtn = function (eventNum) {
 			var callback = function(data) {
 				if (data["status"] === "Success") {
 					// toggle view of fire button
-					eventFireBtn.classList.toggle("selected");
-					resultFireBtn.classList.toggle("selected");
-					eventFireBtn.title = "Favorite";
-					resultFireBtn.title = "Unfavorite";
-					updateFireNum(-1);
+					if (!checkReloadFavoritePage()) {
+						eventFireBtn.classList.toggle("selected");
+						resultFireBtn.classList.toggle("selected");
+						eventFireBtn.title = "Favorite";
+						resultFireBtn.title = "Unfavorite";
+						updateFireNum(-1);
+					}
 				}
 			};
 			$.ajax({
@@ -150,7 +153,18 @@ var updateEventFireBtn = function (eventNum) {
 			var newFireNum = parseInt(getFireNum) + change;
 			$("#eventFireNum").text(newFireNum);
 			$("#resultFireNum" + (eventNum + 1)).text(newFireNum);
-		}
+		};
+		
+		// remove smallSearchResult and corresponding eventView from page if 
+		// on 'my favorites' page
+		var checkReloadFavoritePage = function() {
+			if (window.location.href.indexOf('myfavorites') != -1) {
+				$(".event-view").hide();
+				$("#smallSearchResult" + (eventNum+1)).hide();
+				return 1;
+			}
+			return 0;
+		};
 		
 		// update database with new favorite
 		var eventFireBtn = document.getElementById($(this).attr("id"));

@@ -20,7 +20,7 @@ var showMyEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortEventsByDate(); 	// sort events by date
+	sortResults(); 	// sort events by date
 	createMyEventResults(); // create html code for each created event and display them
 	highlightUserFavorites(); 	// highlight user favorites
 	// declare event handlers for "fireBtn" and "smallSearchResult"
@@ -108,7 +108,7 @@ var updateFireBtn = function () {
 		var checkReloadFavoritePage = function() {
 			if (window.location.href.indexOf('myfavorites') != -1) {
 				$("#smallSearchResult" + eventNum).hide();
-				if (!fireBtn.classList.contains("selected") && selected_event._id == eventId)
+				if (selected_event !== null && !fireBtn.classList.contains("selected") && selected_event._id == eventId)
 					$(".event-view").hide();
 			}
 		};

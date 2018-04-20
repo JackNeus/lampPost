@@ -10,11 +10,21 @@ function setBaseUrl(url) {
 }
 
 $(document).ready(function(){
+	checkSort();
 	loadEvents();
 	// hide the form that users would edit events with
 	$("#event-form").hide();
 	checkDisplay();
 });
+
+
+// reload events if user selects a sort option
+var checkSort = function() {
+	// allow user to sort by date or popularity
+	$("#searchSort").change(function() {
+		loadEvents();
+	});
+};
 
 function checkDisplay() {
 	var i = $("#displayEventForm").length
@@ -63,7 +73,7 @@ var changeMyEvents = function() {
 			if (result) {
 				// hide the event display if current event view is the event to be
 				// deleted
-				if (selected_event._id == event_data[eventNum - 1]._id)
+				if (selected_event !== null && selected_event._id == event_data[eventNum - 1]._id)
 					$(".event-view").hide();
 			
 				var eventId = event_data[eventNum - 1]._id;
