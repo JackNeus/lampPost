@@ -22,6 +22,8 @@ $(document).ready(function(){
 	// slide up all the rows of locations/times
 	// $("[id ^= 'form-row']").slideUp();
 	checkDisplay();
+	// change the time inputs to be handled by timepicker
+	$("input[id*='Time']").timepicker({});
 });
 
 function checkDisplay() {
@@ -61,6 +63,16 @@ var changeMyEvents = function() {
 		// hide the footer
 		$(".footer").hide();
 
+		// make all icons not "selected"
+		$(".deleteBtn").removeClass("selectedIcon");
+		$(".fa-trash-alt").removeClass("fa-inverse");
+		$(".editBtn").removeClass("selectedIcon");
+		$(".fa-pencil-alt").removeClass("fa-inverse");
+
+		// make the icon "selected"
+		$(this).addClass("selectedIcon");
+		$(this).find(".fa-trash-alt").addClass("fa-inverse");
+
 		// toggle highlighting in search results
 		eventNum = getNum($(this).attr('id'), "deleteBtn");
 		highlightSelectedSearchResult(eventNum);
@@ -88,6 +100,12 @@ var changeMyEvents = function() {
 					},
 					success: callback
 				});
+			} else {
+				// make all icons not "selected"
+				$(".deleteBtn").removeClass("selectedIcon");
+				$(".fa-trash-alt").removeClass("fa-inverse");
+				$(".editBtn").removeClass("selectedIcon");
+				$(".fa-pencil-alt").removeClass("fa-inverse");
 			}
 		});
 	});
@@ -100,6 +118,16 @@ var editMyEvents = function() {
 
 		// hide the footer
 		$(".footer").hide();
+
+		// make all icons not "selected"
+		$(".editBtn").removeClass("selectedIcon");
+		$(".fa-pencil-alt").removeClass("fa-inverse");
+		$(".deleteBtn").removeClass("selectedIcon");
+		$(".fa-trash-alt").removeClass("fa-inverse");
+
+		// make the icon "selected"
+		$(this).addClass("selectedIcon");
+		$(this).find(".fa-pencil-alt").addClass("fa-inverse");
 
 		// toggle highlighting in search results
 		eventNum = getNum($(this).attr('id'), "editBtn");

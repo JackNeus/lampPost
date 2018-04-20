@@ -49,9 +49,15 @@
     <script src="static/js/jquery.cookie.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+
     <link rel="stylesheet" href="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.css">
     {% block header %}{% endblock %}
   </head>
+
+
 
   <body>
     <!-- Navbar -->
@@ -116,16 +122,16 @@
 	{% if messages %}
 	  {% if messages[0][0:3] == "Suc" %}
 	  <div class="footer successFlash">
-	    <p id="flashedMessage"> {{ messages[0] }} </p>
+	    <p class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </p>
 	    <script type="text/javascript">
-		slideFooter();
+		    slideFooter();
 	    </script>
 	  </div>
 	  {% else %}
 	  <div class="footer errorFlash">
-	    <p id="flashedMessage"> {{ messages[0] }} </p>
+	    <p class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </p>
 	    <script type="text/javascript">
-		slideFooter();
+		    slideFooter();
 	    </script>
 	  </div>
 	  {% endif %}

@@ -10,6 +10,12 @@ var updateEventView = function() {
 
 			//hide the footer if it exists
 			$(".footer").hide();
+
+			// make all icons not "selected"
+			$(".editBtn").removeClass("selectedIcon");
+			$(".fa-pencil-alt").removeClass("fa-inverse");
+			$(".deleteBtn").removeClass("selectedIcon");
+			$(".fa-trash-alt").removeClass("fa-inverse");
 			
 			var eventNum = getNum($(this).attr("id"), "smallSearchResult");
 			highlightSelectedSearchResult(eventNum);
