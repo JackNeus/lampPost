@@ -328,27 +328,6 @@ def test_edit_event_extra_field():
 		r = make_edit_event_request(event_id, extra_field, generate_auth_token(creator_netid))
 	make_edit_test(test)
 
-def test_edit_event_bad_type():	
-	def test(new_event, event_id, creator_netid):
-		# String fields type check.
-		for field in ["title", "host", "description"]:
-			# Incorrectly-typed value.
-			r = make_edit_event_request(event_id, {field: 123}, generate_auth_token(creator_netid))
-			assert is_error(r)
-			assert "malformatted" in r["error_msg"]
-	make_edit_test(test)
-
-def test_edit_event_bad_field_length():	
-	def test(new_event, event_id, creator_netid):
-		# String fields length check.
-		for field, length in [("title", 5), ("host",3), ("description", 10)]:
-			# Insufficiently long value.
-			short_value = "A"*(length-1)
-			r = make_edit_event_request(event_id, {field: short_value}, generate_auth_token(creator_netid))
-			assert is_error(r)
-			assert "malformatted" in r["error_msg"]
-	make_edit_test(test)
-
 # Try to edit event that does not exist.
 def test_edit_event_event_dne():
 	r = make_edit_event_request("5ac579ff1b41577c54130835", {})
@@ -407,8 +386,6 @@ test_delete_event_bad_id,
 test_edit_event_valid,
 test_edit_event_system_fields,
 test_edit_event_extra_field,
-test_edit_event_bad_type,
-test_edit_event_bad_field_length,
 test_edit_event_event_dne,
 test_edit_event_bad_id,
 test_edit_event_different_creator,
