@@ -428,6 +428,15 @@ def test_add_fav_wrong_user():
 		assert is_error(r)
 	make_fav_test(test)
 
+# Try to favorite an event twice. Event should stay favorited.
+def test_add_double_favorite():
+	def test(new_event, event_id, creator_netid):
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+	make_fav_test(test)
+
 # Try to add a favorite to an invalid event id.
 def test_add_fav_bad_event():
 	def test(new_event, event_id, creator_netid):
@@ -478,7 +487,7 @@ def test_get_fav_wrong_user():
 		assert is_error(r)
 	make_fav_test(test)
 
-def test_get_created_events_no_token():
+def test_get_created_events_wrong_token():
 	r = make_get_created_events_request(user_ids["bwk"], generate_auth_token("jneus"))
 	assert is_error(r)
 
@@ -514,13 +523,14 @@ test_add_event_in_past,
 test_edit_event_in_past,
 test_add_valid_fav,
 test_add_fav_wrong_user,
+test_add_double_favorite,
 test_add_fav_bad_event,
 test_del_valid_fav,
 test_del_fav_no_auth,
 test_del_fav_no_fav,
 test_get_valid_fav,
 test_get_fav_wrong_user,
-test_get_created_events_no_token
+test_get_created_events_wrong_token
 ]
 
 if __name__ == '__main__':
