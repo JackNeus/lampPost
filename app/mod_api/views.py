@@ -277,8 +277,14 @@ def get_favorites(userid):
 				return gen_error_response("Attempted to get a different user's favorites.")
 		except AuthorizationError:
 			return gen_error_response("Invalid authorization.")
-		
-		return gen_data_response(user.favorites)
+			
+		try:
+			events = controller.get_favorite_events(user.favorites)
+			events = [get_raw_event(event) for event in events]
+			return gen_data_response(events)
+		except Exception as e:
+			return gen_failure_response(str(e))
+
 	except Exception as e:
-		raise e
-		return gen_failure_response(str(e))
+			raise e
+			return gen_failure_response(str(e))

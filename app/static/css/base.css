@@ -20,6 +20,13 @@ html .navbar-expand-md, body .navbar-expand-md {
 html .nav-link, body .nav-link {
   font: 100% "Avenir-Medium";
   font-size: 24px; }
+html .dropdown-content, body .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #2d9eee;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 6; }
 html #bigRow, body #bigRow {
   padding-left: 0vw;
   padding-right: 0vw;
@@ -135,7 +142,7 @@ html #bigRow, body #bigRow {
     background-color: #eeeeee;
     box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
     position: relative;
-    z-index: 500; }
+    z-index: 5; }
   .event-view .event-view-title {
     color: #333333;
     margin: 0;
@@ -219,12 +226,14 @@ html #bigRow, body #bigRow {
 
 #leftCol {
   max-height: 88vh;
+  height: 88vh;
   flex: 30%;
   float: left;
   border-right: 5px solid #2d9eee; }
 
 #rightCol {
   max-height: 88vh;
+  height: 88vh;
   flex: 70%;
   float: left; }
 
