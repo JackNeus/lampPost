@@ -69,9 +69,6 @@ def add_event():
 	except:
 		return gen_error_response("Request was malformatted.")
 
-	print("asdf")
-	print(data)
-	print(get_missing_fields(data))
 	try:
 		# Check that the correct parameters have been given.
 		missing_fields = get_missing_fields(data)
