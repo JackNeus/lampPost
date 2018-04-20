@@ -212,7 +212,8 @@ html #bigRow, body #bigRow {
   height: 6.4vh; }
 
 .successFlash {
-  background-color: #00b300; }
+  background-color: #00b300; 
+}
 
 .errorFlash {
   background-color: red; }
