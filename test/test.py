@@ -174,15 +174,37 @@ def test_add_event_bad_type():
 		r = make_add_event_request(bad_value)
 		assert is_error(r)
 
-def test_add_event_bad_field_length():		
+def test_add_event_bad_field_length_short():		
 	# String fields length check.
 	for field, length in [("title", 5), ("host",3), ("description", 10)]:
 		# Insufficiently long value.
 		short_value = deepcopy(base_event)
 		short_value[field] = "A"*(length-1)
 		r = make_add_event_request(short_value)
+		assert is_error(r)	
+
+	# Instance subfields
+	for field, length in [("location", 3)]:
+		# Insufficiently long value.
+		short_value = deepcopy(base_event)
+		short_value["instances"][0][field] = "A"*(length-1)
+		r = make_add_event_request(short_value)
 		assert is_error(r)
 	
+def test_add_event_bad_field_length_long():		
+	# String fields length check.
+	for field, length in [("title", 100), ("host",100), ("trailer", 100), ("description", 10000)]:
+		long_value = deepcopy(base_event)
+		long_value[field] = "A"*(length+1)
+		r = make_add_event_request(long_value)
+		assert is_error(r)
+	
+	# Instance subfields
+	for field, length in [("location", 100)]:
+		long_value = deepcopy(base_event)
+		long_value["instances"][0][field] = "A"*(length+1)
+		r = make_add_event_request(long_value)
+		assert is_error(r)
 
 def test_add_event_bad_instance_data():
 	# Instances tests.
@@ -375,7 +397,8 @@ test_get_valid_events,	# Related
 test_delete_valid_events,	# Related
 test_add_event_missing_field,
 test_add_event_bad_type,
-test_add_event_bad_field_length,
+test_add_event_bad_field_length_short,
+test_add_event_bad_field_length_long,
 test_add_event_bad_instance_data,
 test_add_event_extra_field,
 test_get_event_bad_id,

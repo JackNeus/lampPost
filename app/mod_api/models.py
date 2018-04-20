@@ -9,7 +9,7 @@ class UserEntry(Document):
     meta = { "strict": False}
 
 class InstanceEntry(EmbeddedDocument):
-    location = StringField(required = True, min_length = 3)
+    location = StringField(required = True, min_length = 3, max_length = 100)
     start_datetime = DateTimeField(required = True)
     end_datetime = DateTimeField(required = True)
 
@@ -33,11 +33,11 @@ class InstanceEntry(EmbeddedDocument):
             raise ValidationError("End time is earlier than start time.")
 
 class EventEntry(Document):
-    title = StringField(required = True, unique = True, min_length = 5)
-    host = StringField(required = True, min_length = 3)
+    title = StringField(required = True, unique = True, min_length = 5, max_length = 100)
+    host = StringField(required = True, min_length = 3, max_length = 100)
     instances = EmbeddedDocumentListField(InstanceEntry, required = True, min_length = 1)
         
-    description = StringField(required = True, min_length = 10)
+    description = StringField(required = True, min_length = 10, max_length = 10000)
     visibility = IntField(required = True, default = 0) 
     favorites = IntField(required = True, default = 0)
 
@@ -45,7 +45,7 @@ class EventEntry(Document):
     creator = StringField(required = True)
 
     # Optional fields.
-    trailer = URLField()
+    trailer = URLField(max_length = 100)
 
     meta = {'strict': False}
         
