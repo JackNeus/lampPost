@@ -16,7 +16,6 @@ def check_instance_times(event):
 	# Make sure event being created is not too far in the past.
 	if "instances" in event:
 		for instance in event["instances"]:
-			print(instance)
 			if "end_datetime" not in instance:
 				continue
 			if type(instance["end_datetime"]) is not datetime:
