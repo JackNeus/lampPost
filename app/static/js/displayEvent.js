@@ -86,7 +86,8 @@ function populateEventViewPanel(eventNum) {
 	// Color in fire button if user has favorited an event
 	var eventId = event_data[eventNum]._id;
 	var eventFireBtnElement = document.getElementById("eventFireBtn");
-	if (eventIsFav(eventId)) {
+	var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
+	if (resultFireBtn.classList.contains("selected")) {
 		eventFireBtnElement.classList.toggle("selected");
 	}
 	
