@@ -107,7 +107,7 @@ var updateFireBtn = function () {
 		// if on favorite page, reload the page
 		var checkReloadFavoritePage = function() {
 			if (window.location.href.indexOf('myfavorites') != -1) {
-				setupUserFavorites();
+				$("#smallSearchResult" + eventNum).hide();
 				if (!fireBtn.classList.contains("selected") && selected_event._id == eventId)
 					$(".event-view").hide();
 			}
