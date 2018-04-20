@@ -180,31 +180,35 @@ def test_add_event_bad_field_length_short():
 		# Insufficiently long value.
 		short_value = deepcopy(base_event)
 		short_value[field] = "A"*(length-1)
-		r = make_add_event_request(short_value)
+		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 		assert is_error(r)	
+		assert "malformatted" in r["error_msg"]
 
 	# Instance subfields
 	for field, length in [("location", 3)]:
 		# Insufficiently long value.
 		short_value = deepcopy(base_event)
 		short_value["instances"][0][field] = "A"*(length-1)
-		r = make_add_event_request(short_value)
+		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
 	
 def test_add_event_bad_field_length_long():		
 	# String fields length check.
 	for field, length in [("title", 100), ("host",100), ("trailer", 100), ("description", 10000)]:
 		long_value = deepcopy(base_event)
 		long_value[field] = "A"*(length+1)
-		r = make_add_event_request(long_value)
+		r = make_add_event_request(long_value, generate_auth_token(long_value["creator"]))
 		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
 	
 	# Instance subfields
 	for field, length in [("location", 100)]:
 		long_value = deepcopy(base_event)
 		long_value["instances"][0][field] = "A"*(length+1)
-		r = make_add_event_request(long_value)
+		r = make_add_event_request(long_value, generate_auth_token(long_value["creator"]))
 		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
 
 def test_add_event_bad_instance_data():
 	# Instances tests.
