@@ -127,6 +127,7 @@ def edit_event(id):
 	# Make sure creator matches authorized user.
 	try:
 		event = controller.get_event(id)
+
 		if event is None:
 			return gen_error_response(event_dne_text)
 		user = User.get_user_in_token(request)

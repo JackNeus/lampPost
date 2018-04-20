@@ -24,4 +24,4 @@ def form_to_event_object(form):
 
 	if (form.link.data != ""):
 		eventData['trailer'] = form.link.data
-	return eventData
+	return eventData, len(showings)
