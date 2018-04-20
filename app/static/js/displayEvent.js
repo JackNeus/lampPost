@@ -50,7 +50,7 @@ function populateEventViewPanel(eventNum) {
 	}).append(fireIcon);
 
 	// Number of favorites an event has
-	var getFire = event_data[eventNum].favorites;
+	var getFire = $("#resultFireNum" + (eventNum + 1)).text();
 	var fireNum = $('<p />').attr({
 		class: "eventFireNum",
 		id: "eventFireNum"
@@ -105,12 +105,13 @@ var updateEventFireBtn = function (eventNum) {
 			var callback = function(data) {
 				if (data["status"] === "Success") {
 					// toggle view of fire button
-					checkReloadFavoritePage();
-					eventFireBtn.classList.toggle("selected");
-					resultFireBtn.classList.toggle("selected");
-					eventFireBtn.title = "Unfavorite";
-					resultFireBtn.title = "Unfavorite";
-					updateFireNum(1);
+					if (!checkReloadFavoritePage()) {
+						eventFireBtn.classList.toggle("selected");
+						resultFireBtn.classList.toggle("selected");
+						eventFireBtn.title = "Unfavorite";
+						resultFireBtn.title = "Unfavorite";
+						updateFireNum(1);
+					}
 				}
 			};
 			$.ajax({
