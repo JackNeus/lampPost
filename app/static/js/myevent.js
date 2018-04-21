@@ -1,10 +1,5 @@
 // DEPENDENCIES: displaySearches.js, createEventHtml.js
 
-var base_url;
-function setBaseUrl(url) {
-	base_url = url;
-}
-
 var event_data = [];
 var user_fav_data = [];
 var currentRows = 0;
@@ -15,14 +10,22 @@ function setBaseUrl(url) {
 }
 
 $(document).ready(function(){
-	setupUserFavorites();
+	checkSort();
 	loadEvents();
 	// hide the form that users would edit events with
 	$("#event-form").hide();
-	// slide up all the rows of locations/times
-	// $("[id ^= 'form-row']").slideUp();
 	checkDisplay();
 });
+
+
+// reload events if user selects a sort option
+var checkSort = function() {
+	// allow user to sort by date or popularity
+	$("#searchSort").change(function() {
+		if (event_data != [])
+			showMyEvents();
+	});
+};
 
 function checkDisplay() {
 	var i = $("#displayEventForm").length
@@ -36,14 +39,14 @@ var loadEvents = function() {
 	var userId = $("#userData").data("uid");
 	
 	var callback = function(data) {
-		if (data["status"] === "Success") 
+		if (data["status"] === "Success") {
 			event_data = data["data"];
-		else
-			event_data = null;
-		setupUserFavorites();
-		showMyEvents();
-		changeMyEvents();
-		editMyEvents();
+			setupUserFavorites();
+		}
+		else {
+			event_data = [];
+			showNoEvents();
+		}
 	}
 	$.ajax({
 		url: base_url + '/api/user/get_events/'+userId,
@@ -71,7 +74,7 @@ var changeMyEvents = function() {
 			if (result) {
 				// hide the event display if current event view is the event to be
 				// deleted
-				if (selected_event._id == event_data[eventNum - 1]._id)
+				if (selected_event !== null && selected_event._id == event_data[eventNum - 1]._id)
 					$(".event-view").hide();
 			
 				var eventId = event_data[eventNum - 1]._id;
@@ -94,6 +97,7 @@ var changeMyEvents = function() {
 }
 
 // allow user to change events
+// TODO: move some of this to 'createEventHtml.js'
 var editMyEvents = function() {
 
 	$(".editBtn").click( function() { 
@@ -182,6 +186,9 @@ var setupUserFavorites = function() {
 			user_fav_data = data["data"];
 		else
 			user_fav_data = null;
+		showMyEvents();
+		changeMyEvents();
+		editMyEvents();
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,
@@ -192,3 +199,14 @@ var setupUserFavorites = function() {
 			success: callback
 	});
 };
+
+// Writes simple message to user if they have no favorites
+// TODO: Figure out if we want to show them this message, or just not show the 'Manage
+// my Events' tab at all if they have no events
+var showNoEvents = function() {
+	// clear previous search results
+	var currentSearches = document.getElementById("searches");
+	currentSearches.innerHTML = "";
+	
+	currentSearches.innerHTML = `<h5>You have no events :( Go to 'Add Event' to create one!</h5>`;
+}

@@ -3,6 +3,7 @@
 <!-- SCRIPTS -->
 
 {% block scripts %}
+<link rel="stylesheet" type="text/css" href="/static/css/add.css">
 <script src="/static/js/displaySearches.js?v=0"></script>
 <script src="/static/js/displayEvent.js?v=0"></script>
 <script src="/static/js/createEventHtml.js?v=0"></script>
@@ -25,9 +26,17 @@ setBaseUrl("{{ config.BASE_URL }}");
 	   <div class="flex-container-col" id = "leftCol">
 	   
 	   	<h1>My Events</h1>
+	   	
+	   	<!-- Sort by date or popularity -->
+		<div class="d-flex flex-row align-items-start">
+			<select class="p-2 ml-auto" name="sort" id="searchSort">
+				<option value="Date">Sort By Date</option>
+				<option value="Popularity">Sort By Popularity</option>
+			</select>
+		</div>
 			
 		<!-- Fills in with "search" results from events.json -->
-		<div class="myEvents" id="searches"></div>
+		<div class="flex-container-scroll" id="searches"></div>
 		
 	   </div>
 		
@@ -74,7 +83,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 			{% endif %}
 
 
-			<div class = "event-form" id = "event-form" style="display:none">
+			<div class = "event-form eventFormView" id = "event-form" style="display:none">
 				<div class="col-md-10">
 					<h3 style="text-align:center"> Edit your event by changing the fields below. </h3>
 

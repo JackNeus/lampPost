@@ -1,4 +1,5 @@
-// TODO: add all of Reilly's code pertaining to the large event layout here
+// TODO: refactor this and 'displaySearches.js' so that they use they share functions
+// also move populateEventViewPanel to 'createEventHtml.js'
 
 var selected_event = null;
 
@@ -49,7 +50,7 @@ function populateEventViewPanel(eventNum) {
 	}).append(fireIcon);
 
 	// Number of favorites an event has
-	var getFire = event_data[eventNum].favorites;
+	var getFire = $("#resultFireNum" + (eventNum + 1)).text();
 	var fireNum = $('<p />').attr({
 		class: "eventFireNum",
 		id: "eventFireNum"
@@ -85,7 +86,8 @@ function populateEventViewPanel(eventNum) {
 	// Color in fire button if user has favorited an event
 	var eventId = event_data[eventNum]._id;
 	var eventFireBtnElement = document.getElementById("eventFireBtn");
-	if (eventIsFav(eventId)) {
+	var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
+	if (resultFireBtn.classList.contains("selected")) {
 		eventFireBtnElement.classList.toggle("selected");
 	}
 	
@@ -101,48 +103,76 @@ var updateEventFireBtn = function (eventNum) {
 
 		// update database after favoriting event
 		var favoriteEvent = function() {
+			var callback = function(data) {
+				if (data["status"] === "Success") {
+					// toggle view of fire button
+					if (!checkReloadFavoritePage()) {
+						eventFireBtn.classList.toggle("selected");
+						resultFireBtn.classList.toggle("selected");
+						eventFireBtn.title = "Unfavorite";
+						resultFireBtn.title = "Unfavorite";
+						updateFireNum(1);
+					}
+				}
+			};
 			$.ajax({
 				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))
-				}
+				},
+				success: callback
 			});
 		};
 
 		// update database after unfavoriting event
 		var unfavoriteEvent = function() {
+			var callback = function(data) {
+				if (data["status"] === "Success") {
+					// toggle view of fire button
+					if (!checkReloadFavoritePage()) {
+						eventFireBtn.classList.toggle("selected");
+						resultFireBtn.classList.toggle("selected");
+						eventFireBtn.title = "Favorite";
+						resultFireBtn.title = "Unfavorite";
+						updateFireNum(-1);
+					}
+				}
+			};
 			$.ajax({
 				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))
-				}
+				},
+				success: callback
 			});
 		};
-		// toggle color/title
+		
+		// update favorite number information
+		var updateFireNum = function(change) {
+			var getFireNum = $("#eventFireNum").text();
+			var newFireNum = parseInt(getFireNum) + change;
+			$("#eventFireNum").text(newFireNum);
+			$("#resultFireNum" + (eventNum + 1)).text(newFireNum);
+		};
+		
+		// remove smallSearchResult and corresponding eventView from page if 
+		// on 'my favorites' page
+		var checkReloadFavoritePage = function() {
+			if (window.location.href.indexOf('myfavorites') != -1) {
+				$(".event-view").hide();
+				$("#smallSearchResult" + (eventNum+1)).hide();
+				return 1;
+			}
+			return 0;
+		};
+		
+		// update database with new favorite
 		var eventFireBtn = document.getElementById($(this).attr("id"));
 		var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
-		eventFireBtn.classList.toggle("selected");
-		resultFireBtn.classList.toggle("selected");
-		if (eventFireBtn.classList.contains("selected")) {
-			eventFireBtn.title = "Unfavorite";
-			resultFireBtn.title = "Unfavorite";
-			var change = 1;
-			favoriteEvent();
-		}
-		else {
-			eventFireBtn.title = "Favorite";
-			resultFireBtn.title = "Favorite";
-			var change = -1;
-			unfavoriteEvent();
-		}
-
-		// update favorite number information
-		var getFireNum = document.getElementById("eventFireNum").innerText;
-		var newFireNum = parseInt(getFireNum) + change;
-		document.getElementById("eventFireNum").innerText = newFireNum;
-		document.getElementById("resultFireNum" + (eventNum + 1)).innerText = newFireNum;
+		if (eventFireBtn.classList.contains("selected")) unfavoriteEvent();
+		else favoriteEvent();
 
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
