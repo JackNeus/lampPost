@@ -33,6 +33,14 @@ function checkDisplay() {
 	}
 }
 
+// make all icons not "selected"
+function clearIcons() {
+	$(".deleteBtn").removeClass("selectedIcon");
+	$(".fa-trash-alt").removeClass("fa-inverse");
+	$(".editBtn").removeClass("selectedIcon");
+	$(".fa-pencil-alt").removeClass("fa-inverse");
+}
+
 // load user events
 var loadEvents = function() {
 	var userId = $("#userData").data("uid");
@@ -63,11 +71,7 @@ var changeMyEvents = function() {
 		// hide the footer
 		$(".footer").hide();
 
-		// make all icons not "selected"
-		$(".deleteBtn").removeClass("selectedIcon");
-		$(".fa-trash-alt").removeClass("fa-inverse");
-		$(".editBtn").removeClass("selectedIcon");
-		$(".fa-pencil-alt").removeClass("fa-inverse");
+		clearIcons();
 
 		// make the icon "selected"
 		$(this).addClass("selectedIcon");
@@ -101,11 +105,7 @@ var changeMyEvents = function() {
 					success: callback
 				});
 			} else {
-				// make all icons not "selected"
-				$(".deleteBtn").removeClass("selectedIcon");
-				$(".fa-trash-alt").removeClass("fa-inverse");
-				$(".editBtn").removeClass("selectedIcon");
-				$(".fa-pencil-alt").removeClass("fa-inverse");
+				clearIcons();
 			}
 		});
 	});
@@ -119,11 +119,7 @@ var editMyEvents = function() {
 		// hide the footer
 		$(".footer").hide();
 
-		// make all icons not "selected"
-		$(".editBtn").removeClass("selectedIcon");
-		$(".fa-pencil-alt").removeClass("fa-inverse");
-		$(".deleteBtn").removeClass("selectedIcon");
-		$(".fa-trash-alt").removeClass("fa-inverse");
+		clearIcons();
 
 		// make the icon "selected"
 		$(this).addClass("selectedIcon");
