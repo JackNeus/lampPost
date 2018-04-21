@@ -205,7 +205,7 @@ def test_add_event_missing_field():
 
 def test_add_event_bad_type():		
 	# String fields type check.
-	for field in ["title", "host", "creator", "description"]:
+	for field in ["title", "host", "description"]:
 		# Incorrectly-typed value.
 		bad_value = deepcopy(base_event)
 		bad_value[field] = 123
@@ -419,6 +419,15 @@ def test_edit_event_in_past_bad_times():
 		assert "malformatted" in r["error_msg"]
 	make_edit_test(test)
 
+def test_edit_event_bad_poster_url():
+	# Events whose poster URLs do not start with 'http://princeton-lamppost.s3.amazonaws.com/'
+	# are invalid.
+	def test(new_event, event_id, creator_netid):
+		edits = {"poster": "http://www.google.com/logo.jpg"}
+		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
+		assert is_error(r)
+	make_edit_test(test)
+  
 def test_edit_event_in_past_other_fields():
 	# Tests an event edit where the edit does not change times at all.
 	# This is allowed.
@@ -554,6 +563,7 @@ test_edit_event_event_dne,
 test_edit_event_bad_id,
 test_edit_event_different_creator,
 test_add_event_in_past,
+test_edit_event_bad_poster_url,
 test_edit_event_in_past_bad_times,
 test_edit_event_in_past_other_fields,
 test_add_valid_fav,

@@ -5,7 +5,7 @@ from wtforms.validators import Required, DataRequired
 
 class NameForm(FlaskForm):
 	name = TextField('Name', [Required(message='Forgot your name?')])
-	
+
 class EventForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
@@ -13,6 +13,9 @@ class EventForm(FlaskForm):
     numShowings = RadioField('Number of Showings:', choices=[("1","1"),("2","2"),("3","3"),("4","4")])
     locations = FieldList(StringField('Location'), min_entries=4)
     startDates = FieldList(DateField('Start Date', format='%m/%d/%Y', validators=(validators.Optional(),)), min_entries=4)
+    startTimes = FieldList(TimeField('Start Time', validators=(validators.Optional(),)), min_entries=4)
+    endDates = FieldList(StringField('End Date', validators=(validators.Optional(),)), min_entries=4)
+    endTimes = FieldList(TextField('End Time', validators=(validators.Optional(),)), min_entries=4)
     startTimes = FieldList(TextField('Start Time', validators=(validators.Optional(),)), min_entries=4)
     endDates = FieldList(StringField('End Date', validators=(validators.Optional(),)), min_entries=4)
     endTimes = FieldList(TextField('End Time', validators=(validators.Optional(),)), min_entries=4)
