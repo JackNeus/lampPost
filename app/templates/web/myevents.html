@@ -3,6 +3,7 @@
 <!-- SCRIPTS -->
 
 {% block scripts %}
+<link rel="stylesheet" type="text/css" href="/static/css/add.css">
 <script src="/static/js/displaySearches.js?v=0"></script>
 <script src="/static/js/displayEvent.js?v=0"></script>
 <script src="/static/js/createEventHtml.js?v=0"></script>
@@ -27,7 +28,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 	   	<h1>My Events</h1>
 			
 		<!-- Fills in with "search" results from events.json -->
-		<div class="myEvents" id="searches"></div>
+		<div class="flex-container-scroll" id="searches"></div>
 		
 	   </div>
 		
@@ -51,7 +52,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 			{% endif %}
 
 
-			<div class = "event-form" id = "event-form" style="display:none">
+			<div class = "event-form eventFormView" id = "event-form" style="display:none">
 				<div class="col-md-10">
 					<h3 style="text-align:center"> Edit your event by changing the fields below. </h3>
 
@@ -63,16 +64,16 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 						<div class="form-group">
 							{{ form.title.label(class="req") }} 
-							{{ form.title(class="form-control") }}
+							{{ form.title(class="form-control", maxlength="100") }}
 						</div>
 						<div class="form-group">
 							{{ form.description.label(class="req") }} 
-							{{ form.description(class="form-control", rows="4") }}
+							{{ form.description(class="form-control", rows="4", maxlength="3000") }}
 						</div>
 
 						<div class="form-group">
 							{{ form.host.label(class="req") }} 
-							{{ form.host(class="form-control") }}
+							{{ form.host(class="form-control", maxlength="100") }}
 						</div>
 
 						<div class="form-group">
@@ -90,7 +91,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 							<div class="form-row" id="form-row-{{i+1}}"> 
 								<div class="form-group col-md-4">
 		        					{{ form.locations.__getitem__(i).label(class="numbered req") }}
-		        					{{ form.locations.__getitem__(i)(class="form-control") }}
+		        					{{ form.locations.__getitem__(i)(class="form-control", maxlength="100") }}
 		        				</div>
 
 		        				<div class="form-group col-md-2">
@@ -120,7 +121,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 						<div class="form-group">
 							{{ form.link.label }} 
-							{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control") }}
+							{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control", maxlength="100") }}
 						</div>
 
 						<button type="submit" class="btn btn-primary">Submit!</button>

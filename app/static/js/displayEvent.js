@@ -1,4 +1,7 @@
-// TODO: add all of Reilly's code pertaining to the large event layout here
+// TODO: refactor this and 'displaySearches.js' so that they use they share functions
+// also move populateEventViewPanel to 'createEventHtml.js'
+
+var selected_event = null;
 
 // Shows large event view when search result is clicked
 var updateEventView = function() {
@@ -8,21 +11,27 @@ var updateEventView = function() {
 
 			//hide the footer if it exists
 			$(".footer").hide();
-
-			// toggle highlighting in search results.
-			$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
-		    $(".smallSearchResult").removeClass("selected");
-		    $(this).addClass("selected");
-
-			// Animate selection
-			$(this).animate({"margin-right": '0vh'});
-
-		    // populate and display event view.
+			
+			var eventNum = getNum($(this).attr("id"), "smallSearchResult");
+			highlightSelectedSearchResult(eventNum);
+			
+			// populate and display event view.
 			$(".event-view").hide();
-			var eventNum = getNum($(this).attr("id"), "smallSearchResult") - 1;
-			populateEventViewPanel(eventNum);
+			selected_event = event_data[eventNum - 1];
+			populateEventViewPanel(eventNum - 1);
 			$("#event-view").show();
 		});
+}
+
+// highlight search result that's been selected and display event view
+function highlightSelectedSearchResult(eventNum) {
+	// toggle highlighting in search results.
+	$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
+	$(".smallSearchResult").removeClass("selected");
+	$("#smallSearchResult" + (eventNum)).addClass("selected");
+
+	// Animate selection
+	$("#smallSearchResult" + (eventNum)).animate({"margin-right": '0vh'});
 }
 
 // Populate event view panel with event_data[eventNum] (basic layout)
@@ -101,48 +110,61 @@ var updateEventFireBtn = function (eventNum) {
 
 		// update database after favoriting event
 		var favoriteEvent = function() {
+			var callback = function(data) {
+				if (data["status"] === "Success") {
+					// toggle view of fire button
+					eventFireBtn.classList.toggle("selected");
+					resultFireBtn.classList.toggle("selected");
+					eventFireBtn.title = "Unfavorite";
+					resultFireBtn.title = "Unfavorite";
+					updateFireNum(1);
+				}
+			};
 			$.ajax({
 				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))
-				}
+				},
+				success: callback
 			});
 		};
 
 		// update database after unfavoriting event
 		var unfavoriteEvent = function() {
+			var callback = function(data) {
+				if (data["status"] === "Success") {
+					// toggle view of fire button
+					eventFireBtn.classList.toggle("selected");
+					resultFireBtn.classList.toggle("selected");
+					eventFireBtn.title = "Favorite";
+					resultFireBtn.title = "Unfavorite";
+					updateFireNum(-1);
+				}
+			};
 			$.ajax({
 				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,
 				dataType: 'json',
 				headers: {
 					'Authorization': ('Token ' + $.cookie('api_token'))
-				}
+				},
+				success: callback
 			});
 		};
-		// toggle color/title
+		
+		// update favorite number information
+		var updateFireNum = function(change) {
+			var getFireNum = $("#eventFireNum").text();
+			var newFireNum = parseInt(getFireNum) + change;
+			$("#eventFireNum").text(newFireNum);
+			$("#resultFireNum" + (eventNum + 1)).text(newFireNum);
+		}
+		
+		// update database with new favorite
 		var eventFireBtn = document.getElementById($(this).attr("id"));
 		var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
-		eventFireBtn.classList.toggle("selected");
-		resultFireBtn.classList.toggle("selected");
-		if (eventFireBtn.classList.contains("selected")) {
-			eventFireBtn.title = "Unfavorite";
-			resultFireBtn.title = "Unfavorite";
-			var change = 1;
-			favoriteEvent();
-		}
-		else {
-			eventFireBtn.title = "Favorite";
-			resultFireBtn.title = "Favorite";
-			var change = -1;
-			unfavoriteEvent();
-		}
-
-		// update favorite number information
-		var getFireNum = document.getElementById("eventFireNum").innerText;
-		var newFireNum = parseInt(getFireNum) + change;
-		document.getElementById("eventFireNum").innerText = newFireNum;
-		document.getElementById("resultFireNum" + (eventNum + 1)).innerText = newFireNum;
+		if (eventFireBtn.classList.contains("selected")) unfavoriteEvent();
+		else favoriteEvent();
 
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();

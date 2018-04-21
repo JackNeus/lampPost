@@ -11,10 +11,10 @@
 <body>
 
 	<div class="row" id = "bigRowAddEvent">
-		<div class="col-md-3" id = "leftCol">
 
-		</div>
-		<div class="col-md-6" id = "formCol">
+		<div class="col-md-3"></div>
+		
+		<div class="col-md-6 eventFormView" id = "formCol">
 			<h3 style="text-align:center"> Add your event by filling out the fields below. </h3>
 
 			<form id="addEventForm" action="/add" method="POST" role="form" enctype="multipart/form-data">
@@ -22,16 +22,16 @@
 
 				<div class="form-group">
 					{{ form.title.label(class="req") }}
-					{{ form.title(placeholder="The name of your event", class="form-control") }}
+					{{ form.title(placeholder="The name of your event", class="form-control", maxlength="100") }}
 				</div>
 				<div class="form-group">
 					{{ form.description.label(class="req") }}
-					{{ form.description(placeholder="A brief description of your event, and why people should come!", class="form-control", rows="4") }}
+					{{ form.description(placeholder="A brief description of your event, and why people should come!", class="form-control", rows="4", maxlength="3000") }}
 				</div>
 
 				<div class="form-group">
 					{{ form.host.label(class="req") }}
-					{{ form.host(placeholder="(e.g. Bodyhype, Whig-Clio)", class="form-control") }}
+					{{ form.host(placeholder="(e.g. Bodyhype, Whig-Clio)", class="form-control", maxlength="100") }}
 				</div>
 
 
@@ -49,7 +49,7 @@
 				{% for i in range(form.locations.__len__()) %}
 					<div class="form-row" id="form-row-{{i+1}}">
 						<div class="form-group col-md-4">
-        					{{ form.locations.__getitem__(i).label(class="numbered req") }}
+        					{{ form.locations.__getitem__(i).label(class="numbered req", maxlength="100") }}
         					{{ form.locations.__getitem__(i)(class="form-control") }}
         				</div>
 
@@ -80,7 +80,7 @@
 
 				<div class="form-group">
 					{{ form.link.label }}
-					{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control") }}
+					{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control", maxlength="100") }}
 				</div>
 
 				<button type="submit" class="btn btn-primary submitAddButton">Submit!</button>
@@ -95,9 +95,9 @@
 			</form>
 
 		</div>
-		<div class="col-md-3" id = "rightCol">
 
-		</div>
-
+		<div class="col-md-3"></div>
+		
+	  </div>
 	</body>
 	{% endblock %}

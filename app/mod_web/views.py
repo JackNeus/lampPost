@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask import Blueprint, request, render_template, flash, redirect
+from flask import Blueprint, request, render_template, flash, redirect, session
 from flask_login import login_required, current_user
 from app import CONFIG
 from app.mod_web.forms import NameForm
@@ -13,9 +13,20 @@ import requests
 # Homepage
 @mod_web.route('/')
 def home():
-	return render_template("web/home.html")
+	# User is not logged in.
+	if not current_user.is_authenticated and "guest_mode" not in session:
+		return redirect("/welcome")
+	return redirect("/browse")
+	
+# Splash page
+@mod_web.route('/welcome')
+def welcome():
+	if "proceed" in request.args:
+		session["guest_mode"] = True
+		return redirect("/browse")
+	return render_template("web/splashpage.html")
 
-@mod_web.route('/browser')
+@mod_web.route('/browse')
 def browser():
 	if "USE_MOCK_DATA" in CONFIG and CONFIG["USE_MOCK_DATA"]:
 		# Ignore USE_MOCK_DATA flag if not in DEBUG mode.
@@ -35,7 +46,7 @@ def myevents():
 			print(form.errors)
 			return render_template("web/myevents.html", form=form, errors=form.errors, display=True)
 		else:
-			eventData = controller.form_to_event_object(form)
+			eventData, numShowings = controller.form_to_event_object(form)
 
 			try:
 				if "poster" in request.files:
@@ -60,7 +71,7 @@ def myevents():
 				return redirect("myevents")
 			else:
 				flash("Error. " + r["error_msg"])
-				return render_template("web/myevents.html", form=EventForm(), display=True, numRows=len(showings))
+				return render_template("web/myevents.html", form=EventForm(), display=True, numRows=numShowings)
 	else:
 		return render_template("web/myevents.html", form=EventForm(), display=False, numRows=1)
 
@@ -73,8 +84,8 @@ def addEvent():
 			print(form.errors)
 			return render_template("web/add.html", form=form, errors=form.errors)
 		else:
-			eventData = controller.form_to_event_object(form)
-
+			eventData, numShowings = controller.form_to_event_object(form)
+			
 			# make API request
 			headers = { "Authorization" : "Token %s" % current_user.token }
 			r = requests.put(CONFIG["BASE_URL"]+"/api/event/add", 
@@ -109,4 +120,8 @@ def addEvent():
 				return render_template("web/add.html", form=EventForm())
 	else:
 		return render_template("web/add.html", form=EventForm())
+		
+@mod_web.route('/myfavorites')
+def myfavorites():
+	return render_template("web/myfavorites.html")
 
