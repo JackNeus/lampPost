@@ -22,7 +22,8 @@ $(document).ready(function(){
 var checkSort = function() {
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
-		loadEvents();
+		if (event_data != [])
+			showMyEvents();
 	});
 };
 
