@@ -27,7 +27,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 <div class="flex-container-row" id="bigRow">
    <div class="flex-container-col" id="leftCol">
    		<form onsubmit="return false;">
-   			<div class="d-flex flex-row align-items-start">
+   			<div class="d-flex flex-row align-items-start" id="searchRow">
 				<div class="form-group" id="searchBox">
 			    		<input id="search-box" class="form-control"
 			    		placeholder="Search for events here!" value=""></input>
@@ -61,7 +61,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
  	<div class="flex-container-col" id = "rightCol">
  		{% include "web/eventview.html" %}
-        <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/explore.png" style="width: 100%;">
+    <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/explore.png" style="width: 100%;">
 	</div>
 </div>
 </div>
