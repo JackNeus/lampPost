@@ -123,8 +123,7 @@ def make_del_fav_request(user_id, event_id, token=None):
 	if token is not None:
 		headers = {"Authorization": "Token %s" % token}
 	r = requests.get(app_url + "/user/fav/remove/" + user_id + "/" + event_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return r
 
 def make_get_fav_request(user_id, token=None):
 	headers = None
@@ -468,6 +467,7 @@ def test_add_fav_bad_event():
 	def test(new_event, event_id, creator_netid):
 		r = make_add_fav_request(user_ids[creator_netid], "5ac579ff1b41577c54130835", generate_auth_token(creator_netid))
 		assert is_error(r)
+		assert "exist" in r["error_msg"]
 	make_fav_test(test)
 
 # Try to delete a valid favorite.
@@ -476,7 +476,7 @@ def test_del_valid_fav():
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
 		r = make_del_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
-		assert is_success(r)
+		assert is_success(get_data(r))
 	make_fav_test(test)
 
 # Try to delete a favorite without authorization.
@@ -485,14 +485,16 @@ def test_del_fav_no_auth():
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
 		r = make_del_fav_request(user_ids[creator_netid], event_id)
-		assert is_error(r)
+		assert r.status_code == 403
 	make_fav_test(test)
 
 # Try to delete a favorite that doesn't exist.
 def test_del_fav_no_fav():
 	def test(new_event, event_id, creator_netid):
-		r = make_del_fav_request(user_ids[creator_netid], event_id)
+		r = make_del_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		r = get_data(r)
 		assert is_error(r)
+		assert "isn't in" in r["error_msg"]
 	make_fav_test(test)
 
 # Try to get a valid user's favorites.
@@ -511,11 +513,13 @@ def test_get_fav_wrong_user():
 		assert is_success(r)
 		r = make_get_fav_request(user_ids["bwk"], generate_auth_token(creator_netid))
 		assert is_error(r)
+		assert "different" in r["error_msg"]
 	make_fav_test(test)
 
 def test_get_created_events_wrong_token():
 	r = make_get_created_events_request(user_ids["bwk"], generate_auth_token("jneus"))
 	assert is_error(r)
+	assert "different" in r["error_msg"]
 
 # TODO: add search tests
 
@@ -560,7 +564,6 @@ test_get_valid_fav,
 test_get_fav_wrong_user,
 test_get_created_events_wrong_token
 ]
-
 if __name__ == '__main__':
 	setup()
 	failed = 0
