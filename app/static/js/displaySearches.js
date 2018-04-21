@@ -42,7 +42,10 @@ var highlightUserFavorites = function () {
 
 // Update the popularity of an event when the fire button is clicked
 var updateFireBtn = function () {
-	$(".resultFireBtn").click( function(e) {
+	$(".resultFireBtn").click(function(e) {
+		if ($(this).hasClass("disabled")) return;
+		$(this).addClass("disabled");
+		
 		// get event id and user id
 		var eventNum = getNum($(this).attr("id"), "resultFireBtn");
 		var eventId = event_data[eventNum-1]._id
@@ -59,6 +62,7 @@ var updateFireBtn = function () {
 					updateEventViewFire(1);
 					checkReloadFavoritePage();
 				}
+				fireBtn.classList.toggle("disabled");
 			};
 			$.ajax({
 				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
@@ -81,6 +85,7 @@ var updateFireBtn = function () {
 					updateEventViewFire(-1);
 					checkReloadFavoritePage();
 				}
+				fireBtn.classList.toggle("disabled");
 			};
 			$.ajax({
 				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,

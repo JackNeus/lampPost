@@ -276,6 +276,12 @@ html, body {
 	overflow: hidden;
 }
 
+.searchRow {
+	display: flex;
+	flex-flow: column nowrap;
+	overflow: hidden;
+}
+
 .flex-container-col {
 	display: flex;
 	flex-flow: column nowrap;
@@ -289,9 +295,6 @@ html, body {
     height: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
-    #searches {
-    	min-width:12em;
-	}
 }
 
 .footer {
