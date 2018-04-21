@@ -363,9 +363,11 @@ def test_edit_event_extra_field():
 def test_edit_event_bad_type():	
 	def test(new_event, event_id, creator_netid):
 		# String fields type check.
+		# TODO: Get this test passing with "poster" field.
 		for field in ["title", "host", "description"]:
 			# Incorrectly-typed value.
 			r = make_edit_event_request(event_id, {field: 123}, generate_auth_token(creator_netid))
+			print()
 			assert is_error(r)
 			assert "malformatted" in r["error_msg"]
 	make_edit_test(test)
