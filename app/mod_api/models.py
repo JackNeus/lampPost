@@ -1,6 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.parser import *
 from mongoengine import *
+from app import CONFIG, app
+
 
 class UserEntry(Document):
     netid = StringField(required = True, unique = True)
@@ -38,7 +40,12 @@ class EventEntry(Document):
 
     # Optional fields.
     trailer = URLField(max_length = 100)
+    poster = URLField()
 
+    def clean(self):
+        if self.poster is not None and not self.poster.startswith(CONFIG["S3_LOCATION"]):
+            raise ValidationError("Poster URL did not point to an authorized location.")
+        
     meta = {'strict': False}
         
 # List of fields that MUST be supplied by user.

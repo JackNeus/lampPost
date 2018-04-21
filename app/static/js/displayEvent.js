@@ -76,10 +76,18 @@ function populateEventViewPanel(eventNum) {
 	$("#eventHost").html("by " + event_data[eventNum].host);
 	$("#eventDescription").html(event_data[eventNum].description);
 
-	// Add C&H image
-	var photoNum = Math.floor(Math.random() * 81); + 1;
-	$("#eventPhoto").html("<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
-		+ photoNum + ".png\">");
+	// If the event has a poster, display that.
+	if ("poster" in event_data[eventNum]) {
+		document.getElementById("eventPhoto").innerHTML =
+		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum].poster+"\">";
+	}
+	else {
+		// Add C&H image
+		var photoNum = Math.floor(Math.random() * 81); + 1;
+		document.getElementById("eventPhoto").innerHTML =
+			"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
+			+ photoNum + ".png\">";
+	}
 	
 	// highlight fire button if appropriate
 	if ($("#resultFireBtn" + (eventNum + 1)).hasClass("selected")) {
