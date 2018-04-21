@@ -1,28 +1,30 @@
 /* rgb values for primary-color */
 html, body {
   font: 100% "Avenir-Medium"; }
-  html .h1, body .h1 {
-    font-size: 28px; }
+  html #id_navbar, body #id_navbar {
+    display: none; }
   html .splashScreen, body .splashScreen {
     position: absolute;
     margin: 0;
     height: 100%;
     width: 100%;
     background-color: #eeeeee;
-    background-image: url("../graphics/images/lampPost.jpg");
+    background-image: url("../graphics/images/winter_lamppost.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     text-align: center; }
     html .splashScreen .headerBox, body .splashScreen .headerBox {
       position: relative;
       width: 100%;
+      padding-left: 40vw;
       text-align: center;
       margin-top: 30vh; }
       html .splashScreen .headerBox .loginBox h1, body .splashScreen .headerBox .loginBox h1 {
         font-weight: bold;
+        font-size: 50px;
         margin-bottom: 1em;
         color: white;
-        text-shadow: 2px 2px #000000; }
+        text-shadow: 2px 2px 0px #000; }
       html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
         border: none;
         background-color: #2d9eee;
