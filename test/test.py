@@ -123,8 +123,7 @@ def make_del_fav_request(user_id, event_id, token=None):
 	if token is not None:
 		headers = {"Authorization": "Token %s" % token}
 	r = requests.get(app_url + "/user/fav/remove/" + user_id + "/" + event_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return r
 
 def make_get_fav_request(user_id, token=None):
 	headers = None
@@ -217,16 +216,42 @@ def test_add_event_bad_type():
 		else:
 			assert "malformatted" in r["error_msg"]
 
-def test_add_event_bad_field_length():		
+def test_add_event_bad_field_length_short():		
 	# String fields length check.
 	for field, length in [("title", 5), ("host",3), ("description", 10)]:
 		# Insufficiently long value.
 		short_value = deepcopy(base_event)
 		short_value[field] = "A"*(length-1)
 		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
+		assert is_error(r)	
+		assert "malformatted" in r["error_msg"]
+
+	# Instance subfields
+	for field, length in [("location", 3)]:
+		# Insufficiently long value.
+		short_value = deepcopy(base_event)
+		short_value["instances"][0][field] = "A"*(length-1)
+		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 		assert is_error(r)
 		assert "malformatted" in r["error_msg"]
 	
+def test_add_event_bad_field_length_long():		
+	# String fields length check.
+	for field, length in [("title", 100), ("host",100), ("trailer", 100), ("description", 10000)]:
+		long_value = deepcopy(base_event)
+		long_value[field] = "A"*(length+1)
+		r = make_add_event_request(long_value, generate_auth_token(long_value["creator"]))
+		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
+	
+	# Instance subfields
+	for field, length in [("location", 100)]:
+		long_value = deepcopy(base_event)
+		long_value["instances"][0][field] = "A"*(length+1)
+		r = make_add_event_request(long_value, generate_auth_token(long_value["creator"]))
+		assert is_error(r)
+		assert "malformatted" in r["error_msg"]
+
 def test_add_event_bad_instance_data():
 	# Instances tests.
 
@@ -360,29 +385,6 @@ def test_edit_event_extra_field():
 		r = make_edit_event_request(event_id, extra_field, generate_auth_token(creator_netid))
 	make_edit_test(test)
 
-def test_edit_event_bad_type():	
-	def test(new_event, event_id, creator_netid):
-		# String fields type check.
-		# TODO: Get this test passing with "poster" field.
-		for field in ["title", "host", "description"]:
-			# Incorrectly-typed value.
-			r = make_edit_event_request(event_id, {field: 123}, generate_auth_token(creator_netid))
-			print()
-			assert is_error(r)
-			assert "malformatted" in r["error_msg"]
-	make_edit_test(test)
-
-def test_edit_event_bad_field_length():	
-	def test(new_event, event_id, creator_netid):
-		# String fields length check.
-		for field, length in [("title", 5), ("host",3), ("description", 10)]:
-			# Insufficiently long value.
-			short_value = "A"*(length-1)
-			r = make_edit_event_request(event_id, {field: short_value}, generate_auth_token(creator_netid))
-			assert is_error(r)
-			assert "malformatted" in r["error_msg"]
-	make_edit_test(test)
-
 # Try to edit event that does not exist.
 def test_edit_event_event_dne():
 	r = make_edit_event_request("5ac579ff1b41577c54130835", {}, generate_auth_token("bwk"))
@@ -478,6 +480,7 @@ def test_add_fav_bad_event():
 	def test(new_event, event_id, creator_netid):
 		r = make_add_fav_request(user_ids[creator_netid], "5ac579ff1b41577c54130835", generate_auth_token(creator_netid))
 		assert is_error(r)
+		assert "exist" in r["error_msg"]
 	make_fav_test(test)
 
 # Try to delete a valid favorite.
@@ -486,7 +489,7 @@ def test_del_valid_fav():
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
 		r = make_del_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
-		assert is_success(r)
+		assert is_success(get_data(r))
 	make_fav_test(test)
 
 # Try to delete a favorite without authorization.
@@ -495,14 +498,16 @@ def test_del_fav_no_auth():
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
 		r = make_del_fav_request(user_ids[creator_netid], event_id)
-		assert is_error(r)
+		assert r.status_code == 403
 	make_fav_test(test)
 
 # Try to delete a favorite that doesn't exist.
 def test_del_fav_no_fav():
 	def test(new_event, event_id, creator_netid):
-		r = make_del_fav_request(user_ids[creator_netid], event_id)
+		r = make_del_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
+		r = get_data(r)
 		assert is_error(r)
+		assert "isn't in" in r["error_msg"]
 	make_fav_test(test)
 
 # Try to get a valid user's favorites.
@@ -521,11 +526,13 @@ def test_get_fav_wrong_user():
 		assert is_success(r)
 		r = make_get_fav_request(user_ids["bwk"], generate_auth_token(creator_netid))
 		assert is_error(r)
+		assert "different" in r["error_msg"]
 	make_fav_test(test)
 
 def test_get_created_events_wrong_token():
 	r = make_get_created_events_request(user_ids["bwk"], generate_auth_token("jneus"))
 	assert is_error(r)
+	assert "different" in r["error_msg"]
 
 # TODO: add search tests
 
@@ -542,7 +549,8 @@ test_get_valid_events,	# Related
 test_delete_valid_events,	# Related
 test_add_event_missing_field,
 test_add_event_bad_type,
-test_add_event_bad_field_length,
+test_add_event_bad_field_length_short,
+test_add_event_bad_field_length_long,
 test_add_event_bad_instance_data,
 test_add_event_extra_field,
 test_get_event_bad_id,
@@ -551,8 +559,6 @@ test_delete_event_bad_id,
 test_edit_event_valid,
 test_edit_event_system_fields,
 test_edit_event_extra_field,
-test_edit_event_bad_type,
-test_edit_event_bad_field_length,
 test_edit_event_event_dne,
 test_edit_event_bad_id,
 test_edit_event_different_creator,
@@ -571,7 +577,6 @@ test_get_valid_fav,
 test_get_fav_wrong_user,
 test_get_created_events_wrong_token
 ]
-
 if __name__ == '__main__':
 	setup()
 	failed = 0

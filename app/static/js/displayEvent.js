@@ -50,7 +50,7 @@ function populateEventViewPanel(eventNum) {
 	}).append(fireIcon);
 
 	// Number of favorites an event has
-	var getFire = event_data[eventNum].favorites;
+	var getFire = $("#resultFireNum" + (eventNum + 1)).text();
 	var fireNum = $('<p />').attr({
 		class: "eventFireNum",
 		id: "eventFireNum"
@@ -94,7 +94,8 @@ function populateEventViewPanel(eventNum) {
 	// Color in fire button if user has favorited an event
 	var eventId = event_data[eventNum]._id;
 	var eventFireBtnElement = document.getElementById("eventFireBtn");
-	if (eventIsFav(eventId)) {
+	var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
+	if (resultFireBtn.classList.contains("selected")) {
 		eventFireBtnElement.classList.toggle("selected");
 	}
 	
@@ -113,11 +114,13 @@ var updateEventFireBtn = function (eventNum) {
 			var callback = function(data) {
 				if (data["status"] === "Success") {
 					// toggle view of fire button
-					eventFireBtn.classList.toggle("selected");
-					resultFireBtn.classList.toggle("selected");
-					eventFireBtn.title = "Unfavorite";
-					resultFireBtn.title = "Unfavorite";
-					updateFireNum(1);
+					if (!checkReloadFavoritePage()) {
+						eventFireBtn.classList.toggle("selected");
+						resultFireBtn.classList.toggle("selected");
+						eventFireBtn.title = "Unfavorite";
+						resultFireBtn.title = "Unfavorite";
+						updateFireNum(1);
+					}
 				}
 			};
 			$.ajax({
@@ -135,11 +138,13 @@ var updateEventFireBtn = function (eventNum) {
 			var callback = function(data) {
 				if (data["status"] === "Success") {
 					// toggle view of fire button
-					eventFireBtn.classList.toggle("selected");
-					resultFireBtn.classList.toggle("selected");
-					eventFireBtn.title = "Favorite";
-					resultFireBtn.title = "Unfavorite";
-					updateFireNum(-1);
+					if (!checkReloadFavoritePage()) {
+						eventFireBtn.classList.toggle("selected");
+						resultFireBtn.classList.toggle("selected");
+						eventFireBtn.title = "Favorite";
+						resultFireBtn.title = "Unfavorite";
+						updateFireNum(-1);
+					}
 				}
 			};
 			$.ajax({
@@ -158,7 +163,18 @@ var updateEventFireBtn = function (eventNum) {
 			var newFireNum = parseInt(getFireNum) + change;
 			$("#eventFireNum").text(newFireNum);
 			$("#resultFireNum" + (eventNum + 1)).text(newFireNum);
-		}
+		};
+		
+		// remove smallSearchResult and corresponding eventView from page if 
+		// on 'my favorites' page
+		var checkReloadFavoritePage = function() {
+			if (window.location.href.indexOf('myfavorites') != -1) {
+				$(".event-view").hide();
+				$("#smallSearchResult" + (eventNum+1)).hide();
+				return 1;
+			}
+			return 0;
+		};
 		
 		// update database with new favorite
 		var eventFireBtn = document.getElementById($(this).attr("id"));

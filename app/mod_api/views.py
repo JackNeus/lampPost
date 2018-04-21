@@ -287,7 +287,5 @@ def get_favorites(userid):
 			return gen_data_response(events)
 		except Exception as e:
 			return gen_failure_response(str(e))
-
 	except Exception as e:
-			raise e
 			return gen_failure_response(str(e))
