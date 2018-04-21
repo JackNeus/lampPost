@@ -81,7 +81,6 @@ def addEvent():
 	if request.method == "POST":
 		form = EventForm(request.form)
 		if not form.validate_on_submit():
-			print(form.errors)
 			return render_template("web/add.html", form=form, errors=form.errors)
 		else:
 			eventData, numShowings = controller.form_to_event_object(form)

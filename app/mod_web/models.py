@@ -35,7 +35,7 @@ def upload_file_to_s3(file, acl="public-read"):
 
     return "{}{}".format(CONFIG["S3_LOCATION"], file.filename)
 
-class BadFileTypeException(Exception):
+class BadFileException(Exception):
     pass
 
 def get_file_type(filename):
@@ -44,4 +44,4 @@ def get_file_type(filename):
     return filename.rsplit(".", 1)[1]
 
 def allowed_file_type(filename):
-    return get_file_type(filename) in allowed_extensions
+    return get_file_type(filename).lower() in allowed_extensions
