@@ -87,7 +87,7 @@ var setupUserFavorites = function() {
 		if (data["status"] === "Success")
 			user_fav_data = data["data"];
 		else
-			user_fav_data = null;
+			user_fav_data = [];
 		showSearchResults();
 	};
 	$.ajax({

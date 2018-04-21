@@ -194,6 +194,11 @@ html #bigRow, body #bigRow {
   flex-flow: row wrap;
   overflow: hidden; }
 
+.searchRow {
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden; }
+
 .flex-container-col {
   display: flex;
   flex-flow: column nowrap;
@@ -206,8 +211,6 @@ html #bigRow, body #bigRow {
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll; }
-  .flex-container-scroll #searches {
-    min-width: 12em; }
 
 .footer {
   color: white;

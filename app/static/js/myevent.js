@@ -97,7 +97,6 @@ var changeMyEvents = function() {
 }
 
 // allow user to change events
-// TODO: move some of this to 'createEventHtml.js'
 var editMyEvents = function() {
 
 	$(".editBtn").click( function() { 
@@ -106,7 +105,7 @@ var editMyEvents = function() {
 		$(".footer").hide();
 
 		// toggle highlighting in search results
-		eventNum = getNum($(this).attr('id'), "editBtn");
+		var eventNum = getNum($(this).attr('id'), "editBtn");
 		highlightSelectedSearchResult(eventNum);
 
 		// hide the event display
@@ -185,7 +184,7 @@ var setupUserFavorites = function() {
 		if (data["status"] === "Success") 
 			user_fav_data = data["data"];
 		else
-			user_fav_data = null;
+			user_fav_data = [];
 		showMyEvents();
 		changeMyEvents();
 		editMyEvents();
