@@ -75,7 +75,7 @@ function populateEventViewPanel(eventNum) {
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum].host);
 	$("#eventDescription").html(event_data[eventNum].description);
-
+	
 	// If the event has a poster, display that.
 	if ("poster" in event_data[eventNum]) {
 		document.getElementById("eventPhoto").innerHTML =
