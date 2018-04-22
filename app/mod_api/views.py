@@ -289,3 +289,29 @@ def get_favorites(userid):
 			return gen_failure_response(str(e))
 	except Exception as e:
 			return gen_failure_response(str(e))
+
+# Allow a user to report an event.
+@mod_api.route("/event/report/<eventid>", methods=["PUT"])
+@auth.login_required
+def report_event(eventid):
+	try:
+		if not request.is_json:
+			return gen_error_response("Request was not JSON.")
+
+		try:
+			data = request.get_json()
+		except Exception as e:
+			raise e
+			return gen_error_response("JSON was malformatted.")
+
+		if "reason" not in data:
+			return gen_error_response("Request was missing field 'reason'.")
+
+		user = User.get_user_in_token(request)
+		report = controller.add_report(user, data["reason"], eventid)
+		return gen_data_response(report)
+	except ValidationError as e:
+		return gen_error_response(str(e))
+	except Exception as e:
+		raise e
+		return gen_failure_response(str(e))
