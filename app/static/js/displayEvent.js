@@ -34,6 +34,29 @@ function highlightSelectedSearchResult(eventNum) {
 	$("#smallSearchResult" + (eventNum)).animate({"margin-right": '0vh'});
 }
 
+// Get link to Google Calendar event for ith instance of event_data[eventNum]
+function getGoogleCalLink(eventNum, i) {
+	out_url = "https://www.google.com/calendar/render?action=TEMPLATE";
+	out_url += "&text=" + event_data[eventNum].title.replace(/ /g, "+");
+
+	start_dt = event_data[eventNum].instances[i].start_datetime;
+	start_date = start_dt.split(" ")[0];
+	start_time = start_dt.split(" ")[1];
+
+	end_dt = event_data[eventNum].instances[i].end_datetime;
+	end_date = end_dt.split(" ")[0];
+	end_time = end_dt.split(" ")[1];
+
+
+	out_url += "&dates=" + start_date.replace(/-/g, "") + "T" + start_time.replace(/:/g, "") + "/"; 
+	out_url += end_date.replace(/-/g, "") + "T" + end_time.replace(/:/g, "") + ""; 
+
+	out_url += "&ctz=America/New_York";
+	out_url += "&location=" + event_data[eventNum].instances[i].location;
+	out_url += "&details=" + event_data[eventNum].description.replace(/ /g, "+");
+	return out_url;
+}
+
 // Populate event view panel with event_data[eventNum] (basic layout)
 function populateEventViewPanel(eventNum) {
 	// Fire icon
@@ -67,9 +90,15 @@ function populateEventViewPanel(eventNum) {
 		// Locatiom
 		document.getElementById("eventSubtitle").innerHTML +=
 			instances[i].location + "&nbsp|&nbsp";
+
 		// Time
 		document.getElementById("eventSubtitle").innerHTML +=
 			makeDate(instances[i].start_datetime, instances[i].end_datetime);
+
+		// Link to Google Calendar
+		document.getElementById("eventSubtitle").innerHTML +=
+			"        <a class=\"btn btn-primary\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> Add to Google Calendar! </a>";
+
 		document.getElementById("eventSubtitle").innerHTML += "<br>";
 	}
 	document.getElementById("eventHost").innerHTML =
@@ -90,10 +119,11 @@ function populateEventViewPanel(eventNum) {
 	if (resultFireBtn.classList.contains("selected")) {
 		eventFireBtnElement.classList.toggle("selected");
 	}
-	
+
 	// handle clicks of fire button
 	updateEventFireBtn(eventNum);
 }
+
 // Update the popularity of an event when the fire button is clicked
 var updateEventFireBtn = function (eventNum) {
 	$(".eventFireBtn").click( function(e) {
