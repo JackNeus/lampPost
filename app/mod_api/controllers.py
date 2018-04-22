@@ -155,7 +155,7 @@ def search_events(query, start_datetime):
 	results = []
 	for token in tokens:
 		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
-		token_re = re.compile("(\s*|^)" + token, re.IGNORECASE)
+		token_re = re.compile("(\s+|^)" + token, re.IGNORECASE)
 		events = set()
 		events = events.union(set(EventEntry.objects(title = token_re, instances__end_datetime__gte = start_datetime)))
 		events = events.union(set(EventEntry.objects(host = token_re, instances__end_datetime__gte = start_datetime)))
