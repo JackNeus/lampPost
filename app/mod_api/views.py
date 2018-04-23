@@ -116,7 +116,7 @@ def get_event(id):
 		user = get_user_in_token(request)
 		event = controller.get_event(id)
 		# Make sure event is visible.
-		if not controller.is_visible(event, user):
+		if event is not None and not controller.is_visible(event, user):
 			event = None
 		if event is None:
 			return gen_error_response(event_dne_text)
