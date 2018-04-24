@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+from dateutil.parser import *
+import json
 import re
 from .models import *
 from app import CONFIG, app
@@ -11,8 +14,25 @@ def is_visible(event, user):
 		desired_visibility = 1
 	return event.visibility <= desired_visibility
 
+# Makes sure that no end_datetimes occur [too far] in the past.
+def check_instance_times(event):
+    # This is a sort of grace period.
+    # Users can create events that occurred in the last day.
+	cutoff_time = datetime.today() - timedelta(days=1)
+
+	# Make sure event being created is not too far in the past.
+	if "instances" in event:
+		for instance in event["instances"]:
+			if "end_datetime" not in instance:
+				continue
+			if type(instance["end_datetime"]) is not datetime:
+				end_datetime = parse(instance["end_datetime"])
+			if end_datetime < cutoff_time:
+				raise ValidationError("End time has already passed.")
+
 def add_event(data):
-	new_event = EventEntry.from_json(data)
+	check_instance_times(data)
+	new_event = EventEntry.from_json(json.dumps(data))
 	new_event.save()
 	return new_event
 
@@ -23,8 +43,19 @@ def get_event(id):
 	if len(event) != 1:
 		# More than 1 event returned for the given ID, which is very bad.
 		raise InternalError("More than one event exists for that id.")
+	return event[0]
 	
-	return event[0]	
+# Returns event objects for all event ids in ids
+def get_favorite_events(ids):
+	events = []
+	for event_id in ids:
+		try:
+			event = get_event(event_id)
+			if event is not None:
+				events.append(event)
+		except:
+			pass
+	return events
 
 def delete_event(id):
 	event = get_event(id)
@@ -42,6 +73,10 @@ def edit_event(id, data):
 	event = get_event(id)
 	if event is None:
 		return None
+	# Make sure new dates don't occur too far in past.
+	# TODO: Fix this. Ideally we keep track of creation time and limit based on that.
+	# Maybe. I don't really know.
+	check_instance_times(data)
 	for field in data:
 		# Don't allow user to modify system fields. 
 		if field in system_fields:
@@ -127,7 +162,7 @@ def search_events(query, start_datetime, user=None):
 	results = []
 	for token in tokens:
 		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
-		token_re = re.compile("(\s*|^)" + token, re.IGNORECASE)
+		token_re = re.compile("(\s+|^)" + token, re.IGNORECASE)
 		events = set()
 		events = events.union(set(EventEntry.objects(title = token_re, instances__end_datetime__gte = start_datetime)))
 		events = events.union(set(EventEntry.objects(host = token_re, instances__end_datetime__gte = start_datetime)))

@@ -1,18 +1,19 @@
 html, body {
   font: 100% "Avenir-Medium";
   background-color: #eeeeeee; }
+  html .h1, body .h1 {
+    font-size: 28px; }
   html .logo, body .logo {
     width: 200px; }
   html .navbar-expand-md, body .navbar-expand-md {
-    background-color: #2d9eee;
-    }
+    background-color: #2d9eee; }
   html .nav-link, body .nav-link {
-      font-size: 20px;}
+    font-size: 20px; }
   html h1, body h1 {
     text-align: center; }
   html #bigRow, body #bigRow {
     padding-left: 0vw;
-    padding-right: 0vw; }
+    padding-right: 2vw; }
     html #bigRow #searchBox, body #bigRow #searchBox {
       padding-top: 2vh; }
     html #bigRow .smallSearchResult, body #bigRow .smallSearchResult {
@@ -35,4 +36,4 @@ html, body {
       overflow: scroll;
       display: none; }
 
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=OLD_styleNew.css.map */

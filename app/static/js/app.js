@@ -21,11 +21,6 @@ $(document).ready(function(){
 	setupUserFavorites();
 	setupDataRetrieval();
 
-	// populate page if event data is initialized
-	if (event_data) {
-		showSearchResults();
-	}
-
 	// remove splash screen once user clicks 'log in' or 'continue as guest'
 	$('.homeLink').click(function () {
     		document.getElementById('splashScreen').style.display = 'none';
@@ -71,9 +66,8 @@ var setupDataRetrieval = function() {
 		    	if (data["status"] === "Success")
 				event_data = data["data"];
 			else
-				event_data = null;
+				event_data = [];
 			setupUserFavorites();
-			showSearchResults();
 		};
 		$.ajax({
 			url: base_url + '/api/event/search/' + query,
@@ -93,7 +87,8 @@ var setupUserFavorites = function() {
 		if (data["status"] === "Success")
 			user_fav_data = data["data"];
 		else
-			user_fav_data = null;
+			user_fav_data = [];
+		showSearchResults();
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,

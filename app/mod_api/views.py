@@ -97,7 +97,7 @@ def add_event():
 
 	# Try to add new event.
 	try:
-		new_event = controller.add_event(json.dumps(data))
+		new_event = controller.add_event(data)
 		# Return id of newly added event.
 		return gen_data_response({"id": str(new_event.id)})
 	except NotUniqueError as e:
@@ -107,6 +107,7 @@ def add_event():
 	except ValidationError as e:
 		return gen_error_response("Request was malformatted.")
 	except Exception as e:
+		raise e
 		return gen_failure_response(str(e))
 
 @mod_api.route("/event/get/<id>", methods=["GET"])
@@ -138,6 +139,7 @@ def edit_event(id):
 	# Make sure creator matches authorized user.
 	try:
 		event = controller.get_event(id)
+
 		if event is None:
 			return gen_error_response(event_dne_text)
 		user = User.get_user_in_token(request)
@@ -184,6 +186,8 @@ def delete_event(id):
 		if event is None:
 			return gen_error_response(event_dne_text)
 		return gen_data_response(get_raw_event(event))
+	except ValidationError as e:
+		return gen_error_response("Request was malformatted.")
 	except Exception as e:
 		return gen_failure_response(str(e))
 
@@ -223,7 +227,6 @@ def get_created_events(userid):
 @mod_api.route("/user/fav/add/<userid>/<eventid>")
 @auth.login_required
 def add_event_fav(userid, eventid):
-
 	try:
 		event = controller.get_event(eventid)
 		user = controller.get_user_by_uid(userid)
@@ -285,13 +288,15 @@ def get_favorites(userid):
 		try:
 			token_user = User.get_user_in_token(request)
 			if token_user is None or token_user.netid != user.netid:
-				print("user: " + user.netid)
-				print("token: " + token_user.netid)
 				return gen_error_response("Attempted to get a different user's favorites.")
 		except AuthorizationError:
 			return gen_error_response("Invalid authorization.")
-		
-		return gen_data_response(user.favorites)
+			
+		try:
+			events = controller.get_favorite_events(user.favorites)
+			events = [get_raw_event(event) for event in events]
+			return gen_data_response(events)
+		except Exception as e:
+			return gen_failure_response(str(e))
 	except Exception as e:
-		raise e
-		return gen_failure_response(str(e))
+			return gen_failure_response(str(e))
