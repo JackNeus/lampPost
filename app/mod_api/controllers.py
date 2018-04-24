@@ -160,20 +160,22 @@ def remove_user_favorite(user, eventid):
 # Only events ending after start_datetime are included in search results.
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
 def search_events(query, start_datetime, user=None):
+	# Query settings that go with ALL queries.
+	query_settings = {"visibility__lte": get_max_visibility(user),
+		"instances__end_datetime__gte": start_datetime}
+
 	tokens = query.split()
 	results = []
 	for token in tokens:
 		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
-		token_re = re.compile("(\s+|^)" + token, re.IGNORECASE)
-
-		#Query settings that go with ALL queries.
-		query_settings = {"visibility__lte": get_max_visibility(user),
-			"instances__end_datetime__gte": start_datetime}
+		prefix_re = re.compile("(\s+|^)%s" % token, re.IGNORECASE)
+		full_word_re = re.compile("(\s+|^)%s(\s+|$)" % token, re.IGNORECASE)
 
 		# Queries to run.
-		queries = [{"title": token_re},
-			{"host": token_re},
-			{"instances__location": token_re}]
+		queries = [{"title": prefix_re},
+			{"host": prefix_re},
+			{"instances__location": prefix_re},
+			{"description": full_word_re}]
 
 		sources = list(map(lambda query: set(EventEntry.objects(**query, **query_settings)), queries))
 		events = set().union(*sources)
