@@ -1,22 +1,29 @@
-// TODO: refactor this and 'displaySearches.js' so that they use they share functions
-// also move populateEventViewPanel to 'createEventHtml.js'
+// DEPENDENCIES: handleFavorites.js
 
+// keep track of current event shown in event view
 var selected_event = null;
 
 // Shows large event view when search result is clicked
-var updateEventView = function() {
+var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
 		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
 		var eventId = event_data[eventNum - 1]._id;
 		
-		// don't update if click on already selected search result
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-		
+		// if currently showing the event edit form, don't animate
+		// highlight again
+		if ($(".eventFormView").css("display") == "block") {
 			// hide the form view
 			$("#event-form").hide();
 
 			//hide the footer if it exists
 			$(".footer").hide();
+			
+			populateEventViewPanel(eventNum);
+			handleEventFireBtnClick(eventNum);
+		}
+		
+		// don't update if click on already selected search result
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
 		
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];

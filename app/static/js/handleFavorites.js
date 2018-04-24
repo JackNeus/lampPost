@@ -5,16 +5,18 @@ var highlightUserFavorites = function () {
 		var eventId = event_data[i]._id;
 
 		// Color in fire button if user has favorited an event
-		var fireBtnElement = document.getElementById("resultFireBtn" + (i + 1));
+		var fireBtn = $("#resultFireBtn" + (i + 1));
 		if (eventIsFav(eventId)) {
-			fireBtnElement.classList.toggle("selected");
-			fireBtnElement.title = "Unfavorite";
+			$(fireBtn).toggleClass("selected");
+			$(fireBtn).prop('title', 'Unfavorite');
 		}
 	}
 };
 
 // Update the popularity of an event when the fire button is clicked
 var updateFireBtn = function (fireBtn, eventNum) {
+		// make sure api request for favoriting goes through before making
+		// another one
 		if ($(fireBtn).hasClass("disabled")) return;
 		$(fireBtn).addClass("disabled");
 		
@@ -27,6 +29,7 @@ var updateFireBtn = function (fireBtn, eventNum) {
 			var callback = function(data) {
 				$(fireBtn).toggleClass("disabled");
 				if (data["status"] === "Success") {
+					// update view for the two different button cases
 					if ($(fireBtn).hasClass('resultFireBtn'))
 						updateSearchResultFireView(fireBtn, eventNum, 1);
 					else if($(fireBtn).hasClass('eventFireBtn'))
@@ -48,6 +51,7 @@ var updateFireBtn = function (fireBtn, eventNum) {
 			var callback = function(data) {
 				$(fireBtn).toggleClass("disabled");
 				if (data["status"] === "Success") {
+					// update view for the two different button cases
 					if ($(fireBtn).hasClass('resultFireBtn'))
 						updateSearchResultFireView(fireBtn, eventNum, -1);
 					else if($(fireBtn).hasClass('eventFireBtn'))
