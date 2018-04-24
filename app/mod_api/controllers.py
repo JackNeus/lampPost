@@ -7,12 +7,14 @@ from app import CONFIG, app
 
 InternalError = Exception("InternalError")
 
-def is_visible(event, user):
+def get_max_visibility(user):
 	if user is None:
-		desired_visibility = 0
+		return 0
 	else:
-		desired_visibility = 1
-	return event.visibility <= desired_visibility
+		return 1
+
+def is_visible(event, user):
+	return event.visibility <= get_max_visibility(user)
 
 # Makes sure that no end_datetimes occur [too far] in the past.
 def check_instance_times(event):
@@ -163,13 +165,22 @@ def search_events(query, start_datetime, user=None):
 	for token in tokens:
 		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
 		token_re = re.compile("(\s+|^)" + token, re.IGNORECASE)
-		events = set()
-		events = events.union(set(EventEntry.objects(title = token_re, instances__end_datetime__gte = start_datetime)))
-		events = events.union(set(EventEntry.objects(host = token_re, instances__end_datetime__gte = start_datetime)))
-		events = events.union(set(EventEntry.objects(instances__location = token_re, instances__end_datetime__gte = start_datetime)))
+
+		#Query settings that go with ALL queries.
+		query_settings = {"visibility__lte": get_max_visibility(user),
+			"instances__end_datetime__gte": start_datetime}
+
+		# Queries to run.
+		queries = [{"title": token_re},
+			{"host": token_re},
+			{"instances__location": token_re}]
+
+		sources = list(map(lambda query: set(EventEntry.objects(**query, **query_settings)), queries))
+		events = set().union(*sources)
+		
 		results.append(events)
 	events = set.intersection(*results)
-	return filter(lambda x: is_visible(x, user), events)
+	return events
 
 def add_report(reporter, reason, event_id):
 	event = get_event(event_id)
