@@ -356,23 +356,17 @@ def make_test(test_body, event_to_add = None):
 	assert is_success(r)
 	event_id = r["data"]["id"]
 
-	test_body(new_event, event_id, creator_netid)
-
-	# Cleanup
-	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
-	assert is_success(r)
-
-
-# Base for favorite tests.
-def make_test(test_body):
-	# Setup
-	new_event = deepcopy(base_event)
-	creator_netid = new_event["creator"]
-	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
-	assert is_success(r)
-	event_id = r["data"]["id"]
-
-	test_body(new_event, event_id, creator_netid)
+	try: 
+		test_body(new_event, event_id, creator_netid)
+	except Exception as e:  # Temporarily catch exception.
+		# Try to clean-up, if we can't, abort.
+		try:
+			r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
+		except:
+			print("Something went wrong.")
+			print("Please restart the testing platform (test.sh).")
+			exit()
+		raise e  # Reraise exception
 
 	# Cleanup
 	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
