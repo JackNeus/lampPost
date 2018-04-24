@@ -324,5 +324,4 @@ def report_event(eventid):
 	except ValidationError as e:
 		return gen_error_response(str(e))
 	except Exception as e:
-		raise e
 		return gen_failure_response(str(e))
