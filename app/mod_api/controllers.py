@@ -170,3 +170,15 @@ def search_events(query, start_datetime, user=None):
 		results.append(events)
 	events = set.intersection(*results)
 	return filter(lambda x: is_visible(x, user), events)
+
+def add_report(reporter, reason, event_id):
+	event = get_event(event_id)
+	if event is None:
+		raise EventDNEError()
+	event_dump = str(event.to_json())
+	new_report = ReportEntry(reporter=reporter.netid,
+		report_time=datetime.now(),
+		reason=reason,
+		event_dump=event_dump)
+	new_report.save()
+	return new_report.to_json()
