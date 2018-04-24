@@ -167,10 +167,16 @@ def test_add_valid_events():
 
 def test_get_valid_events():
 	for event_id in valid_events:
-		r = make_get_event_request(event_id, generate_auth_token("bwk"))
-		assert is_success(r)
-		assert compare_events(valid_events[event_id], r["data"])
-
+		r = make_get_event_request(event_id)
+		visibility = 0
+		if 'visibility' in valid_events[event_id]:
+			visibility = valid_events[event_id]["visibility"]
+		if visibility > 0:
+			assert is_error(r)
+		else:
+			assert is_success(r)
+			assert compare_events(valid_events[event_id], r["data"])
+      
 def test_delete_valid_events():
 	for event_id in valid_events:
 		creator_netid = valid_events[event_id]["creator"]

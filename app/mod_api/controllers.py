@@ -7,6 +7,13 @@ from app import CONFIG, app
 
 InternalError = Exception("InternalError")
 
+def is_visible(event, user):
+	if user is None:
+		desired_visibility = 0
+	else:
+		desired_visibility = 1
+	return event.visibility <= desired_visibility
+
 # Makes sure that no end_datetimes occur [too far] in the past.
 def check_instance_times(event):
     # This is a sort of grace period.
@@ -150,7 +157,7 @@ def remove_user_favorite(user, eventid):
 # The intersection of results for the tokens is returned.
 # Only events ending after start_datetime are included in search results.
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
-def search_events(query, start_datetime):
+def search_events(query, start_datetime, user=None):
 	tokens = query.split()
 	results = []
 	for token in tokens:
@@ -162,4 +169,4 @@ def search_events(query, start_datetime):
 		events = events.union(set(EventEntry.objects(instances__location = token_re, instances__end_datetime__gte = start_datetime)))
 		results.append(events)
 	events = set.intersection(*results)
-	return events
+	return filter(lambda x: is_visible(x, user), events)
