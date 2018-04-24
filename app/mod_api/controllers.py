@@ -7,12 +7,14 @@ from app import CONFIG, app
 
 InternalError = Exception("InternalError")
 
-def is_visible(event, user):
+def get_max_visibility(user):
 	if user is None:
-		desired_visibility = 0
+		return 0
 	else:
-		desired_visibility = 1
-	return event.visibility <= desired_visibility
+		return 1
+
+def is_visible(event, user):
+	return event.visibility <= get_max_visibility(user)
 
 # Makes sure that no end_datetimes occur [too far] in the past.
 def check_instance_times(event):
@@ -95,6 +97,19 @@ def edit_event(id, data):
 def get_events_by_creator(netid):
 	events = EventEntry.objects(creator = netid)
 	return events
+
+# Get trending events. This is curently the 15 events occurring in the next week 
+# with the most favories.
+def get_trending_events(user = None):
+	trending_size = 15
+	# Start a day ago.
+	start_datetime = datetime.now() - timedelta(days = 1)
+	end_datetime = datetime.now() + timedelta(days = 7)
+	trending_events = EventEntry.objects(instances__end_datetime__gte = start_datetime,
+		instances__end_datetime__lte = end_datetime, 
+		visibility__lte = get_max_visibility(user))
+	trending_events = trending_events.order_by('-favorites').limit(trending_size)
+	return trending_events
 
 # Get [netid of] creator for event (by event id).
 def get_event_creator(id):
