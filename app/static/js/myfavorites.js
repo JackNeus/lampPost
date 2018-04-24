@@ -19,17 +19,14 @@ var setupUserFavorites = function() {
 	var callback = function(data) {
 		if (data["status"] === "Success") {
 			user_fav_data = data["data"];
-			event_data = data["data"]
+			event_data = data["data"];
+			showSearchResults();
 		}
 		else {
 			user_fav_data = [];
 			event_data = [];
-		}
-		// only show favorites if user has any
-		if (user_fav_data.length != 0) 
-			showSearchResults();
-		else 
 			showNoFavorites();
+		}	
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,
