@@ -188,6 +188,7 @@ var setupUserFavorites = function() {
 		showMyEvents();
 		changeMyEvents();
 		editMyEvents();
+		checkEventParameter();
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,

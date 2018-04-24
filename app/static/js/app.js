@@ -17,6 +17,8 @@ function setData(data) {
 
 $(document).ready(function(){
 	// setup search bar functionality
+	checkSearchParameter();
+	if ($("#search-box").val()) fetchData($("#search-box").val());
 	setupSearch();
 	setupUserFavorites();
 	setupDataRetrieval();
@@ -49,7 +51,14 @@ var setupDataRetrieval = function() {
 	$("#search-box").keyup(function() {
 		if ($("#datepicker").val())
 			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
-		else query = $(this).val()
+		else query = $(this).val();
+		
+		// update url with eventid paramter
+		var newurl = window.location.protocol + "//" + 
+				 window.location.host + 
+				 window.location.pathname + 
+				 addUrlParameter(document.location.search, 'search', query);
+		window.history.pushState({ path: newurl }, '', newurl);
 
 		fetchData(query);
 	});
@@ -59,26 +68,26 @@ var setupDataRetrieval = function() {
 		var date_py = java2py_date($(this).val());
 	  	fetchData($("#search-box").val() + "/" + date_py);
 	});
-
-	// fetch data given a query string
-	function fetchData(query) {
-		var callback = function(data){
-		    	if (data["status"] === "Success")
-				event_data = data["data"];
-			else
-				event_data = [];
-			setupUserFavorites();
-		};
-		$.ajax({
-			url: base_url + '/api/event/search/' + query,
-			dataType: 'json',
-			headers: {
-				'Authorization': ('Token ' + $.cookie('api_token'))
-			},
-			success: callback
-		});
-	}
 };
+
+// fetch data given a query string
+function fetchData(query) {
+	var callback = function(data){
+	    	if (data["status"] === "Success")
+			event_data = data["data"];
+		else
+			event_data = [];
+		setupUserFavorites();
+	};
+	$.ajax({
+		url: base_url + '/api/event/search/' + query,
+		dataType: 'json',
+		headers: {
+			'Authorization': ('Token ' + $.cookie('api_token'))
+		},
+		success: callback
+	});
+}
 
 // Get list of events which user has favorited
 var setupUserFavorites = function() {
@@ -89,6 +98,7 @@ var setupUserFavorites = function() {
 		else
 			user_fav_data = [];
 		showSearchResults();
+		checkEventParameter();
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,
