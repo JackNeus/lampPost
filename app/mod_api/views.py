@@ -55,6 +55,14 @@ def verify_token(token):
 def unauthorized():
 	return make_response(jsonify({'error': 'Unauthorized access'}), 403)
 
+def get_user_in_token(request):
+	user = None
+	try:
+		user = User.get_user_in_token(request)
+	except AuthorizationError:
+		pass
+	return user
+
 @mod_api.route("/event/add", methods=["PUT"])
 @auth.login_required
 def add_event():
@@ -103,10 +111,13 @@ def add_event():
 		return gen_failure_response(str(e))
 
 @mod_api.route("/event/get/<id>", methods=["GET"])
-@auth.login_required
 def get_event(id):
 	try:
+		user = get_user_in_token(request)
 		event = controller.get_event(id)
+		# Make sure event is visible.
+		if event is not None and not controller.is_visible(event, user):
+			event = None
 		if event is None:
 			return gen_error_response(event_dne_text)
 		return gen_data_response(get_raw_event(event));
@@ -182,10 +193,10 @@ def delete_event(id):
 
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>/<start_datetime>")
-@auth.login_required
-def event_search(query, start_datetime):
+def event_search(query, start_datetime):	
 	try:
-		events = controller.search_events(query, start_datetime)
+		user = get_user_in_token(request)
+		events = controller.search_events(query, start_datetime, user)
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
