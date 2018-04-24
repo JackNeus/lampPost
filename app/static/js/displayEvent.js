@@ -1,13 +1,27 @@
-// TODO: refactor this and 'displaySearches.js' so that they use they share functions
-// also move populateEventViewPanel to 'createEventHtml.js'
+// DEPENDENCIES: handleFavorites.js
 
+// keep track of current event shown in event view
 var selected_event = null;
 
 // Shows large event view when search result is clicked
-var updateEventView = function() {
+var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
 		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
 		var eventId = event_data[eventNum - 1]._id;
+		
+		// if currently showing the event edit form, don't animate
+		// highlight again
+		if ($(".eventFormView").css("display") == "block") {
+		
+			// hide the form view
+			$("#event-form").hide();
+
+			//hide the footer if it exists
+			$(".footer").hide();
+			
+			populateEventViewPanel(eventNum);
+			handleEventFireBtnClick(eventNum);
+		}
 		
 		// don't update if click on already selected search result
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
@@ -19,19 +33,13 @@ var updateEventView = function() {
 					 addUrlParameter(document.location.search, 'event', eventId);
 			window.history.pushState({ path: newurl }, '', newurl);
 		
-			// hide the form view
-			$("#event-form").hide();
-
-			//hide the footer if it exists
-			$(".footer").hide();
-		
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 			
 			// populate and display event view
 			highlightSelectedSearchResult(eventNum);
 			populateEventViewPanel(eventNum);
-			updateEventFireBtn(eventNum);
+			handleEventFireBtnClick(eventNum);
 		}
 	});
 }
@@ -48,9 +56,9 @@ function highlightSelectedSearchResult(eventNum) {
 }
 
 // Update the popularity of an event when the fire button is clicked
-var updateEventFireBtn = function (eventNum) {
+var handleEventFireBtnClick = function (eventNum) {
 	$(".eventFireBtn").click(function(e) {
-		updateFireBtn2(this, eventNum);
+		updateFireBtn(this, eventNum);
 		e.stopPropagation();
 	});
 };
@@ -116,7 +124,4 @@ function populateEventViewPanel(eventNum) {
 	else $("#eventFireBtn").removeClass("selected");
 	
 	$("#event-view").show();
-	
-	// handle clicks of fire button
-	//updateEventFireBtn(eventNum);
 }

@@ -1,4 +1,4 @@
-// DEPENDENCIES: displayEvent.js, createEventHtml.js
+// DEPENDENCIES: displayEvent.js, createEventHtml.js, handleFavorites.js
 
 // Populate search result panel with event_data sorted by date.
 var showSearchResults = function() {
@@ -6,12 +6,11 @@ var showSearchResults = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortResults(); 		// sort by date or popularity
-	createSearchResults();	// create html code for each search result and display them
-	highlightUserFavorites(); 	// highlight user favorites
-	// declare event handlers for "fireBtn" and "smallSearchResult"
-	updateFireBtn(); 		// handle clicks of fire button
-	updateEventView(); 	// handle click of event
+	sortResults(); 			// sort by date or popularity
+	createSearchResults();		// create html code for each search result and display them
+	highlightUserFavorites(); 	// highlight user favorites on load
+	handleFireBtnClick(); 		// handle clicks of fire button
+	handleEventViewClick(); 	// handle click of event
 }
 
 // Populate search result panel with event_data sorted by date.
@@ -20,19 +19,18 @@ var showMyEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortResults(); 	// sort events by date
-	createMyEventResults(); // create html code for each created event and display them
-	highlightUserFavorites(); 	// highlight user favorites
-	// declare event handlers for "fireBtn" and "smallSearchResult"
-	updateFireBtn(); 		// handle clicks of fire button
-	updateEventView(); 	// handle click of event
+	sortResults(); 			// sort events by date
+	createMyEventResults(); 	// create html code for each created event and display them
+	highlightUserFavorites(); 	// highlight user favorites on load
+	handleFireBtnClick(); 		// handle clicks of fire button
+	handleEventViewClick(); 	// handle click of event
 }
 
 // Update the popularity of an event when the fire button is clicked
-var updateFireBtn = function () {
+var handleFireBtnClick = function () {
 	$(".resultFireBtn").click(function(e) {
 		var eventNum = getNum($(this).attr("id"), "resultFireBtn");
-		updateFireBtn2(this, eventNum);
+		updateFireBtn(this, eventNum);
 		e.stopPropagation();
 	});
 };

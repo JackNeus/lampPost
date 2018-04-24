@@ -1,4 +1,4 @@
-// DEPENDENCIES: displaySearches.js, displayEvent.js
+// DEPENDENCIES: displaySearches.js, displayEvent.js, handleUrlParam.js
 
 var base_url;
 function setBaseUrl(url) {
@@ -22,11 +22,6 @@ $(document).ready(function(){
 	setupSearch();
 	setupUserFavorites();
 	setupDataRetrieval();
-
-	// remove splash screen once user clicks 'log in' or 'continue as guest'
-	$('.homeLink').click(function () {
-    		document.getElementById('splashScreen').style.display = 'none';
-	});
 });
 
 // Sets up sort and filter functionality for search box
@@ -52,13 +47,6 @@ var setupDataRetrieval = function() {
 		if ($("#datepicker").val())
 			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
 		else query = $(this).val();
-		
-		// update url with eventid paramter
-		var newurl = window.location.protocol + "//" + 
-				 window.location.host + 
-				 window.location.pathname + 
-				 addUrlParameter(document.location.search, 'search', query);
-		window.history.pushState({ path: newurl }, '', newurl);
 
 		fetchData(query);
 	});
@@ -78,6 +66,15 @@ function fetchData(query) {
 		else
 			event_data = [];
 		setupUserFavorites();
+		var url = window.location.href;
+		// update url with eventid paramter
+		//var newurl = window.location.protocol + "//" + 
+		//		 window.location.host + 
+		//		 window.location.pathname + 
+		//		 addUrlParameter(document.location.search, 'search', query);
+		var newurl = addUrlParameter(url, 'search', query);
+		console.log(addUrlParameter(document.location.search, 'search', query));
+		window.history.pushState({ path: newurl }, '', newurl);
 	};
 	$.ajax({
 		url: base_url + '/api/event/search/' + query,

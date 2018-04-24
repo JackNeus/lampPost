@@ -59,14 +59,15 @@ var loadEvents = function() {
 };
 
 // allow user to delete events
-var changeMyEvents = function() {
+var handleDeleteMyEvent = function() {
 	$(".deleteBtn").click( function() {
 		// hide the footer
 		$(".footer").hide();
 
 		// toggle highlighting in search results
 		eventNum = getNum($(this).attr('id'), "deleteBtn");
-		highlightSelectedSearchResult(eventNum);
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
+			highlightSelectedSearchResult(eventNum);
 		
 		// delete event if user confirms deletion
 		$("#smallSearchResult" + eventNum).show(function () {
@@ -74,8 +75,10 @@ var changeMyEvents = function() {
 			if (result) {
 				// hide the event display if current event view is the event to be
 				// deleted
-				if (selected_event !== null && selected_event._id == event_data[eventNum - 1]._id)
+				if (selected_event !== null && selected_event._id == event_data[eventNum - 1]._id) {
 					$(".event-view").hide();
+					$("#event-form").hide();
+				}
 			
 				var eventId = event_data[eventNum - 1]._id;
 			
@@ -97,7 +100,7 @@ var changeMyEvents = function() {
 }
 
 // allow user to change events
-var editMyEvents = function() {
+var handleEditMyEvent = function() {
 
 	$(".editBtn").click( function() { 
 
@@ -106,7 +109,8 @@ var editMyEvents = function() {
 
 		// toggle highlighting in search results
 		var eventNum = getNum($(this).attr('id'), "editBtn");
-		highlightSelectedSearchResult(eventNum);
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
+			highlightSelectedSearchResult(eventNum);
 
 		// hide the event display
 		$(".event-view").hide();
@@ -186,8 +190,8 @@ var setupUserFavorites = function() {
 		else
 			user_fav_data = [];
 		showMyEvents();
-		changeMyEvents();
-		editMyEvents();
+		handleDeleteMyEvent();
+		handleEditMyEvent();
 		checkEventParameter();
 	};
 	$.ajax({
