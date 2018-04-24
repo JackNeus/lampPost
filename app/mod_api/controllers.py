@@ -11,7 +11,10 @@ from app import CONFIG, app
 
 InternalError = Exception("InternalError")
 
-sg = sendgrid.SendGridAPIClient(apikey=CONFIG['SENDGRID_API_KEY'])
+if "SENDGRID_API_KEY" in CONFIG:
+	sg = sendgrid.SendGridAPIClient(apikey=CONFIG['SENDGRID_API_KEY'])
+else:
+	sg = None
 
 def is_visible(event, user):
 	if user is None:
@@ -193,6 +196,8 @@ def add_report(reporter, reason, event_id):
 	return new_report.to_json()
 
 def send_report_email(report):
+	if CONFIG["DEBUG"] and sg is None:
+		return
 	for admin in CONFIG["ADMINS"]:
 		from_email = Email("system@lamppost.info")
 		to_email = Email(admin)
