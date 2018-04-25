@@ -1,11 +1,20 @@
 from datetime import datetime, timedelta
 from dateutil.parser import *
 import json
+import os
 import re
+import sendgrid
+from sendgrid.helpers.mail import *
+
 from .models import *
 from app import CONFIG, app
 
 InternalError = Exception("InternalError")
+
+if "SENDGRID_API_KEY" in CONFIG:
+	sg = sendgrid.SendGridAPIClient(apikey=CONFIG['SENDGRID_API_KEY'])
+else:
+	sg = None
 
 def is_visible(event, user):
 	if user is None:
@@ -180,5 +189,23 @@ def add_report(reporter, reason, event_id):
 		report_time=datetime.now(),
 		reason=reason,
 		event_dump=event_dump)
+	send_report_email(new_report)
+
+	# Save after report has been successfully emailed.
 	new_report.save()
 	return new_report.to_json()
+
+def send_report_email(report):
+	if CONFIG["DEBUG"] and sg is None:
+		return
+	for admin in CONFIG["ADMINS"]:
+		from_email = Email("system@lamppost.info")
+		to_email = Email(admin)
+		subject = "An event was reported."
+		content_string = "Reporter: %s<br />Time: %s<br />Reason: %s<br />Event: %s<br />" % (report.reporter, report.report_time, report.reason, report.event_dump)
+		content = Content("text/html", content_string)
+		mail = Mail(from_email, subject, to_email, content)
+		response = sg.client.mail.send.post(request_body=mail.get())
+		print(response.status_code)
+		print(response.body)
+		print(response.headers)
