@@ -3,7 +3,6 @@ from dateutil.parser import *
 from mongoengine import *
 from app import CONFIG, app
 
-
 class UserEntry(Document):
     netid = StringField(required = True, unique = True)
     favorites = ListField()

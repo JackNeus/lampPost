@@ -6,6 +6,7 @@ import json
 from app.mod_user.models import AuthorizationError, User, UserEntry
 from . import api_module as mod_api
 from . import controllers as controller
+from . import error_handler
 from .models import *
 from app import CONFIG
 
@@ -97,7 +98,7 @@ def add_event():
 	except FieldDoesNotExist as e:
 		return gen_error_response("Request included a field that does not exist.")
 	except ValidationError as e:
-		return gen_error_response("Request was malformatted.")
+		return gen_error_response(error_handler.validation_error(e, data))
 	except Exception as e:
 		raise e
 		return gen_failure_response(str(e))
