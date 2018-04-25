@@ -1,6 +1,13 @@
 from datetime import datetime, timedelta
 from dateutil.parser import *
 from mongoengine import *
+from app import CONFIG, app
+
+class EventDNEError(Exception):
+    pass
+
+class RateError(Exception):
+    pass
 
 class UserEntry(Document):
     netid = StringField(required = True, unique = True)
@@ -9,7 +16,7 @@ class UserEntry(Document):
     meta = { "strict": False}
 
 class InstanceEntry(EmbeddedDocument):
-    location = StringField(required = True, min_length = 3)
+    location = StringField(required = True, min_length = 3, max_length = 100)
     start_datetime = DateTimeField(required = True)
     end_datetime = DateTimeField(required = True)
 
@@ -19,25 +26,17 @@ class InstanceEntry(EmbeddedDocument):
             self.start_datetime = parse(self.start_datetime)
         if type(self.end_datetime) is not datetime:
             self.end_datetime = parse(self.end_datetime)
-        
-        # This is a sort of grace period.
-        # Users can create events that occurred in the last day.
-        cutoff_time = datetime.today() - timedelta(days=1)
-
-        # End datetime cannot have already passed.
-        if self.end_datetime < cutoff_time:
-            raise ValidationError("End time has already passed.")
 
         # End datetime cannot be before start datetime.
         if self.end_datetime < self.start_datetime:
             raise ValidationError("End time is earlier than start time.")
 
 class EventEntry(Document):
-    title = StringField(required = True, unique = True, min_length = 5)
-    host = StringField(required = True, min_length = 3)
+    title = StringField(required = True, unique = True, min_length = 5, max_length = 100)
+    host = StringField(required = True, min_length = 3, max_length = 100)
     instances = EmbeddedDocumentListField(InstanceEntry, required = True, min_length = 1)
         
-    description = StringField(required = True, min_length = 10)
+    description = StringField(required = True, min_length = 10, max_length = 10000)
     visibility = IntField(required = True, default = 0) 
     favorites = IntField(required = True, default = 0)
 
@@ -45,8 +44,13 @@ class EventEntry(Document):
     creator = StringField(required = True)
 
     # Optional fields.
-    trailer = URLField()
+    trailer = URLField(max_length = 100)
+    poster = URLField()
 
+    def clean(self):
+        if self.poster is not None and not self.poster.startswith(CONFIG["S3_LOCATION"]):
+            raise ValidationError("Poster URL did not point to an authorized location.")
+        
     meta = {'strict': False}
         
 # List of fields that MUST be supplied by user.
@@ -63,7 +67,8 @@ required_fields = [
 # List of system fields (i.e. fields that the user should not touch)
 system_fields = [
 "id",
-"creator"]
+"creator",
+"favorites"]
 
 # TODO: Make this more generic/less hacky/generally better.
 def has_field(obj, field):
@@ -97,3 +102,9 @@ def get_raw_event(event_entry):
         raw["instances"][i]["start_datetime"] = str(raw["instances"][i]["start_datetime"])
         raw["instances"][i]["end_datetime"] = str(raw["instances"][i]["end_datetime"])
     return raw
+
+class ReportEntry(Document):
+    reporter = StringField(required = True)
+    report_time = DateTimeField(required = True)
+    reason = StringField(required = True, min_length = 15)
+    event_dump = StringField(required = True)

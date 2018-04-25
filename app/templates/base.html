@@ -26,6 +26,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/base.css?v=1">
     <link rel="stylesheet" type="text/css" href="/static/css/add.css?v=1">
+    <script src="/static/js/displaySearches.js?v=0"></script>
+    <script src="/static/js/displayEvent.js?v=0"></script>
+    <script src="/static/js/createEventHtml.js?v=0"></script>
+    <script src="/static/js/handleFavorites.js?v=0"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -76,18 +80,24 @@
           <li class="nav-item">
             <a class="nav-link" href="/add">Add Event</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/myevents">My Events</a>
-          </li>
           {% endif %}
           </li>
+          {% if current_user.is_authenticated %}
+          <div class="userProfile">
           <li class="nav-item">
-            {% if current_user.is_authenticated %}
-            <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
-            {% else %}
-             <a class="nav-link" href="/login"> Login </a>
-            {% endif %}
+          	<a class="nav-link" id="userProfileLink" href="#">My Account</a>
+          	   <div class="dropdown-content" id="userProfileDropdown">
+		      <a class="nav-link" href="/myevents">Manage My Events</a>
+		      <a class="nav-link" href="/myfavorites">Favorite Events</a>
+		   </div>
           </li>
+          </div>
+          <li class="nav-item">
+             <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
+          </li>
+          {% else %}
+		 <a class="nav-link" href="/login"> Login </a>
+	    {% endif %}
         </ul>
       </div>
     </nav>
@@ -107,6 +117,18 @@
       function slideFooter(){
         $(".footer").slideDown("slow");
       }
+      
+      /* Toggle My Profile dropdown */
+	$("#userProfileLink").click( function () {
+	    $("#userProfileDropdown").toggle();
+	});
+
+	// Close the dropdown if the user clicks outside of it
+	window.onclick = function(event) {
+	  if (!event.target.matches('#userProfileLink')) {
+	  	$("#userProfileDropdown").hide();
+	  }
+	}
   </script>
 
 
@@ -141,4 +163,6 @@
 
   </body>
   {% block scripts %}{% endblock %}
+  <script>
+   </script>
 </html>
