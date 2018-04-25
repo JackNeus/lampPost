@@ -10,8 +10,8 @@ class AuthorizationError(Exception):
 class UserEntry(Document):
 	netid = StringField(required = True, unique = True)
 
-	meta = { "strict": False }
-
+	meta = { 'strict': False }
+	
 class User(UserMixin):
 	def __init__(self, uid, netid):
 		self.uid = str(uid)

@@ -4,11 +4,15 @@ BASE_URL="http://localhost:5002"
 
 SECRET_KEY="this_secret_key_is_for_testing_only"
 
+S3_LOCATION='http://princeton-lamppost.s3.amazonaws.com/'
+
 DB_NAME="lamppost"
 DB_HOST="localhost"
 DB_PORT=12345
 DB_USERNAME=None
 DB_PASSWORD=None
+
+REPORT_TIME_LIMIT=10
 
 USE_MOCK_DATA=False
 BYPASS_API_AUTH=False

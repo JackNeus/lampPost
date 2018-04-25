@@ -3,7 +3,6 @@ from flask import Blueprint, request, render_template, flash, redirect, session
 from flask_login import login_required, current_user
 from app import CONFIG
 from app.mod_web.forms import NameForm
-from app.mod_web.models import User
 from . import web_module as mod_web
 from . import controllers as controller
 from .forms import *
@@ -42,16 +41,30 @@ def browser():
 def myevents():
 	if request.method == "POST":
 		form = EventForm(request.form)
-		# TODO: Put the form parsing code in a separate function
+
 		if not form.validate_on_submit():
 			print(form.errors)
 			return render_template("web/myevents.html", form=form, errors=form.errors, display=True)
 		else:
 			eventData, numShowings = controller.form_to_event_object(form)
 
+			try:
+				if "poster" in request.files:
+					# Upload image to S3.
+					file_url = controller.upload_file(request.form['event-id'], request.files["poster"])
+					# Update event with image URL.
+					
+					eventData["poster"] = file_url
+			except Exception as e:
+				flash("Error: " + str(e))
+				return render_template("web/myevents.html", form=EventForm())
+
 			# make API request
-			headers = { "Authorization" : "Token %s" % current_user.token }
-			r = requests.post(CONFIG["BASE_URL"] + "/api/event/edit/"+request.form['event-id'], json=eventData, headers=headers)
+			r = controller.make_edit_request(request.form['event-id'], eventData)
+
+			if r.status_code != 200:
+				flash("Something went wrong. Please contact a developer.")
+				return render_template("web/add.html", form=EventForm())
 			r = json.loads(r.text)
 			if r["status"] == "Success":
 				flash("Success! Your event has been edited.")
@@ -68,7 +81,6 @@ def addEvent():
 	if request.method == "POST":
 		form = EventForm(request.form)
 		if not form.validate_on_submit():
-			print(form.errors)
 			return render_template("web/add.html", form=form, errors=form.errors)
 		else:
 			eventData, numShowings = controller.form_to_event_object(form)
@@ -83,6 +95,23 @@ def addEvent():
 				return render_template("web/add.html", form=EventForm())
 			r = json.loads(r.text)
 			if r["status"] == "Success":
+				event_id = r["data"]["id"]
+				# If event was successfully added, upload poster & update event.
+				try:
+					if "poster" in request.files:
+						# Upload image to S3.
+						file_url = controller.upload_file(event_id, request.files["poster"])
+						# Update event with image URL.
+						
+						# TODO: Handle failures better (or at all).
+						controller.make_edit_request(event_id, {'poster': file_url})
+				except Exception as e:
+					# If adding the image fail, delete the event and pretend like
+					# nothing happened.
+					controller.make_delete_request(event_id)
+					flash("Error. " + str(e))
+					return render_template("web/add.html", form=EventForm())
+
 				flash("Success! Your event has been added.")
 				return redirect("add")
 			else:

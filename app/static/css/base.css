@@ -32,21 +32,36 @@ html #bigRow, body #bigRow {
   padding-right: 0vw;
   margin-bottom: 2vh; }
 
+.hidden {
+  display: none; }
+
 .debug-data {
   display: none;
   color: red; }
 
+#searches-wrapper {
+  min-height: 75px;
+  border-top: 5px solid #555555;
+  position: relative; }
+  #searches-wrapper .centered {
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0; }
+  #searches-wrapper #loading-spinner {
+    font-size: 1.7em; }
+
 #searches {
-  border-top: 5px solid #555555; }
+  padding-top: 1vh; }
 
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
   max-width: 100%;
   width: 100%;
-  flex-shrink: 1000; }
-
-#search-box {
+  flex-shrink: 1000;
   font-size: 16px !important; }
 
 #searchSort {
@@ -194,6 +209,11 @@ html #bigRow, body #bigRow {
   flex-flow: row wrap;
   overflow: hidden; }
 
+.searchRow {
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden; }
+
 .flex-container-col {
   display: flex;
   flex-flow: column nowrap;
@@ -206,8 +226,6 @@ html #bigRow, body #bigRow {
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll; }
-  .flex-container-scroll #searches {
-    min-width: 12em; }
 
 .footer {
   color: white;

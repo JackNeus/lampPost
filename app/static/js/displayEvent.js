@@ -5,22 +5,25 @@ var selected_event = null;
 
 // Shows large event view when search result is clicked
 var updateEventView = function() {
-		$(".smallSearchResult").click( function(){
+	$(".smallSearchResult").click( function(){
+		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
+		// don't update if click on already selected search result
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
 			// hide the form view
 			$("#event-form").hide();
 
 			//hide the footer if it exists
 			$(".footer").hide();
-			
-			var eventNum = getNum($(this).attr("id"), "smallSearchResult");
+		
 			highlightSelectedSearchResult(eventNum);
-			
+		
 			// populate and display event view.
 			$(".event-view").hide();
 			selected_event = event_data[eventNum - 1];
 			populateEventViewPanel(eventNum - 1);
 			$("#event-view").show();
-		});
+		}
+	});
 }
 
 // highlight search result that's been selected and display event view
@@ -59,74 +62,74 @@ function getGoogleCalLink(eventNum, i) {
 
 // Populate event view panel with event_data[eventNum] (basic layout)
 function populateEventViewPanel(eventNum) {
-	// Fire icon
-	var fireIcon = $('<i />').attr({
-		class: "fas fa-fire",
-	});
 
 	// Clickable fire button that displays "Favorite" when hovered over
-	//document.getElementById("eventFireBtn").innerHTML = "";
-	var fireBtn = $('<div />').attr({
-		class: "eventFireBtn btn",
-		title: "Favorite",
-		id: "eventFireBtn"
-	}).append(fireIcon);
-
-	// Number of favorites an event has
-	var getFire = $("#resultFireNum" + (eventNum + 1)).text();
-	var fireNum = $('<p />').attr({
-		class: "eventFireNum",
-		id: "eventFireNum"
-	}).append(getFire);
+	var fireBtn = 
+		`<div class="eventFireBtn btn" id="eventFireBtn">`
+	    +		`<i class="fas fa-fire"></i>`
+	    + `</div>`;
+	  
+	// Number of favorites
+	var fireNum = 
+		`<p class="eventFireNum" id="eventFireNum">`
+	    + 	$("#resultFireNum" + (eventNum + 1)).text()
+	    + `</p>`;
 	
-	document.getElementById("welcome").style.display="none";
-	document.getElementById("eventTitle").innerHTML = event_data[eventNum].title;
+	// hide welcome image
+	$("#welcome").css("display", "none");
+	
+	// setup event main header
+	$("#eventTitle").html(event_data[eventNum].title);
+	$("#eventSubtitle").html("");
 	$("#eventFireBtn").remove();
 	$("#eventFireNum").remove();
 	$("#mainHeaderLine").append(fireBtn).append(fireNum);
-	document.getElementById("eventSubtitle").innerHTML = "";
+	
+	// setup dates and times
 	var instances = event_data[eventNum].instances;
 	for (var i = 0; i < instances.length; i++) {
 		// Locatiom
-		document.getElementById("eventSubtitle").innerHTML +=
-			instances[i].location + "&nbsp|&nbsp";
-
+		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
+		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
+		$("#eventSubtitle").append("<br>");
 		document.getElementById("eventSubtitle").innerHTML +=
-			makeDate(instances[i].start_datetime, instances[i].end_datetime);
-
-		// Link to Google Calendar
-		document.getElementById("eventSubtitle").innerHTML +=
-			"        <a class=\"btn btn-primary\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> Add to Google Calendar! </a>";
-
-		document.getElementById("eventSubtitle").innerHTML += "<br>";
+			"<a class=\"btn btn-primary\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> Add to 	Google Calendar! </a>";
 	}
-	document.getElementById("eventHost").innerHTML =
-		"by " + event_data[eventNum].host;
-	document.getElementById("eventDescription").innerHTML =
-		event_data[eventNum].description;
-
-	// Add C&H image
-	var photoNum = Math.floor(Math.random() * 81); + 1;
-	document.getElementById("eventPhoto").innerHTML =
-		"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
-		+ photoNum + ".png\">";
 	
-	// Color in fire button if user has favorited an event
-	var eventId = event_data[eventNum]._id;
-	var eventFireBtnElement = document.getElementById("eventFireBtn");
-	var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
-	if (resultFireBtn.classList.contains("selected")) {
-		eventFireBtnElement.classList.toggle("selected");
-	}
+	// setup host and description
+	$("#eventHost").html("by " + event_data[eventNum].host);
+	$("#eventDescription").html(event_data[eventNum].description);
 
+	// If the event has a poster, display that.
+	if ("poster" in event_data[eventNum]) {
+		document.getElementById("eventPhoto").innerHTML =
+		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum].poster+"\">";
+	}
+	else {
+		// Add C&H image
+		var photoNum = Math.floor(Math.random() * 81); + 1;
+		document.getElementById("eventPhoto").innerHTML =
+			"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
+			+ photoNum + ".png\">";
+	}
+	
+	// highlight fire button if appropriate
+	if ($("#resultFireBtn" + (eventNum + 1)).hasClass("selected")) {
+		$("#eventFireBtn").addClass("selected");
+	}
+	else $("#eventFireBtn").removeClass("selected");
+	
 	// handle clicks of fire button
 	updateEventFireBtn(eventNum);
 }
 
 // Update the popularity of an event when the fire button is clicked
 var updateEventFireBtn = function (eventNum) {
-	$(".eventFireBtn").click( function(e) {
+	$("#eventFireBtn").click( function(e) {
+		if ($(this).hasClass("disabled")) return;
+		$(this).addClass("disabled");
+		
 		// get event id and user id
 		var eventId = event_data[eventNum]._id;
 		var userId = $("#userData").data("uid");
@@ -144,6 +147,7 @@ var updateEventFireBtn = function (eventNum) {
 						updateFireNum(1);
 					}
 				}
+				eventFireBtn.classList.toggle("disabled");
 			};
 			$.ajax({
 				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
@@ -164,10 +168,11 @@ var updateEventFireBtn = function (eventNum) {
 						eventFireBtn.classList.toggle("selected");
 						resultFireBtn.classList.toggle("selected");
 						eventFireBtn.title = "Favorite";
-						resultFireBtn.title = "Unfavorite";
+						resultFireBtn.title = "Favorite";
 						updateFireNum(-1);
 					}
 				}
+				eventFireBtn.classList.toggle("disabled");
 			};
 			$.ajax({
 				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,
@@ -181,7 +186,7 @@ var updateEventFireBtn = function (eventNum) {
 		
 		// update favorite number information
 		var updateFireNum = function(change) {
-			var getFireNum = $("#eventFireNum").text();
+			var getFireNum = $("#resultFireNum" + (eventNum + 1)).text();
 			var newFireNum = parseInt(getFireNum) + change;
 			$("#eventFireNum").text(newFireNum);
 			$("#resultFireNum" + (eventNum + 1)).text(newFireNum);
@@ -199,7 +204,7 @@ var updateEventFireBtn = function (eventNum) {
 		};
 		
 		// update database with new favorite
-		var eventFireBtn = document.getElementById($(this).attr("id"));
+		var eventFireBtn = document.getElementById("eventFireBtn");
 		var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
 		if (eventFireBtn.classList.contains("selected")) unfavoriteEvent();
 		else favoriteEvent();
@@ -207,4 +212,3 @@ var updateEventFireBtn = function (eventNum) {
 		// prevents whole search result from being selected when fire button is clicked
 		e.stopPropagation();
 	});
-}
