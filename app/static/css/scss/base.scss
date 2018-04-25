@@ -18,8 +18,7 @@ html, body {
 	// Font Style
 
 	// Base font
-	font: 100% $font-light;
-	font-size: 20px;
+	font: 100% $font-med;
 	// Headers
 	.h1, h1 {
 		font: 100% $font-heavy;
@@ -52,7 +51,7 @@ html, body {
 		font: 100% $font-med;
 		font-size:24px;
 	}
-	
+
 	.dropdown-content {
 	    display: none;
 	    position: absolute;
