@@ -349,6 +349,11 @@ html, body {
     float: left;
 }
 
+.flashedMessage {
+  padding-top: 1.5vh;
+  padding-bottom: 1.5vh;
+}
+
 @media screen and (max-width: 600px) {
     .flex-container-row {
         flex-direction: column;

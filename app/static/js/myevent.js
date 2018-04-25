@@ -15,6 +15,8 @@ $(document).ready(function(){
 	// hide the form that users would edit events with
 	$("#event-form").hide();
 	checkDisplay();
+	// change the time inputs to be handled by timepicker
+	$("input[id*='Time']").timepicker({});
 });
 
 
@@ -32,6 +34,14 @@ function checkDisplay() {
 	if (i > 0) {
 		$("#event-form").show();
 	}
+}
+
+// make all icons not "selected"
+function unselectIcons() {
+	$(".deleteBtn").removeClass("selectedIcon");
+	$(".fa-trash-alt").removeClass("fa-inverse");
+	$(".editBtn").removeClass("selectedIcon");
+	$(".fa-pencil-alt").removeClass("fa-inverse");
 }
 
 // load user events
@@ -64,6 +74,12 @@ var handleDeleteMyEvent = function() {
 		// hide the footer
 		$(".footer").hide();
 
+		unselectIcons();
+
+		// make the icon "selected"
+		$(this).addClass("selectedIcon");
+		$(this).find(".fa-trash-alt").addClass("fa-inverse");
+
 		// toggle highlighting in search results
 		eventNum = getNum($(this).attr('id'), "deleteBtn");
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
@@ -94,6 +110,8 @@ var handleDeleteMyEvent = function() {
 					},
 					success: callback
 				});
+			} else {
+				unselectIcons();
 			}
 		});
 	});
@@ -106,6 +124,12 @@ var handleEditMyEvent = function() {
 
 		// hide the footer
 		$(".footer").hide();
+
+		unselectIcons();
+
+		// make the icon "selected"
+		$(this).addClass("selectedIcon");
+		$(this).find(".fa-pencil-alt").addClass("fa-inverse");
 
 		// toggle highlighting in search results
 		var eventNum = getNum($(this).attr('id'), "editBtn");

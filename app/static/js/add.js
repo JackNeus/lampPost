@@ -64,8 +64,9 @@ function processClick( num ) {
 
 $(document).ready(function(){	
 
-	// change the time inputs to have type=time
-	$("input[id*='Time']").prop('type', 'time');
+	// change the time inputs to be handled by timepicker
+	$("input[id*='Time']").timepicker({});
+	//$("input[id*='Time']").prop('type', 'time');
 
 	// if the form passes us a number of showings, initialize the radio button to that
 	// otherwise, initialize the first radio option (for number of showings) to be checked
@@ -77,6 +78,9 @@ $(document).ready(function(){
 		$("#numShowings-0").attr("checked", "checked");
 		currentNumShowing = 1;
 	}
+
+	// initialize the event to be available to Princeton students
+	$("#visibility-0").attr("checked", "checked");
 
 	// hide the rows that we don't need
 	for (var i = currentNumShowing + 1; i <= 4; i++) {

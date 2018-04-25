@@ -18,6 +18,12 @@ var handleEventViewClick = function() {
 
 			//hide the footer if it exists
 			$(".footer").hide();
+
+			// make all icons not "selected"
+			$(".editBtn").removeClass("selectedIcon");
+			$(".fa-pencil-alt").removeClass("fa-inverse");
+			$(".deleteBtn").removeClass("selectedIcon");
+			$(".fa-trash-alt").removeClass("fa-inverse");
 			
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
