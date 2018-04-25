@@ -189,7 +189,6 @@ def add_report(reporter, reason, event_id):
 		if last_report_time >= cutoff_time:
 			delta = last_report_time - cutoff_time
 			second_delta = delta.total_seconds()
-			print(second_delta)
 			raise RateError("You must wait %d seconds before reporting another event." % second_delta)
 
 	event = get_event(event_id)
