@@ -1,27 +1,37 @@
-// TODO: refactor this and 'displaySearches.js' so that they use they share functions
-// also move populateEventViewPanel to 'createEventHtml.js'
+// DEPENDENCIES: handleFavorites.js
 
+// keep track of current event shown in event view
 var selected_event = null;
 
 // Shows large event view when search result is clicked
-var updateEventView = function() {
+var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
 		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
-		// don't update if click on already selected search result
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+		var eventId = event_data[eventNum - 1]._id;
+		
+		// if currently showing the event edit form, don't animate
+		// highlight again
+		if ($(".eventFormView").css("display") == "block") {
 			// hide the form view
 			$("#event-form").hide();
 
 			//hide the footer if it exists
 			$(".footer").hide();
+			
+			populateEventViewPanel(eventNum);
+			handleEventFireBtnClick(eventNum);
+		}
 		
-			highlightSelectedSearchResult(eventNum);
+		// don't update if click on already selected search result
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
 		
-			// populate and display event view.
-			$(".event-view").hide();
+			// store currently selected event
 			selected_event = event_data[eventNum - 1];
-			populateEventViewPanel(eventNum - 1);
-			$("#event-view").show();
+			
+			// populate and display event view
+			highlightSelectedSearchResult(eventNum);
+			populateEventViewPanel(eventNum);
+			handleEventFireBtnClick(eventNum);
 		}
 	});
 }
@@ -31,14 +41,24 @@ function highlightSelectedSearchResult(eventNum) {
 	// toggle highlighting in search results.
 	$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
 	$(".smallSearchResult").removeClass("selected");
-	$("#smallSearchResult" + (eventNum)).addClass("selected");
+	$("#smallSearchResult" + eventNum).addClass("selected");
 
 	// Animate selection
-	$("#smallSearchResult" + (eventNum)).animate({"margin-right": '0vh'});
+	$("#smallSearchResult" + eventNum).animate({"margin-right": '0vh'});
 }
 
-// Populate event view panel with event_data[eventNum] (basic layout)
+// Update the popularity of an event when the fire button is clicked
+var handleEventFireBtnClick = function (eventNum) {
+	$(".eventFireBtn").click(function(e) {
+		updateFireBtn(this, eventNum);
+		e.stopPropagation();
+	});
+};
+
+// Populate event view panel with event_data[eventNum-1] (basic layout)
 function populateEventViewPanel(eventNum) {
+
+	$(".event-view").hide();
 
 	// Clickable fire button that displays "Favorite" when hovered over
 	var fireBtn = 
@@ -49,21 +69,21 @@ function populateEventViewPanel(eventNum) {
 	// Number of favorites
 	var fireNum = 
 		`<p class="eventFireNum" id="eventFireNum">`
-	    + 	$("#resultFireNum" + (eventNum + 1)).text()
+	    + 	$("#resultFireNum" + eventNum).text()
 	    + `</p>`;
 	
 	// hide welcome image
 	$("#welcome").css("display", "none");
 	
 	// setup event main header
-	$("#eventTitle").html(event_data[eventNum].title);
+	$("#eventTitle").html(event_data[eventNum-1].title);
 	$("#eventSubtitle").html("");
 	$("#eventFireBtn").remove();
 	$("#eventFireNum").remove();
 	$("#mainHeaderLine").append(fireBtn).append(fireNum);
 	
 	// setup dates and times
-	var instances = event_data[eventNum].instances;
+	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
 		// Locatiom
 		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
@@ -73,13 +93,13 @@ function populateEventViewPanel(eventNum) {
 	}
 	
 	// setup host and description
-	$("#eventHost").html("by " + event_data[eventNum].host);
-	$("#eventDescription").html(event_data[eventNum].description);
+	$("#eventHost").html("by " + event_data[eventNum-1].host);
+	$("#eventDescription").html(event_data[eventNum-1].description);
 
 	// If the event has a poster, display that.
-	if ("poster" in event_data[eventNum]) {
+	if ("poster" in event_data[eventNum-1]) {
 		document.getElementById("eventPhoto").innerHTML =
-		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum].poster+"\">";
+		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
 	}
 	else {
 		// Add C&H image
@@ -90,101 +110,10 @@ function populateEventViewPanel(eventNum) {
 	}
 	
 	// highlight fire button if appropriate
-	if ($("#resultFireBtn" + (eventNum + 1)).hasClass("selected")) {
+	if ($("#resultFireBtn" + eventNum).hasClass("selected")) {
 		$("#eventFireBtn").addClass("selected");
 	}
 	else $("#eventFireBtn").removeClass("selected");
 	
-	// handle clicks of fire button
-	updateEventFireBtn(eventNum);
+	$("#event-view").show();
 }
-
-// Update the popularity of an event when the fire button is clicked
-var updateEventFireBtn = function (eventNum) {
-	$("#eventFireBtn").click( function(e) {
-		if ($(this).hasClass("disabled")) return;
-		$(this).addClass("disabled");
-		
-		// get event id and user id
-		var eventId = event_data[eventNum]._id;
-		var userId = $("#userData").data("uid");
-
-		// update database after favoriting event
-		var favoriteEvent = function() {
-			var callback = function(data) {
-				if (data["status"] === "Success") {
-					// toggle view of fire button
-					if (!checkReloadFavoritePage()) {
-						eventFireBtn.classList.toggle("selected");
-						resultFireBtn.classList.toggle("selected");
-						eventFireBtn.title = "Unfavorite";
-						resultFireBtn.title = "Unfavorite";
-						updateFireNum(1);
-					}
-				}
-				eventFireBtn.classList.toggle("disabled");
-			};
-			$.ajax({
-				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
-				dataType: 'json',
-				headers: {
-					'Authorization': ('Token ' + $.cookie('api_token'))
-				},
-				success: callback
-			});
-		};
-
-		// update database after unfavoriting event
-		var unfavoriteEvent = function() {
-			var callback = function(data) {
-				if (data["status"] === "Success") {
-					// toggle view of fire button
-					if (!checkReloadFavoritePage()) {
-						eventFireBtn.classList.toggle("selected");
-						resultFireBtn.classList.toggle("selected");
-						eventFireBtn.title = "Favorite";
-						resultFireBtn.title = "Favorite";
-						updateFireNum(-1);
-					}
-				}
-				eventFireBtn.classList.toggle("disabled");
-			};
-			$.ajax({
-				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,
-				dataType: 'json',
-				headers: {
-					'Authorization': ('Token ' + $.cookie('api_token'))
-				},
-				success: callback
-			});
-		};
-		
-		// update favorite number information
-		var updateFireNum = function(change) {
-			var getFireNum = $("#resultFireNum" + (eventNum + 1)).text();
-			var newFireNum = parseInt(getFireNum) + change;
-			$("#eventFireNum").text(newFireNum);
-			$("#resultFireNum" + (eventNum + 1)).text(newFireNum);
-		};
-		
-		// remove smallSearchResult and corresponding eventView from page if 
-		// on 'my favorites' page
-		var checkReloadFavoritePage = function() {
-			if (window.location.href.indexOf('myfavorites') != -1) {
-				$(".event-view").hide();
-				$("#smallSearchResult" + (eventNum+1)).hide();
-				return 1;
-			}
-			return 0;
-		};
-		
-		// update database with new favorite
-		var eventFireBtn = document.getElementById("eventFireBtn");
-		var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));
-		if (eventFireBtn.classList.contains("selected")) unfavoriteEvent();
-		else favoriteEvent();
-
-		// prevents whole search result from being selected when fire button is clicked
-		e.stopPropagation();
-	});
-};
