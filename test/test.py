@@ -125,6 +125,12 @@ def make_get_created_events_request(user_id, token=None):
 def make_report_event_request(event_id, report, token=None):
 	return make_request("put", "/event/report/", event_id, token, json=report)
 
+def make_search_request(query, start_datetime=None, token=None):
+	params = query
+	if start_datetime is not None:
+		params += "/" + parse(start_datetime)
+	return make_request("get", "/event/search/", params, token)
+
 user_ids = {}
 
 def setup():
