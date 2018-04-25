@@ -1,5 +1,6 @@
 from copy import deepcopy
 from datetime import datetime, timedelta
+from dateutil.parser import *
 import dateutil.parser
 import functools
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -124,6 +125,9 @@ def make_get_created_events_request(user_id, token=None):
 
 def make_report_event_request(event_id, report, token=None):
 	return make_request("put", "/event/report/", event_id, token, json=report)
+
+def make_get_trending_request(token=None):
+	return make_request("get", "/event/trending", token=token)
 
 user_ids = {}
 
@@ -319,7 +323,12 @@ def test_delete_event_bad_id():
 	assert is_error(r)
 	assert "malformatted" in r["error_msg"]
 
-# Base for edit tests.
+def abort():
+	print("Something went wrong.")
+	print("Please restart the testing platform (test.sh).")
+	exit()
+
+# Base for tests.
 # If event_to_add is not None, that event will be used.
 def make_test(test_body, event_to_add = None):
 	# Setup
@@ -339,14 +348,47 @@ def make_test(test_body, event_to_add = None):
 		try:
 			r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
 		except:
-			print("Something went wrong.")
-			print("Please restart the testing platform (test.sh).")
-			exit()
+			abort()
 		raise e  # Reraise exception
 
 	# Cleanup
 	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
 	assert is_success(r)
+
+# Base for tests in which multiple events need to be added.
+# generator should be a function that takes a single integer parameter
+# and returns a single event.
+def make_test_multi(test_body, num_events, generator):
+	events = []
+	def teardown():
+		for event in events:
+			r = make_delete_event_request(event["_id"], generate_auth_token(event["creator"]))
+			if is_error(r):
+				abort()
+	try:
+		# Setup
+		for i in range(num_events):
+			new_event = generator(i)
+			creator_netid = new_event["creator"]
+			r = make_add_event_request(new_event, generate_auth_token(creator_netid))
+			assert is_success(r)
+			new_event["_id"] = r["data"]["id"]
+			events.append(new_event)
+	except Exception as e:
+
+		raise e
+		teardown()
+		assert False
+
+	try:
+		test_body(events)
+	except Exception as e:  # Temporarily catch exception.
+		# Try to cleanup, if we can't, abort
+		teardown()
+		raise e  # Reraise exception
+
+	# Cleanup
+	teardown()
 
 # Valid event editing.
 def test_edit_event_valid():
@@ -539,6 +581,36 @@ def test_report_event_short_reason():
 		assert "short" in r["error_msg"]
 	make_test(test)	
 
+def generate_event(i):
+	event = deepcopy(base_event)
+	event["title"] += str(i)
+	event["favorites"] = i
+	event["visibility"] = (i % 2) == 0
+	now = datetime.now().replace(second=0, microsecond=0)
+	event["instances"][0]["start_datetime"] = str(now)
+	event["instances"][0]["end_datetime"] = str(now + timedelta(hours=1))
+	return event
+
+def test_trending_event_valid_no_auth():
+	def test(new_events):
+		r = make_get_trending_request()
+		assert is_success(r)
+		expected_trending = sorted(new_events, key=lambda x: x["favorites"], reverse=True)
+		# We should only get back public events.
+		expected_trending = list(filter(lambda x: x["visibility"] == 0, expected_trending))
+		for i in range(len(r['data'])):
+			assert compare_events(expected_trending[i], r['data'][i])
+	make_test_multi(test, 20, generate_event)
+
+def test_trending_event_valid():
+	def test(new_events):
+		r = make_get_trending_request(generate_auth_token("jneus"))
+		assert is_success(r)
+		expected_trending = sorted(new_events, key=lambda x: x["favorites"], reverse=True)
+		for i in range(len(r['data'])):
+			assert compare_events(expected_trending[i], r['data'][i])
+	make_test_multi(test, 20, generate_event)
+
 # TODO: add search tests
 
 # Execution order of tests.
@@ -582,8 +654,9 @@ test_get_valid_fav,
 test_get_fav_wrong_user,
 test_get_created_events_wrong_token,
 test_report_event,
-test_report_event_short_reason
-]
+test_report_event_short_reason,
+test_trending_event_valid_no_auth, 
+test_trending_event_valid]
 
 if __name__ == '__main__':
 	setup()
