@@ -52,15 +52,17 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 
 		<!-- Fills in with "search" results from events.json -->
-		<div class="flex-container-scroll" id="searches">
-            <div class="searchPost"></div>
+		<div class="flex-container-scroll" id="searches-wrapper">
+			<div id="searches">
+            	<div class="searchPost"></div>
+        	</div>
+			<div class="fa fa-spinner fa-spin hidden centered" id="loading-spinner"></div>
         </div>
 
   	</div>
 
  	<div class="flex-container-col" id = "rightCol">
  		{% include "web/eventview.html" %}
-    <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/explore.png" style="width: 100%;">
 	</div>
 </div>
 </div>
