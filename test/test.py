@@ -78,45 +78,36 @@ def is_error(r):
 
 app_url = "http://localhost:5002/api"
 
-def make_add_event_request(event_data, token=None):
+def get_requests_method(method):
+	m = {"get": requests.get,
+		 "put": requests.put,
+		 "post": requests.post,
+		 "delete": requests.delete}
+	return m[method.lower()]
+
+def make_request(method, endpoint, params="", token=None, json=None):
 	headers = None
 	if token is not None:
 		headers = {"Authorization": "Token %s" % token}
-	r = requests.put(app_url + "/event/add", json=event_data, headers=headers)
+	request = get_requests_method(method)
+	r = request(app_url + endpoint + params, json=json, headers=headers)
 	assert r.status_code == 200
 	return get_data(r)
+
+def make_add_event_request(event_data, token=None):
+	return make_request("put", "/event/add", json=event_data, token=token)
 
 def make_get_event_request(event_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.get(app_url + "/event/get/" + event_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("get", "/event/get/", event_id, token)
 
 def make_delete_event_request(event_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.delete(app_url + "/event/delete/" + event_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("delete", "/event/delete/", event_id, token)
 
 def make_edit_event_request(event_id, data, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.post(app_url + "/event/edit/" + event_id, json=data, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("post", "/event/edit/", event_id, token, data)
 
 def make_add_fav_request(user_id, event_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.get(app_url + "/user/fav/add/" + user_id + "/" + event_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("get", "/user/fav/add/", "%s/%s" % (user_id, event_id), token)
 
 def make_del_fav_request(user_id, event_id, token=None):
 	headers = None
@@ -126,28 +117,13 @@ def make_del_fav_request(user_id, event_id, token=None):
 	return r
 
 def make_get_fav_request(user_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.get(app_url + "/user/fav/get/" + user_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
-
+	return make_request("get", "/user/fav/get/", user_id, token)
+	
 def make_get_created_events_request(user_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.get(app_url + "/user/get_events/" + user_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("get", "/user/get_events/", user_id, token)
 
 def make_report_event_request(event_id, report, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.put(app_url + "/event/report/" + event_id, json=report, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("put", "/event/report/", event_id, token, json=report)
 
 user_ids = {}
 
@@ -356,23 +332,17 @@ def make_test(test_body, event_to_add = None):
 	assert is_success(r)
 	event_id = r["data"]["id"]
 
-	test_body(new_event, event_id, creator_netid)
-
-	# Cleanup
-	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
-	assert is_success(r)
-
-
-# Base for favorite tests.
-def make_test(test_body):
-	# Setup
-	new_event = deepcopy(base_event)
-	creator_netid = new_event["creator"]
-	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
-	assert is_success(r)
-	event_id = r["data"]["id"]
-
-	test_body(new_event, event_id, creator_netid)
+	try: 
+		test_body(new_event, event_id, creator_netid)
+	except Exception as e:  # Temporarily catch exception.
+		# Try to clean-up, if we can't, abort.
+		try:
+			r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
+		except:
+			print("Something went wrong.")
+			print("Please restart the testing platform (test.sh).")
+			exit()
+		raise e  # Reraise exception
 
 	# Cleanup
 	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
