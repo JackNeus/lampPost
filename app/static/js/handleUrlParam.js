@@ -1,21 +1,30 @@
-var checkEventParameter = function() {
+// check if the event url parameter exists. If so, return the event id
+var checkEventUrlParameter = function() {
 	var eventId = getUrlParameter('event');
-	if (eventId) {
-		var event = $.grep(event_data, function(event){return event._id === eventId;})[0];
-		if (event != undefined) {
-			eventNum = event_data.indexOf(event) + 1;
-			selected_event = event;
-			highlightSelectedSearchResult(eventNum);
-			populateEventViewPanel(eventNum);
-			handleEventFireBtnClick(eventNum);
-		}
-	}
+	return eventId;
 };
 
-var checkSearchParameter = function() {
+// check if the search url parameter exists. If so, fill in the 
+// search box with that value
+var checkSearchUrlParameter = function() {
 	var searchQuery = getUrlParameter('search');
 	if (searchQuery) {
 		$("#search-box").val(searchQuery);
+	}
+};
+
+// check if eventId exists in event_data. If so, highlight search result
+// and show event view for that event
+var updateUrlParamEventView = function(eventId) {
+	// get the event data for the given event id
+	var event = $.grep(event_data, function(event){return event._id === eventId;})[0];
+	
+	if (event != undefined) {
+		eventNum = event_data.indexOf(event) + 1;
+		selected_event = event;
+		highlightSelectedSearchResult(eventNum);
+		populateEventViewPanel(eventNum);
+		handleEventFireBtnClick(eventNum);
 	}
 };
 
@@ -36,29 +45,12 @@ var getUrlParameter = function(sParam) {
     }
 };
 
-var addUrlParameter = function(url, param, value) {
-   param = encodeURIComponent(param);
-   var r = "([&?]|&amp;)" + param + "\\b(?:=(?:[^&#]*))*";
-   var a = document.createElement('a');
-   var regex = new RegExp(r);
-   var str = param + (value ? "=" + encodeURIComponent(value) : ""); 
-   a.href = url;
-   var q = a.search.replace(regex, "$1"+str);
-   if (q === a.search) {
-      a.search += (a.search ? "&" : "") + str;
-   } else {
-      a.search = q;
-   }
-   return a.href;
-}
-
 /*
 * Add a URL parameter (or changing it if it already exists)
 * @param {search} string  this is typically document.location.search
 * @param {key}    string  the key to set
 * @param {val}    string  value 
 */
-/*
 var addUrlParameter = function(search, key, val){
 	key = encodeURIComponent(key); val = encodeURIComponent(val);
 	var newParam = key + '=' + val,
@@ -76,5 +68,4 @@ var addUrlParameter = function(search, key, val){
 	}
 
 	return params;
-	};
-*/
+};
