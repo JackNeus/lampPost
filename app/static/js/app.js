@@ -23,11 +23,6 @@ $(document).ready(function(){
 	setupSearch();
 	setupUserFavorites();
 	setupDataRetrieval();
-
-	// remove splash screen once user clicks 'log in' or 'continue as guest'
-	$('.homeLink').click(function () {
-    		document.getElementById('splashScreen').style.display = 'none';
-	});
 });
 
 // Sets up sort and filter functionality for search box
@@ -52,8 +47,8 @@ var setupDataRetrieval = function() {
 	$("#search-box").keyup(function() {
 		if ($("#datepicker").val())
 			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
-		else query = $(this).val()
-
+		else query = $(this).val();
+	
 		fetchData(query);
 	});
 
@@ -62,8 +57,9 @@ var setupDataRetrieval = function() {
 		var date_py = java2py_date($(this).val());
 	  	fetchData($("#search-box").val() + "/" + date_py);
 	});
+};
 
-	// fetch data given a query string
+  // fetch data given a query string
 	function fetchData(query) {
 		search_requests_in_progress += 1;
 		$("#loading-spinner").removeClass("hidden");
@@ -91,7 +87,6 @@ var setupDataRetrieval = function() {
 			complete: cleanup_callback
 		});
 	}
-};
 
 // Get list of events which user has favorited
 var setupUserFavorites = function() {

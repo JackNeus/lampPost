@@ -27,7 +27,6 @@ var createSearchResults = function() {
 	  			"eventInstances"], i);
 	  	// add in all the event instances (dates and times) to the "eventInstances" div
 	  	addEventInstances(i);
-
 	}
 };
 
