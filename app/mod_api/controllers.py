@@ -180,7 +180,26 @@ def search_events(query, start_datetime, user=None):
 	events = set.intersection(*results)
 	return filter(lambda x: is_visible(x, user), events)
 
+def get_most_recent_report(reporter):
+	reports = ReportEntry.objects(reporter=reporter.netid).order_by('-report_time')
+	if reports.count() == 0:
+		return None
+	return reports[0]
+
 def add_report(reporter, reason, event_id):
+	last_report = get_most_recent_report(reporter)
+
+	if last_report is not None:
+		last_report_time = last_report.report_time
+
+		# Time limit between reports.
+		report_rate = CONFIG["REPORT_TIME_LIMIT"]
+		cutoff_time = datetime.today() - timedelta(seconds=report_rate)
+		if last_report_time >= cutoff_time:
+			delta = last_report_time - cutoff_time
+			second_delta = delta.total_seconds()
+			raise RateError("You must wait %d seconds before reporting another event." % second_delta)
+
 	event = get_event(event_id)
 	if event is None:
 		raise EventDNEError()

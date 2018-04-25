@@ -319,8 +319,12 @@ def report_event(eventid):
 		if "reason" not in data:
 			return gen_error_response("Request was missing field 'reason'.")
 
-		user = User.get_user_in_token(request)
-		report = controller.add_report(user, data["reason"], eventid)
+		try:
+			user = User.get_user_in_token(request)
+			report = controller.add_report(user, data["reason"], eventid)
+		except RateError as e:
+			return gen_error_response(str(e))
+
 		return gen_data_response(report)
 	except ValidationError as e:
 		return gen_error_response(str(e))

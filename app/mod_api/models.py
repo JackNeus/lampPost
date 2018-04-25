@@ -6,6 +6,9 @@ from app import CONFIG, app
 class EventDNEError(Exception):
     pass
 
+class RateError(Exception):
+    pass
+
 class UserEntry(Document):
     netid = StringField(required = True, unique = True)
     favorites = ListField()
