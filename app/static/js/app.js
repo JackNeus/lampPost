@@ -62,8 +62,7 @@ var setupDataRetrieval = function() {
 
 		// don't make api call if query hasn't changed
 		if (query != prevQuery) {
-			// don't make api call if query is empty 
-			if (query != "") fetchData(query);
+			fetchData(query);
 			
 			prevQuery = query;
 			
@@ -115,11 +114,15 @@ var setupDataRetrieval = function() {
 // Get list of events which user has favorited
 var setupUserFavorites = function() {
 	var userId = $("#userData").data("uid");
-	var callback = function(data) {
+
+	var success_callback = function(data) {
 		if (data["status"] === "Success")
 			user_fav_data = data["data"];
 		else
 			user_fav_data = [];
+	};
+
+	var updateSearch = function() {
 		showSearchResults();
 		
 		// update event view if url has eventId
@@ -127,15 +130,23 @@ var setupUserFavorites = function() {
 			updateUrlParamEventView(urlParamEventId);
 			urlParamEventId = null;
 		}
-	};
-	$.ajax({
-			url: base_url + '/api/user/fav/get/'+ userId,
-			dataType: 'json',
-			headers: {
-				'Authorization': ('Token ' + $.cookie('api_token'))
-			},
-			success: callback
-	});
+
+	}
+
+	if (userId === "") {
+		updateSearch();
+	}
+	else { 
+		$.ajax({
+				url: base_url + '/api/user/fav/get/'+ userId,
+				dataType: 'json',
+				headers: {
+					'Authorization': ('Token ' + $.cookie('api_token'))
+				},
+				success: success_callback,
+				complete: updateSearch
+		});
+	}
 }
 
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
