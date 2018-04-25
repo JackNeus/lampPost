@@ -44,6 +44,29 @@ var handleEventViewClick = function() {
 	});
 }
 
+// Get link to Google Calendar event for ith instance of event_data[eventNum]
+function getGoogleCalLink(eventNum, i) {
+	out_url = "https://www.google.com/calendar/render?action=TEMPLATE";
+	out_url += "&text=" + event_data[eventNum].title.replace(/ /g, "+");
+
+	start_dt = event_data[eventNum].instances[i].start_datetime;
+	start_date = start_dt.split(" ")[0];
+	start_time = start_dt.split(" ")[1];
+
+	end_dt = event_data[eventNum].instances[i].end_datetime;
+	end_date = end_dt.split(" ")[0];
+	end_time = end_dt.split(" ")[1];
+
+
+	out_url += "&dates=" + start_date.replace(/-/g, "") + "T" + start_time.replace(/:/g, "") + "/"; 
+	out_url += end_date.replace(/-/g, "") + "T" + end_time.replace(/:/g, "") + ""; 
+
+	out_url += "&ctz=America/New_York";
+	out_url += "&location=" + event_data[eventNum].instances[i].location;
+	out_url += "&details=" + event_data[eventNum].description.replace(/ /g, "+");
+	return out_url;
+}
+
 // highlight search result that's been selected and display event view
 function highlightSelectedSearchResult(eventNum) {
 	// toggle highlighting in search results.
@@ -98,10 +121,12 @@ function populateEventViewPanel(eventNum) {
 		// Time
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 		$("#eventSubtitle").append("<br>");
+		console.log("TEST");
+		document.getElementById("eventSubtitle").innerHTML +=
+			"<a class=\"btn btn-primary\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> Add to 	Google Calendar! </a>";
 	}
 	
 	// setup host and description
-
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
 	$("#eventDescription").html(event_data[eventNum-1].description);
 
