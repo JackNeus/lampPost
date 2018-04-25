@@ -34,7 +34,7 @@ function checkDisplay() {
 }
 
 // make all icons not "selected"
-function clearIcons() {
+function unselectIcons() {
 	$(".deleteBtn").removeClass("selectedIcon");
 	$(".fa-trash-alt").removeClass("fa-inverse");
 	$(".editBtn").removeClass("selectedIcon");
@@ -71,7 +71,7 @@ var changeMyEvents = function() {
 		// hide the footer
 		$(".footer").hide();
 
-		clearIcons();
+		unselectIcons();
 
 		// make the icon "selected"
 		$(this).addClass("selectedIcon");
@@ -105,7 +105,7 @@ var changeMyEvents = function() {
 					success: callback
 				});
 			} else {
-				clearIcons();
+				unselectIcons();
 			}
 		});
 	});
@@ -119,7 +119,7 @@ var editMyEvents = function() {
 		// hide the footer
 		$(".footer").hide();
 
-		clearIcons();
+		unselectIcons();
 
 		// make the icon "selected"
 		$(this).addClass("selectedIcon");
