@@ -3,11 +3,10 @@
 <!-- SCRIPTS -->
 
 {% block scripts %}
-<script src="/static/js/displaySearches.js?v=0"></script>
-<script src="/static/js/displayEvent.js?v=0"></script>
-<script src="/static/js/createEventHtml.js?v=0"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/add.css">
 <script src="/static/js/myevent.js?v=0"></script>
-<script src="/static/js/add.js?v=0"></script>
+<script src="/static/js/handleUrlParam.js?v=0"></script>
+<script src="/static/js/handleFavorites.js?v=0"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -25,37 +24,21 @@ setBaseUrl("{{ config.BASE_URL }}");
 	   <div class="flex-container-col" id = "leftCol">
 	   
 	   	<h1>My Events</h1>
+	   	
+	   	<!-- Sort by date or popularity -->
+		<div class="d-flex flex-row align-items-start">
+			<select class="p-2 ml-auto" name="sort" id="searchSort">
+				<option value="Date">Sort By Date</option>
+				<option value="Popularity">Sort By Popularity</option>
+			</select>
+		</div>
 			
 		<!-- Fills in with "search" results from events.json -->
-		<div class="myEvents" id="searches"></div>
-		
-	   </div>
+		<div class="flex-container-scroll" id="searches"></div>
+	    </div>
 		
 	 	<div class="flex-container-col" id = "rightCol">
- 		<div class = "event-view" id = "event-view">
-	   		<div class="event-view-header" id="event-view-header">
-                <div class="flex-container-col">
-                    <div class="d-flex flex-row align-items-start" id="mainHeaderLine">
-                        <h1 class="event-view-title mr-auto" id="eventTitle"></h1>
-                        <div class="eventFireBtn btn" title="Favorite" id="eventFireBtn"></div>
-                        <p class="eventFireNum" id="eventFireNum">32</p>
-                    </div>
-                    <div class="d-flex flex-row align-items-start">
-         	   		    <h3 class="event-view-subtitle mr-auto" id="eventSubtitle"></h3>
-                        <p class="event-view-host" id="eventHost"></p>
-                    </div>
-                </div>
-            </div>
-	   		<div class="event-view-info">
-	   			<div id="eventPhoto"></div>
-                <div class="d-inline-flex p-2">
-                    <h2 class="eventSection">Description</h2>
-                </div>
-                <div class="d-inline-flex p-2">
-	   			    <p id="eventDescription"></p>
-	   			</div>
-	   		</div>
-		</div>
+ 			{% include "web/eventview.html" %}
 			
 			<!-- TODO: this element is not really necessary, only referenced
 			in displayEvent.js so maybe we should fix at some point, but not a 
@@ -74,11 +57,11 @@ setBaseUrl("{{ config.BASE_URL }}");
 			{% endif %}
 
 
-			<div class = "event-form" id = "event-form" style="display:none">
+			<div class = "event-form eventFormView" id = "event-form" style="display:none">
 				<div class="col-md-10">
 					<h3 style="text-align:center"> Edit your event by changing the fields below. </h3>
 
-					<form id="addEventForm" action="/myevents" method="POST" role="form">
+					<form id="addEventForm" action="/myevents" method="POST" role="form" enctype="multipart/form-data">
 						{{ form.csrf_token }}
 
 						<!-- Hidden event id, populated by jquery -->

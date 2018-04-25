@@ -20,26 +20,48 @@ html .navbar-expand-md, body .navbar-expand-md {
 html .nav-link, body .nav-link {
   font: 100% "Avenir-Medium";
   font-size: 24px; }
+html .dropdown-content, body .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #2d9eee;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 6; }
 html #bigRow, body #bigRow {
   padding-left: 0vw;
   padding-right: 0vw;
   margin-bottom: 2vh; }
 
+.hidden {
+  display: none; }
+
 .debug-data {
   display: none;
   color: red; }
 
+#searches-wrapper {
+  min-height: 75px;
+  border-top: 5px solid #555555;
+  position: relative; }
+  #searches-wrapper .centered {
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0; }
+  #searches-wrapper #loading-spinner {
+    font-size: 1.7em; }
+
 #searches {
-  border-top: 5px solid #555555; }
+  padding-top: 1vh; }
 
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
   max-width: 100%;
   width: 100%;
-  flex-shrink: 1000; }
-
-#search-box {
+  flex-shrink: 1000;
   font-size: 16px !important; }
 
 #searchSort {
@@ -135,7 +157,7 @@ html #bigRow, body #bigRow {
     background-color: #eeeeee;
     box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
     position: relative;
-    z-index: 500; }
+    z-index: 5; }
   .event-view .event-view-title {
     color: #333333;
     margin: 0;
@@ -187,6 +209,11 @@ html #bigRow, body #bigRow {
   flex-flow: row wrap;
   overflow: hidden; }
 
+.searchRow {
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden; }
+
 .flex-container-col {
   display: flex;
   flex-flow: column nowrap;
@@ -199,8 +226,6 @@ html #bigRow, body #bigRow {
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll; }
-  .flex-container-scroll #searches {
-    min-width: 12em; }
 
 .footer {
   color: white;
@@ -219,12 +244,14 @@ html #bigRow, body #bigRow {
 
 #leftCol {
   max-height: 88vh;
+  height: 88vh;
   flex: 30%;
   float: left;
   border-right: 5px solid #2d9eee; }
 
 #rightCol {
   max-height: 88vh;
+  height: 88vh;
   flex: 70%;
   float: left; }
 
