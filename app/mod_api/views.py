@@ -191,6 +191,7 @@ def delete_event(id):
 	except Exception as e:
 		return gen_failure_response(str(e))
 
+@mod_api.route("/event/search/", defaults={"query":"","start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>/<start_datetime>")
 def event_search(query, start_datetime):	

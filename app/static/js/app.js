@@ -9,6 +9,9 @@ function setBaseUrl(url) {
 var event_data = [];
 var user_fav_data = [];
 
+// Keep track of the number of search requests currently out.
+var search_requests_in_progress = 0;
+
 // Allow for external population of event_data.
 // Currently only used for USE_MOCK_DATA flag.
 function setData(data) {
@@ -56,24 +59,34 @@ var setupDataRetrieval = function() {
 	});
 };
 
-// fetch data given a query string
-function fetchData(query) {
-	var callback = function(data){
-	    	if (data["status"] === "Success")
-			event_data = data["data"];
-		else
-			event_data = [];
-		setupUserFavorites();
-	};
-	$.ajax({
-		url: base_url + '/api/event/search/' + query,
-		dataType: 'json',
-		headers: {
-			'Authorization': ('Token ' + $.cookie('api_token'))
-		},
-		success: callback
-	});
-}
+  // fetch data given a query string
+	function fetchData(query) {
+		search_requests_in_progress += 1;
+		$("#loading-spinner").removeClass("hidden");
+
+		var success_callback = function(data){
+		    if (data["status"] === "Success")
+				event_data = data["data"];
+			else
+				event_data = [];
+			setupUserFavorites();
+		};
+		var cleanup_callback = function() {
+			search_requests_in_progress -= 1;
+			if (search_requests_in_progress == 0) {
+				$("#loading-spinner").addClass("hidden");
+			}
+		}
+		$.ajax({
+			url: base_url + '/api/event/search/' + query,
+			dataType: 'json',
+			headers: {
+				'Authorization': ('Token ' + $.cookie('api_token'))
+			},
+			success: success_callback,
+			complete: cleanup_callback
+		});
+	}
 
 // Get list of events which user has favorited
 var setupUserFavorites = function() {

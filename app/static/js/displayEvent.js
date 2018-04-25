@@ -93,6 +93,7 @@ function populateEventViewPanel(eventNum) {
 	}
 	
 	// setup host and description
+
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
 	$("#eventDescription").html(event_data[eventNum-1].description);
 
