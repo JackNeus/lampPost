@@ -28,7 +28,7 @@ var updateUrlParamEventView = function(eventId) {
 	}
 };
 
-
+// Function found online in stack overflow
 // given a url parameter, return the value of that parameter
 var getUrlParameter = function(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -45,6 +45,7 @@ var getUrlParameter = function(sParam) {
     }
 };
 
+// Function found online in stack overflow
 /*
 * Add a URL parameter (or changing it if it already exists)
 * @param {search} string  this is typically document.location.search
