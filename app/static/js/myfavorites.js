@@ -21,6 +21,8 @@ var setupUserFavorites = function() {
 			user_fav_data = data["data"];
 			event_data = data["data"];
 			showSearchResults();
+			var urlParamEventId = checkEventUrlParameter();
+			if (urlParamEventId) updateUrlParamEventView(urlParamEventId);
 		}
 		else {
 			user_fav_data = [];

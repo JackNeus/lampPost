@@ -192,6 +192,8 @@ var setupUserFavorites = function() {
 		showMyEvents();
 		handleDeleteMyEvent();
 		handleEditMyEvent();
+		var urlParamEventId = checkEventUrlParameter();
+		if (urlParamEventId) updateUrlParamEventView(urlParamEventId);
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,

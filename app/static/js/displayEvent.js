@@ -12,6 +12,7 @@ var handleEventViewClick = function() {
 		// if currently showing the event edit form, don't animate
 		// highlight again
 		if ($(".eventFormView").css("display") == "block") {
+		
 			// hide the form view
 			$("#event-form").hide();
 
@@ -24,6 +25,13 @@ var handleEventViewClick = function() {
 		
 		// don't update if click on already selected search result
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+		
+			// update url with eventid paramter
+			var newurl = window.location.protocol + "//" + 
+					 window.location.host + 
+					 window.location.pathname + 
+					 addUrlParameter(document.location.search, 'event', eventId);
+			window.history.pushState({ path: newurl }, '', newurl);
 		
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
