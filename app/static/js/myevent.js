@@ -207,8 +207,6 @@ var renderEditForm = function(eventNum) {
 		$("#endTimes-" + i).val("");
 	}
 
-	$("#poster-display").attr("href", event_data[eventNum - 1].poster);
-
 	$("#link").val(event_data[eventNum - 1].trailer);
 
 
