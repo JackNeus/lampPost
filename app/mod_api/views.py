@@ -191,6 +191,7 @@ def delete_event(id):
 	except Exception as e:
 		return gen_failure_response(str(e))
 
+@mod_api.route("/event/search/", defaults={"query":"","start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>/<start_datetime>")
 def event_search(query, start_datetime):	
@@ -319,13 +320,16 @@ def report_event(eventid):
 		if "reason" not in data:
 			return gen_error_response("Request was missing field 'reason'.")
 
-		user = User.get_user_in_token(request)
-		report = controller.add_report(user, data["reason"], eventid)
+		try:
+			user = User.get_user_in_token(request)
+			report = controller.add_report(user, data["reason"], eventid)
+		except RateError as e:
+			return gen_error_response(str(e))
+
 		return gen_data_response(report)
 	except ValidationError as e:
 		return gen_error_response(str(e))
 	except Exception as e:
-		raise e
 		return gen_failure_response(str(e))
 
 # Get trending events.

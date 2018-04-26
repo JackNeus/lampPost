@@ -1,11 +1,20 @@
 from datetime import datetime, timedelta
 from dateutil.parser import *
 import json
+import os
 import re
+import sendgrid
+from sendgrid.helpers.mail import *
+
 from .models import *
 from app import CONFIG, app
 
 InternalError = Exception("InternalError")
+
+if "SENDGRID_API_KEY" in CONFIG:
+	sg = sendgrid.SendGridAPIClient(apikey=CONFIG['SENDGRID_API_KEY'])
+else:
+	sg = None
 
 def get_max_visibility(user):
 	if user is None:
@@ -173,20 +182,50 @@ def remove_user_favorite(user, eventid):
 # Only events ending after start_datetime are included in search results.
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
 def search_events(query, start_datetime, user=None):
+	# Query settings that go with ALL queries.
+	query_settings = {"visibility__lte": get_max_visibility(user),
+		"instances__end_datetime__gte": start_datetime}
+
 	tokens = query.split()
 	results = []
 	for token in tokens:
 		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
-		token_re = re.compile("(\s+|^)" + token, re.IGNORECASE)
-		events = set()
-		events = events.union(set(EventEntry.objects(title = token_re, instances__end_datetime__gte = start_datetime)))
-		events = events.union(set(EventEntry.objects(host = token_re, instances__end_datetime__gte = start_datetime)))
-		events = events.union(set(EventEntry.objects(instances__location = token_re, instances__end_datetime__gte = start_datetime)))
+		prefix_re = re.compile("(\s+|^)%s" % token, re.IGNORECASE)
+		full_word_re = re.compile("(\s+|^)%s(\s+|$)" % token, re.IGNORECASE)
+
+		# Queries to run.
+		queries = [{"title": prefix_re},
+			{"host": prefix_re},
+			{"instances__location": prefix_re},
+			{"description": full_word_re}]
+
+		sources = list(map(lambda query: set(EventEntry.objects(**query, **query_settings)), queries))
+		events = set().union(*sources)
+		
 		results.append(events)
 	events = set.intersection(*results)
-	return filter(lambda x: is_visible(x, user), events)
+	return events
+
+def get_most_recent_report(reporter):
+	reports = ReportEntry.objects(reporter=reporter.netid).order_by('-report_time')
+	if reports.count() == 0:
+		return None
+	return reports[0]
 
 def add_report(reporter, reason, event_id):
+	last_report = get_most_recent_report(reporter)
+
+	if last_report is not None:
+		last_report_time = last_report.report_time
+
+		# Time limit between reports.
+		report_rate = CONFIG["REPORT_TIME_LIMIT"]
+		cutoff_time = datetime.today() - timedelta(seconds=report_rate)
+		if last_report_time >= cutoff_time:
+			delta = last_report_time - cutoff_time
+			second_delta = delta.total_seconds()
+			raise RateError("You must wait %d seconds before reporting another event." % second_delta)
+
 	event = get_event(event_id)
 	if event is None:
 		raise EventDNEError()
@@ -195,5 +234,23 @@ def add_report(reporter, reason, event_id):
 		report_time=datetime.now(),
 		reason=reason,
 		event_dump=event_dump)
+	send_report_email(new_report)
+
+	# Save after report has been successfully emailed.
 	new_report.save()
 	return new_report.to_json()
+
+def send_report_email(report):
+	if CONFIG["DEBUG"] and sg is None:
+		return
+	for admin in CONFIG["ADMINS"]:
+		from_email = Email("system@lamppost.info")
+		to_email = Email(admin)
+		subject = "An event was reported."
+		content_string = "Reporter: %s<br />Time: %s<br />Reason: %s<br />Event: %s<br />" % (report.reporter, report.report_time, report.reason, report.event_dump)
+		content = Content("text/html", content_string)
+		mail = Mail(from_email, subject, to_email, content)
+		response = sg.client.mail.send.post(request_body=mail.get())
+		print(response.status_code)
+		print(response.body)
+		print(response.headers)

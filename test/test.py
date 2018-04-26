@@ -6,6 +6,7 @@ import functools
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import json
 import requests
+import sys
 import os
 from subprocess import call, check_output
 import traceback
@@ -128,6 +129,12 @@ def make_report_event_request(event_id, report, token=None):
 
 def make_get_trending_request(token=None):
 	return make_request("get", "/event/trending", token=token)
+
+def make_search_request(query, start_datetime=None, token=None):
+	params = query
+	if start_datetime is not None:
+		params += "/" + parse(start_datetime)
+	return make_request("get", "/event/search/", params, token)
 
 user_ids = {}
 
@@ -576,7 +583,7 @@ def test_report_event():
 def test_report_event_short_reason():
 	def test(new_event, event_id, creator_netid):
 		report = {"reason": "Hate to talk."}
-		r = make_report_event_request(event_id, report, generate_auth_token("jneus"))
+		r = make_report_event_request(event_id, report, generate_auth_token("rrliu"))
 		assert is_error(r)
 		assert "short" in r["error_msg"]
 	make_test(test)	
@@ -610,6 +617,17 @@ def test_trending_event_valid():
 		for i in range(len(r['data'])):
 			assert compare_events(expected_trending[i], r['data'][i])
 	make_test_multi(test, 20, generate_event)
+
+# Can't add two reports within a certain number of seconds of one another.
+def test_report_two_reports():
+	def test(new_event, event_id, creator_netid):
+		report = {"reason": "This event is AGAINST my ideals."}
+		r = make_report_event_request(event_id, report, generate_auth_token("bwk"))
+		assert is_success(r)
+		r = make_report_event_request(event_id, report, generate_auth_token("bwk"))
+		assert is_error(r)
+		assert "must wait" in r["error_msg"]
+	make_test(test)
 
 # TODO: add search tests
 
@@ -656,18 +674,29 @@ test_get_created_events_wrong_token,
 test_report_event,
 test_report_event_short_reason,
 test_trending_event_valid_no_auth, 
-test_trending_event_valid]
+test_trending_event_valid,
+test_report_two_reports
+]
 
 if __name__ == '__main__':
 	setup()
 	failed = 0
+	nl_just_printed = False
 	for test in tests:
 		try:
 			test()
-			print(".")
+			sys.stdout.write(".")
+			sys.stdout.flush()
+			nl_just_printed = False
 		except AssertionError:
 			failed += 1
-			print(get_test_name(test) + " failed")
+			p = ""
+			if not nl_just_printed:
+				p = "\n"
+			print(p + get_test_name(test) + " failed")
+			
+			nl_just_printed = True
 			# TODO: Print stack trace only if a flag is set.
 			#traceback.print_exc()
-	print("%d/%d tests passed." % (len(tests) - failed, len(tests)))
+
+	print("\n%d/%d tests passed." % (len(tests) - failed, len(tests)))
