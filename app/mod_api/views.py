@@ -201,6 +201,7 @@ def event_search(query, start_datetime):
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
+		raise e
 		return gen_failure_response(str(e))
 
 @mod_api.route("/user/get_events/<userid>")
@@ -328,5 +329,16 @@ def report_event(eventid):
 		return gen_data_response(report)
 	except ValidationError as e:
 		return gen_error_response(str(e))
+	except Exception as e:
+		return gen_failure_response(str(e))
+
+# Get trending events.
+@mod_api.route("/event/trending", methods=["GET"])
+def trending_events():
+	try:
+		user = get_user_in_token(request)
+		trending_events = controller.get_trending_events(user)
+		trending_events = [get_raw_event(event) for event in trending_events]
+		return gen_data_response(trending_events)
 	except Exception as e:
 		return gen_failure_response(str(e))
