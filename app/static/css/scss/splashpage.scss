@@ -1,6 +1,6 @@
 $background-color: #eeeeee;
 $primary-color: #2d9eee;
-$font-stack: "Avenir-Medium";
+$font-med: "Avenir-Medium", "Arial-Medium";
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
@@ -8,7 +8,7 @@ $primary-color-b: 238;
 
 html, body {
 	// Font Style
-	font: 100% $font-stack;
+	font-family: $font-med;
 	.h1 {
 		font-size:28px;
 	}
@@ -23,7 +23,7 @@ html, body {
 		background-size: cover;
 		background-repeat: no-repeat;
 		text-align: center;
-		
+
 		.headerBox {
 			position: relative;
 			width: 100%;
@@ -33,10 +33,10 @@ html, body {
 				h1 {
 					font-weight: bold;
 					margin-bottom: 1em;
-					color: white; 
+					color: white;
 					text-shadow: 2px 2px #000000;
 				}
-		
+
 				a {
 					border: none;
 					background-color: $primary-color;
@@ -48,11 +48,11 @@ html, body {
 				  	overflow: hidden;
 				  	text-align: center;
 				  }
-				  
+
 				 p {
 				 	padding: 0;
 				 	margin: 0;
-				 }  
+				 }
 			}
 		}
 	}

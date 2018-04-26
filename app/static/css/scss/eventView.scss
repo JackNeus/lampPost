@@ -1,0 +1,95 @@
+$background-color: #eeeeee;
+$primary-color: #2d9eee;
+$dark-color: #333333;
+$med-color: #555555;
+$light-color: #999999;
+$orange: #ee7f2d;
+$font-light: "Avenir-Light";
+$font-med: "Avenir-Medium";
+$font-heavy: "Avenir-Heavy";
+/* rgb values for primary-color */
+$primary-color-r: 29;
+$primary-color-g: 158;
+$primary-color-b: 238;
+
+
+.event-view {
+  max-height: 100%;
+  min-width: 30vh;
+  display: none;
+  color: $light-color;
+
+	.event-view-header {
+		padding: 10px;
+    	background-color: $background-color;
+		// Shadow
+		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+		position: relative;
+    	z-index: 5;
+	}
+	.event-view-title {
+	    color: $dark-color;
+		margin: 0;
+		line-height: normal;
+	}
+	.event-view-host {
+		color: $med-color;
+		margin: 0;
+		line-height: 30px;
+		font-size: 15px;
+	}
+	.event-view-subtitle{
+	    color: $med-color;
+		margin: 0;
+		line-height: normal;
+	}
+	.eventFireBtn {
+	    color: $light-color;
+		font-size: 45px;
+		font-family: FontAwesome;
+		line-height: 0 !important;
+		padding: 0;
+		&.selected {
+			color: $orange;
+			&:hover {
+				color: $orange;
+			}
+		}
+		&:hover {
+			color: rgba(255, 165, 0, 0.5);
+		}
+	}
+	.eventFireNum {
+		color: $dark-color;
+		font-size: 0.85em;
+		font-weight: bold;
+	}
+	.event-view-box {
+	    width: 100%;
+	    height: 75vh;
+        z-index: 0;
+        position: relative;
+	    overflow-y: scroll;
+	    overflow-x: hidden;
+	}
+    .eventPhoto {
+        position: fixed;
+        z-index: -1;
+        img {
+            width: 100%;
+            max-height: 30vh;
+        }
+    }
+    .event-view-info {
+        z-index: 1;
+	    background-color: white;
+	    padding-bottom: 75vh;
+        margin-top: 30vh;
+    }
+	.eventSection {
+		padding-top: 20px;
+		color: $med-color;
+		margin: 0;
+		border-bottom: 2px solid $primary-color;
+	}
+}

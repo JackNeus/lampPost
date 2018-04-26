@@ -1,0 +1,42 @@
+$background-color: #eeeeee;
+$primary-color: #2d9eee;
+$dark-color: #333333;
+$med-color: #555555;
+$light-color: #999999;
+$orange: #ee7f2d;
+$font-light: "Avenir-Light", "Arial-Light";
+$font-med: "Avenir-Medium", "Arial-Medium";
+$font-heavy: "Avenir-Heavy", "Arial-Heavy";
+/* rgb values for primary-color */
+$primary-color-r: 29;
+$primary-color-g: 158;
+$primary-color-b: 238;
+
+// Navbar style
+html, body {
+	.logo {
+		width: 200px;
+	}
+	.navbar-expand-md {
+		background-color: $primary-color;
+	}
+	.nav-link {
+		font-family: $font-med;
+		font-size:24px;
+	}
+
+	.dropdown-content {
+	    display: none;
+	    position: absolute;
+	    background-color: $primary-color;
+	    min-width: 160px;
+	    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	    z-index: 6;
+	}
+
+	#bigRow {
+		padding-left: 0vw;
+		padding-right: 0vw;
+		margin-bottom: 2vh;
+	}
+}

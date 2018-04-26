@@ -7,6 +7,10 @@
 <script src="/static/js/displayEvent.js?v=1"></script>
 <script src="/static/js/createEventHtml.js?v=1"></script>
 <script src="/static/js/app.js?v=1"></script>
+
+<link rel="stylesheet" type="text/css" href="/static/css/browser.css?v=1">
+<link rel="stylesheet" type="text/css" href="/static/css/eventView.css?v=1">
+
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -23,7 +27,6 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 <!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
-<div class="container-fluid">
 <div class="flex-container-row" id="bigRow">
    <div class="flex-container-col" id="leftCol">
    		<form onsubmit="return false;">
@@ -58,11 +61,11 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
         </div>
 
   	</div>
+    <div class="search-resizer"></div>
 
  	<div class="flex-container-col" id = "rightCol">
  		{% include "web/eventview.html" %}
     <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/explore.png" style="width: 100%;">
 	</div>
-</div>
 </div>
 {% endblock %}
