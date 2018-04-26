@@ -22,4 +22,14 @@ label {
  	background-color: #555555;
  }
 
+.delete-button {
+	color: #dc3545;
+ 	&:hover {
+ 		color: #c9302c;
+ 	}
+}
+
+ .delete-poster-button {
+ 	cursor: pointer;
+ }
 /*# sourceMappingURL=addEvent.css.map */

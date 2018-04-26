@@ -61,10 +61,10 @@ def myevents():
 
 			# make API request
 			r = controller.make_edit_request(request.form['event-id'], eventData)
-
+			
 			if r.status_code != 200:
 				flash("Something went wrong. Please contact a developer.")
-				return render_template("web/add.html", form=EventForm())
+				return render_template("web/myevents.html", form=EventForm())
 			r = json.loads(r.text)
 			if r["status"] == "Success":
 				flash("Success! Your event has been edited.")
