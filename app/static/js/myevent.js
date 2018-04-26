@@ -121,12 +121,22 @@ var handleDeleteMyEvent = function() {
 var handleEditMyEvent = function() {
 
 	$(".editBtn").click( function() { 
+		var eventNum = getNum($(this).attr('id'), "editBtn");
+		var eventId = event_data[eventNum - 1]._id;
+
 		// Add edit parameter to URL.
 		if (getUrlParameter('edit') === undefined) {
 			updateUrl(addUrlParameter(document.location.search, 'edit'));
 		}
+		
+		// Update event parameter in URL, if necessary.
 
-		var eventNum = getNum($(this).attr('id'), "editBtn");
+		// don't update if click on already selected search result
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+			// update url with eventid paramter
+			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+		}
+
 		renderEditForm(eventNum);
 	});
 }
