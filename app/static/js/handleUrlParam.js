@@ -4,6 +4,15 @@ var checkEventUrlParameter = function() {
 	return eventId;
 };
 
+// check if the edit event url parameter exists. If so, return true.
+var checkEditEventUrlParameter = function() {
+	var editMode = getUrlParameter('edit');
+	if (editMode === undefined) {
+		return false;
+	}
+	return editMode;
+}
+
 // check if the search url parameter exists. If so, fill in the 
 // search box with that value
 var checkSearchUrlParameter = function() {
@@ -23,8 +32,13 @@ var updateUrlParamEventView = function(eventId) {
 		eventNum = event_data.indexOf(event) + 1;
 		selected_event = event;
 		highlightSelectedSearchResult(eventNum);
-		populateEventViewPanel(eventNum);
-		handleEventFireBtnClick(eventNum);
+		if (checkEditEventUrlParameter()) {
+			renderEditForm(eventNum);
+		}
+		else {
+			populateEventViewPanel(eventNum);
+			handleEventFireBtnClick(eventNum);
+		}
 	}
 };
 
@@ -53,9 +67,15 @@ var getUrlParameter = function(sParam) {
 * @param {val}    string  value 
 */
 var addUrlParameter = function(search, key, val){
-	key = encodeURIComponent(key); val = encodeURIComponent(val);
-	var newParam = key + '=' + val,
-	params = '?' + newParam;
+	key = encodeURIComponent(key); 
+	if (val === undefined || val === null) {
+		var newParam = key;
+	}
+	else {
+		val = encodeURIComponent(val);
+		var newParam = key + '=' + val;
+	}
+	var params = '?' + newParam;
 
 	// If the "search" string exists, then build params from it
 	if (search) {
@@ -70,3 +90,19 @@ var addUrlParameter = function(search, key, val){
 
 	return params;
 };
+
+// Remove the edit parameter from search. 
+// This should probably be made more generic in the future.
+var removeEditParameter = function(search) {
+	params = search.replace(new RegExp('&?edit'), '');
+	return params;
+}
+
+// Update url with given parameters.
+var updateUrl = function(params) {
+	var newurl = window.location.protocol + "//" + 
+			 window.location.host + 
+			 window.location.pathname + 
+			 params;
+	window.history.pushState({ path: newurl }, '', newurl);
+}
