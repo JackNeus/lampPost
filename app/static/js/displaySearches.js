@@ -1,4 +1,4 @@
-// DEPENDENCIES: displayEvent.js, createEventHtml.js
+// DEPENDENCIES: displayEvent.js, createEventHtml.js, handleFavorites.js
 
 // Populate search result panel with event_data sorted by date.
 var showSearchResults = function() {
@@ -6,12 +6,11 @@ var showSearchResults = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortResults(); 		// sort by date or popularity
-	createSearchResults();	// create html code for each search result and display them
-	highlightUserFavorites(); 	// highlight user favorites
-	// declare event handlers for "fireBtn" and "smallSearchResult"
-	updateFireBtn(); 		// handle clicks of fire button
-	updateEventView(); 	// handle click of event
+	sortResults(); 			// sort by date or popularity
+	createSearchResults();		// create html code for each search result and display them
+	highlightUserFavorites(); 	// highlight user favorites on load
+	handleFireBtnClick(); 		// handle clicks of fire button
+	handleEventViewClick(); 	// handle click of event
 }
 
 // Populate search result panel with event_data sorted by date.
@@ -20,128 +19,21 @@ var showMyEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortResults(); 	// sort events by date
-	createMyEventResults(); // create html code for each created event and display them
-	highlightUserFavorites(); 	// highlight user favorites
-	// declare event handlers for "fireBtn" and "smallSearchResult"
-	updateFireBtn(); 		// handle clicks of fire button
-	updateEventView(); 	// handle click of event
+	sortResults(); 			// sort events by date
+	createMyEventResults(); 	// create html code for each created event and display them
+	highlightUserFavorites(); 	// highlight user favorites on load
+	handleFireBtnClick(); 		// handle clicks of fire button
+	handleEventViewClick(); 	// handle click of event
 }
-
-// Color in fire button for events a user has favorited
-var highlightUserFavorites = function () {
-	for (var i = 0; i < event_data.length; i++) {
-		// Event id
-		var eventId = event_data[i]._id;
-
-		// Color in fire button if user has favorited an event
-		var fireBtnElement = document.getElementById("resultFireBtn" + (i + 1));
-		if (eventIsFav(eventId)) fireBtnElement.classList.toggle("selected");
-	}
-};
 
 // Update the popularity of an event when the fire button is clicked
-var updateFireBtn = function () {
+var handleFireBtnClick = function () {
 	$(".resultFireBtn").click(function(e) {
-		if ($(this).hasClass("disabled")) return;
-		$(this).addClass("disabled");
-		
-		// get event id and user id
 		var eventNum = getNum($(this).attr("id"), "resultFireBtn");
-		var eventId = event_data[eventNum-1]._id
-		var userId = $("#userData").data("uid");
-
-		// update database after favoriting event
-		var favoriteEvent = function() {
-			var callback = function(data) {
-				if (data["status"] === "Success") {
-					// toggle view of fire button
-					fireBtn.classList.toggle("selected");
-					fireBtn.title = "Unfavorite";
-					updateFireNum(1);
-					updateEventViewFire(1);
-					checkReloadFavoritePage();
-				}
-				fireBtn.classList.toggle("disabled");
-			};
-			$.ajax({
-				url: base_url + '/api/user/fav/add/'+ userId + "/" + eventId,
-				dataType: 'json',
-				headers: {
-					'Authorization': ('Token ' + $.cookie('api_token'))
-				},
-				success: callback
-			});
-		};
-
-		// update database after unfavoriting event
-		var unfavoriteEvent = function() {
-			var callback = function(data) {
-				if (data["status"] === "Success") {
-					// toggle view of fire button
-					fireBtn.classList.toggle("selected");
-					fireBtn.title = "Favorite";
-					updateFireNum(-1);
-					updateEventViewFire(-1);
-					checkReloadFavoritePage();
-				}
-				fireBtn.classList.toggle("disabled");
-			};
-			$.ajax({
-				url: base_url + '/api/user/fav/remove/'+ userId + "/" + eventId,
-				dataType: 'json',
-				headers: {
-					'Authorization': ('Token ' + $.cookie('api_token'))
-				},
-				success: callback
-			});
-		};
-		
-		// update database with new favorite
-		var fireBtn = document.getElementById($(this).attr("id"));
-		if (fireBtn.classList.contains("selected")) unfavoriteEvent();
-		else favoriteEvent();
-		
-		// update favorite number information
-		var updateFireNum = function(change) {
-			var getFireNum = $("#resultFireNum" + eventNum).text();
-			var newFireNum = parseInt(getFireNum) + change;
-			$("#resultFireNum" + eventNum).text(newFireNum);
-		}
-		
-		// if on favorite page, reload the page
-		var checkReloadFavoritePage = function() {
-			if (window.location.href.indexOf('myfavorites') != -1) {
-				$("#smallSearchResult" + eventNum).hide();
-				if (selected_event !== null && !fireBtn.classList.contains("selected") && selected_event._id == eventId)
-					$(".event-view").hide();
-			}
-		};
-		
-		// update favorite button on event-view if the current event-view is the same as
-		// the search that's been favorited
-		var updateEventViewFire = function(change) {
-			if (selected_event !== null && selected_event._id == eventId) {
-				// toggle color/highlighting
-				var eventFireBtn = document.getElementById("eventFireBtn");
-				eventFireBtn.classList.toggle("selected");
-				if (eventFireBtn.classList.contains("selected")) {
-					eventFireBtn.title = "Unfavorite";
-				}
-				else {
-					eventFireBtn.title = "Favorite";
-				}
-				// update favorite number information
-				var getFireNum = $("#eventFireNum").text();
-				var newFireNum = parseInt(getFireNum) + change;
-				$("#eventFireNum").text(newFireNum);
-			}
-		};
-
-		// prevents whole search result from being selected when fire button is clicked
+		updateFireBtn(this, eventNum);
 		e.stopPropagation();
 	});
-}
+};
 
 // Sort results by popularity or date
 var sortResults = function () {
