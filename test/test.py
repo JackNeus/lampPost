@@ -745,7 +745,7 @@ test_search_empty,
 test_search_no_auth,
 test_search_all, test_search_default_starttime
 ]
-tests=[test_search_starttime]
+
 if __name__ == '__main__':
 	setup()
 	failed = 0
