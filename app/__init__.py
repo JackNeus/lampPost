@@ -1,6 +1,12 @@
+import argparse
 import sys
 from flask import Flask, render_template
 from mongoengine import register_connection
+
+# Command line flags.
+parser = argparse.ArgumentParser()
+parser.add_argument("--test_mode")
+args = parser.parse_args()
 
 class FlaskApp(Flask):
     def __init__(self):
@@ -8,10 +14,10 @@ class FlaskApp(Flask):
 
 app = FlaskApp()
 
-if len(sys.argv) > 1:
+if args.test_mode:
     try:
-        app.config.from_pyfile("../" + sys.argv[1])
-        print("Running app in MANUAL mode.")
+        app.config.from_pyfile("../test/test_config.public_cfg")
+        print("Running app in TEST mode.")
     except:
         print("Supplied configuration not found.")
 else:
