@@ -14,9 +14,9 @@ var updateEventView = function() {
 
 			//hide the footer if it exists
 			$(".footer").hide();
-		
+
 			highlightSelectedSearchResult(eventNum);
-		
+
 			// populate and display event view.
 			$(".event-view").hide();
 			selected_event = event_data[eventNum - 1];
@@ -29,7 +29,7 @@ var updateEventView = function() {
 // highlight search result that's been selected and display event view
 function highlightSelectedSearchResult(eventNum) {
 	// toggle highlighting in search results.
-	$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
+	$(".smallSearchResult.selected").animate({"margin-right": '4vh'});
 	$(".smallSearchResult").removeClass("selected");
 	$("#smallSearchResult" + (eventNum)).addClass("selected");
 
@@ -41,27 +41,27 @@ function highlightSelectedSearchResult(eventNum) {
 function populateEventViewPanel(eventNum) {
 
 	// Clickable fire button that displays "Favorite" when hovered over
-	var fireBtn = 
+	var fireBtn =
 		`<div class="eventFireBtn btn" id="eventFireBtn">`
 	    +		`<i class="fas fa-fire"></i>`
 	    + `</div>`;
-	  
+
 	// Number of favorites
-	var fireNum = 
+	var fireNum =
 		`<p class="eventFireNum" id="eventFireNum">`
 	    + 	$("#resultFireNum" + (eventNum + 1)).text()
 	    + `</p>`;
-	
+
 	// hide welcome image
 	$("#welcome").css("display", "none");
-	
+
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum].title);
 	$("#eventSubtitle").html("");
 	$("#eventFireBtn").remove();
 	$("#eventFireNum").remove();
 	$("#mainHeaderLine").append(fireBtn).append(fireNum);
-	
+
 	// setup dates and times
 	var instances = event_data[eventNum].instances;
 	for (var i = 0; i < instances.length; i++) {
@@ -71,7 +71,7 @@ function populateEventViewPanel(eventNum) {
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 		$("#eventSubtitle").append("<br>");
 	}
-	
+
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum].host);
 	$("#eventDescription").html(event_data[eventNum].description);
@@ -79,22 +79,23 @@ function populateEventViewPanel(eventNum) {
 	// If the event has a poster, display that.
 	if ("poster" in event_data[eventNum]) {
 		document.getElementById("eventPhoto").innerHTML =
-		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum].poster+"\">";
+		"<img class=\"mx-auto d-block\" src=\""+event_data[eventNum].poster+"\" id=\"poster\">";
 	}
+	// good for testing:
 	else {
 		// Add C&H image
-		var photoNum = Math.floor(Math.random() * 81); + 1;
+		var photoNum = Math.floor(Math.random() * 81) + 1;
 		document.getElementById("eventPhoto").innerHTML =
-			"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
-			+ photoNum + ".png\">";
+			"<img class=\"mx-auto d-block\" src=\"../../static/graphics/images/CH/"
+			+ photoNum + ".png\" id=\"poster\">";
 	}
-	
+
 	// highlight fire button if appropriate
 	if ($("#resultFireBtn" + (eventNum + 1)).hasClass("selected")) {
 		$("#eventFireBtn").addClass("selected");
 	}
 	else $("#eventFireBtn").removeClass("selected");
-	
+
 	// handle clicks of fire button
 	updateEventFireBtn(eventNum);
 }
@@ -104,7 +105,7 @@ var updateEventFireBtn = function (eventNum) {
 	$("#eventFireBtn").click( function(e) {
 		if ($(this).hasClass("disabled")) return;
 		$(this).addClass("disabled");
-		
+
 		// get event id and user id
 		var eventId = event_data[eventNum]._id;
 		var userId = $("#userData").data("uid");
@@ -158,7 +159,7 @@ var updateEventFireBtn = function (eventNum) {
 				success: callback
 			});
 		};
-		
+
 		// update favorite number information
 		var updateFireNum = function(change) {
 			var getFireNum = $("#resultFireNum" + (eventNum + 1)).text();
@@ -166,8 +167,8 @@ var updateEventFireBtn = function (eventNum) {
 			$("#eventFireNum").text(newFireNum);
 			$("#resultFireNum" + (eventNum + 1)).text(newFireNum);
 		};
-		
-		// remove smallSearchResult and corresponding eventView from page if 
+
+		// remove smallSearchResult and corresponding eventView from page if
 		// on 'my favorites' page
 		var checkReloadFavoritePage = function() {
 			if (window.location.href.indexOf('myfavorites') != -1) {
@@ -177,7 +178,7 @@ var updateEventFireBtn = function (eventNum) {
 			}
 			return 0;
 		};
-		
+
 		// update database with new favorite
 		var eventFireBtn = document.getElementById("eventFireBtn");
 		var resultFireBtn = document.getElementById("resultFireBtn" + (eventNum + 1));

@@ -4,6 +4,8 @@
 
 {% block scripts %}
 <link rel="stylesheet" type="text/css" href="/static/css/add.css">
+<link rel="stylesheet" type="text/css" href="/static/css/browser.css?v=1">
+<link rel="stylesheet" type="text/css" href="/static/css/eventView.css?v=1">
 <script src="/static/js/displaySearches.js?v=0"></script>
 <script src="/static/js/displayEvent.js?v=0"></script>
 <script src="/static/js/createEventHtml.js?v=0"></script>
@@ -18,15 +20,11 @@ setBaseUrl("{{ config.BASE_URL }}");
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="/static/css/myevents.css">
-
-
-<div class="container-fluid">
-  	<div class="flex-container-row" id="bigRow">
-  	
+<div class="flex-container-row" id="bigRow">
 	   <div class="flex-container-col" id = "leftCol">
-	   
+
 	   	<h1>My Events</h1>
-	   	
+
 	   	<!-- Sort by date or popularity -->
 		<div class="d-flex flex-row align-items-start">
 			<select class="p-2 ml-auto" name="sort" id="searchSort">
@@ -34,21 +32,21 @@ setBaseUrl("{{ config.BASE_URL }}");
 				<option value="Popularity">Sort By Popularity</option>
 			</select>
 		</div>
-			
+
 		<!-- Fills in with "search" results from events.json -->
 		<div class="flex-container-scroll" id="searches"></div>
-		
+
 	   </div>
-		
+
 	 	<div class="flex-container-col" id = "rightCol">
  			{% include "web/eventview.html" %}
-			
+
 			<!-- TODO: this element is not really necessary, only referenced
-			in displayEvent.js so maybe we should fix at some point, but not a 
+			in displayEvent.js so maybe we should fix at some point, but not a
 			priority right now -->
 			<div id="welcome" ></div>
 
-			<!-- Hacky, but I can't think of a better way. 
+			<!-- Hacky, but I can't think of a better way.
 			If this element exists, then we will force the form to display with jQuery. -->
 			{% if display %}
 				<a id="displayEventForm"> </a>
@@ -71,16 +69,16 @@ setBaseUrl("{{ config.BASE_URL }}");
 						<input style="display:none" id="event-id" type="text" name="event-id"> </input>
 
 						<div class="form-group">
-							{{ form.title.label(class="req") }} 
+							{{ form.title.label(class="req") }}
 							{{ form.title(class="form-control", maxlength="100") }}
 						</div>
 						<div class="form-group">
-							{{ form.description.label(class="req") }} 
+							{{ form.description.label(class="req") }}
 							{{ form.description(class="form-control", rows="4", maxlength="3000") }}
 						</div>
 
 						<div class="form-group">
-							{{ form.host.label(class="req") }} 
+							{{ form.host.label(class="req") }}
 							{{ form.host(class="form-control", maxlength="100") }}
 						</div>
 
@@ -96,7 +94,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 						</div>
 
 						{% for i in range(form.locations.__len__()) %}
-							<div class="form-row" id="form-row-{{i+1}}"> 
+							<div class="form-row" id="form-row-{{i+1}}">
 								<div class="form-group col-md-4">
 		        					{{ form.locations.__getitem__(i).label(class="numbered req") }}
 		        					{{ form.locations.__getitem__(i)(class="form-control", maxlength="100") }}
@@ -107,7 +105,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 									{{ form.startDates.__getitem__(i)(class="form-control") }}
 								</div>
 								<div class="form-group col-md-2">
-									{{ form.startTimes.__getitem__(i).label(class="numbered req") }} 
+									{{ form.startTimes.__getitem__(i).label(class="numbered req") }}
 									{{ form.startTimes.__getitem__(i)(class="form-control") }}
 								</div>
 								<div class="form-group col-md-2">
@@ -128,7 +126,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 						</div>
 
 						<div class="form-group">
-							{{ form.link.label }} 
+							{{ form.link.label }}
 							{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control", maxlength="100") }}
 						</div>
 
@@ -146,10 +144,9 @@ setBaseUrl("{{ config.BASE_URL }}");
 					</form>
 
 				</div>
-				
+
 			</div>
 
-		</div>	
-	</div>
+		</div>
 </div>
 {% endblock %}
