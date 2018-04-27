@@ -78,7 +78,6 @@ def myevents():
 				return render_template("web/myevents.html", form=EventForm())
 
 			# make API request
-			print(request.form['event_id'])
 			r = controller.make_edit_request(request.form['event_id'], eventData)
 
 			if r.status_code != 200:
