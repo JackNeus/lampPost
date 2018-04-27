@@ -106,5 +106,5 @@ def get_raw_event(event_entry):
 class ReportEntry(Document):
     reporter = StringField(required = True)
     report_time = DateTimeField(required = True)
-    reason = StringField(required = True, min_length = 15)
+    reason = StringField(required = True, min_length = 5)
     event_dump = StringField(required = True)

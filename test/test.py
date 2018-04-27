@@ -580,7 +580,7 @@ def test_report_event():
 # Reason is too short.
 def test_report_event_short_reason():
 	def test(new_event, event_id, creator_netid):
-		report = {"reason": "Hate to talk."}
+		report = {"reason": "bad"}
 		r = make_report_event_request(event_id, report, generate_auth_token("rrliu"))
 		assert is_error(r)
 		assert "short" in r["error_msg"]

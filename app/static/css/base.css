@@ -180,71 +180,61 @@ html #bigRow, body #bigRow {
   max-height: 100%;
   min-width: 30vh;
   display: none;
-  color: #999999;
-}
-.event-view .event-view-header {
-  padding: 10px;
-  background-color: #eeeeee;
-  box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
-  position: relative;
-  z-index: 5;
-}
-.event-view .event-view-title {
-  color: #333333;
-  margin: 0;
-  line-height: normal;
-}
-.event-view .event-view-host {
-  color: #555555;
-  margin: 0;
-  line-height: 30px;
-  font-size: 15px;
-}
-.event-view .event-view-subtitle {
-  color: #555555;
-  margin: 0;
-  line-height: normal;
-}
-.event-view .eventFireBtn {
-  color: #999999;
-  font-size: 45px;
-  font-family: FontAwesome;
-  line-height: 0 !important;
-  padding: 0;
-}
-.event-view .eventFireBtn.selected {
-  color: #ee7f2d;
-}
-.event-view .eventFireBtn.selected:hover {
-  color: #ee7f2d;
-}
-.event-view .eventFireBtn:hover {
-  color: rgba(255, 165, 0, 0.5);
-}
-.event-view .eventFireNum {
-  color: #333333;
-  font-size: 0.85em;
-  font-weight: bold;
-}
-.event-view .event-view-info {
-  width: 100%;
-  background-color: white;
-  height: 75vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding-bottom: 2vh;
-}
-.event-view img {
-  float: top;
-  width: 100%;
-  height: auto;
-}
-.event-view .eventSection {
-  padding-top: 20px;
-  color: #555555;
-  margin: 0;
-  border-bottom: 2px solid #2d9eee;
-}
+  color: #999999; }
+  .event-view .event-view-header {
+    padding: 10px;
+    background-color: #eeeeee;
+    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+    position: relative;
+    z-index: 5; }
+  .event-view .event-view-title {
+    color: #333333;
+    margin: 0;
+    line-height: normal; }
+  .event-view .event-view-host {
+    color: #555555;
+    margin: 0;
+    line-height: 30px;
+    font-size: 15px; }
+  .event-view .event-view-subtitle {
+    color: #555555;
+    margin: 0;
+    line-height: normal; }
+  .event-view .eventFireBtn {
+    color: #999999;
+    font-size: 45px;
+    font-family: FontAwesome;
+    line-height: 0 !important;
+    padding: 0; }
+    .event-view .eventFireBtn.selected {
+      color: #ee7f2d; }
+      .event-view .eventFireBtn.selected:hover {
+        color: #ee7f2d; }
+    .event-view .eventFireBtn:hover {
+      color: rgba(255, 165, 0, 0.5); }
+  .event-view .eventFireNum {
+    color: #333333;
+    font-size: 0.85em;
+    font-weight: bold; }
+  .event-view .event-view-info {
+    width: 100%;
+    background-color: white;
+    height: 75vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-bottom: 2vh; }
+  .event-view img {
+    float: top;
+    width: 100%;
+    height: auto; }
+  .event-view .eventSection {
+    padding-top: 20px;
+    color: #555555;
+    margin: 0;
+    border-bottom: 2px solid #2d9eee; }
+  .event-view #reportBtn {
+    color: white;
+    float: right; }
 
 .flex-container-row {
   display: flex;

@@ -23,7 +23,7 @@ setBaseUrl("{{ config.BASE_URL }}");
   	
 	   <div class="flex-container-col" id = "leftCol">
 	   
-	   	<h1>My Events</h1>
+	   	<h1 style="text-align:center; padding-top:1vh">My Events</h1>
 	   	
 	   	<!-- Sort by date or popularity -->
 		<div class="d-flex flex-row align-items-start">
@@ -58,8 +58,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 
 			<div class = "event-form eventFormView" id = "event-form" style="display:none">
-				<div class="col-md-10">
-					<h3 style="text-align:center"> Edit your event by changing the fields below. </h3>
+					<h2 style="text-align:center"> Edit your event by changing the fields below. </h2>
 
 					<form id="addEventForm" action="/myevents" method="POST" role="form" enctype="multipart/form-data">
 						{{ form.csrf_token }}
@@ -151,13 +150,15 @@ setBaseUrl("{{ config.BASE_URL }}");
 						</div>
 
 
-					</form>
-
-				</div>
-				
+					</form>				
 			</div>
+
+			<!-- So the footer doesn't cover key areas -->
+			<div id="emptyBottomSpace"> </div>
 
 		</div>	
 	</div>
 </div>
+
+
 {% endblock %}

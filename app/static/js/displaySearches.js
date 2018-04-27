@@ -109,8 +109,8 @@ function makeDate(start, end) {
 	var today = new Date();
 
 	// Special cases for dates within a week of current date
-	var weekdays = ["Sun", "Mon", "Tue", "Wed",
-			    "Thu", "Fri", "Sat"];
+	var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday",
+			    "Thursday", "Friday", "Saturday"];
 	var time_diff = Date.timeBetween(today, start_date, 'days');
 
 	var date_str = weekdays[start_date.getDay()] += " ";
