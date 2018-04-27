@@ -18,7 +18,7 @@
 
 		
 		<div class="eventFormView" id = "formCol">
-			<h3 style="text-align:center"> Add your event by filling out the fields below. </h3>
+			<h2 style="text-align:center"> Add your event by filling out the fields below. </h2>
 
 			<form id="addEventForm" action="/add" method="POST" role="form" enctype="multipart/form-data">
 				{{ form.csrf_token }}
@@ -107,6 +107,11 @@
 
 
 			</form>
+
+		</div>
+
+		<!-- So the footer doesn't cover key areas -->
+		<div id="emptyBottomSpace"> </div>
 
 	</body>
 {% endblock %}

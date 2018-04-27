@@ -22,13 +22,14 @@ label {
 .eventFormView {
   padding-top: 2vh;
   padding-right: 2vw;
-  padding-left: 2vw;
-  height: 88vh;
-  overflow-y: scroll; }
+  padding-left: 2vw; }
 
 #formCol {
   border-left: 5px solid #2d9eee;
   border-right: 5px solid #2d9eee; }
+
+#emptyBottomSpace {
+  height: 9vh; }
 
 .submitAddButton:hover {
   border-color: #2d9eee;
