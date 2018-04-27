@@ -121,95 +121,107 @@ var handleDeleteMyEvent = function() {
 var handleEditMyEvent = function() {
 
 	$(".editBtn").click( function() { 
-
-		// hide the footer
-		$(".footer").hide();
-
-		unselectIcons();
-
-		// make the icon "selected"
-		$(this).addClass("selectedIcon");
-		$(this).find(".fa-pencil-alt").addClass("fa-inverse");
-
-		// toggle highlighting in search results
 		var eventNum = getNum($(this).attr('id'), "editBtn");
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
-			highlightSelectedSearchResult(eventNum);
+		var eventId = event_data[eventNum - 1]._id;
 
-		// hide the event display
-		$(".event-view").hide();
-
-		// fill the form with the correct values
-		$("#event-id").val(event_data[eventNum - 1]._id);
-		$("#title").val(event_data[eventNum - 1].title);
-		$("#description").val(event_data[eventNum - 1].description);
-		$("#host").val(event_data[eventNum - 1].host);
-		var numShowings = event_data[eventNum - 1].instances.length;
-		$("#numShowings-" + (numShowings - 1)).prop("checked", true);
-		$("#visibility-" + (1 - event_data[eventNum - 1].visibility)).prop("checked", true);
-
-		// to avoid flickering, if we haven't loaded anything yet, do this special case
-		if (currentRows == 0) {
-			// hide all rows
-			for (var i = 1; i <= 4; i++) {
-				$("#form-row-" + i).hide();
-			}
-			// show the ones we need
-			for (var i = 1; i <= numShowings; i++) {
-				$("#form-row-" + i).show();
-			}
-			currentRows = numShowings;
-		}
-		// otherwise, do the standard
-		else {
-			// show the correct number of form rows, by sliding down any extra we might need
-			for (var i = currentRows; i <= numShowings; i++) {
-				$("#form-row-" + i).slideDown();
-			}
-
-			currentRows = numShowings;
-
-			// slide up any extra form rows
-			for (var i = numShowings + 1; i <= 4; i++) {
-				$("#form-row-" + i).slideUp();
-			}
-		}
-
-		// fill in correct values in any relevant form rows
-		for (var i = 0; i < numShowings; i++) {
-			$("#locations-" + i).val(event_data[eventNum - 1].instances[i]["location"]);
-			starts = event_data[eventNum - 1].instances[i]["start_datetime"].split(" ");
-			ends = event_data[eventNum - 1].instances[i]["end_datetime"].split(" ");
-
-			yearMonDayS = starts[0].split("-")
-			yearMonDayE = ends[0].split("-")
-			$("#startDates-" + i).val(yearMonDayS[1] + "/" + yearMonDayS[2] + "/" + yearMonDayS[0]);
-			$("#endDates-" + i).val(yearMonDayE[1] + "/" + yearMonDayE[2] + "/" + yearMonDayE[0]);
-
-			timeS = starts[1];
-			timeE = ends[1];
-			$("#startTimes-" + i).val(timeS);
-			$("#endTimes-" + i).val(timeE);
-		}
-
-		// empty the values in all the other form rows
-		for (var i = numShowings; i < 4; i++) {
-			$("#locations-" + i).val("");
-			$("#startDates-" + i).val("");
-			$("#endDates-" + i).val("");
-			$("#startTimes-" + i).val("");
-			$("#endTimes-" + i).val("");
+		// Add edit parameter to URL.
+		if (getUrlParameter('edit') === undefined) {
+			updateUrl(addUrlParameter(document.location.search, 'edit'));
 		}
 		
-		$("#link").val(event_data[eventNum - 1].trailer);
+		// Update event parameter in URL, if necessary.
 
+		// don't update if click on already selected search result
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+			// update url with eventid paramter
+			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+		}
 
-		// display the form
-		$("#event-form").show();
-
+		renderEditForm(eventNum);
 	});
 }
 
+var renderEditForm = function(eventNum) {
+	var editBtn = $("#editBtn"+eventNum);
+
+	// hide the footer
+	$(".footer").hide();
+
+	unselectIcons();
+
+	// make the icon "selected"
+	editBtn.addClass("selectedIcon");
+	editBtn.find(".fa-pencil-alt").addClass("fa-inverse");
+
+	// toggle highlighting in search results
+	if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
+		highlightSelectedSearchResult(eventNum);
+
+	// hide the event display
+	$(".event-view").hide();
+
+	// fill the form with the correct values
+	$("#event-id").val(event_data[eventNum - 1]._id);
+	$("#title").val(event_data[eventNum - 1].title);
+	$("#description").val(event_data[eventNum - 1].description);
+	$("#host").val(event_data[eventNum - 1].host);
+	var numShowings = event_data[eventNum - 1].instances.length;
+	$("#numShowings-" + (numShowings - 1)).prop("checked", true);
+
+	// to avoid flickering, if we haven't loaded anything yet, do this special case
+	if (currentRows == 0) {
+		for (var i = 1; i <= numShowings; i++) {
+			$("#form-row-" + i).show();
+		}
+		currentRows = numShowings;
+	}
+	// otherwise, do the standard
+	else {
+		// show the correct number of form rows, by sliding down any extra we might need
+		for (var i = currentRows; i <= numShowings; i++) {
+			$("#form-row-" + i).slideDown();
+		}
+
+		currentRows = numShowings;
+
+		// slide up any extra form rows
+		for (var i = numShowings + 1; i <= 4; i++) {
+			$("#form-row-" + i).slideUp();
+		}
+	}
+
+	// fill in correct values in any relevant form rows
+	for (var i = 0; i < numShowings; i++) {
+		$("#locations-" + i).val(event_data[eventNum - 1].instances[i]["location"]);
+		starts = event_data[eventNum - 1].instances[i]["start_datetime"].split(" ");
+		ends = event_data[eventNum - 1].instances[i]["end_datetime"].split(" ");
+
+		yearMonDayS = starts[0].split("-")
+		yearMonDayE = ends[0].split("-")
+		$("#startDates-" + i).val(yearMonDayS[1] + "/" + yearMonDayS[2] + "/" + yearMonDayS[0]);
+		$("#endDates-" + i).val(yearMonDayE[1] + "/" + yearMonDayE[2] + "/" + yearMonDayE[0]);
+
+		timeS = starts[1];
+		timeE = ends[1];
+		$("#startTimes-" + i).val(timeS);
+		$("#endTimes-" + i).val(timeE);
+	}
+
+	// empty the values in all the other form rows
+	for (var i = numShowings; i < 4; i++) {
+		$("#locations-" + i).val("");
+		$("#startDates-" + i).val("");
+		$("#endDates-" + i).val("");
+		$("#startTimes-" + i).val("");
+		$("#endTimes-" + i).val("");
+	}
+
+	$("#link").val(event_data[eventNum - 1].trailer);
+
+
+	// display the form
+	$("#event-form").show();
+}
 
 // Get list of events which user has favorited
 var setupUserFavorites = function() {
@@ -223,7 +235,9 @@ var setupUserFavorites = function() {
 		handleDeleteMyEvent();
 		handleEditMyEvent();
 		var urlParamEventId = checkEventUrlParameter();
-		if (urlParamEventId) updateUrlParamEventView(urlParamEventId);
+		if (urlParamEventId) {
+			updateUrlParamEventView(urlParamEventId);
+		}
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,
