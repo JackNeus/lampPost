@@ -42,7 +42,6 @@ def check_instance_times(event):
 				raise ValidationError("End time has already passed.")
 
 def add_event(data):
-	check_instance_times(data)
 	new_event = EventEntry.from_json(json.dumps(data))
 	new_event.save()
 	return new_event
