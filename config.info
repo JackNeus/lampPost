@@ -3,7 +3,7 @@
 DEBUG=True
 PORT=5001
 BASE_URL=http://localhost:5001
-
+MAX_FILE_SIZE=500
 SECRET_KEY=
 
 DB_NAME=
