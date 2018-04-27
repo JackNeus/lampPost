@@ -1,0 +1,80 @@
+/* rgb values for primary-color */
+.event-view {
+  max-height: 100%;
+  min-width: 30vh;
+  display: none;
+  color: #999999;
+}
+.event-view .event-view-header {
+  padding: 10px;
+  background-color: #eeeeee;
+  box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+  position: relative;
+  z-index: 5;
+}
+.event-view .event-view-title {
+  color: #333333;
+  margin: 0;
+  line-height: normal;
+}
+.event-view .event-view-host {
+  color: #555555;
+  margin: 0;
+  line-height: 30px;
+  font-size: 15px;
+}
+.event-view .event-view-subtitle {
+  color: #555555;
+  margin: 0;
+  line-height: normal;
+}
+.event-view .eventFireBtn {
+  color: #999999;
+  font-size: 45px;
+  font-family: FontAwesome;
+  line-height: 0 !important;
+  padding: 0;
+}
+.event-view .eventFireBtn.selected {
+  color: #ee7f2d;
+}
+.event-view .eventFireBtn.selected:hover {
+  color: #ee7f2d;
+}
+.event-view .eventFireBtn:hover {
+  color: rgba(255, 165, 0, 0.5);
+}
+.event-view .eventFireNum {
+  color: #333333;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+.event-view .event-view-box {
+  width: 100%;
+  height: 75vh;
+  z-index: 0;
+  position: relative;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.event-view .eventPhoto {
+  position: fixed;
+  z-index: -1;
+}
+.event-view .eventPhoto img {
+  width: 100%;
+  max-height: 30vh;
+  object-fit: cover;
+}
+.event-view .event-view-info {
+  z-index: 1;
+  background-color: white;
+  padding-bottom: 75vh;
+  margin-top: 30vh;
+}
+.event-view .eventSection {
+  padding-top: 20px;
+  color: #555555;
+  margin: 0;
+  border-bottom: 2px solid #2d9eee;
+}

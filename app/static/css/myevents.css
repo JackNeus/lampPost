@@ -1,22 +1,25 @@
 .invisible {
-  display: none; }
+  display: none;
+}
 
 label {
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 .req:after {
   content: " *";
-  color: red; }
+  color: red;
+}
 
 .col-md-10 {
-  padding-left: 11vw; }
+  padding-left: 11vw;
+}
 
 #rightCol {
-  max-height: 88vh; }
+  max-height: 88vh;
+}
 
 .selectedIcon {
   background-color: #555555; }
 
 /*# sourceMappingURL=addEvent.css.map */
-
-/*# sourceMappingURL=myevents.css.map */

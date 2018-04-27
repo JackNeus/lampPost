@@ -1,0 +1,92 @@
+/* rgb values for primary-color */
+html, body {
+  font: 100% "Avenir-Medium";
+  background-color: #eeeeee;
+}
+html .h1, html h1, body .h1, body h1 {
+  font: 100% "Avenir-Heavy";
+  font-size: 36px;
+}
+html .h2, html h2, body .h2, body h2 {
+  font: 100% "Avenir-Heavy";
+  font-size: 26px;
+}
+html .h3, html h3, body .h3, body h3 {
+  font: 100% "Avenir-Medium";
+  font-size: 20px;
+}
+
+.debug-data {
+  display: none;
+  color: red;
+}
+
+::placeholder {
+  color: #999999 !important;
+  opacity: 1;
+}
+
+.flex-container-row {
+  display: flex;
+  flex-flow: row wrap;
+  overflow: hidden;
+}
+
+.searchRow {
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden;
+}
+
+.flex-container-col {
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden;
+}
+
+.flex-container-scroll {
+  flex-grow: 0;
+  flex-shrink: 10000;
+  flex-basis: auto;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.footer {
+  color: white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  height: 6.4vh;
+}
+
+.successFlash {
+  background-color: #00b300;
+}
+
+.errorFlash {
+  background-color: red;
+}
+
+#leftCol {
+  max-height: 88vh;
+  height: 88vh;
+  flex: 30%;
+  float: left;
+}
+
+#rightCol {
+  max-height: 88vh;
+  height: 88vh;
+  flex: 60%;
+  float: left;
+}
+
+@media screen and (max-width: 600px) {
+  .flex-container-row {
+    flex-direction: column;
+  }
+}
