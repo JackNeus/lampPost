@@ -15,24 +15,21 @@ $primary-color-b: 238;
 
 // Page style
 html, body {
-	// Font Style
-
 	// Base font
-	font: 100% $font-light;
-	font-size: 20px;
+	font: 100% $font-med;
 	// Headers
 	.h1, h1 {
-		font: 100% $font-heavy;
+		font-family: $font-heavy;
 		font-size:36px;
 	}
 
 	.h2, h2 {
-		font: 100% $font-heavy;
+		font-family: $font-heavy;
 		font-size:26px;
 	}
 
 	.h3, h3 {
-		font: 100% $font-med;
+		font-family: $font-med;
 		font-size:20px;
 	}
 
@@ -40,6 +37,7 @@ html, body {
 	background-color: $background-color;
 }
 
+<<<<<<< HEAD
 // Navbar style
 html, body {
 	.logo {
@@ -52,7 +50,7 @@ html, body {
 		font: 100% $font-med;
 		font-size:24px;
 	}
-	
+
 	.dropdown-content {
 	    display: none;
 	    position: absolute;
@@ -73,221 +71,17 @@ html, body {
 	display: none;
 }
 
+=======
+>>>>>>> 27b05ae02a4b64d43a36ffe6102ec73e1bb88f28
 // Debug Style
 .debug-data {
 	display: none;
 	color: red;
 }
 
-#searches-wrapper {
-	min-height: 75px;
-	border-top: 5px solid $med-color;	
-	position: relative;
-
-	.centered{
-		margin: auto;
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-	}
-
-	#loading-spinner {
-		font-size: 1.7em;
-	}
-}
-
-#searches {
-	padding-top: 1vh;
-}
-
-#searchBox {
-	padding: 0;
-	margin: 2vh 2vh;
-	max-width: 100%;
-	width: 100%;
-	flex-shrink: 1000;
-	font-size: 16px !important;
-}
-
-#searchSort {
-	border: 1px solid #AAA;
-	color: $dark-color;
-	font-size: 0.75em;
-	overflow: hidden;
-	border-radius: 2px;
-	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin: 2vh 2vh;
-      flex-grow: 1000;
-      flex-shrink: 0;
-}
-
-.filters {
-	margin: 0vh 2vh;
-
-	label {
-		font-size: 0.75em;
-	}
-
-	input[type=text] {
-		font-size: 0.65em;
-	}
-	.datetime {
-		display: none;
-	}
-}
-
-.smallSearchResult {
-	flex-grow: 1000;
- 	min-height: 10vh;
- 	border-right: 4px solid $primary-color;
-	border-left: 4px solid $primary-color;
-	border-top: 2px solid $primary-color;
-	border-bottom: 2px solid $primary-color;
-	border-radius: 0px 10px 10px 0px;
-	cursor: pointer;
-	margin: 0vh 2vh 0vh 0vh;
- 	overflow: hidden;
- 	background: white;
-	color: $dark-color;
-	.resultTitle {
-		font-size: 1.2em;
-	}
-	.resultTime {
-		font-size: 1em;
-		color: $light-color;
-		margin-bottom: 0.3em;
-	}
- 	&.selected {
-		.resultTitle {
-			color: white;
-		}
-		.resultTime {
-			color: white;
-		}
-		border-radius: 0px;
-		background-color: $primary-color;
-		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
-		z-index: 2;
-		position: relative;
-		&:hover {
-			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.8);
-		 	border: 3px solid $primary-color;
-		}
- 	}
- 	&:hover {
-		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
-		z-index: 1;
-		position: relative;
- 		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.2);
-		border: 3px solid $primary-color;
- 	}
-	.resultContents {
-		padding-left: 0.8vw;
-		padding-right: 0.8vw;
-		padding-top: 0.6vh;
-		padding-bottom: 0.6vh;
-		text-overflow: ellipsis;
-		overflow: hidden;
-		.resultFireBtn {
-			font-size: 24px;
-			font-family: FontAwesome;
-			color: $background-color;
-			padding: 0;
-			&.selected {
-				color: $orange;
-				&:hover {
-					color: $orange;
-				}
-			}
-			&:hover {
-				color: rgba(255, 165, 0, 0.5);
-			}
-			.resultFireNum {
-				color: $dark-color !important;
-				font-size: 0.85em;
-				font-weight: bold;
-			}
-		}
-	}
-}
-
-
-// Event event
-// TODO: Move to seperate file?
-.event-view {
-  max-height: 100%;
-  min-width: 30vh;
-  display: none;
-  color: $light-color;
-
-	.event-view-header {
-		padding: 10px;
-    	background-color: $background-color;
-		// Shadow
-		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
-		position: relative;
-    	z-index: 5;
-	}
-	.event-view-title {
-	    color: $dark-color;
-		margin: 0;
-		line-height: normal;
-	}
-	.event-view-host {
-		color: $med-color;
-		margin: 0;
-		line-height: 30px;
-		font-size: 15px;
-	}
-	.event-view-subtitle{
-	    color: $med-color;
-		margin: 0;
-		line-height: normal;
-	}
-	.eventFireBtn {
-	    color: $light-color;
-		font-size: 45px;
-		font-family: FontAwesome;
-		line-height: 0 !important;
-		padding: 0;
-		&.selected {
-			color: $orange;
-			&:hover {
-				color: $orange;
-			}
-		}
-		&:hover {
-			color: rgba(255, 165, 0, 0.5);
-		}
-	}
-	.eventFireNum {
-		color: $dark-color;
-		font-size: 0.85em;
-		font-weight: bold;
-	}
-	.event-view-info {
-	    width: 100%;
-	    background-color: white;
-	    height: 75vh;
-	    overflow-y: scroll;
-	    overflow-x: hidden;
-	    padding-bottom: 2vh;
-	}
-	img {
-		float: top;
-		width: 100%;
-		height: auto;
-	}
-	.eventSection {
-		padding-top: 20px;
-		color: $med-color;
-		margin: 0;
-		border-bottom: 2px solid $primary-color;
-	}
+::placeholder {
+	color: $light-color !important;
+	opacity: 1;
 }
 
 .flex-container-row {
@@ -338,9 +132,8 @@ html, body {
 #leftCol {
 	max-height: 88vh;
 	height: 88vh;
-	flex: 30%;
+	flex: 25%;
     float: left;
-    border-right: 5px solid $primary-color;
 }
 #rightCol {
 	max-height: 88vh;

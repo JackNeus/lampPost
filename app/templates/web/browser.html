@@ -4,8 +4,15 @@
 
 {% block scripts %}
 <script src="/static/js/app.js?v=1"></script>
+<<<<<<< HEAD
 <script src="/static/js/handleUrlParam.js?v=0"></script>
 <script src="/static/js/handleFavorites.js?v=0"></script>
+=======
+
+<link rel="stylesheet" type="text/css" href="/static/css/browser.css?v=1">
+<link rel="stylesheet" type="text/css" href="/static/css/eventView.css?v=1">
+
+>>>>>>> 27b05ae02a4b64d43a36ffe6102ec73e1bb88f28
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -22,7 +29,6 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 <!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
-<div class="container-fluid">
 <div class="flex-container-row" id="bigRow">
    <div class="flex-container-col" id="leftCol">
    		<form onsubmit="return false;">
@@ -60,10 +66,10 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
         </div>
 
   	</div>
+    <div class="search-resizer"></div>
 
  	<div class="flex-container-col" id = "rightCol">
  		{% include "web/eventview.html" %}
 	</div>
-</div>
 </div>
 {% endblock %}
