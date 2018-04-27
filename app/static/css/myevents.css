@@ -4,6 +4,9 @@
 label {
   font-weight: bold; }
 
+#reportBtn {
+  display: none; }
+
 .req:after {
   content: " *";
   color: red; }
