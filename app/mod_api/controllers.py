@@ -203,7 +203,9 @@ def search_events(query, start_datetime, user=None):
 		events = set().union(*sources)
 		
 		results.append(events)
-	events = set.intersection(*results)
+	events = []
+	if len(results) > 0:
+		events = set.intersection(*results)
 	return events
 
 def get_most_recent_report(reporter):
