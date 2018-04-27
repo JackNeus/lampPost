@@ -203,6 +203,9 @@ html #bigRow, body #bigRow {
     color: #555555;
     margin: 0;
     border-bottom: 2px solid #2d9eee; }
+  .event-view #reportBtn {
+    color: white;
+    float: right; }
 
 .flex-container-row {
   display: flex;

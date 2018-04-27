@@ -8,10 +8,21 @@ label {
   content: " *";
   color: red; }
 
+@media screen and (min-width: 900px) {
+  .eventFormView {
+    min-width: 900px;
+    margin: auto;
+    width: 60vw; } }
+@media screen and (max-width: 620px) {
+  .fullWidthMobileI {
+    width: 100%; } }
+@media screen and (max-width: 455px) {
+  .fullWidthMobileS {
+    width: 100%; } }
 .eventFormView {
   padding-top: 2vh;
-  padding-right: 2vh;
-  margin-left: 2vh;
+  padding-right: 2vw;
+  padding-left: 2vw;
   height: 88vh;
   overflow-y: scroll; }
 
