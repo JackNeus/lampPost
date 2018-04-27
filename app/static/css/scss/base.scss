@@ -240,8 +240,9 @@ html, body {
 	.event-view-host {
 		color: $med-color;
 		margin: 0;
+		margin-left: 1vh;
 		line-height: 30px;
-		font-size: 15px;
+		font-size: 20px;
 	}
 	.event-view-subtitle{
 	    color: $med-color;
@@ -287,6 +288,9 @@ html, body {
 		color: $med-color;
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
+	}
+	.calendar-btn {
+		text-decoration: none !important;
 	}
 }
 

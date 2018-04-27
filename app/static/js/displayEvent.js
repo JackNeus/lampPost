@@ -126,10 +126,10 @@ function populateEventViewPanel(eventNum) {
 		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
-		$("#eventSubtitle").append("<br>");
-		console.log("TEST");
+		
 		document.getElementById("eventSubtitle").innerHTML +=
-			"<a class=\"btn btn-primary\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> Add to 	Google Calendar! </a>";
+			"<a class=\"calendar-btn\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>";
+		$("#eventSubtitle").append("<br>");
 	}
 	
 	// setup host and description

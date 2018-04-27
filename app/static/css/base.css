@@ -165,8 +165,9 @@ html #bigRow, body #bigRow {
   .event-view .event-view-host {
     color: #555555;
     margin: 0;
+    margin-left: 1vh;
     line-height: 30px;
-    font-size: 15px; }
+    font-size: 20px; }
   .event-view .event-view-subtitle {
     color: #555555;
     margin: 0;
@@ -203,6 +204,8 @@ html #bigRow, body #bigRow {
     color: #555555;
     margin: 0;
     border-bottom: 2px solid #2d9eee; }
+  .event-view .calendar-btn {
+    text-decoration: none !important; }
 
 .flex-container-row {
   display: flex;
