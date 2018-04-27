@@ -146,9 +146,15 @@ var handleEditMyEvent = function() {
 		$("#host").val(event_data[eventNum - 1].host);
 		var numShowings = event_data[eventNum - 1].instances.length;
 		$("#numShowings-" + (numShowings - 1)).prop("checked", true);
+		$("#visibility-" + (1 - event_data[eventNum - 1].visibility)).prop("checked", true);
 
 		// to avoid flickering, if we haven't loaded anything yet, do this special case
 		if (currentRows == 0) {
+			// hide all rows
+			for (var i = 1; i <= 4; i++) {
+				$("#form-row-" + i).hide();
+			}
+			// show the ones we need
 			for (var i = 1; i <= numShowings; i++) {
 				$("#form-row-" + i).show();
 			}
