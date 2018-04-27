@@ -161,10 +161,13 @@ var renderEditForm = function(eventNum) {
 	$(".event-view").hide();
 
 	// fill the form with the correct values
-	$("#event-id").val(event_data[eventNum - 1]._id);
+	$("#event_id").val(event_data[eventNum - 1]._id);
 	$("#title").val(event_data[eventNum - 1].title);
 	$("#description").val(event_data[eventNum - 1].description);
 	$("#host").val(event_data[eventNum - 1].host);
+	
+	$("#visibility-"+(1-event_data[eventNum-1].visibility)).attr('checked', 'checked');
+
 	var numShowings = event_data[eventNum - 1].instances.length;
 	$("#numShowings-" + (numShowings - 1)).prop("checked", true);
 

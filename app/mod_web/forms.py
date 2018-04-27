@@ -4,6 +4,7 @@ from wtforms import StringField, TextField, TextAreaField, RadioField, FieldList
 from wtforms.validators import Required, DataRequired
 
 class EventForm(FlaskForm):
+    event_id = TextField()
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     host = StringField('Host', validators=[DataRequired()])
@@ -21,5 +22,6 @@ class EventForm(FlaskForm):
     link = StringField('Promo Video')
 
 class ReportForm(FlaskForm):
+    event_id = TextField()
     category = RadioField('Reason:', choices=[("Duplicate event", "Duplicate event"), ("Spam/Offensive","Spam/Offensive"), ("Other", "Other")])
     description = TextAreaField('Description')

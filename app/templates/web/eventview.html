@@ -41,7 +41,7 @@
         <form id="reportForm"  method="POST" role="form" enctype="multipart/form-data">
             {{ formR.csrf_token }}
             <!-- Hidden event id, populated by jquery -->
-            <input style="display:none" id="event-id" type="text" name="event-id"> </input>
+            {{ formR.event_id(class="hidden") }}
 
           <div class="modal-body">
             <p> We take event maintenance seriously, and appreciate you taking the time to submit a report. Choose the issue below, and optionally also provide a description. </p>
