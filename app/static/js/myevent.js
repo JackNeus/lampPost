@@ -141,7 +141,6 @@ var handleEditMyEvent = function() {
 	});
 }
 
-
 var renderEditForm = function(eventNum) {
 	var editBtn = $("#editBtn"+eventNum);
 
