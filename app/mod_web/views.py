@@ -33,12 +33,6 @@ def browser():
 		if "category" not in request.form:
 			flash("Error: Reason cannot be empty.")
 			return render_template("web/browser.html", formR=ReportForm(), wasError=True)
-
-		print("here")
-		print(CONFIG["BASE_URL"]+"/api/event/report/" + request.form['event-id'])
-		print("asdf1")
-		print(request.form["category"] + ": " + request.form["description"])
-		print("asdf2")
 		
 		eventData = {"reason": request.form["category"] + ": " + request.form["description"]}
 		headers = { "Authorization" : "Token %s" % current_user.token }

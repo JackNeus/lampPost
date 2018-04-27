@@ -97,9 +97,9 @@ var handleEventFireBtnClick = function (eventNum) {
 	});
 };
 
-// set title of report popup to match that of the event with number a
-function setTitle(a) {
-	$("#reportPopupTitle").html("\"" + a + "\"");
+// set title of report popup 
+function setTitle(title) {
+	$("#reportPopupTitle").html("\"" + title + "\"");
 }
 
 // Populate event view panel with event_data[eventNum-1] (basic layout)
