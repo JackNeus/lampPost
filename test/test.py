@@ -1,10 +1,12 @@
 from copy import deepcopy
 from datetime import datetime, timedelta
+from dateutil.parser import *
 import dateutil.parser
 import functools
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import json
 import requests
+import sys
 import os
 from subprocess import call, check_output
 import traceback
@@ -78,45 +80,36 @@ def is_error(r):
 
 app_url = "http://localhost:5002/api"
 
-def make_add_event_request(event_data, token=None):
+def get_requests_method(method):
+	m = {"get": requests.get,
+		 "put": requests.put,
+		 "post": requests.post,
+		 "delete": requests.delete}
+	return m[method.lower()]
+
+def make_request(method, endpoint, params="", token=None, json=None):
 	headers = None
 	if token is not None:
 		headers = {"Authorization": "Token %s" % token}
-	r = requests.put(app_url + "/event/add", json=event_data, headers=headers)
+	request = get_requests_method(method)
+	r = request(app_url + endpoint + params, json=json, headers=headers)
 	assert r.status_code == 200
 	return get_data(r)
+
+def make_add_event_request(event_data, token=None):
+	return make_request("put", "/event/add", json=event_data, token=token)
 
 def make_get_event_request(event_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.get(app_url + "/event/get/" + event_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("get", "/event/get/", event_id, token)
 
 def make_delete_event_request(event_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.delete(app_url + "/event/delete/" + event_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("delete", "/event/delete/", event_id, token)
 
 def make_edit_event_request(event_id, data, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.post(app_url + "/event/edit/" + event_id, json=data, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("post", "/event/edit/", event_id, token, data)
 
 def make_add_fav_request(user_id, event_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.get(app_url + "/user/fav/add/" + user_id + "/" + event_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("get", "/user/fav/add/", "%s/%s" % (user_id, event_id), token)
 
 def make_del_fav_request(user_id, event_id, token=None):
 	headers = None
@@ -126,22 +119,25 @@ def make_del_fav_request(user_id, event_id, token=None):
 	return r
 
 def make_get_fav_request(user_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.get(app_url + "/user/fav/get/" + user_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
-
+	return make_request("get", "/user/fav/get/", user_id, token)
+	
 def make_get_created_events_request(user_id, token=None):
-	headers = None
-	if token is not None:
-		headers = {"Authorization": "Token %s" % token}
-	r = requests.get(app_url + "/user/get_events/" + user_id, headers=headers)
-	assert r.status_code == 200
-	return get_data(r)
+	return make_request("get", "/user/get_events/", user_id, token)
+
+def make_report_event_request(event_id, report, token=None):
+	return make_request("put", "/event/report/", event_id, token, json=report)
+
+def make_get_trending_request(token=None):
+	return make_request("get", "/event/trending", token=token)
+
+def make_search_request(query, start_datetime=None, token=None):
+	params = query
+	if start_datetime is not None:
+		params += "/" + str(start_datetime)
+	return make_request("get", "/event/search/", params, token)
 
 user_ids = {}
+dummy_events = {}
 
 def setup():
 	def add_user(netid):
@@ -155,22 +151,31 @@ def setup():
 	global user_ids
 	for user in ["jneus", "tpollner", "bwk", "rrliu"]:
 		user_ids[user] = add_user(user)
+
+	global dummy_events
+	with open('test/test_data.json', 'r') as f:
+		dummy_events = json.load(f)
+
 valid_events = {}
 
 def test_add_valid_events():
-	with open('test/test_data.json', 'r') as f:
-		data = json.load(f)
-	for event in data:
+	for event in dummy_events:
 		r = make_add_event_request(event, generate_auth_token(event["creator"]))
 		assert is_success(r)
 		valid_events[r["data"]["id"]] = event
 
 def test_get_valid_events():
 	for event_id in valid_events:
-		r = make_get_event_request(event_id, generate_auth_token("bwk"))
-		assert is_success(r)
-		assert compare_events(valid_events[event_id], r["data"])
-
+		r = make_get_event_request(event_id)
+		visibility = 0
+		if 'visibility' in valid_events[event_id]:
+			visibility = valid_events[event_id]["visibility"]
+		if visibility > 0:
+			assert is_error(r)
+		else:
+			assert is_success(r)
+			assert compare_events(valid_events[event_id], r["data"])
+      
 def test_delete_valid_events():
 	for event_id in valid_events:
 		creator_netid = valid_events[event_id]["creator"]
@@ -185,13 +190,8 @@ base_event = {"title": "Party", "host":"LampPost Team", "creator": "bwk",
 				  				 "location": "Princeton University"},
 				  				 {"start_datetime": "3pm April 2 2100",
 				  				 "end_datetime": "4pm April 2 2100",
-				  				 "location": "Princeton University"}]}
-
-fav_event = {"title": "Favorites", "host": "LampPost Team", "creator": "rrliu",
-"instances": [{"location": "COS Building","start_datetime": "5pm April 20th 2030",
-"end_datetime": "6pm April 20th 2030"}],
-"description": "This event has favorites.",
-"favorites": 10}
+				  				 "location": "Princeton University"}],
+				  	"favorites": 10}
 
 def test_add_event_missing_field():
 	# Missing required fields.
@@ -328,9 +328,14 @@ def test_delete_event_bad_id():
 	assert is_error(r)
 	assert "malformatted" in r["error_msg"]
 
-# Base for edit tests.
+def abort():
+	print("Something went wrong.")
+	print("Please restart the testing platform (test.sh).")
+	exit()
+
+# Base for tests.
 # If event_to_add is not None, that event will be used.
-def make_edit_test(test_body, event_to_add = None):
+def make_test(test_body, event_to_add = None):
 	# Setup
 	if event_to_add is not None:
 		new_event = deepcopy(event_to_add)
@@ -341,12 +346,54 @@ def make_edit_test(test_body, event_to_add = None):
 	assert is_success(r)
 	event_id = r["data"]["id"]
 
-	test_body(new_event, event_id, creator_netid)
+	try: 
+		test_body(new_event, event_id, creator_netid)
+	except Exception as e:  # Temporarily catch exception.
+		# Try to clean-up, if we can't, abort.
+		try:
+			r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
+		except:
+			abort()
+		raise e  # Reraise exception
 
 	# Cleanup
 	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
 	assert is_success(r)
 
+# Base for tests in which multiple events need to be added.
+# generator should be a function that takes a single integer parameter
+# and returns a single event.
+def make_test_multi(test_body, num_events, generator):
+	events = []
+	def teardown():
+		for event in events:
+			r = make_delete_event_request(event["_id"], generate_auth_token(event["creator"]))
+			if is_error(r):
+				print(r)
+				abort()
+	try:
+		# Setup
+		for i in range(num_events):
+			new_event = generator(i)
+			creator_netid = new_event["creator"]
+			r = make_add_event_request(new_event, generate_auth_token(creator_netid))
+			assert is_success(r)
+			new_event["_id"] = r["data"]["id"]
+			events.append(new_event)
+	except Exception as e:
+		raise e
+		teardown()
+		assert False
+
+	try:
+		test_body(events)
+	except Exception as e:  # Temporarily catch exception.
+		# Try to cleanup, if we can't, abort
+		teardown()
+		raise e  # Reraise exception
+
+	# Cleanup
+	teardown()
 
 # Valid event editing.
 def test_edit_event_valid():
@@ -366,7 +413,7 @@ def test_edit_event_valid():
 			r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
 			assert is_success(r)
 			assert compare_events(new_event, r["data"])
-	make_edit_test(test)
+	make_test(test)
 
 def test_edit_event_system_fields():
 	def test(new_event, event_id, creator_netid):
@@ -375,7 +422,7 @@ def test_edit_event_system_fields():
 		assert is_success(r)
 		# Event should not have changed.
 		assert compare_events(new_event, r["data"])
-	make_edit_test(test)
+	make_test(test)
 
 def test_edit_event_extra_field():
 	def test(new_event, event_id, creator_netid):
@@ -383,7 +430,7 @@ def test_edit_event_extra_field():
 		extra_field = deepcopy(base_event)
 		extra_field["bad_field_does_not_exist"] = "uh oh"
 		r = make_edit_event_request(event_id, extra_field, generate_auth_token(creator_netid))
-	make_edit_test(test)
+	make_test(test)
 
 # Try to edit event that does not exist.
 def test_edit_event_event_dne():
@@ -402,7 +449,7 @@ def test_edit_event_different_creator():
 	def test(new_event, event_id, creator_netid):
 		r = make_edit_event_request(event_id, {"description":"My event sucks!"}, generate_auth_token("jneus"))
 		assert is_error(r)
-	make_edit_test(test)
+	make_test(test)
 
 def test_edit_event_in_past_bad_times():
 	# Tests an event edit where the edit includes an instance with endtimes 
@@ -417,7 +464,7 @@ def test_edit_event_in_past_bad_times():
 		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
 		assert is_error(r)
 		assert "malformatted" in r["error_msg"]
-	make_edit_test(test)
+	make_test(test)
 
 def test_edit_event_bad_poster_url():
 	# Events whose poster URLs do not start with 'http://princeton-lamppost.s3.amazonaws.com/'
@@ -426,7 +473,7 @@ def test_edit_event_bad_poster_url():
 		edits = {"poster": "http://www.google.com/logo.jpg"}
 		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
 		assert is_error(r)
-	make_edit_test(test)
+	make_test(test)
   
 def test_edit_event_in_past_other_fields():
 	# Tests an event edit where the edit does not change times at all.
@@ -435,36 +482,21 @@ def test_edit_event_in_past_other_fields():
 		edits = {"description": "This event is t-t-t-totally tubular!"}
 		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
 		assert is_success(r)
-	make_edit_test(test)
+	make_test(test)
   
-# Base for favorite tests.
-def make_fav_test(test_body):
-	# Setup
-	new_event = deepcopy(fav_event)
-	creator_netid = new_event["creator"]
-	r = make_add_event_request(new_event, generate_auth_token(creator_netid))
-	assert is_success(r)
-	event_id = r["data"]["id"]
-
-	test_body(new_event, event_id, creator_netid)
-
-	# Cleanup
-	r = make_delete_event_request(event_id, generate_auth_token(creator_netid))
-	assert is_success(r)
-
 # Try to add a valid favorite.
 def test_add_valid_fav():
 	def test(new_event, event_id, creator_netid):
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
-	make_fav_test(test)
+	make_test(test)
 
 # Try to add a favorite to a different user.
 def test_add_fav_wrong_user():
 	def test(new_event, event_id, creator_netid):
-		r = make_add_fav_request(user_ids["bwk"], event_id, generate_auth_token(creator_netid))
+		r = make_add_fav_request(user_ids["rrliu"], event_id, generate_auth_token(creator_netid))
 		assert is_error(r)
-	make_fav_test(test)
+	make_test(test)
 
 # Try to favorite an event twice. Event should stay favorited.
 def test_add_double_favorite():
@@ -473,7 +505,7 @@ def test_add_double_favorite():
 		assert is_success(r)
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
-	make_fav_test(test)
+	make_test(test)
 
 # Try to add a favorite to an invalid event id.
 def test_add_fav_bad_event():
@@ -481,7 +513,7 @@ def test_add_fav_bad_event():
 		r = make_add_fav_request(user_ids[creator_netid], "5ac579ff1b41577c54130835", generate_auth_token(creator_netid))
 		assert is_error(r)
 		assert "exist" in r["error_msg"]
-	make_fav_test(test)
+	make_test(test)
 
 # Try to delete a valid favorite.
 def test_del_valid_fav():
@@ -490,7 +522,7 @@ def test_del_valid_fav():
 		assert is_success(r)
 		r = make_del_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(get_data(r))
-	make_fav_test(test)
+	make_test(test)
 
 # Try to delete a favorite without authorization.
 def test_del_fav_no_auth():
@@ -499,7 +531,7 @@ def test_del_fav_no_auth():
 		assert is_success(r)
 		r = make_del_fav_request(user_ids[creator_netid], event_id)
 		assert r.status_code == 403
-	make_fav_test(test)
+	make_test(test)
 
 # Try to delete a favorite that doesn't exist.
 def test_del_fav_no_fav():
@@ -508,7 +540,7 @@ def test_del_fav_no_fav():
 		r = get_data(r)
 		assert is_error(r)
 		assert "isn't in" in r["error_msg"]
-	make_fav_test(test)
+	make_test(test)
 
 # Try to get a valid user's favorites.
 def test_get_valid_fav():
@@ -517,24 +549,152 @@ def test_get_valid_fav():
 		assert is_success(r)
 		r = make_get_fav_request(user_ids[creator_netid], generate_auth_token(creator_netid))
 		assert is_success(r)
-	make_fav_test(test)
+	make_test(test)
 
 # Try to get a different user's favorites.
 def test_get_fav_wrong_user():
 	def test(new_event, event_id, creator_netid):
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
-		r = make_get_fav_request(user_ids["bwk"], generate_auth_token(creator_netid))
+		r = make_get_fav_request(user_ids["rrliu"], generate_auth_token(creator_netid))
 		assert is_error(r)
 		assert "different" in r["error_msg"]
-	make_fav_test(test)
+	make_test(test)
 
 def test_get_created_events_wrong_token():
-	r = make_get_created_events_request(user_ids["bwk"], generate_auth_token("jneus"))
+	r = make_get_created_events_request(user_ids["rrliu"], generate_auth_token("jneus"))
 	assert is_error(r)
 	assert "different" in r["error_msg"]
 
-# TODO: add search tests
+# Valid report of event.
+def test_report_event():
+	def test(new_event, event_id, creator_netid):
+		report = {"reason": "I hate events. I hate lamp posts. What more can I say?"}
+		r = make_report_event_request(event_id, report, generate_auth_token("jneus"))
+		assert is_success(r)
+		data = json.loads(r["data"])
+		assert data["reporter"] == "jneus"
+		assert data["reason"] == report["reason"]
+	make_test(test)
+
+# Reason is too short.
+def test_report_event_short_reason():
+	def test(new_event, event_id, creator_netid):
+		report = {"reason": "Hate to talk."}
+		r = make_report_event_request(event_id, report, generate_auth_token("rrliu"))
+		assert is_error(r)
+		assert "short" in r["error_msg"]
+	make_test(test)	
+
+def generate_event(i):
+	event = deepcopy(base_event)
+	event["title"] += str(i)
+	event["favorites"] = i
+	event["visibility"] = (i % 2) == 0
+	now = datetime.now().replace(second=0, microsecond=0)
+	event["instances"][0]["start_datetime"] = str(now)
+	event["instances"][0]["end_datetime"] = str(now + timedelta(hours=1))
+	return event
+
+def test_trending_event_valid_no_auth():
+	def test(new_events):
+		r = make_get_trending_request()
+		assert is_success(r)
+		expected_trending = sorted(new_events, key=lambda x: x["favorites"], reverse=True)
+		# We should only get back public events.
+		expected_trending = list(filter(lambda x: x["visibility"] == 0, expected_trending))
+		for i in range(len(r['data'])):
+			assert compare_events(expected_trending[i], r['data'][i])
+	make_test_multi(test, 20, generate_event)
+
+def test_trending_event_valid():
+	def test(new_events):
+		r = make_get_trending_request(generate_auth_token("jneus"))
+		assert is_success(r)
+		expected_trending = sorted(new_events, key=lambda x: x["favorites"], reverse=True)
+		for i in range(len(r['data'])):
+			assert compare_events(expected_trending[i], r['data'][i])
+	make_test_multi(test, 20, generate_event)
+
+# Can't add two reports within a certain number of seconds of one another.
+def test_report_two_reports():
+	def test(new_event, event_id, creator_netid):
+		report = {"reason": "This event is AGAINST my ideals."}
+		r = make_report_event_request(event_id, report, generate_auth_token("bwk"))
+		assert is_success(r)
+		r = make_report_event_request(event_id, report, generate_auth_token("bwk"))
+		assert is_error(r)
+		assert "must wait" in r["error_msg"]
+	make_test(test)
+
+def get_dummy_event(i):
+	return deepcopy(dummy_events[i])
+
+def get_dummy_event_now(i):
+	event = get_dummy_event(i)
+	today = datetime.now() + timedelta(minutes=10)
+	yesterday = today - timedelta(days=1)
+	event["instances"][0]["start_datetime"] = str(yesterday)
+	event["instances"][0]["end_datetime"] = str(today + timedelta(hours=i-1))
+	# Delete other instances.
+	event["instances"] = event["instances"][:1]
+	return event 
+
+def get_ids(events):
+	return set(map(lambda x: x["_id"], events))
+
+# Empty search query.
+def test_search_empty():
+	def test(new_events):
+		r = make_search_request("", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		assert len(r["data"]) == 0
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+# Check that an unauthenticated search only returns public events.
+def test_search_no_auth():
+	def test(new_events):
+		r = make_search_request("*", None)
+		assert is_success(r)
+		expected = filter(lambda x: "visibility" not in x or x["visibility"] == 0, new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+# Check that an authenticated search for '*' returns all events.
+def test_search_all():
+	def test(new_events):
+		r = make_search_request("*", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		expected_ids = get_ids(new_events)
+		event_ids = get_ids(r["data"])
+
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+# Check that when a start time is not given, the current time is used.
+def test_search_default_starttime():
+	def test(new_events):
+		r = make_search_request("*", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		expected = filter(lambda x: parse(x["instances"][0]["end_datetime"]) >= datetime.now(), new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event_now)
+
+# Standard start time check.
+def test_search_starttime():
+	def test(new_events):
+		last_week = datetime.now() - timedelta(days=7)
+		r = make_search_request("*", last_week, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		expected_ids = get_ids(new_events)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event_now)
 
 # Execution order of tests.
 # Only tests in this list will be executed.
@@ -575,18 +735,36 @@ test_del_fav_no_auth,
 test_del_fav_no_fav,
 test_get_valid_fav,
 test_get_fav_wrong_user,
-test_get_created_events_wrong_token
+test_get_created_events_wrong_token,
+test_report_event,
+test_report_event_short_reason,
+test_trending_event_valid_no_auth, 
+test_trending_event_valid,
+test_report_two_reports,
+test_search_empty,
+test_search_no_auth,
+test_search_all, test_search_default_starttime
 ]
+
 if __name__ == '__main__':
 	setup()
 	failed = 0
+	nl_just_printed = False
 	for test in tests:
 		try:
 			test()
-			print(".")
+			sys.stdout.write(".")
+			sys.stdout.flush()
+			nl_just_printed = False
 		except AssertionError:
 			failed += 1
-			print(get_test_name(test) + " failed")
+			p = ""
+			if not nl_just_printed:
+				p = "\n"
+			print(p + get_test_name(test) + " failed")
+			
+			nl_just_printed = True
 			# TODO: Print stack trace only if a flag is set.
 			#traceback.print_exc()
-	print("%d/%d tests passed." % (len(tests) - failed, len(tests)))
+
+	print("\n%d/%d tests passed." % (len(tests) - failed, len(tests)))

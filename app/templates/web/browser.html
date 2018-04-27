@@ -3,10 +3,9 @@
 <!--****************************** SCRIPTS **********************************-->
 
 {% block scripts %}
-<script src="/static/js/displaySearches.js?v=1"></script>
-<script src="/static/js/displayEvent.js?v=1"></script>
-<script src="/static/js/createEventHtml.js?v=1"></script>
 <script src="/static/js/app.js?v=1"></script>
+<script src="/static/js/handleUrlParam.js?v=0"></script>
+<script src="/static/js/handleFavorites.js?v=0"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -53,15 +52,17 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 
 		<!-- Fills in with "search" results from events.json -->
-		<div class="flex-container-scroll" id="searches">
-            <div class="searchPost"></div>
+		<div class="flex-container-scroll" id="searches-wrapper">
+			<div id="searches">
+            	<div class="searchPost"></div>
+        	</div>
+			<div class="fa fa-spinner fa-spin hidden centered" id="loading-spinner"></div>
         </div>
 
   	</div>
 
  	<div class="flex-container-col" id = "rightCol">
  		{% include "web/eventview.html" %}
-    <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/explore.png" style="width: 100%;">
 	</div>
 </div>
 </div>

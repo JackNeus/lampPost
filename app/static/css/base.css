@@ -40,27 +40,40 @@ html #bigRow, body #bigRow {
   margin-bottom: 2vh;
 }
 
+.hidden {
+  display: none; }
+
 .debug-data {
   display: none;
   color: red;
 }
 
+#searches-wrapper {
+  min-height: 75px;
+  border-top: 5px solid #555555;
+  position: relative; }
+  #searches-wrapper .centered {
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0; }
+  #searches-wrapper #loading-spinner {
+    font-size: 1.7em; }
+
 #searches {
+  padding-top: 1vh;
   border-top: 5px solid #555555;
 }
-
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
   max-width: 100%;
   width: 100%;
   flex-shrink: 1000;
+  font-size: 16px !important; }
 }
-
-#search-box {
-  font-size: 16px !important;
-}
-
 #searchSort {
   border: 1px solid #AAA;
   color: #333333;
@@ -292,6 +305,10 @@ html #bigRow, body #bigRow {
   flex: 70%;
   float: left;
 }
+
+.flashedMessage {
+  padding-top: 1.5vh;
+  padding-bottom: 1.5vh; }
 
 @media screen and (max-width: 600px) {
   .flex-container-row {

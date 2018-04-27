@@ -4,11 +4,9 @@
 
 {% block scripts %}
 <link rel="stylesheet" type="text/css" href="/static/css/add.css">
-<script src="/static/js/displaySearches.js?v=0"></script>
-<script src="/static/js/displayEvent.js?v=0"></script>
-<script src="/static/js/createEventHtml.js?v=0"></script>
 <script src="/static/js/myevent.js?v=0"></script>
-<script src="/static/js/add.js?v=0"></script>
+<script src="/static/js/handleUrlParam.js?v=0"></script>
+<script src="/static/js/handleFavorites.js?v=0"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -37,8 +35,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 			
 		<!-- Fills in with "search" results from events.json -->
 		<div class="flex-container-scroll" id="searches"></div>
-		
-	   </div>
+	    </div>
 		
 	 	<div class="flex-container-col" id = "rightCol">
  			{% include "web/eventview.html" %}
@@ -82,6 +79,17 @@ setBaseUrl("{{ config.BASE_URL }}");
 						<div class="form-group">
 							{{ form.host.label(class="req") }} 
 							{{ form.host(class="form-control", maxlength="100") }}
+						</div>
+
+						<div class="form-group">
+							{{ form.visibility.label(style="padding-right:1vw", class="req") }}
+							{% for subfield in form.visibility %}
+		    					<div class="form-check form-check-inline">
+			        				{{ subfield(class="form-check-input") }}
+			        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
+			        			</div>
+							{% endfor %}
+							<small id="fileHelp" class="form-text text-muted"> If you indicate the audience as "Princeton students", the event will only be visible to CAS-authenticated users. Otherwise, the general public can view it. </small>
 						</div>
 
 						<div class="form-group">

@@ -34,6 +34,17 @@
 					{{ form.host(placeholder="(e.g. Bodyhype, Whig-Clio)", class="form-control", maxlength="100") }}
 				</div>
 
+				<div class="form-group">
+					{{ form.visibility.label(style="padding-right:1vw", class="req") }}
+					{% for subfield in form.visibility %}
+    					<div class="form-check form-check-inline">
+	        				{{ subfield(class="form-check-input") }}
+	        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
+	        			</div>
+					{% endfor %}
+					<small id="fileHelp" class="form-text text-muted"> If you indicate the audience as "Princeton students", the event will only be visible to CAS-authenticated users. Otherwise, the general public can view it. </small>
+				</div>
+
 
 				<div class="form-group">
 					{{ form.numShowings.label(style="padding-right:1vw", class="req") }}
@@ -100,4 +111,4 @@
 		
 	  </div>
 	</body>
-	{% endblock %}
+{% endblock %}
