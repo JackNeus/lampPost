@@ -4,9 +4,9 @@ $dark-color: #333333;
 $med-color: #555555;
 $light-color: #999999;
 $orange: #ee7f2d;
-$font-light: "Avenir-Light";
-$font-med: "Avenir-Medium";
-$font-heavy: "Avenir-Heavy";
+$font-light: "Avenir-Light", "Arial-Light";
+$font-med: "Avenir-Medium", "Arial-Medium";
+$font-heavy: "Avenir-Heavy", "Arial-Heavy";
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
@@ -16,7 +16,7 @@ $primary-color-b: 238;
 // Page style
 html, body {
 	// Base font
-	font: 100% $font-med;
+	font-family: 100% $font-med;
 	// Headers
 	.h1, h1 {
 		font-family: $font-heavy;
