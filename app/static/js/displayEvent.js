@@ -130,7 +130,7 @@ function populateEventViewPanel(eventNum) {
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 		$("#eventSubtitle").append("<br>");
 		console.log("TEST");
-		document.getElementById("eventSubtitle").innerHTML +=
+		document.getElementById("googleCalLink").innerHTML =
 			"<a class=\"btn btn-primary\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> Add to 	Google Calendar! </a>";
 	}
 
@@ -141,7 +141,7 @@ function populateEventViewPanel(eventNum) {
 	// If the event has a poster, display that.
 	if ("poster" in event_data[eventNum-1]) {
 		document.getElementById("eventPhoto").innerHTML =
-		"<img class=\"mx-auto d-block\" src=\""+event_data[eventNum].poster+"\" id=\"poster\">";
+		"<img class=\"mx-auto d-block\" src=\""+event_data[eventNum-1].poster+"\" id=\"poster\">";
 	}
 	// good for testing:
 	else {
