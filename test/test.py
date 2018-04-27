@@ -290,20 +290,6 @@ def test_add_event_extra_field():
 	assert is_error(r)
 	assert "malformatted" in r["error_msg"]
 
-def test_add_event_in_past():
-	# Tests events with endtimes that have already happened.
-	old_event = deepcopy(base_event)
-
-	days_ago = 7
-	start_datetime = str(datetime.today() - timedelta(days=days_ago))
-	end_datetime = str(datetime.today() - timedelta(days=days_ago-1))
-	old_event["instances"] = [{"location": "Location",
-							  "start_datetime": start_datetime,
-							  "end_datetime": end_datetime}]
-	r = make_add_event_request(old_event, generate_auth_token(old_event["creator"]))
-	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
-
 # Try to get event that does not exist.
 def test_get_event_event_dne():
 	r = make_get_event_request("5ac579ff1b41577c54130835", generate_auth_token("bwk"))
@@ -451,21 +437,6 @@ def test_edit_event_different_creator():
 		assert is_error(r)
 	make_test(test)
 
-def test_edit_event_in_past_bad_times():
-	# Tests an event edit where the edit includes an instance with endtimes 
-	# that have already happened. This should not be allowed.
-	def test(new_event, event_id, creator_netid):
-		days_ago = 7
-		start_datetime = str(datetime.today() - timedelta(days=days_ago))
-		end_datetime = str(datetime.today() - timedelta(days=days_ago-1))
-		edits = {"instances": [{"location": "Location",
-							   "start_datetime": start_datetime,
-							  "end_datetime": end_datetime}]}
-		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
-		assert is_error(r)
-		assert "malformatted" in r["error_msg"]
-	make_test(test)
-
 def test_edit_event_bad_poster_url():
 	# Events whose poster URLs do not start with 'http://princeton-lamppost.s3.amazonaws.com/'
 	# are invalid.
@@ -473,15 +444,6 @@ def test_edit_event_bad_poster_url():
 		edits = {"poster": "http://www.google.com/logo.jpg"}
 		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
 		assert is_error(r)
-	make_test(test)
-  
-def test_edit_event_in_past_other_fields():
-	# Tests an event edit where the edit does not change times at all.
-	# This is allowed.
-	def test(new_event, event_id, creator_netid):
-		edits = {"description": "This event is t-t-t-totally tubular!"}
-		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
-		assert is_success(r)
 	make_test(test)
   
 # Try to add a valid favorite.
@@ -722,10 +684,7 @@ test_edit_event_extra_field,
 test_edit_event_event_dne,
 test_edit_event_bad_id,
 test_edit_event_different_creator,
-test_add_event_in_past,
 test_edit_event_bad_poster_url,
-test_edit_event_in_past_bad_times,
-test_edit_event_in_past_other_fields,
 test_add_valid_fav,
 test_add_fav_wrong_user,
 test_add_double_favorite,
