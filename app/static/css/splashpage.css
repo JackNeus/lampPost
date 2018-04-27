@@ -1,40 +1,45 @@
 /* rgb values for primary-color */
 html, body {
-  font: 100% "Avenir-Medium"; }
-  html .h1, body .h1 {
-    font-size: 28px; }
-  html .splashScreen, body .splashScreen {
-    position: absolute;
-    margin: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #eeeeee;
-    background-image: url("../graphics/images/lampPost.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    text-align: center; }
-    html .splashScreen .headerBox, body .splashScreen .headerBox {
-      position: relative;
-      width: 100%;
-      text-align: center;
-      margin-top: 30vh; }
-      html .splashScreen .headerBox .loginBox h1, body .splashScreen .headerBox .loginBox h1 {
-        font-weight: bold;
-        margin-bottom: 1em;
-        color: white;
-        text-shadow: 2px 2px #000000; }
-      html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
-        border: none;
-        background-color: #2d9eee;
-        border-radius: 5px;
-        color: white;
-        margin-bottom: 1em;
-        max-width: 100%;
-        min-width: 300px;
-        overflow: hidden;
-        text-align: center; }
-      html .splashScreen .headerBox .loginBox p, body .splashScreen .headerBox .loginBox p {
-        padding: 0;
-        margin: 0; }
-
-/*# sourceMappingURL=splashpage.css.map */
+  font-family: "Avenir-Medium", "Arial-Medium";
+}
+html .h1, body .h1 {
+  font-size: 28px;
+}
+html .splashScreen, body .splashScreen {
+  position: absolute;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #eeeeee;
+  background-image: url("../graphics/images/lampPost.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+html .splashScreen .headerBox, body .splashScreen .headerBox {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin-top: 30vh;
+}
+html .splashScreen .headerBox .loginBox h1, body .splashScreen .headerBox .loginBox h1 {
+  font-weight: bold;
+  margin-bottom: 1em;
+  color: white;
+  text-shadow: 2px 2px #000000;
+}
+html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
+  border: none;
+  background-color: #2d9eee;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 1em;
+  max-width: 100%;
+  min-width: 300px;
+  overflow: hidden;
+  text-align: center;
+}
+html .splashScreen .headerBox .loginBox p, body .splashScreen .headerBox .loginBox p {
+  padding: 0;
+  margin: 0;
+}

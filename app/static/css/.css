@@ -4,15 +4,15 @@ html, body {
   background-color: #eeeeee;
 }
 html .h1, html h1, body .h1, body h1 {
-  font-family: "Avenir-Heavy";
+  font: 100% "Avenir-Heavy";
   font-size: 36px;
 }
 html .h2, html h2, body .h2, body h2 {
-  font-family: "Avenir-Heavy";
+  font: 100% "Avenir-Heavy";
   font-size: 26px;
 }
 html .h3, html h3, body .h3, body h3 {
-  font-family: "Avenir-Medium";
+  font: 100% "Avenir-Medium";
   font-size: 20px;
 }
 
@@ -74,14 +74,14 @@ html .h3, html h3, body .h3, body h3 {
 #leftCol {
   max-height: 88vh;
   height: 88vh;
-  flex: 25%;
+  flex: 30%;
   float: left;
 }
 
 #rightCol {
   max-height: 88vh;
   height: 88vh;
-  flex: 70%;
+  flex: 60%;
   float: left;
 }
 
