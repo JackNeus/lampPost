@@ -1,6 +1,6 @@
 import argparse
 import sys
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, flash
 from mongoengine import register_connection
 
 # Command line flags.
@@ -45,6 +45,11 @@ except Exception as e:
 @app.errorhandler(404)
 def error(e):
     return render_template("404.html"), 404
+
+@app.errorhandler(500)
+def error(e):
+    flash("Error. Something went very wrong.")
+    return redirect("/browse")
 
 from app.mod_web import web_module
 app.register_blueprint(web_module)

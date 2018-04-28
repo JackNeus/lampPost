@@ -4,9 +4,9 @@ $dark-color: #333333;
 $med-color: #555555;
 $light-color: #999999;
 $orange: #ee7f2d;
-$font-light: "Avenir-Light";
-$font-med: "Avenir-Medium";
-$font-heavy: "Avenir-Heavy";
+$font-light: "Avenir-Light", "Arial-Light", sans-serif;
+$font-med: "Avenir-Medium", "Arial-Medium", sans-serif;
+$font-heavy: "Avenir-Heavy", "Arial-Heavy", sans-serif;
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
@@ -103,13 +103,14 @@ html, body {
 #searchBox {
 	padding: 0;
 	margin: 2vh 2vh;
+	margin-bottom: 0;
 	max-width: 100%;
-	width: 100%;
 	flex-shrink: 1000;
 	font-size: 16px !important;
 }
 
 #searchSort {
+	margin: 2vh 0vh;
 	border: 1px solid #AAA;
 	color: $dark-color;
 	font-size: 0.75em;
@@ -118,13 +119,29 @@ html, body {
 	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin: 2vh 2vh;
-      flex-grow: 1000;
-      flex-shrink: 0;
+      min-height: 4.25vh;
+      height: 4.25vh;
+      float:left;
+}
+
+#searchRow {
+ 	min-height: 4.25vh;
+}
+
+.searchButtons {
+	display: flex; 
+	flex-wrap: nowrap; 
+	margin-right: 2vh;
+}
+
+.filter-button {
+	margin: 2vh 2vh;
+	padding-left: 0;
 }
 
 .filters {
 	margin: 0vh 2vh;
+	margin-bottom: 2vh;
 
 	label {
 		font-size: 0.75em;
@@ -367,8 +384,16 @@ html, body {
     float: left;
 }
 
+.searchBoxCol {
+	flex: 40%;
+}
+
 @media screen and (max-width: 600px) {
     .flex-container-row {
         flex-direction: column;
+    }
+    #leftCol {
+    	   max-height: 55vh;
+    	   height: auto;
     }
 }

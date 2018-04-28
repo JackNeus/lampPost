@@ -1,15 +1,15 @@
 /* rgb values for primary-color */
 html, body {
-  font: 100% "Avenir-Medium";
+  font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
   background-color: #eeeeee; }
   html .h1, html h1, body .h1, body h1 {
-    font: 100% "Avenir-Heavy";
+    font: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
     font-size: 36px; }
   html .h2, html h2, body .h2, body h2 {
-    font: 100% "Avenir-Heavy";
+    font: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
     font-size: 26px; }
   html .h3, html h3, body .h3, body h3 {
-    font: 100% "Avenir-Medium";
+    font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
     font-size: 20px; }
 
 html .logo, body .logo {
@@ -17,7 +17,7 @@ html .logo, body .logo {
 html .navbar-expand-md, body .navbar-expand-md {
   background-color: #2d9eee; }
 html .nav-link, body .nav-link {
-  font: 100% "Avenir-Medium";
+  font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
   font-size: 24px; }
 html .dropdown-content, body .dropdown-content {
   display: none;
@@ -265,7 +265,6 @@ html #bigRow, body #bigRow {
   height: 88vh;
   flex: 70%;
   float: left; }
-
 @media screen and (max-width: 600px) {
   .flex-container-row {
     flex-direction: column; } }
