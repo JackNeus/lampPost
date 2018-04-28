@@ -214,7 +214,7 @@ def test_add_event_bad_type():
 		if field == "creator":
 			assert "different" in r["error_msg"]
 		else:
-			assert "malformatted" in r["error_msg"]
+			assert "wrong type" in r["error_msg"]
 
 def test_add_event_bad_field_length_short():		
 	# String fields length check.
@@ -224,7 +224,7 @@ def test_add_event_bad_field_length_short():
 		short_value[field] = "A"*(length-1)
 		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 		assert is_error(r)	
-		assert "malformatted" in r["error_msg"]
+		assert "short" in r["error_msg"]
 
 	# Instance subfields
 	for field, length in [("location", 3)]:
@@ -233,16 +233,16 @@ def test_add_event_bad_field_length_short():
 		short_value["instances"][0][field] = "A"*(length-1)
 		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 		assert is_error(r)
-		assert "malformatted" in r["error_msg"]
+		assert "short" in r["error_msg"]
 	
 def test_add_event_bad_field_length_long():		
 	# String fields length check.
-	for field, length in [("title", 100), ("host",100), ("trailer", 100), ("description", 10000)]:
+	for field, length in [("title", 100), ("host",100), ("description", 10000)]:
 		long_value = deepcopy(base_event)
 		long_value[field] = "A"*(length+1)
 		r = make_add_event_request(long_value, generate_auth_token(long_value["creator"]))
 		assert is_error(r)
-		assert "malformatted" in r["error_msg"]
+		assert "long" in r["error_msg"]
 	
 	# Instance subfields
 	for field, length in [("location", 100)]:
@@ -250,7 +250,7 @@ def test_add_event_bad_field_length_long():
 		long_value["instances"][0][field] = "A"*(length+1)
 		r = make_add_event_request(long_value, generate_auth_token(long_value["creator"]))
 		assert is_error(r)
-		assert "malformatted" in r["error_msg"]
+		assert "long" in r["error_msg"]
 
 def test_add_event_bad_instance_data():
 	# Instances tests.
@@ -261,7 +261,7 @@ def test_add_event_bad_instance_data():
 	time_swap["instances"][0]["end_datetime"] = base_event["instances"][0]["start_datetime"]
 	r = make_add_event_request(time_swap, generate_auth_token(time_swap["creator"]))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "earlier" in r["error_msg"]
 	
 	# Missing required fields.
 	for field in ["location", "start_datetime", "end_datetime"]:
@@ -276,7 +276,7 @@ def test_add_event_bad_instance_data():
 	short_value["instances"][0]["location"] = "AB"
 	r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "short" in r["error_msg"]
 
 def test_add_event_extra_field():
 	# This test is currently disabled because the EventEntry type has
@@ -300,7 +300,7 @@ def test_get_event_event_dne():
 def test_get_event_bad_id():
 	r = make_get_event_request("bad_id_format", generate_auth_token("bwk"))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "not a valid" in r["error_msg"]
 
 # Try to delete event that does not exist.
 def test_delete_event_event_dne():
@@ -312,7 +312,7 @@ def test_delete_event_event_dne():
 def test_delete_event_bad_id():
 	r = make_delete_event_request("bad_id_format", generate_auth_token("bwk"))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "not a valid" in r["error_msg"]
 
 def abort():
 	print("Something went wrong.")
@@ -428,7 +428,7 @@ def test_edit_event_event_dne():
 def test_edit_event_bad_id():
 	r = make_edit_event_request("bad_id_format", {}, generate_auth_token("bwk"))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "not a valid" in r["error_msg"]
 
 # Try to edit event that does not belong to us.
 def test_edit_event_different_creator():

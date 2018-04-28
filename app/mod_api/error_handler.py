@@ -20,38 +20,36 @@ def main_handler(e):
 		return "Event object does not include field %s" % str(e)
 	else:
 		if CONFIG["DEBUG"]:
-			return str(e) + " butts"
+			return str(e)
 		else:
 			return "Something went wrong."
 
 def validation_error(e):
 	errors = e.errors
 
-	if errors is None:
-		return str(e)
-
 	report = ""
 
-	for key in errors:
-		message = str(errors[key])
-		if message.find("too short") is not -1:
-			readable = " is too short."
-		elif message.find("too long") is not -1:
-			readable = " is too long."
-		elif message.find("Invalid scheme") is not -1:
-			readable = " is not a URL."
-		elif message.find("only accepts") is not -1:
-			readable = " is the wrong type."
-		elif message.find("not a valid") is not -1:
-			readable = " is not a valid id."
-		else:
-			readable = str(errors[key])
-		report = report + str(key).capitalize() + readable + " "
+	if errors is not None:
+		for key in errors:
+			message = str(errors[key])
+			if message.find("too short") is not -1:
+				readable = " is too short."
+			elif message.find("too long") is not -1:
+				readable = " is too long."
+			elif message.find("Invalid scheme") is not -1:
+				readable = " is not a URL."
+			elif message.find("only accepts") is not -1:
+				readable = " is the wrong type."
+			elif message.find("not a valid") is not -1:
+				readable = " is not a valid id."
+			else:
+				readable = str(errors[key])
+			report = report + str(key).capitalize() + readable + " "
 
 	if report is not "":
 		return report
 	else:
 		if CONFIG["DEBUG"]:
-			return str(e) + " butts"
+			return str(e)
 		else:
 			return "Request was malformatted."
