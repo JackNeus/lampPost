@@ -140,21 +140,13 @@
 
 	{% with messages = get_flashed_messages() %}
 	{% if messages %}
-	  {% if messages[0][0:3] != "Err" %}
-	  <div class="footer successFlash">
-	    <p class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </p>
+  	<div id="footer" class="footer {{ 'successFlash' if messages[0][0:3] != 'Err' else 'errorFlash'}}">
+      <div class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </div>
+      <div class="close"><div class="icon-container"><i class="icon fa fa-times" onclick="var f = document.getElementById('footer'); f.classList.add('hidden');"></i></div></div>
 	    <script type="text/javascript">
 		    slideFooter();
 	    </script>
 	  </div>
-	  {% else %}
-	  <div class="footer errorFlash">
-	    <p class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </p>
-	    <script type="text/javascript">
-		    slideFooter();
-	    </script>
-	  </div>
-	  {% endif %}
 	{% endif %}
 	{% endwith %}
 
