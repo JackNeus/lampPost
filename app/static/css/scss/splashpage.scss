@@ -9,8 +9,9 @@ $primary-color-b: 238;
 html, body {
 	// Font Style
 	font: 100% $font-stack;
-	.h1 {
-		font-size:28px;
+
+	#id_navbar {
+		display:none;
 	}
 
 	.splashScreen {
@@ -19,7 +20,7 @@ html, body {
 		height: 100%;
 		width:100%;
 		background-color: $background-color;
-		background-image: url("../graphics/images/lampPost.jpg");
+		background-image: url("../graphics/images/winter_lamppost.jpg");
 		background-size: cover;
 		background-repeat: no-repeat;
 		text-align: center;
@@ -27,14 +28,16 @@ html, body {
 		.headerBox {
 			position: relative;
 			width: 100%;
+			padding-left:40vw;
 			text-align: center;
 			margin-top: 30vh;
 			.loginBox {
 				h1 {
 					font-weight: bold;
+					font-size: 50px;
 					margin-bottom: 1em;
 					color: white; 
-					text-shadow: 2px 2px #000000;
+					text-shadow: 2px 2px 0px #000;
 				}
 		
 				a {

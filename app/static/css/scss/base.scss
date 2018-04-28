@@ -18,8 +18,7 @@ html, body {
 	// Font Style
 
 	// Base font
-	font: 100% $font-light;
-	font-size: 20px;
+	font: 100% $font-med;
 	// Headers
 	.h1, h1 {
 		font: 100% $font-heavy;
@@ -52,7 +51,7 @@ html, body {
 		font: 100% $font-med;
 		font-size:24px;
 	}
-	
+
 	.dropdown-content {
 	    display: none;
 	    position: absolute;
@@ -69,14 +68,37 @@ html, body {
 	}
 }
 
+.hidden {
+	display: none;
+}
+
 // Debug Style
 .debug-data {
 	display: none;
 	color: red;
 }
 
+#searches-wrapper {
+	min-height: 75px;
+	border-top: 5px solid $med-color;	
+	position: relative;
+
+	.centered{
+		margin: auto;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+	}
+
+	#loading-spinner {
+		font-size: 1.7em;
+	}
+}
+
 #searches {
-	border-top: 5px solid $med-color;
+	padding-top: 1vh;
 }
 
 #searchBox {
@@ -85,9 +107,6 @@ html, body {
 	max-width: 100%;
 	width: 100%;
 	flex-shrink: 1000;
-}
-
-#search-box {
 	font-size: 16px !important;
 }
 
@@ -268,6 +287,11 @@ html, body {
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
 	}
+
+	#reportBtn {
+		color:white;
+		float:right;
+	}
 }
 
 .flex-container-row {
@@ -327,6 +351,11 @@ html, body {
 	height: 88vh;
 	flex: 70%;
     float: left;
+}
+
+.flashedMessage {
+  padding-top: 1.5vh;
+  padding-bottom: 1.5vh;
 }
 
 @media screen and (max-width: 600px) {

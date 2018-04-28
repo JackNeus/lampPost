@@ -3,7 +3,7 @@
 DEBUG=True
 PORT=5001
 BASE_URL=http://localhost:5001
-
+MAX_FILE_SIZE=500
 SECRET_KEY=
 
 DB_NAME=
@@ -15,6 +15,14 @@ DB_PASSWORD=
 S3_BUCKET=
 S3_KEY_ID=
 S3_KEY_SECRET=
+S3_LOCATION=
+# Max file size (in KB).
+MAX_FILE_SIZE=500
+
+SENDGRID_API_KEY=
+
+# Required amount of time between event reports.
+REPORT_TIME_LIMIT=30
 
 # If set to True, will initialize data to data in static/mock_data/data.json
 USE_MOCK_DATA=

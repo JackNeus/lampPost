@@ -12,7 +12,7 @@ def form_to_event_object(form):
 	eventData['title'] = form.title.data
 	eventData['description'] = form.description.data
 	# TODO: let's actually let users determine this
-	eventData['visibility'] = 0
+	eventData['visibility'] = int(form.visibility.data)
 
 	showings = []
 	for i in range(int(form.numShowings.data)):

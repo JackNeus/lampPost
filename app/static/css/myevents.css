@@ -4,15 +4,22 @@
 label {
   font-weight: bold; }
 
+#reportBtn {
+  display: none; }
+
 .req:after {
   content: " *";
   color: red; }
 
-.col-md-10 {
-  padding-left: 11vw; }
-
 #rightCol {
   max-height: 88vh; }
+
+.selectedIcon {
+  background-color: #555555; }
+
+.eventFormView {
+  height: 88vh;
+  overflow-y: scroll; }
 
 /*# sourceMappingURL=addEvent.css.map */
 
