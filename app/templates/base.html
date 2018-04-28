@@ -142,7 +142,7 @@
 	{% if messages %}
   	<div id="footer" class="footer {{ 'successFlash' if messages[0][0:3] != 'Err' else 'errorFlash'}}">
       <div class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </div>
-      <div class="close"><div class="icon-container"><i class="icon fa fa-times" onclick="var f = document.getElementById('footer'); f.classList.add('hidden');"></i></div></div>
+      <div class="close"><div class="icon-container"><i class="icon fa fa-times" onclick="$('#footer').fadeOut('slow');"></i></div></div>
 	    <script type="text/javascript">
 		    slideFooter();
 	    </script>
