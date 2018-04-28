@@ -39,8 +39,10 @@ var handleEventViewClick = function() {
 
 		// don't update if click on already selected search result
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter
-			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+			// update url with eventid paramter if event is different than 
+			// event currently in url
+			if (getUrlParameter('event') !== eventId)
+				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
 
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
