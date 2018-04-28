@@ -4,7 +4,7 @@ $dark-color: #333333;
 $med-color: #555555;
 $light-color: #999999;
 $orange: #ee7f2d;
-$font-light: "Avenir-Light", "Arial-Light";
+$font-light: "Avenir-Light", "Arial-Light", sans-serif;
 $font-med: "Avenir-Medium", "Arial-Medium", sans-serif;
 $font-heavy: "Avenir-Heavy", "Arial-Heavy", sans-serif;
 /* rgb values for primary-color */
@@ -117,10 +117,12 @@ html, body {
 	overflow: hidden;
 	border-radius: 2px;
 	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      min-height: 4.25vh;
-      float:left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 4.25vh;
+    float:left;
+    font: 100% $font-light;
+	font-size: 14px !important;
 }
 
 #searchRow {
