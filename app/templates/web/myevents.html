@@ -63,9 +63,9 @@ setBaseUrl("{{ config.BASE_URL }}");
 					<form id="addEventForm" action="/myevents" method="POST" role="form" enctype="multipart/form-data">
 						{{ form.csrf_token }}
 
-						<!-- Hidden event id, populated by jquery -->
-						<input style="display:none" id="event-id" type="text" name="event-id"> </input>
-
+			            <!-- Hidden event id, populated by jquery -->
+			            {{ form.event_id(class="hidden") }}
+			            
 						<div class="form-group">
 							{{ form.title.label(class="req") }} 
 							{{ form.title(class="form-control", maxlength="100") }}

@@ -36,7 +36,7 @@ def browser():
 		
 		eventData = {"reason": request.form["category"] + ": " + request.form["description"]}
 		headers = { "Authorization" : "Token %s" % current_user.token }
-		r = requests.put(CONFIG["BASE_URL"]+"/api/event/report/" + request.form['event-id'], 
+		r = requests.put(CONFIG["BASE_URL"]+"/api/event/report/" + request.form['event_id'], 
 			json = eventData, headers = headers)
 		r = json.loads(r.text)
 		if r["status"] == "Success":
@@ -69,7 +69,7 @@ def myevents():
 			try:
 				if "poster" in request.files:
 					# Upload image to S3.
-					file_url = controller.upload_file(request.form['event-id'], request.files["poster"])
+					file_url = controller.upload_file(request.form['event_id'], request.files["poster"])
 					# Update event with image URL.
 					
 					eventData["poster"] = file_url
@@ -78,7 +78,7 @@ def myevents():
 				return render_template("web/myevents.html", form=EventForm())
 
 			# make API request
-			r = controller.make_edit_request(request.form['event-id'], eventData)
+			r = controller.make_edit_request(request.form['event_id'], eventData)
 
 			if r.status_code != 200:
 				flash("Error: something went wrong. Please contact a developer.")

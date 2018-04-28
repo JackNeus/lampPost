@@ -146,7 +146,7 @@ function populateEventViewPanel(eventNum) {
 	// upon clicking report button, clear elements and fill id
 	$("#reportBtn").click(function() {
 		// fill this element of the form with the correct value
-		$("#event-id").val(event_data[eventNum - 1]._id);
+		$("#event_id").val(event_data[eventNum - 1]._id);
 		// clear the other elements
 		$("#description").val("");
 		$("#category-0").attr("checked", false);
