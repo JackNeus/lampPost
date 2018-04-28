@@ -12,7 +12,6 @@ $primary-color-r: 29;
 $primary-color-g: 158;
 $primary-color-b: 238;
 
-
 // Page style
 html, body {
 	// Font Style
@@ -346,6 +345,21 @@ html, body {
   width: 100%;
   text-align:center;
   height: 6.4vh;
+
+  .flashedMessage {
+    padding-top: 1.5vh;
+	padding-bottom: 1.5vh;
+  }
+
+  .close {
+  	position: absolute;
+  	right: 1vh;
+
+  	top: 50%;
+
+  	font-size: 24px;
+  	margin-top: -12px;
+  }
 }
 
 .successFlash {
@@ -372,11 +386,6 @@ html, body {
 
 .searchBoxCol {
 	flex: 40%;
-}
-
-.flashedMessage {
-  padding-top: 1.5vh;
-  padding-bottom: 1.5vh;
 }
 
 @media screen and (max-width: 600px) {

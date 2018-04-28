@@ -237,6 +237,15 @@ html #bigRow, body #bigRow {
   width: 100%;
   text-align: center;
   height: 6.4vh; }
+  .footer .flashedMessage {
+    padding-top: 1.5vh;
+    padding-bottom: 1.5vh; }
+  .footer .close {
+    position: absolute;
+    right: 1vh;
+    top: 50%;
+    font-size: 24px;
+    margin-top: -12px; }
 
 .successFlash {
   background-color: #00b300; }
@@ -256,11 +265,6 @@ html #bigRow, body #bigRow {
   height: 88vh;
   flex: 70%;
   float: left; }
-
-.flashedMessage {
-  padding-top: 1.5vh;
-  padding-bottom: 1.5vh; }
-
 @media screen and (max-width: 600px) {
   .flex-container-row {
     flex-direction: column; } }
