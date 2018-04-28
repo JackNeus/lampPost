@@ -26,12 +26,12 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 <div class="flex-container-row" id="bigRow">
    <div class="flex-container-col" id="leftCol">
    		<form onsubmit="return false;">
-   			<div class="d-flex flex-row align-items-start" id="searchRow">
-				<div class="form-group" id="searchBox">
+   			<div class="flex-container-row" id="searchRow">
+				<div class="form-group searchBoxCol" id="searchBox">
 			    		<input id="search-box" class="form-control"
 			    		placeholder="Search for events here!" value=""></input>
 				</div>
-				<select class="ml-auto align-self-stretch" name="sort" id="searchSort">
+				<select class="ml-auto" name="sort" id="searchSort">
 					<option value="Date">Sort By Date</option>
 					<option value="Popularity">Sort By Popularity</option>
 				</select>

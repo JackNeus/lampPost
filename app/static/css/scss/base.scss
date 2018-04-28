@@ -104,13 +104,14 @@ html, body {
 #searchBox {
 	padding: 0;
 	margin: 2vh 2vh;
+	margin-bottom: 0;
 	max-width: 100%;
-	width: 100%;
 	flex-shrink: 1000;
 	font-size: 16px !important;
 }
 
 #searchSort {
+	margin: 2vh 2vh;
 	border: 1px solid #AAA;
 	color: $dark-color;
 	font-size: 0.75em;
@@ -119,9 +120,12 @@ html, body {
 	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin: 2vh 2vh;
-      flex-grow: 1000;
-      flex-shrink: 0;
+      min-height: 4.25vh;
+      height: 4.25vh;
+}
+
+#searchRow {
+ 	min-height: 4.25vh;
 }
 
 .filters {
@@ -351,6 +355,10 @@ html, body {
 	height: 88vh;
 	flex: 70%;
     float: left;
+}
+
+.searchBoxCol {
+	flex: 50%;
 }
 
 .flashedMessage {
