@@ -3,7 +3,7 @@ from . import controllers as controller
 from datetime import datetime, timedelta
 from dateutil.parser import *
 
-def validation_error(e, data):
+def validation_error(e):
 	errors = e.errors
 
 	report = ""
