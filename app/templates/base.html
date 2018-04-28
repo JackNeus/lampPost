@@ -145,6 +145,9 @@
 	    <p class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </p>
 	    <script type="text/javascript">
 		    slideFooter();
+        setTimeout(function() {
+            $('.footer').fadeOut('fast');
+            }, 4000);
 	    </script>
 	  </div>
 	  {% else %}
@@ -152,6 +155,9 @@
 	    <p class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </p>
 	    <script type="text/javascript">
 		    slideFooter();
+        setTimeout(function() {
+            $('.footer').fadeOut('fast');
+            }, 4000);
 	    </script>
 	  </div>
 	  {% endif %}
