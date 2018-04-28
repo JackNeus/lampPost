@@ -78,7 +78,7 @@ def myevents():
 				return render_template("web/myevents.html", form=EventForm())
 
 			# make API request
-			r = controller.make_edit_request(request.form['event-id'], eventData)
+			r = controller.make_edit_request(request.form['event_id'], eventData)
 			
 			if r.status_code != 200:
 				flash("Something went wrong. Please contact a developer.")
