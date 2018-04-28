@@ -37,7 +37,7 @@ var handleFireBtnClick = function () {
 };
 
 // Highlight the event in the url
-// TODO: Make the length not shrink
+// TODO: Make the length of the small search result not shrink
 var checkHighlightEventInUrl = function() {
 	var eventId = getUrlParameter('event');
 	if (eventId) {
