@@ -3,6 +3,7 @@ from . import controllers as controller
 from app.mod_api.models import ReadableError
 from app.mod_user.models import AuthorizationError
 from mongoengine import *
+from app import CONFIG
 
 def main_handler(e):
 	if type(e) is ValidationError:
@@ -18,10 +19,16 @@ def main_handler(e):
 	elif type(e) is KeyError:
 		return "Event object does not include field %s" % str(e)
 	else:
-		return str(e)
+		if CONFIG["DEBUG"]:
+			return str(e) + " butts"
+		else:
+			return "Something went wrong."
 
 def validation_error(e):
 	errors = e.errors
+
+	if errors is None:
+		return str(e)
 
 	report = ""
 
@@ -33,6 +40,10 @@ def validation_error(e):
 			readable = " is too long."
 		elif message.find("Invalid scheme") is not -1:
 			readable = " is not a URL."
+		elif message.find("only accepts") is not -1:
+			readable = " is the wrong type."
+		elif message.find("not a valid") is not -1:
+			readable = " is not a valid id."
 		else:
 			readable = str(errors[key])
 		report = report + str(key).capitalize() + readable + " "
@@ -40,4 +51,7 @@ def validation_error(e):
 	if report is not "":
 		return report
 	else:
-		return str(e)
+		if CONFIG["DEBUG"]:
+			return str(e) + " butts"
+		else:
+			return "Request was malformatted."
