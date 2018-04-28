@@ -101,17 +101,8 @@ def add_event():
 		new_event = controller.add_event(data)
 		# Return id of newly added event.
 		return gen_data_response({"id": str(new_event.id)})
-	except NotUniqueError as e:
-		return gen_error_response("An event already exists with that title.")
-	except FieldDoesNotExist as e:
-		return gen_error_response("Request included a field that does not exist.")
-	except ValidationError as e:
-		return gen_error_response(error_handler.validation_error(e))
-	except ReadableError as e:
-		return gen_error_response(str(e))
 	except Exception as e:
-		raise e
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 @mod_api.route("/event/get/<id>", methods=["GET"])
 def get_event(id):
@@ -124,10 +115,8 @@ def get_event(id):
 		if event is None:
 			return gen_error_response(event_dne_text)
 		return gen_data_response(get_raw_event(event));
-	except ValidationError as e:
-		return gen_error_response("Request was malformatted.")
 	except Exception as e:
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 @mod_api.route("/event/edit/<id>", methods=["POST"])
 @auth.login_required
@@ -152,16 +141,8 @@ def edit_event(id):
 			return gen_error_response("Attempted to edit event for different user.")
 
 		updated_event = controller.edit_event(id, data)
-	except AuthorizationError as e:
-		return gen_error_response("Invalid authorization.")
-	except KeyError as e:
-		return gen_error_response("Event object does not include field %s" % str(e))
-	except ValidationError as e:
-		return gen_error_response(error_handler.validation_error(e))
-	except ReadableError as e:
-		return gen_error_response(str(e))
 	except Exception as e:
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 	if updated_event is None:
 		return gen_error_response(event_dne_text)
@@ -191,10 +172,8 @@ def delete_event(id):
 		if event is None:
 			return gen_error_response(event_dne_text)
 		return gen_data_response(get_raw_event(event))
-	except ValidationError as e:
-		return gen_error_response("Request was malformatted.")
 	except Exception as e:
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 @mod_api.route("/event/search/", defaults={"query":"","start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
@@ -206,8 +185,7 @@ def event_search(query, start_datetime):
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
-		raise e
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 @mod_api.route("/user/get_events/<userid>")
 @auth.login_required
@@ -229,7 +207,7 @@ def get_created_events(userid):
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 @mod_api.route("/user/fav/add/<userid>/<eventid>")
 @auth.login_required
@@ -254,7 +232,7 @@ def add_event_fav(userid, eventid):
 			controller.add_user_favorite(user, eventid)
 		return gen_data_response(event.favorites) # need to return something or views gets angry
 	except Exception as e:
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 @mod_api.route("/user/fav/remove/<userid>/<eventid>")
 @auth.login_required
@@ -281,7 +259,7 @@ def remove_event_fav(userid, eventid):
 			return gen_error_response("You can't un-favorite an event that isn't in your favorites!")
 		return gen_data_response(event.favorites)
 	except Exception as e:
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 @mod_api.route("/user/fav/get/<userid>")
 @auth.login_required
@@ -304,9 +282,9 @@ def get_favorites(userid):
 			events = [get_raw_event(event) for event in events]
 			return gen_data_response(events)
 		except Exception as e:
-			return gen_failure_response(str(e))
+			return gen_error_response(error_handler.main_handler(e))
 	except Exception as e:
-			return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 # Allow a user to report an event.
 @mod_api.route("/event/report/<eventid>", methods=["PUT"])
@@ -335,7 +313,7 @@ def report_event(eventid):
 	except ValidationError as e:
 		return gen_error_response(str(e))
 	except Exception as e:
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
 
 # Get trending events.
 @mod_api.route("/event/trending", methods=["GET"])
@@ -346,4 +324,4 @@ def trending_events():
 		trending_events = [get_raw_event(event) for event in trending_events]
 		return gen_data_response(trending_events)
 	except Exception as e:
-		return gen_failure_response(str(e))
+		return gen_error_response(error_handler.main_handler(e))
