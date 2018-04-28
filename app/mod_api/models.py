@@ -9,6 +9,9 @@ class EventDNEError(Exception):
 class RateError(Exception):
     pass
 
+class ReadableError(Exception):
+    pass
+
 class UserEntry(Document):
     netid = StringField(required = True, unique = True)
     favorites = ListField()
@@ -29,7 +32,7 @@ class InstanceEntry(EmbeddedDocument):
 
         # End datetime cannot be before start datetime.
         if self.end_datetime < self.start_datetime:
-            raise ValidationError("End time is earlier than start time.")
+            raise ReadableError("End time is earlier than start time.")
 
 class EventEntry(Document):
     title = StringField(required = True, unique = True, min_length = 5, max_length = 100)
@@ -49,7 +52,7 @@ class EventEntry(Document):
 
     def clean(self):
         if self.poster is not None and not self.poster.startswith(CONFIG["S3_LOCATION"]):
-            raise ValidationError("Poster URL did not point to an authorized location.")
+            raise ReadableError("Poster URL did not point to an authorized location.")
         
     meta = {'strict': False}
         

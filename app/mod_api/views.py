@@ -107,6 +107,8 @@ def add_event():
 		return gen_error_response("Request included a field that does not exist.")
 	except ValidationError as e:
 		return gen_error_response(error_handler.validation_error(e))
+	except ReadableError as e:
+		return gen_error_response(str(e))
 	except Exception as e:
 		raise e
 		return gen_failure_response(str(e))
@@ -156,6 +158,8 @@ def edit_event(id):
 		return gen_error_response("Event object does not include field %s" % str(e))
 	except ValidationError as e:
 		return gen_error_response(error_handler.validation_error(e))
+	except ReadableError as e:
+		return gen_error_response(str(e))
 	except Exception as e:
 		return gen_failure_response(str(e))
 
