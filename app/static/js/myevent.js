@@ -121,16 +121,25 @@ var handleDeleteMyEvent = function() {
 var handleEditMyEvent = function() {
 
 	$(".editBtn").click( function() { 
+		var eventNum = getNum($(this).attr('id'), "editBtn");
+		var eventId = event_data[eventNum - 1]._id;
+
 		// Add edit parameter to URL.
 		if (getUrlParameter('edit') === undefined) {
 			updateUrl(addUrlParameter(document.location.search, 'edit'));
 		}
+		
+		// Update event parameter in URL, if necessary.
 
-		var eventNum = getNum($(this).attr('id'), "editBtn");
+		// don't update if click on already selected search result
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+			// update url with eventid paramter
+			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+		}
+
 		renderEditForm(eventNum);
 	});
 }
-
 
 var renderEditForm = function(eventNum) {
 	var editBtn = $("#editBtn"+eventNum);
@@ -152,12 +161,12 @@ var renderEditForm = function(eventNum) {
 	$(".event-view").hide();
 
 	// fill the form with the correct values
-	$("#event-id").val(event_data[eventNum - 1]._id);
+	$("#event_id").val(event_data[eventNum - 1]._id);
 	$("#title").val(event_data[eventNum - 1].title);
 	$("#description").val(event_data[eventNum - 1].description);
 	$("#host").val(event_data[eventNum - 1].host);
-
-	$("#visibility-"+event_data[eventNum - 1].visibility).attr('checked', 'checked')
+  
+	$("#visibility-"+(1-event_data[eventNum-1].visibility)).attr('checked', 'checked');
 
 	var numShowings = event_data[eventNum - 1].instances.length;
 	$("#numShowings-" + (numShowings - 1)).prop("checked", true);

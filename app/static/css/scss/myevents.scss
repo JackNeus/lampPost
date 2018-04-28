@@ -5,13 +5,13 @@ label {
   font-weight: bold; 
 }
 
+#reportBtn {
+	display:none;
+}
+
 .req:after {
 	content: " *";
 	color:red;
- }
-
-.col-md-10 {
- 	padding-left: 11vw;
  }
 
  #rightCol {
@@ -32,4 +32,9 @@ label {
  .delete-poster-button {
  	cursor: pointer;
  }
+ .eventFormView {
+	height: 88vh;
+    overflow-y: scroll;  
+}
+
 /*# sourceMappingURL=addEvent.css.map */
