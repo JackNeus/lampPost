@@ -42,23 +42,27 @@ var createMyEventResults = function() {
 		+   `<div class="resultContents">`
 		+	 `<div class="d-flex flex-row align-items-start">`
 		+	    `<div class="p-2 mr-auto">`
-		+	       `<p class="resultTitle">` + event_data[i].title + `</p>`
+		+	       `<h2 class="resultTitle">` + event_data[i].title + `</h2>`
 		+		 `<div id="eventInstances"></div>`
 		+	    `</div>`
-		+	    `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
-		+		 `<i class="fas fa-fire"></i>`
-		+	    `</div>`
-		+		 `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
+		+		`<div class="d-flex flex-column align-items-start justify-content-start">`
+		+			`<div class="d-flex flex-row ml-auto">`
+		+	    	  `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
+		+		 	  `<i class="fas fa-fire"></i>`
+		+	    	  `</div>`
+		+			  `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
+		+			`</div>`
+		+    	  	`<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn">`
+		+  	  		  `<i class="fas fa-trash-alt"></i>`
+		+   	 	`</div>`
+		+    		`<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn">`
+		+       	  `<i class="fas fa-pencil-alt"></i>`
+		+    		`</div>`
+		+		`</div>`
 		+	    `</div>`
 		+       `</div>`
 		+   `</div>`
 		+ `<div class="d-flex flex-column">`
-		+    `<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn">`
-		+  	  `<i class="fas fa-trash-alt"></i>`
-		+    `</div>`
-		+    `<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn">`
-		+       `<i class="fas fa-pencil-alt"></i>`
-		+    `</div>`
 	  	+  `</div>`
 	  	+ `</div>`;
 
