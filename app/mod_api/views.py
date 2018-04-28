@@ -144,7 +144,7 @@ def edit_event(id):
 	except KeyError as e:
 		return gen_error_response("Event object does not include field %s" % str(e))
 	except ValidationError as e:
-		return gen_error_response("Request was malformatted.")
+		return gen_error_response(error_handler.validation_error(e, data))
 	except Exception as e:
 		return gen_failure_response(str(e))
 
