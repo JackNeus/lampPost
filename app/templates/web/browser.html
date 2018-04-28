@@ -31,20 +31,22 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 			    		<input id="search-box" class="form-control"
 			    		placeholder="Search for events here!" value=""></input>
 				</div>
-				<select class="ml-auto" name="sort" id="searchSort">
+			</div>
+			<div class="searchButtons">
+				<div class="filter-button btn" id="filter-btn" title="Filter">
+				  <i class="fas fa-filter"></i>
+			  	</div>
+			  	<select class="ml-auto" name="sort" id="searchSort">
 					<option value="Date">Sort By Date</option>
 					<option value="Popularity">Sort By Popularity</option>
 				</select>
 			</div>
 
 			<div class="d-flex flex-row align-items-start justify-content-end filters">
-			  <div class="p-2 mr-auto datetime">
+			  <div class="mr-auto datetime">
 				  <label for="datepicker">Search from date: </label>
 				  <input type="text" id="datepicker"
 					   class="form-control" name="datepicker">
-			  </div>
-			  <div class="filter-button btn"  id="filter-btn" title="Filter">
-				  <i class="fas fa-filter"></i>
 			  </div>
 			 </div>
 

@@ -111,7 +111,7 @@ html, body {
 }
 
 #searchSort {
-	margin: 2vh 2vh;
+	margin: 2vh 0vh;
 	border: 1px solid #AAA;
 	color: $dark-color;
 	font-size: 0.75em;
@@ -122,14 +122,27 @@ html, body {
       white-space: nowrap;
       min-height: 4.25vh;
       height: 4.25vh;
+      float:left;
 }
 
 #searchRow {
  	min-height: 4.25vh;
 }
 
+.searchButtons {
+	display: flex; 
+	flex-wrap: nowrap; 
+	margin-right: 2vh;
+}
+
+.filter-button {
+	margin: 2vh 2vh;
+	padding-left: 0;
+}
+
 .filters {
 	margin: 0vh 2vh;
+	margin-bottom: 2vh;
 
 	label {
 		font-size: 0.75em;
@@ -358,7 +371,7 @@ html, body {
 }
 
 .searchBoxCol {
-	flex: 50%;
+	flex: 40%;
 }
 
 .flashedMessage {
@@ -369,5 +382,9 @@ html, body {
 @media screen and (max-width: 600px) {
     .flex-container-row {
         flex-direction: column;
+    }
+    #leftCol {
+    	   max-height: 55vh;
+    	   height: auto;
     }
 }
