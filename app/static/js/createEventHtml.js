@@ -73,6 +73,48 @@ var createMyEventResults = function() {
 	  }
 };
 
+// create the html for my events
+var createCalenderViewResults = function() {
+	// create html code for each search result
+		var searchResult = "";
+		searchResult += `<div class="calendar-view-row">`;
+		
+		var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", 
+					"Thursday", "Friday", "Saturday"];
+		
+		for (var i = 0; i < daysOfWeek.length; i++) {
+			searchResult += 
+			  `<div class="flex-container-col dayCol">`
+			+  `<div class="dayTitle">` + daysOfWeek[i].substring(0, 3) + `</div>`
+			+  `<div class="dayResults" id="` + daysOfWeek[i] + `"></div>`
+			+ `</div>`;
+		}
+		searchResult += `</div>`;
+		 
+	  	$("#searches").append(searchResult);
+	  	
+	  	// create html code for each search result
+	for (var i = 0; i < event_data.length; i++) {
+		var searchResult = "";
+
+		searchResult =
+		`<div class="smallSearchResult" id="smallSearchResult">`
+		+  `<div class="resultContents">`
+		+	   `<h2 class="resultTitle">` + event_data[i].title + `</h2>`
+		+	   `<div id="eventInstances"></div>`
+		+   `</div>`
+	  	+`</div>`;
+
+	  	// add the created html to the "searches" element in myevent.html
+	  	$("#Sunday").append(searchResult);
+	  	// number the given ids to match the event number so that elements can
+	  	// be differentiated
+	  	numberIds(["smallSearchResult", "eventInstances"], i);
+	      // add in all the event instances (dates and times) to the "eventInstances" div
+	  	addEventsByDay(i);
+	  }
+};
+
 // number the ids given in array elementNames using the event index
 var numberIds = function(elementNames, i) {
 	for (var j = 0; j < elementNames.length; j++) {
@@ -92,3 +134,20 @@ var addEventInstances = function(i) {
 		$("#eventInstances" + (i+1)).append(time);
 	}
 }
+
+var addEventsByDay = function(i) {
+	var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday",
+				"Thursday", "Friday", "Saturday"];
+	var instances = event_data[i].instances;
+
+	for (var j = 0; j < instances.length; j++) {
+		var startDate = new Date(instances[0].start_datetime);
+		var endDate =  new Date(instances[0].end_datetime);
+		var timeStr = makeTimeStr(startDate, endDate);
+		var time = $('<p />').attr({
+				class: "resultTime"
+			}).append(timeStr);
+		$("#eventInstances" + (i+1)).append(time);
+	}
+	
+};

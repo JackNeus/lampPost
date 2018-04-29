@@ -6,6 +6,7 @@
 <script src="/static/js/app.js?v=1"></script>
 <script src="/static/js/handleUrlParam.js?v=0"></script>
 <script src="/static/js/handleFavorites.js?v=0"></script>
+<script src="/static/js/calendarView.js?v=0"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -23,13 +24,16 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 <!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
 <div class="container-fluid">
-<div class="flex-container-row" id="bigRow">
+<div class="flex-container-row list-view" id="bigRow">
    <div class="flex-container-col" id="leftCol">
    		<form onsubmit="return false;">
-   			<div class="flex-container-row" id="searchRow">
+   			<div class="" id="searchRow">
 				<div class="form-group searchBoxCol" id="searchBox">
 			    		<input id="search-box" class="form-control"
 			    		placeholder="Search for events here!" value=""></input>
+				</div>
+				<div class="calendar-view-button calendarMode btn" id="calendarViewBtn" title="Calendar View">
+					<i class="fas fa-calendar"></i>
 				</div>
 			</div>
 			<div class="searchButtons">

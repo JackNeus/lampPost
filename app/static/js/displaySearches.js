@@ -7,12 +7,14 @@ var showSearchResults = function() {
 	currentSearches.innerHTML = "";
 
 	sortResults(); 			// sort by date or popularity
-	createSearchResults();		// create html code for each search result and display them
+	if ($("#calendarViewBtn").hasClass("calendarMode"))
+		createSearchResults();		// create html code for each search result and display them
+	else createCalenderViewResults();
 	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button
 	handleEventViewClick(); 	// handle click of event
-}
+};
 
 // Populate search result panel with event_data sorted by date.
 var showMyEvents = function() {
@@ -25,7 +27,7 @@ var showMyEvents = function() {
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button
 	handleEventViewClick(); 	// handle click of event
-}
+};
 
 // Update the popularity of an event when the fire button is clicked
 var handleFireBtnClick = function () {
@@ -124,8 +126,8 @@ function makeDate(start, end) {
 	var today = new Date();
 
 	// Special cases for dates within a week of current date
-	var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday",
-			    "Thursday", "Friday", "Saturday"];
+	var weekdays = ["Sun", "Mon", "Tue", "Wed",
+			    "Thu", "Fri", "Sat"];
 	var time_diff = Date.timeBetween(today, start_date, 'days');
 
 	var date_str = weekdays[start_date.getDay()] += " ";
@@ -143,10 +145,15 @@ function makeDate(start, end) {
 	if (start_date.getFullYear() != today.getFullYear())
 		date_str += "/" + (start_date.getFullYear());
 
-	// create time strings in hh:mm format
+	return date_str + " " + makeTimeStr(start_date, end_date);
+}
+
+// create time strings in hh:mm format
+function makeTimeStr(start_date, end_date) {
+	// get hour of date
 	var start_hour = start_date.getHours();
 	var end_hour = end_date.getHours();
-
+	
 	// Convert from military hours to a more readable format
 	var suffix = "am";
 	if (start_hour == 0) {
@@ -165,6 +172,7 @@ function makeDate(start, end) {
 		suffix = "pm";
 		end_hour -= 12;
 	}
+	
 	// minutes
 	start_time = start_hour + ":" +
 			("0" + start_date.getMinutes()).slice(-2);
@@ -172,9 +180,9 @@ function makeDate(start, end) {
 			("0" + end_date.getMinutes()).slice(-2);
 
 	if (start_time === end_time) {
-		return date_str + " @" + start_time + suffix;
+		return "@" + start_time + suffix;
 	}
 	else {
-		return date_str + " " + start_time + "-" + end_time + suffix;
+		return start_time + "-" + end_time + suffix;
 	}
 }

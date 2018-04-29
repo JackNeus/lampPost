@@ -127,6 +127,10 @@ html, body {
 
 #searchRow {
  	min-height: 4.25vh;
+ 	display: flex;
+ 	margin-right: 2vh;
+ 	flex-wrap: nowrap;
+ 	align-items: stretch;
 }
 
 .searchButtons {
@@ -138,6 +142,10 @@ html, body {
 .filter-button {
 	margin: 2vh 2vh;
 	padding-left: 0;
+}
+
+.calendar-view-button {
+	margin-top: 2vh;
 }
 
 .filters {
@@ -371,25 +379,61 @@ html, body {
   background-color:red;
 }
 
-#leftCol {
-	max-height: 88vh;
-	height: 88vh;
-	flex: 30%;
-    float: left;
-    border-right: 5px solid $primary-color;
+.list-view {
+	#leftCol {
+		max-height: 88vh;
+		height: 88vh;
+		flex: 30%;
+	    float: left;
+	    border-right: 5px solid $primary-color;
+	}
+	#rightCol {
+		max-height: 88vh;
+		height: 88vh;
+		flex: 70%;
+	    float: left;
+	}
 }
-#rightCol {
-	max-height: 88vh;
-	height: 88vh;
-	flex: 70%;
-    float: left;
+
+.calendar-view {
+	#leftCol {
+		flex: 60%;
+	}
+	#rightCol {
+		flex: 40%;
+	}
+}
+
+.calendar-view-row {
+	display: flex; 
+	flex-wrap: nowrap; 
+	width: 100%;
+	border-left: 2px solid black;
+	
+	.dayCol {
+		max-width: 14%;
+		min-width: 14%;
+		border-right: 2px solid black;
+		
+		.dayTitle {
+		 	border-bottom: 2px solid black;
+		 	align-self: center;
+		}
+		
+		.dayResults {
+			.smallSearchResult {
+				margin-right: 0;
+			}
+		}
+	}
+
 }
 
 .searchBoxCol {
 	flex: 40%;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 825px) {
     .flex-container-row {
         flex-direction: column;
     }

@@ -50,6 +50,7 @@ var setupSearch = function() {
 	$("#searchSort").change(function() {
 		showSearchResults();
 	});
+	handleCalendarView();
 };
 
 // Updates search results after input to search box or change in filters

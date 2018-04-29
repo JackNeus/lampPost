@@ -58,12 +58,13 @@ html #bigRow, body #bigRow {
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
+  margin-bottom: 0;
   max-width: 100%;
-  width: 100%;
   flex-shrink: 1000;
   font-size: 16px !important; }
 
 #searchSort {
+  margin: 2vh 0vh;
   border: 1px solid #AAA;
   color: #333333;
   font-size: 0.75em;
@@ -72,12 +73,33 @@ html #bigRow, body #bigRow {
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-height: 4.25vh;
+  float: left;
+  font: 100% "Avenir-Light", "Arial-Light", sans-serif;
+  font-size: 14px !important; }
+
+#searchRow {
+  min-height: 4.25vh;
+  display: flex;
+  margin-right: 2vh;
+  flex-wrap: nowrap;
+  align-items: stretch; }
+
+.searchButtons {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-right: 2vh; }
+
+.filter-button {
   margin: 2vh 2vh;
-  flex-grow: 1000;
-  flex-shrink: 0; }
+  padding-left: 0; }
+
+.calendar-view-button {
+  margin-top: 2vh; }
 
 .filters {
-  margin: 0vh 2vh; }
+  margin: 0vh 2vh;
+  margin-bottom: 2vh; }
   .filters label {
     font-size: 0.75em; }
   .filters input[type=text] {
@@ -253,20 +275,47 @@ html #bigRow, body #bigRow {
 .errorFlash {
   background-color: red; }
 
-#leftCol {
+.list-view #leftCol {
   max-height: 88vh;
   height: 88vh;
   flex: 30%;
   float: left;
   border-right: 5px solid #2d9eee; }
-
-#rightCol {
+.list-view #rightCol {
   max-height: 88vh;
   height: 88vh;
   flex: 70%;
   float: left; }
-@media screen and (max-width: 600px) {
+
+.calendar-view #leftCol {
+  flex: 60%; }
+.calendar-view #rightCol {
+  flex: 40%; }
+
+.calendar-view-row {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  border-left: 2px solid black; }
+  .calendar-view-row .dayCol {
+    max-width: 14%;
+    min-width: 14%;
+    border-right: 2px solid black; }
+    .calendar-view-row .dayCol .dayTitle {
+      border-bottom: 2px solid black;
+      align-self: center; }
+    .calendar-view-row .dayCol .dayResults .smallSearchResult {
+      margin-right: 0; }
+
+.searchBoxCol {
+  flex: 40%; }
+
+@media screen and (max-width: 825px) {
   .flex-container-row {
-    flex-direction: column; } }
+    flex-direction: column; }
+
+  #leftCol {
+    max-height: 55vh;
+    height: auto; } }
 
 /*# sourceMappingURL=base.css.map */
