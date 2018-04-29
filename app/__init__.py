@@ -22,9 +22,15 @@ if args.test_mode:
         print("Supplied configuration not found.")
 else:
     try:
-        app.config.from_pyfile("../dev_config.cfg")
+        app.config.from_pyfile("../prod_config.cfg")
+        print("Running app in PROD mode.")
     except FileNotFoundError:
-        print("Development configuration not found.")
+        print("Production configuration not found.")
+        try:
+            app.config.from_pyfile("../dev_config.cfg")
+            print("Running app in DEV mode. If this is production, terminate immediately.")
+        except FileNotFoundError:
+            print("Development configuration not found.")
 
 CONFIG = app.config
 
