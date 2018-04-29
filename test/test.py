@@ -133,10 +133,11 @@ def make_get_trending_request(token=None):
 def make_search_request(query, start_datetime=None, token=None):
 	params = query
 	if start_datetime is not None:
-		params += "/" + parse(start_datetime)
+		params += "/" + str(start_datetime)
 	return make_request("get", "/event/search/", params, token)
 
 user_ids = {}
+dummy_events = {}
 
 def setup():
 	def add_user(netid):
@@ -150,12 +151,15 @@ def setup():
 	global user_ids
 	for user in ["jneus", "tpollner", "bwk", "rrliu"]:
 		user_ids[user] = add_user(user)
+
+	global dummy_events
+	with open('test/test_data.json', 'r') as f:
+		dummy_events = json.load(f)
+
 valid_events = {}
 
 def test_add_valid_events():
-	with open('test/test_data.json', 'r') as f:
-		data = json.load(f)
-	for event in data:
+	for event in dummy_events:
 		r = make_add_event_request(event, generate_auth_token(event["creator"]))
 		assert is_success(r)
 		valid_events[r["data"]["id"]] = event
@@ -189,12 +193,6 @@ base_event = {"title": "Party", "host":"LampPost Team", "creator": "bwk",
 				  				 "location": "Princeton University"}],
 				  	"favorites": 10}
 
-fav_event = {"title": "Favorites", "host": "LampPost Team", "creator": "rrliu",
-"instances": [{"location": "COS Building","start_datetime": "5pm April 20th 2030",
-"end_datetime": "6pm April 20th 2030"}],
-"description": "This event has favorites.",
-"favorites": 10}
-
 def test_add_event_missing_field():
 	# Missing required fields.
 	for field in ["title", "host", "creator", "description", "instances"]:
@@ -216,7 +214,7 @@ def test_add_event_bad_type():
 		if field == "creator":
 			assert "different" in r["error_msg"]
 		else:
-			assert "malformatted" in r["error_msg"]
+			assert "wrong type" in r["error_msg"]
 
 def test_add_event_bad_field_length_short():		
 	# String fields length check.
@@ -226,7 +224,7 @@ def test_add_event_bad_field_length_short():
 		short_value[field] = "A"*(length-1)
 		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 		assert is_error(r)	
-		assert "malformatted" in r["error_msg"]
+		assert "short" in r["error_msg"]
 
 	# Instance subfields
 	for field, length in [("location", 3)]:
@@ -235,16 +233,16 @@ def test_add_event_bad_field_length_short():
 		short_value["instances"][0][field] = "A"*(length-1)
 		r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 		assert is_error(r)
-		assert "malformatted" in r["error_msg"]
+		assert "short" in r["error_msg"]
 	
 def test_add_event_bad_field_length_long():		
 	# String fields length check.
-	for field, length in [("title", 100), ("host",100), ("trailer", 100), ("description", 10000)]:
+	for field, length in [("title", 100), ("host",100), ("description", 10000)]:
 		long_value = deepcopy(base_event)
 		long_value[field] = "A"*(length+1)
 		r = make_add_event_request(long_value, generate_auth_token(long_value["creator"]))
 		assert is_error(r)
-		assert "malformatted" in r["error_msg"]
+		assert "long" in r["error_msg"]
 	
 	# Instance subfields
 	for field, length in [("location", 100)]:
@@ -252,7 +250,7 @@ def test_add_event_bad_field_length_long():
 		long_value["instances"][0][field] = "A"*(length+1)
 		r = make_add_event_request(long_value, generate_auth_token(long_value["creator"]))
 		assert is_error(r)
-		assert "malformatted" in r["error_msg"]
+		assert "long" in r["error_msg"]
 
 def test_add_event_bad_instance_data():
 	# Instances tests.
@@ -263,7 +261,7 @@ def test_add_event_bad_instance_data():
 	time_swap["instances"][0]["end_datetime"] = base_event["instances"][0]["start_datetime"]
 	r = make_add_event_request(time_swap, generate_auth_token(time_swap["creator"]))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "earlier" in r["error_msg"]
 	
 	# Missing required fields.
 	for field in ["location", "start_datetime", "end_datetime"]:
@@ -278,7 +276,7 @@ def test_add_event_bad_instance_data():
 	short_value["instances"][0]["location"] = "AB"
 	r = make_add_event_request(short_value, generate_auth_token(short_value["creator"]))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "short" in r["error_msg"]
 
 def test_add_event_extra_field():
 	# This test is currently disabled because the EventEntry type has
@@ -292,20 +290,6 @@ def test_add_event_extra_field():
 	assert is_error(r)
 	assert "malformatted" in r["error_msg"]
 
-def test_add_event_in_past():
-	# Tests events with endtimes that have already happened.
-	old_event = deepcopy(base_event)
-
-	days_ago = 7
-	start_datetime = str(datetime.today() - timedelta(days=days_ago))
-	end_datetime = str(datetime.today() - timedelta(days=days_ago-1))
-	old_event["instances"] = [{"location": "Location",
-							  "start_datetime": start_datetime,
-							  "end_datetime": end_datetime}]
-	r = make_add_event_request(old_event, generate_auth_token(old_event["creator"]))
-	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
-
 # Try to get event that does not exist.
 def test_get_event_event_dne():
 	r = make_get_event_request("5ac579ff1b41577c54130835", generate_auth_token("bwk"))
@@ -316,7 +300,7 @@ def test_get_event_event_dne():
 def test_get_event_bad_id():
 	r = make_get_event_request("bad_id_format", generate_auth_token("bwk"))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "not a valid" in r["error_msg"]
 
 # Try to delete event that does not exist.
 def test_delete_event_event_dne():
@@ -328,7 +312,7 @@ def test_delete_event_event_dne():
 def test_delete_event_bad_id():
 	r = make_delete_event_request("bad_id_format", generate_auth_token("bwk"))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "not a valid" in r["error_msg"]
 
 def abort():
 	print("Something went wrong.")
@@ -371,6 +355,7 @@ def make_test_multi(test_body, num_events, generator):
 		for event in events:
 			r = make_delete_event_request(event["_id"], generate_auth_token(event["creator"]))
 			if is_error(r):
+				print(r)
 				abort()
 	try:
 		# Setup
@@ -382,7 +367,6 @@ def make_test_multi(test_body, num_events, generator):
 			new_event["_id"] = r["data"]["id"]
 			events.append(new_event)
 	except Exception as e:
-
 		raise e
 		teardown()
 		assert False
@@ -444,28 +428,13 @@ def test_edit_event_event_dne():
 def test_edit_event_bad_id():
 	r = make_edit_event_request("bad_id_format", {}, generate_auth_token("bwk"))
 	assert is_error(r)
-	assert "malformatted" in r["error_msg"]
+	assert "not a valid" in r["error_msg"]
 
 # Try to edit event that does not belong to us.
 def test_edit_event_different_creator():
 	def test(new_event, event_id, creator_netid):
 		r = make_edit_event_request(event_id, {"description":"My event sucks!"}, generate_auth_token("jneus"))
 		assert is_error(r)
-	make_test(test)
-
-def test_edit_event_in_past_bad_times():
-	# Tests an event edit where the edit includes an instance with endtimes 
-	# that have already happened. This should not be allowed.
-	def test(new_event, event_id, creator_netid):
-		days_ago = 7
-		start_datetime = str(datetime.today() - timedelta(days=days_ago))
-		end_datetime = str(datetime.today() - timedelta(days=days_ago-1))
-		edits = {"instances": [{"location": "Location",
-							   "start_datetime": start_datetime,
-							  "end_datetime": end_datetime}]}
-		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
-		assert is_error(r)
-		assert "malformatted" in r["error_msg"]
 	make_test(test)
 
 def test_edit_event_bad_poster_url():
@@ -475,15 +444,6 @@ def test_edit_event_bad_poster_url():
 		edits = {"poster": "http://www.google.com/logo.jpg"}
 		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
 		assert is_error(r)
-	make_test(test)
-  
-def test_edit_event_in_past_other_fields():
-	# Tests an event edit where the edit does not change times at all.
-	# This is allowed.
-	def test(new_event, event_id, creator_netid):
-		edits = {"description": "This event is t-t-t-totally tubular!"}
-		r = make_edit_event_request(event_id, edits, generate_auth_token(creator_netid))
-		assert is_success(r)
 	make_test(test)
   
 # Try to add a valid favorite.
@@ -582,7 +542,7 @@ def test_report_event():
 # Reason is too short.
 def test_report_event_short_reason():
 	def test(new_event, event_id, creator_netid):
-		report = {"reason": "Hate to talk."}
+		report = {"reason": "bad"}
 		r = make_report_event_request(event_id, report, generate_auth_token("rrliu"))
 		assert is_error(r)
 		assert "short" in r["error_msg"]
@@ -629,7 +589,74 @@ def test_report_two_reports():
 		assert "must wait" in r["error_msg"]
 	make_test(test)
 
-# TODO: add search tests
+def get_dummy_event(i):
+	return deepcopy(dummy_events[i])
+
+def get_dummy_event_now(i):
+	event = get_dummy_event(i)
+	today = datetime.now() + timedelta(minutes=10)
+	yesterday = today - timedelta(days=1)
+	event["instances"][0]["start_datetime"] = str(yesterday)
+	event["instances"][0]["end_datetime"] = str(today + timedelta(hours=i-1))
+	# Delete other instances.
+	event["instances"] = event["instances"][:1]
+	return event 
+
+def get_ids(events):
+	return set(map(lambda x: x["_id"], events))
+
+# Empty search query.
+def test_search_empty():
+	def test(new_events):
+		r = make_search_request("", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		assert len(r["data"]) == 0
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+# Check that an unauthenticated search only returns public events.
+def test_search_no_auth():
+	def test(new_events):
+		r = make_search_request("*", None)
+		assert is_success(r)
+		expected = filter(lambda x: "visibility" not in x or x["visibility"] == 0, new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+# Check that an authenticated search for '*' returns all events.
+def test_search_all():
+	def test(new_events):
+		r = make_search_request("*", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		expected_ids = get_ids(new_events)
+		event_ids = get_ids(r["data"])
+
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+# Check that when a start time is not given, the current time is used.
+def test_search_default_starttime():
+	def test(new_events):
+		r = make_search_request("*", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		expected = filter(lambda x: parse(x["instances"][0]["end_datetime"]) >= datetime.now(), new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event_now)
+
+# Standard start time check.
+def test_search_starttime():
+	def test(new_events):
+		last_week = datetime.now() - timedelta(days=7)
+		r = make_search_request("*", last_week, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		expected_ids = get_ids(new_events)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event_now)
 
 # Execution order of tests.
 # Only tests in this list will be executed.
@@ -657,10 +684,7 @@ test_edit_event_extra_field,
 test_edit_event_event_dne,
 test_edit_event_bad_id,
 test_edit_event_different_creator,
-test_add_event_in_past,
 test_edit_event_bad_poster_url,
-test_edit_event_in_past_bad_times,
-test_edit_event_in_past_other_fields,
 test_add_valid_fav,
 test_add_fav_wrong_user,
 test_add_double_favorite,
@@ -675,7 +699,10 @@ test_report_event,
 test_report_event_short_reason,
 test_trending_event_valid_no_auth, 
 test_trending_event_valid,
-test_report_two_reports
+test_report_two_reports,
+test_search_empty,
+test_search_no_auth,
+test_search_all, test_search_default_starttime
 ]
 
 if __name__ == '__main__':

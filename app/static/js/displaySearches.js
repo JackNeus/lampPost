@@ -8,6 +8,7 @@ var showSearchResults = function() {
 
 	sortResults(); 			// sort by date or popularity
 	createSearchResults();		// create html code for each search result and display them
+	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button
 	handleEventViewClick(); 	// handle click of event
@@ -35,6 +36,20 @@ var handleFireBtnClick = function () {
 	});
 };
 
+// Highlight the event in the url
+// TODO: Make the length of the small search result not shrink
+var checkHighlightEventInUrl = function() {
+	var eventId = getUrlParameter('event');
+	if (eventId) {
+		var event = $.grep(event_data, function(event){return event._id === eventId;})[0];
+		if (event != undefined) {
+			eventNum = event_data.indexOf(event) + 1;
+			selected_event = event;
+			$("#smallSearchResult" + eventNum).addClass("selected");
+		}
+	}
+};
+
 // Sort results by popularity or date
 var sortResults = function () {
 	// check which sort is selected
@@ -53,7 +68,7 @@ var sortResults = function () {
 
 	if (sortByDate) 	sortEventsByDate();
 	else 			sortEventsByPopularity();
-}
+};
 
 /*----------------------------- UTILITY FUNCTIONS ----------------------------*/
 
@@ -109,8 +124,8 @@ function makeDate(start, end) {
 	var today = new Date();
 
 	// Special cases for dates within a week of current date
-	var weekdays = ["Sun", "Mon", "Tue", "Wed",
-			    "Thu", "Fri", "Sat"];
+	var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday",
+			    "Thursday", "Friday", "Saturday"];
 	var time_diff = Date.timeBetween(today, start_date, 'days');
 
 	var date_str = weekdays[start_date.getDay()] += " ";

@@ -2,10 +2,15 @@
 
 // keep track of current event shown in event view
 var selected_event = null;
+// keep track of current title shown in event view
+var selected_title = "";
 
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
+
+		// hide any footer
+		$(".footer").hide();
 		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
 		var eventId = event_data[eventNum - 1]._id;
 		
@@ -29,16 +34,16 @@ var handleEventViewClick = function() {
 			handleEventFireBtnClick(eventNum);
 		}
 		
+		// Get rid of the edit parameter, if it exists.
+		updateUrl(removeEditParameter(document.location.search));
+
 		// don't update if click on already selected search result
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-		
-			// update url with eventid paramter
-			var newurl = window.location.protocol + "//" + 
-					 window.location.host + 
-					 window.location.pathname + 
-					 addUrlParameter(document.location.search, 'event', eventId);
-			window.history.pushState({ path: newurl }, '', newurl);
-		
+			// update url with eventid paramter if event is different than 
+			// event currently in url
+			if (getUrlParameter('event') !== eventId)
+				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 			
@@ -92,6 +97,11 @@ var handleEventFireBtnClick = function (eventNum) {
 	});
 };
 
+// set title of report popup 
+function setTitle(title) {
+	$("#reportPopupTitle").html("\"" + title + "\"");
+}
+
 // Populate event view panel with event_data[eventNum-1] (basic layout)
 function populateEventViewPanel(eventNum) {
 
@@ -126,10 +136,31 @@ function populateEventViewPanel(eventNum) {
 		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
-		
+
 		document.getElementById("eventSubtitle").innerHTML +=
 			"<a class=\"calendar-btn\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>";
 		$("#eventSubtitle").append("<br>");
+	}
+
+	selected_title = event_data[eventNum-1].title;
+	$("#eventSubtitle").append("<a id=\"reportBtn\" class=\"btn btn-danger\" data-toggle=\"modal\"" 
+		+"data-target=\"#myModal\" onclick=\"setTitle(selected_title)\"> <i class=\"fas fa-exclamation-triangle\"></i> Report </a>");
+
+	// upon clicking report button, clear elements and fill id
+	$("#reportBtn").click(function() {
+		// fill this element of the form with the correct value
+		$("#event_id").val(event_data[eventNum - 1]._id);
+		// clear the other elements
+		$("#description").val("");
+		$("#category-0").attr("checked", false);
+		$("#category-1").attr("checked", false);
+		$("#category-2").attr("checked", false);
+	});
+
+	// if there was an error in submitting report, then show modal
+	if ($('#wasError').length) {
+		setTitle(selected_title);
+		$('#myModal').modal('show');
 	}
 	
 	// setup host and description

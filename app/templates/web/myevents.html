@@ -7,6 +7,7 @@
 <script src="/static/js/myevent.js?v=0"></script>
 <script src="/static/js/handleUrlParam.js?v=0"></script>
 <script src="/static/js/handleFavorites.js?v=0"></script>
+<script src="/static/js/add.js?v=0"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -23,15 +24,13 @@ setBaseUrl("{{ config.BASE_URL }}");
   	
 	   <div class="flex-container-col" id = "leftCol">
 	   
-	   	<h1>My Events</h1>
+	   	<h1 style="text-align:center; padding-top:1vh">My Events</h1>
 	   	
 	   	<!-- Sort by date or popularity -->
-		<div class="d-flex flex-row align-items-start">
-			<select class="p-2 ml-auto" name="sort" id="searchSort">
-				<option value="Date">Sort By Date</option>
-				<option value="Popularity">Sort By Popularity</option>
-			</select>
-		</div>
+		<select name="sort" id="myEventSortBtn">
+			<option value="Date">Sort By Date</option>
+			<option value="Popularity">Sort By Popularity</option>
+		</select>
 			
 		<!-- Fills in with "search" results from events.json -->
 		<div class="flex-container-scroll" id="searches"></div>
@@ -58,15 +57,14 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 
 			<div class = "event-form eventFormView" id = "event-form" style="display:none">
-				<div class="col-md-10">
-					<h3 style="text-align:center"> Edit your event by changing the fields below. </h3>
+					<h2 style="text-align:center"> Edit your event by changing the fields below. </h2>
 
 					<form id="addEventForm" action="/myevents" method="POST" role="form" enctype="multipart/form-data">
 						{{ form.csrf_token }}
 
-						<!-- Hidden event id, populated by jquery -->
-						<input style="display:none" id="event-id" type="text" name="event-id"> </input>
-
+			            <!-- Hidden event id, populated by jquery -->
+			            {{ form.event_id(class="hidden") }}
+			            
 						<div class="form-group">
 							{{ form.title.label(class="req") }} 
 							{{ form.title(class="form-control", maxlength="100") }}
@@ -151,13 +149,15 @@ setBaseUrl("{{ config.BASE_URL }}");
 						</div>
 
 
-					</form>
-
-				</div>
-				
+					</form>				
 			</div>
+
+			<!-- So the footer doesn't cover key areas -->
+			<div id="emptyBottomSpace"> </div>
 
 		</div>	
 	</div>
 </div>
+
+
 {% endblock %}
