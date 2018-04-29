@@ -143,9 +143,7 @@ function populateEventViewPanel(eventNum) {
 	}
 
 	selected_title = event_data[eventNum-1].title;
-	$("#eventSubtitle").append("<a id=\"reportBtn\" class=\"btn btn-danger\" data-toggle=\"modal\"" 
-		+"data-target=\"#myModal\" onclick=\"setTitle(selected_title)\"> <i class=\"fas fa-exclamation-triangle\"></i> Report </a>");
-
+	
 	// upon clicking report button, clear elements and fill id
 	$("#reportBtn").click(function() {
 		// fill this element of the form with the correct value
