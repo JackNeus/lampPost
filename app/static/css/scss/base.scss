@@ -240,7 +240,6 @@ html, body {
 	.event-view-host {
 		color: $med-color;
 		margin: 0;
-		margin-left: 1vh;
 		line-height: 30px;
 		font-size: 20px;
 	}
@@ -255,6 +254,7 @@ html, body {
 		font-family: FontAwesome;
 		line-height: 0 !important;
 		padding: 0;
+		margin-left:2vh;
 		&.selected {
 			color: $orange;
 			&:hover {
