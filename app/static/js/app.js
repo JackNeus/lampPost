@@ -28,6 +28,7 @@ $(document).ready(function(){
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
+	if (checkCalendarParameter()) showCalendarView();
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
 	
@@ -40,7 +41,7 @@ $(document).ready(function(){
 var setupSearch = function() {
 	// allow user to pick start date and toggle the filter
 	$(function() {
-		$('s#datepicker').datepicker();
+		$('#datepicker').datepicker();
 	});
 	$('#filter-btn').click(function() {
 		$('.datetime').slideToggle(200);

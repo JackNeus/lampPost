@@ -379,20 +379,18 @@ html, body {
   background-color:red;
 }
 
-.list-view {
-	#leftCol {
-		max-height: 88vh;
-		height: 88vh;
-		flex: 30%;
-	    float: left;
-	    border-right: 5px solid $primary-color;
-	}
-	#rightCol {
-		max-height: 88vh;
-		height: 88vh;
-		flex: 70%;
-	    float: left;
-	}
+#leftCol {
+	max-height: 88vh;
+	height: 88vh;
+	flex: 30%;
+    float: left;
+    border-right: 5px solid $primary-color;
+}
+#rightCol {
+	max-height: 88vh;
+	height: 88vh;
+	flex: 70%;
+    float: left;
 }
 
 .calendar-view {
@@ -423,6 +421,17 @@ html, body {
 		.dayResults {
 			.smallSearchResult {
 				margin-right: 0;
+				overflow: wrap;
+				.resultContents {
+					.resultFireBtn {
+						display: none;
+					}
+			
+					.resultFireNum {
+						display: none;
+				
+					}
+				}
 			}
 		}
 	}

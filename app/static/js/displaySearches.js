@@ -29,6 +29,20 @@ var showMyEvents = function() {
 	handleEventViewClick(); 	// handle click of event
 };
 
+// Populate search result panel with event_data sorted by date.
+var showMyFavorites = function() {
+	// clear previous search results
+	var currentSearches = document.getElementById("searches");
+	currentSearches.innerHTML = "";
+
+	sortResults(); 			// sort by date or popularity
+	createSearchResults();		// create html code for each search result and display them
+	checkHighlightEventInUrl();	// highlight the event in url if exists
+	highlightUserFavorites(); 	// highlight user favorites on load
+	handleFireBtnClick(); 		// handle clicks of fire button
+	handleEventViewClick(); 	// handle click of event
+};
+
 // Update the popularity of an event when the fire button is clicked
 var handleFireBtnClick = function () {
 	$(".resultFireBtn").click(function(e) {
@@ -146,6 +160,16 @@ function makeDate(start, end) {
 		date_str += "/" + (start_date.getFullYear());
 
 	return date_str + " " + makeTimeStr(start_date, end_date);
+}
+
+function makeDateStr(start_date) {
+	var today = new Date();
+	
+	var date_str = (start_date.getMonth() + 1) + '/' + start_date.getDate();
+	// don't show year unless year is different than current year
+	if (start_date.getFullYear() != today.getFullYear())
+		date_str += "/" + (start_date.getFullYear());
+	return date_str;
 }
 
 // create time strings in hh:mm format

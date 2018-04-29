@@ -275,13 +275,14 @@ html #bigRow, body #bigRow {
 .errorFlash {
   background-color: red; }
 
-.list-view #leftCol {
+#leftCol {
   max-height: 88vh;
   height: 88vh;
   flex: 30%;
   float: left;
   border-right: 5px solid #2d9eee; }
-.list-view #rightCol {
+
+#rightCol {
   max-height: 88vh;
   height: 88vh;
   flex: 70%;
@@ -305,7 +306,12 @@ html #bigRow, body #bigRow {
       border-bottom: 2px solid black;
       align-self: center; }
     .calendar-view-row .dayCol .dayResults .smallSearchResult {
-      margin-right: 0; }
+      margin-right: 0;
+      overflow: wrap; }
+      .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireBtn {
+        display: none; }
+      .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireNum {
+        display: none; }
 
 .searchBoxCol {
   flex: 40%; }

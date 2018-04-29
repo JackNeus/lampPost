@@ -1,20 +1,32 @@
 var handleCalendarView = function() {
 	$("#calendarViewBtn").click(function() {
-		$("#bigRow").toggleClass('calendar-view');
-		
-		if ($("#calendarViewBtn").hasClass("calendarMode")) {
-			var listBtn = `<i class="fas fa-list"></i>`;
-			$("#calendarViewBtn").html(listBtn);
-			$("#calendarViewBtn").prop('title', 'List View');
+		// Add edit parameter to URL.
+		if (getUrlParameter('calendar') === undefined) {
+			updateUrl(addUrlParameter(document.location.search, 'calendar'));
 		}
 		else {
-			var calendarBtn = `<i class="fas fa-calendar"></i>`;
-			$("#calendarViewBtn").html(calendarBtn);
-			$("#calendarViewBtn").prop('title', 'Calendar View');
+			updateUrl(removeUrlParameter(document.location.search, 'calendar'));
 		}
 		
-		$("#calendarViewBtn").toggleClass("calendarMode");
-		showSearchResults();
+		showCalendarView();
 	})
+};
+
+var showCalendarView = function() {
+	$("#bigRow").toggleClass('calendar-view');
+		
+	if ($("#calendarViewBtn").hasClass("calendarMode")) {
+		var listBtn = `<i class="fas fa-list"></i>`;
+		$("#calendarViewBtn").html(listBtn);
+		$("#calendarViewBtn").prop('title', 'List View');
+	}
+	else {
+		var calendarBtn = `<i class="fas fa-calendar"></i>`;
+		$("#calendarViewBtn").html(calendarBtn);
+		$("#calendarViewBtn").prop('title', 'Calendar View');
+	}
+	
+	$("#calendarViewBtn").toggleClass("calendarMode");
+	showSearchResults();
 };
 

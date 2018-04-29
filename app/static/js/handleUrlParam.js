@@ -13,6 +13,14 @@ var checkEditEventUrlParameter = function() {
 	return editMode;
 }
 
+var checkCalendarParameter = function() {
+	var calendarMode = getUrlParameter('calendar');
+	if (calendarMode === undefined)
+		return false;
+	return calendarMode;
+	
+};
+
 // check if the search url parameter exists. If so, fill in the 
 // search box with that value
 var checkSearchUrlParameter = function() {
@@ -93,8 +101,8 @@ var addUrlParameter = function(search, key, val){
 
 // Remove the edit parameter from search. 
 // This should probably be made more generic in the future.
-var removeEditParameter = function(search) {
-	params = search.replace(new RegExp('&?edit'), '');
+var removeUrlParameter = function(search, parameter) {
+	params = search.replace(new RegExp('&?' + parameter), '');
 	return params;
 }
 
