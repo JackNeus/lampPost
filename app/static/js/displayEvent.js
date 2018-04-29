@@ -11,8 +11,8 @@ var handleEventViewClick = function() {
 
 		// hide any footer
 		$(".footer").hide();
-		eventNum = getNum($(this).attr("id"), "smallSearchResult");
-		eventId = event_data[eventNum - 1]._id;
+		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
+		var eventId = event_data[eventNum - 1]._id;
 
 		// if currently showing the event edit form, don't animate
 		// highlight again
@@ -112,10 +112,6 @@ function populateEventViewPanel(eventNum) {
 
 	  
 	// Number of favorites
-	var fireNum = 
-		`<p class="eventFireNum" id="eventFireNum">`
-	    + 	$("#resultFireNum" + eventNum).text()
-	    + `</p>`;
 	var fireNum = $("#eventFireNum");
 	var fireCount = $("#resultFireNum" + eventNum).text();
 	fireNum.html(fireCount);
