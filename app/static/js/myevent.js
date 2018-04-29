@@ -120,7 +120,7 @@ var handleDeleteMyEvent = function() {
 // allow user to change events
 var handleEditMyEvent = function() {
 
-	$(".editBtn").click( function() { 
+	$(".editBtn").click( function(e) { 
 		var eventNum = getNum($(this).attr('id'), "editBtn");
 		var eventId = event_data[eventNum - 1]._id;
 
@@ -136,8 +136,8 @@ var handleEditMyEvent = function() {
 			// update url with eventid paramter
 			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
 		}
-
 		renderEditForm(eventNum);
+		e.stopPropagation();
 	});
 }
 
@@ -223,7 +223,6 @@ var renderEditForm = function(eventNum) {
 		$("#current-poster").toggleClass("hidden");
 	}
 	$("#link").val(event_data[eventNum - 1].trailer);
-
 
 	// display the form
 	$("#event-form").show();
