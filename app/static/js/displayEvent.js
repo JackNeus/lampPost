@@ -11,9 +11,9 @@ var handleEventViewClick = function() {
 
 		// hide any footer
 		$(".footer").hide();
-		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
-		var eventId = event_data[eventNum - 1]._id;
-		
+		eventNum = getNum($(this).attr("id"), "smallSearchResult");
+		eventId = event_data[eventNum - 1]._id;
+
 		// if currently showing the event edit form, don't animate
 		// highlight again
 		if ($(".eventFormView").css("display") == "block") {
@@ -91,6 +91,7 @@ function highlightSelectedSearchResult(eventNum) {
 
 // Update the popularity of an event when the fire button is clicked
 var handleEventFireBtnClick = function (eventNum) {
+	$(".eventFireBtn").unbind("click");
 	$(".eventFireBtn").click(function(e) {
 		updateFireBtn(this, eventNum);
 		e.stopPropagation();
@@ -104,30 +105,27 @@ function setTitle(title) {
 
 // Populate event view panel with event_data[eventNum-1] (basic layout)
 function populateEventViewPanel(eventNum) {
-
 	$(".event-view").hide();
 
 	// Clickable fire button that displays "Favorite" when hovered over
-	var fireBtn = 
-		`<div class="eventFireBtn btn" id="eventFireBtn">`
-	    +		`<i class="fas fa-fire"></i>`
-	    + `</div>`;
+	var fireBtn = $("#eventFireBtn");
+
 	  
 	// Number of favorites
 	var fireNum = 
 		`<p class="eventFireNum" id="eventFireNum">`
 	    + 	$("#resultFireNum" + eventNum).text()
 	    + `</p>`;
-	
+	var fireNum = $("#eventFireNum");
+	var fireCount = $("#resultFireNum" + eventNum).text();
+	fireNum.html(fireCount);
+
 	// hide welcome image
 	$("#welcome").css("display", "none");
 	
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
 	$("#eventSubtitle").html("");
-	$("#eventFireBtn").remove();
-	$("#eventFireNum").remove();
-	$("#mainHeaderLine").append(fireBtn).append(fireNum);
 	
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
