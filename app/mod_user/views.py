@@ -7,7 +7,7 @@ from flask_login import login_required, current_user
 
 @mod_user.route('/login', methods=['GET'])
 def login():
-	if current_user.is_authenticated():
+	if current_user.is_authenticated:
 		return make_response(redirect("/browse"))
 
 	C = CASClient.CASClient(request.args)
