@@ -165,7 +165,7 @@ var renderEditForm = function(eventNum) {
 	$("#title").val(event_data[eventNum - 1].title);
 	$("#description").val(event_data[eventNum - 1].description);
 	$("#host").val(event_data[eventNum - 1].host);
-	
+  
 	$("#visibility-"+(1-event_data[eventNum-1].visibility)).attr('checked', 'checked');
 
 	var numShowings = event_data[eventNum - 1].instances.length;
@@ -218,12 +218,24 @@ var renderEditForm = function(eventNum) {
 		$("#startTimes-" + i).val("");
 		$("#endTimes-" + i).val("");
 	}
-
+	if (event_data[eventNum - 1].poster !== undefined) {
+		$("#poster-link").attr('href', event_data[eventNum - 1].poster);
+		$("#current-poster").toggleClass("hidden");
+	}
 	$("#link").val(event_data[eventNum - 1].trailer);
 
 
 	// display the form
 	$("#event-form").show();
+}
+
+var handleDeletePoster = function() {
+	$("#delete-poster-button").click(function() {
+		if (confirm("Are you sure you wish to remove the poster?")) {
+			$("#deletePoster").attr("value", "delete");
+			$("#current-poster").toggleClass("hidden");
+		}
+	});
 }
 
 // Get list of events which user has favorited
@@ -235,6 +247,7 @@ var setupUserFavorites = function() {
 		else
 			user_fav_data = [];
 		showMyEvents();
+		handleDeletePoster();
 		handleDeleteMyEvent();
 		handleEditMyEvent();
 		var urlParamEventId = checkEventUrlParameter();

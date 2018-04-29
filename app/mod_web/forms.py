@@ -18,6 +18,7 @@ class EventForm(FlaskForm):
     startTimes = FieldList(TextField('Start Time', validators=(validators.Optional(),)), min_entries=4)
     endDates = FieldList(StringField('End Date', validators=(validators.Optional(),)), min_entries=4)
     endTimes = FieldList(TextField('End Time', validators=(validators.Optional(),)), min_entries=4)
+    deletePoster = TextField()
     poster = FileField('Event Photo/Poster')
     link = StringField('Promo Video')
 
