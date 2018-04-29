@@ -3,10 +3,8 @@ from wtforms_components import TimeField
 from wtforms import StringField, TextField, TextAreaField, RadioField, FieldList, DateField, FileField, validators
 from wtforms.validators import Required, DataRequired
 
-class NameForm(FlaskForm):
-	name = TextField('Name', [Required(message='Forgot your name?')])
-
 class EventForm(FlaskForm):
+    event_id = TextField()
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     host = StringField('Host', validators=[DataRequired()])
@@ -22,3 +20,8 @@ class EventForm(FlaskForm):
     endTimes = FieldList(TextField('End Time', validators=(validators.Optional(),)), min_entries=4)
     poster = FileField('Event Photo/Poster')
     link = StringField('Promo Video')
+
+class ReportForm(FlaskForm):
+    event_id = TextField()
+    category = RadioField('Reason:', choices=[("Duplicate event", "Duplicate event"), ("Spam/Offensive","Spam/Offensive"), ("Other", "Other")])
+    description = TextAreaField('Description')

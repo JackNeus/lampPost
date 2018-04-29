@@ -36,7 +36,7 @@ def make_edit_request(event_id, edits):
 		
 def make_delete_request(event_id):
 	headers = { "Authorization" : "Token %s" % current_user.token }
-	return requests.post(CONFIG["BASE_URL"] + "/api/event/delete/"+event_id, headers=headers)
+	return requests.delete(CONFIG["BASE_URL"] + "/api/event/delete/"+event_id, headers=headers)
 		
 
 def upload_file(event_id, file):

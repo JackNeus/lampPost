@@ -1,16 +1,15 @@
 /* rgb values for primary-color */
 html, body {
-  font: 100% "Avenir-Light";
-  font-size: 20px;
+  font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
   background-color: #eeeeee; }
   html .h1, html h1, body .h1, body h1 {
-    font: 100% "Avenir-Heavy";
+    font: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
     font-size: 36px; }
   html .h2, html h2, body .h2, body h2 {
-    font: 100% "Avenir-Heavy";
+    font: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
     font-size: 26px; }
   html .h3, html h3, body .h3, body h3 {
-    font: 100% "Avenir-Medium";
+    font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
     font-size: 20px; }
 
 html .logo, body .logo {
@@ -18,7 +17,7 @@ html .logo, body .logo {
 html .navbar-expand-md, body .navbar-expand-md {
   background-color: #2d9eee; }
 html .nav-link, body .nav-link {
-  font: 100% "Avenir-Medium";
+  font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
   font-size: 24px; }
 html .dropdown-content, body .dropdown-content {
   display: none;
@@ -206,6 +205,9 @@ html #bigRow, body #bigRow {
     border-bottom: 2px solid #2d9eee; }
   .event-view .calendar-btn {
     text-decoration: none !important; }
+  .event-view #reportBtn {
+    color: white;
+    float: right; }
 
 .flex-container-row {
   display: flex;
@@ -238,6 +240,15 @@ html #bigRow, body #bigRow {
   width: 100%;
   text-align: center;
   height: 6.4vh; }
+  .footer .flashedMessage {
+    padding-top: 1.5vh;
+    padding-bottom: 1.5vh; }
+  .footer .close {
+    position: absolute;
+    right: 1vh;
+    top: 50%;
+    font-size: 24px;
+    margin-top: -12px; }
 
 .successFlash {
   background-color: #00b300; }
@@ -257,11 +268,6 @@ html #bigRow, body #bigRow {
   height: 88vh;
   flex: 70%;
   float: left; }
-
-.flashedMessage {
-  padding-top: 1.5vh;
-  padding-bottom: 1.5vh; }
-
 @media screen and (max-width: 600px) {
   .flex-container-row {
     flex-direction: column; } }
