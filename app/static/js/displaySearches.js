@@ -57,15 +57,6 @@ var sortResults = function () {
 		sortByDate = true;
 	else  sortByDate = false;
 
-	// sort all instances of the event by date
-	for (var i = 0; i < event_data.length; i++) {
-		event_data[i].instances.sort(function(a, b) {
-			return Date.timeBetween(new Date(b.start_datetime),
-							new Date(a.start_datetime),
-							'seconds');
-		});
-	}
-
 	if (sortByDate) {
 		sortEventsByDate();
 	}
@@ -102,9 +93,13 @@ function eventIsFav(eventId) {
 // sort the events by date (using the first instance of the event)
 function sortEventsByDate() {
 	event_data.sort(function (a, b) {
-		return Date.timeBetween(new Date(b.instances[0].start_datetime),
+		let time_between = Date.timeBetween(new Date(b.instances[0].start_datetime),
 						new Date(a.instances[0].start_datetime),
 						'seconds');
+		if (time_between === 0) {
+			return a.title < b.title;
+		}
+		return time_between;
 	});
 	if (!getSortDirection()) {
 		event_data.reverse();
@@ -114,7 +109,11 @@ function sortEventsByDate() {
 // sort the events by popularity
 function sortEventsByPopularity() {
 	event_data.sort(function (a, b) {
-		return parseInt(b.favorites) - parseInt(a.favorites);
+		var fav_diff = parseInt(b.favorites) - parseInt(a.favorites);		
+		if (fav_diff === 0) {
+			return a.title < b.title;
+		}
+		return fav_diff;
 	});
 	if (!getSortDirection()) {
 		event_data.reverse();
