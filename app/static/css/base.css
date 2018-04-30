@@ -31,6 +31,10 @@ html #bigRow, body #bigRow {
   padding-right: 0vw;
   margin-bottom: 2vh; }
 
+.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important; }
+
 .danger-button {
   color: #dc3545; }
   .danger-button:hover {
@@ -127,7 +131,6 @@ html #bigRow, body #bigRow {
   flex-grow: 1000;
   min-height: 10vh;
   border-right: 4px solid #2d9eee;
-  border-left: 4px solid #2d9eee;
   border-top: 2px solid #2d9eee;
   border-bottom: 2px solid #2d9eee;
   cursor: pointer;

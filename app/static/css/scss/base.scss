@@ -67,6 +67,11 @@ html, body {
 	}
 }
 
+.container-fluid {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
 .danger-button {
 	color: #dc3545;
  	&:hover {
@@ -190,7 +195,7 @@ html, body {
 	flex-grow: 1000;
  	min-height: 10vh;
  	border-right: 4px solid $primary-color;
-	border-left: 4px solid $primary-color;
+	// border-left: 4px solid $primary-color;
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
 	cursor: pointer;
