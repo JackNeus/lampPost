@@ -328,5 +328,14 @@ html #bigRow, body #bigRow {
   #leftCol {
     max-height: 55vh;
     height: auto; } }
+#interiorWelcomeDiv {
+  padding-left: 50px; }
+  #interiorWelcomeDiv #welcomeMessage {
+    font-size: 50px;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 10px; }
+  #interiorWelcomeDiv .welcomeText {
+    font-size: 22px; }
 
 /*# sourceMappingURL=base.css.map */
