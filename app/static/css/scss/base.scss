@@ -37,8 +37,9 @@ html, body {
 	// Other Style
 	background-color: $background-color;
 
-	// Prevent full page scrolling
-	overflow: hidden;
+	.scroll-disabled {
+		overflow: hidden;
+	}
 }
 
 // Navbar style

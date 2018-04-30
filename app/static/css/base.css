@@ -11,6 +11,8 @@ html, body {
   html .h3, html h3, body .h3, body h3 {
     font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
     font-size: 20px; }
+  html .scroll-disabled, body .scroll-disabled {
+    overflow: hidden; }
 
 html .logo, body .logo {
   width: 200px; }
