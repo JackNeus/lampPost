@@ -17,20 +17,20 @@ html, body {
 	// Font Style
 
 	// Base font
-	font: 100% $font-med;
+	font-family: 100% $font-med;
 	// Headers
 	.h1, h1 {
-		font: 100% $font-heavy;
+		font-family: 100% $font-heavy;
 		font-size:36px;
 	}
 
 	.h2, h2 {
-		font: 100% $font-heavy;
+		font-family: 100% $font-heavy;
 		font-size:26px;
 	}
 
 	.h3, h3 {
-		font: 100% $font-med;
+		font-family: 100% $font-med;
 		font-size:20px;
 	}
 
@@ -72,6 +72,10 @@ html, body {
  	&:hover {
  		color: #c9302c;
  	}
+  
+::placeholder {
+	color: $light-color !important;
+	opacity: 1;
 }
 
 .hidden {
@@ -104,6 +108,7 @@ html, body {
 }
 
 #searches {
+	border-bottom: 5px solid $primary-color;
 	padding-top: 1vh;
 }
 
@@ -112,24 +117,25 @@ html, body {
 	margin: 2vh 2vh;
 	margin-bottom: 0;
 	max-width: 100%;
+	width: 100%;
 	flex-shrink: 1000;
 	font-size: 16px !important;
 }
 
 #searchSort {
-	margin: 2vh 0vh;
 	border: 1px solid #AAA;
 	color: $dark-color;
 	font-size: 0.75em;
+
 	overflow: hidden;
+	margin: 2vh 0vh;
 	border-radius: 2px;
 	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+
     text-overflow: ellipsis;
     white-space: nowrap;
-    min-height: 4.25vh;
-    float:left;
-    font: 100% $font-light;
-	font-size: 14px !important;
+
+    min-height: 4.25vh
 }
 
 #myEventSortBtn {
@@ -187,7 +193,6 @@ html, body {
 	border-left: 4px solid $primary-color;
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
-	border-radius: 0px 10px 10px 0px;
 	cursor: pointer;
 	margin: 0vh 2vh 0vh 0vh;
  	overflow: hidden;
@@ -213,9 +218,10 @@ html, body {
 		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
 		z-index: 2;
 		position: relative;
+		border-top: 3px solid $primary-color;
+		border-bottom: 3px solid $primary-color;
 		&:hover {
 			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.8);
-		 	border: 3px solid $primary-color;
 		}
  	}
  	&:hover {
@@ -223,13 +229,14 @@ html, body {
 		z-index: 1;
 		position: relative;
  		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.2);
-		border: 3px solid $primary-color;
+		border-top: 3px solid $primary-color;
+		border-bottom: 3px solid $primary-color;
  	}
 	.resultContents {
 		padding-left: 0.8vw;
 		padding-right: 0.8vw;
 		padding-top: 0.6vh;
-		padding-bottom: 0.6vh;
+
 		text-overflow: ellipsis;
 		overflow: hidden;
 		.resultFireBtn {
@@ -255,6 +262,19 @@ html, body {
 	}
 }
 
+
+.searches-resizer {
+	max-height: 88vh;
+	height: 88vh;
+	width: 5px;
+	float: left;
+	z-index: 500;
+	background-color: $primary-color;
+	cursor: col-resize;
+	&:hover {
+		background-color: $orange;
+	}
+}
 
 // Event event
 // TODO: Move to seperate file?
@@ -402,9 +422,8 @@ html, body {
 #leftCol {
 	max-height: 88vh;
 	height: 88vh;
-	flex: 30%;
+	flex: 25%;
     float: left;
-    border-right: 5px solid $primary-color;
 }
 #rightCol {
 	max-height: 88vh;
