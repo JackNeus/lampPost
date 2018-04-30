@@ -17,11 +17,6 @@ label {
 .selectedIcon {
   background-color: #555555; }
 
-.delete-button {
-  color: #dc3545; }
-  .delete-button:hover {
-    color: #c9302c; }
-
 .delete-poster-button {
   cursor: pointer; }
 
