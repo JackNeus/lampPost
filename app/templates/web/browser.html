@@ -53,10 +53,13 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 		</form>
 
 
-		<!-- Fills in with "search" results from events.json -->
+		<!-- Fills in with both search results, and trending events. -->
 		<div class="flex-container-scroll" id="searches-wrapper">
 			<div id="searches">
             	<div class="searchPost"></div>
+        	</div>
+        	<div id="trendingEvents">
+        		<div class="searchPost"> </div>
         	</div>
 			<div class="fa fa-spinner fa-spin hidden centered" id="loading-spinner"></div>
         </div>
@@ -69,8 +72,8 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 	 			<h1 id = "welcomeMessage"> Welcome to LampPost! </h1>
 
 				  <div class="row">
-				    <div class="col-sm">
-	 					<p class = "welcomeText" > If you're looking for a better way to find events on campus, you are in the right place. Get started by 
+				    <div class="col-md-6">
+	 					<p class = "welcomeText" > Get started by:
 	 					<ul class="welcomeText">
 	 						<li> <a class="keyword"> Browsing </a> through trending events on the left! </li>
 	 						<li> <a class="keyword"> Searching </a> for events by keyword/date/location. </li>
@@ -79,11 +82,10 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 	 					</ul>
 	 					</p>
 	 				</div>
-				    <div class="col-sm">
+				    <div class="col-md-6">
 				      <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/lamppostmeme.png" style="display: block;
 			    margin-left: auto;
 			    margin-right: auto;
-			    padding-top:5vh;
 			    width: 85%;">
 				    </div>
 				  </div>

@@ -34,7 +34,36 @@ $(document).ready(function(){
 	// setup search bar functionality
 	setupSearch();
 	setupDataRetrieval();
+
+	// add the trending events
+	addTrendingResults();
 });
+
+function addTrendingResults() {
+	var success_callback = function(data){
+	    if (data["status"] === "Success")
+			event_data = data["data"];
+		else
+			event_data = [];
+		setupUserFavorites();
+	};
+	var cleanup_callback = function() {
+		search_requests_in_progress -= 1;
+		if (search_requests_in_progress == 0) {
+			$("#loading-spinner").addClass("hidden");
+		}
+	}
+	$.ajax({
+		url: base_url + '/api/event/trending',
+		dataType: 'json',
+		headers: {
+			'Authorization': ('Token ' + $.cookie('api_token'))
+		},
+		success: success_callback,
+		complete: cleanup_callback
+	});
+	showSearchResults();
+}
 
 // Sets up sort and filter functionality for search box
 var setupSearch = function() {
