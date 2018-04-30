@@ -131,6 +131,7 @@ html, body {
 	display: flex; 
 	flex-wrap: nowrap; 
 	margin-right: 2vh;
+	font-size: 14px;
 
 	.filter-button {
 		padding-left: 0;
@@ -144,10 +145,9 @@ html, body {
 		.sort-direction {
 			cursor: pointer;
 			padding-left: 5px;
-			font-size: 1.7em;
+			font-size: 1.55em;
 			display: inline-block;
 			float: left;
-			margin-top: -5px;
 		}
 
 		.select-style {
