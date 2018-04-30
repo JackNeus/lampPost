@@ -36,6 +36,9 @@ html, body {
 
 	// Other Style
 	background-color: $background-color;
+
+	// Prevent full page scrolling
+	overflow: hidden;
 }
 
 // Navbar style
