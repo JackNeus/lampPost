@@ -81,35 +81,50 @@ var createCalenderViewResults = function() {
 	
 	var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", 
 				"Thursday", "Friday", "Saturday"];
-			
-	var today = new Date();
-	var startDate = today;
-	var todayDOW = today.getDay();
 	
-	currentDate = new Date();
-	for (var i = todayDOW; i < daysOfWeek.length; i++) {
+	// get number of weeks into future/past		
+	var numWeek = getNum($(".calendarBtns").attr('id'), "calendarBtns");
+	
+	// figure out first date of calendar week view
+	var today = new Date();
+	var firstDay = new Date();
+	firstDay.setDate(today.getDate() + (numWeek * 7));
+	
+	// day of week string of first day of calendar view
+	var firstDayStr = firstDay.getDay();
+	
+	var currentDate = new Date(firstDay);
+	count = 1;
+	// create html for each day of week, starting from firstDay
+	for (var i = firstDayStr; i < daysOfWeek.length; i++) {
 		searchResult += 
 		  `<div class="flex-container-col dayCol">`
 		+  `<div class="dayTitle">` 
 		+ 	`<div class="dayName">` + daysOfWeek[i].substring(0, 3) + `</div>`
-		+ 	`<div class="date">` + makeDateStr(currentDate) + `</div>`
+		+ 	`<div class="date" id="date` + count + `">` + makeDateStr(currentDate) + `</div>`
 		+  `</div>`
 		+  `<div class="dayResults" id="` + daysOfWeek[i] + `"></div>`
 		+ `</div>`;
 		
 		currentDate.setDate(currentDate.getDate() + 1);
+		count++;
 	}
-	for (var i = 0; i < todayDOW; i++) {
+	for (var i = 0; i < firstDayStr; i++) {
 		searchResult += 
 		  `<div class="flex-container-col dayCol">`
-		+  `<div class="dayTitle">` + daysOfWeek[i].substring(0, 3) + `</div>`
+		+  `<div class="dayTitle">` 
+		+ 	`<div class="dayName">` + daysOfWeek[i].substring(0, 3) + `</div>`
+		+ 	`<div class="date"` + count + `>` + makeDateStr(currentDate) + `</div>`
+		+  `</div>`
 		+  `<div class="dayResults" id="` + daysOfWeek[i] + `"></div>`
 		+ `</div>`;
 		
 		currentDate.setDate(currentDate.getDate() + 1);
+		count++;
 	}
 	searchResult += `</div>`;
 	 
+	// add html to "searches" div
   	$("#searches").append(searchResult);
   	
   	// create html code for each search result
@@ -135,9 +150,10 @@ var createCalenderViewResults = function() {
 			var endDate =  new Date(instances[j].end_datetime);
 
 		  	// add the created html to the correct day of week element in myevent.html
-		  	var time_diff = Date.timeBetween(today, startDate, 'days');
-		  	if (time_diff < 7)
+		  	var time_diff = Date.timeBetween(firstDay, startDate, 'days');
+		  	if (time_diff >= 0 && time_diff < 7) {
 		  		$("#" + getDayOfWeek(startDate)).append(searchResult);
+		  	}
 		  	
 		  	// number the given ids to match the event number so that elements can
 		  	// be differentiated
@@ -157,7 +173,7 @@ var numberIds = function(elementNames, i) {
 	for (var j = 0; j < elementNames.length; j++) {
 		$("#" + elementNames[j]).attr("id", elementNames[j] + (i+1));
 	}
-}
+};
 
 // append the event data/time to the appropriate my event result
 var addEventInstances = function(i) {
@@ -170,11 +186,11 @@ var addEventInstances = function(i) {
 					       instances[j].end_datetime));
 		$("#eventInstances" + (i+1)).append(time);
 	}
-}
+};
 
 // return a time element for a given instance
 var getEventTimeElement = function(startDate, endDate) {
-	var timeStr = makeTimeStr(startDate, endDate);
+	var timeStr = makeDate(startDate, endDate);
 	var timeElement = $('<p />').attr({
 			class: "resultTime"
 		}).append(timeStr);

@@ -28,7 +28,7 @@ $(document).ready(function(){
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
-	if (checkCalendarParameter()) showCalendarView();
+	if (checkCalendarParameter()) toggleCalendarView();
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
 	

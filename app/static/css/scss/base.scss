@@ -412,9 +412,12 @@ html, body {
 		max-width: 14%;
 		min-width: 14%;
 		border-right: 2px solid black;
+		max-height: 88vh;
+		height: auto;
 		
 		.dayTitle {
 		 	border-bottom: 2px solid black;
+		 	width: 100%;
 		 	align-self: center;
 		}
 		
@@ -422,14 +425,26 @@ html, body {
 			.smallSearchResult {
 				margin-right: 0;
 				overflow: wrap;
+				border-right: none;
+				border-left: none;
+				border-top: none;
+				border-radius: 0;
 				.resultContents {
+					.resultTitle {
+						font-size: 0.8em;
+						line-height: 1em;
+						height: 3em;
+						overflow: hidden;
+					}
+					.resultTime {
+						font-size: 0.6em;
+					}
 					.resultFireBtn {
 						display: none;
 					}
 			
 					.resultFireNum {
 						display: none;
-				
 					}
 				}
 			}

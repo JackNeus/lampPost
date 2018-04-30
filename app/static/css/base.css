@@ -301,13 +301,27 @@ html #bigRow, body #bigRow {
   .calendar-view-row .dayCol {
     max-width: 14%;
     min-width: 14%;
-    border-right: 2px solid black; }
+    border-right: 2px solid black;
+    max-height: 88vh;
+    height: auto; }
     .calendar-view-row .dayCol .dayTitle {
       border-bottom: 2px solid black;
+      width: 100%;
       align-self: center; }
     .calendar-view-row .dayCol .dayResults .smallSearchResult {
       margin-right: 0;
-      overflow: wrap; }
+      overflow: wrap;
+      border-right: none;
+      border-left: none;
+      border-top: none;
+      border-radius: 0; }
+      .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTitle {
+        font-size: 0.8em;
+        line-height: 1em;
+        height: 3em;
+        overflow: hidden; }
+      .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTime {
+        font-size: 0.6em; }
       .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireBtn {
         display: none; }
       .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireNum {

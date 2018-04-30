@@ -7,8 +7,11 @@ var showSearchResults = function() {
 	currentSearches.innerHTML = "";
 
 	sortResults(); 			// sort by date or popularity
+	
+	// create html code for each search result and display them
+	// show results differently for calendar view
 	if ($("#calendarViewBtn").hasClass("calendarMode"))
-		createSearchResults();		// create html code for each search result and display them
+		createSearchResults();
 	else createCalenderViewResults();
 	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load

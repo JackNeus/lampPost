@@ -1,6 +1,7 @@
+// handle clicks of calendar view/list view button
 var handleCalendarView = function() {
 	$("#calendarViewBtn").click(function() {
-		// Add edit parameter to URL.
+		// Add calendar parameter to URL.
 		if (getUrlParameter('calendar') === undefined) {
 			updateUrl(addUrlParameter(document.location.search, 'calendar'));
 		}
@@ -8,13 +9,16 @@ var handleCalendarView = function() {
 			updateUrl(removeUrlParameter(document.location.search, 'calendar'));
 		}
 		
-		showCalendarView();
+		toggleCalendarView();
 	})
 };
 
-var showCalendarView = function() {
+// toggle view for calendar and display the correct week calendar results
+var toggleCalendarView = function() {
+	// toggle column size proportions
 	$("#bigRow").toggleClass('calendar-view');
 		
+	// toggle calendar/list view button
 	if ($("#calendarViewBtn").hasClass("calendarMode")) {
 		var listBtn = `<i class="fas fa-list"></i>`;
 		$("#calendarViewBtn").html(listBtn);
@@ -28,5 +32,28 @@ var showCalendarView = function() {
 	
 	$("#calendarViewBtn").toggleClass("calendarMode");
 	showSearchResults();
+	handleNextWeekClick();
+	handlePreviousWeekClick();
+};
+
+// handle clicks of next week arrow
+var handleNextWeekClick = function() {
+	$(".nextWeekBtn").click(function() {
+		var numWeek = getNum($(".calendarBtns").attr('id'), "calendarBtns");
+		$(".calendarBtns").attr('id', 'calendarBtns' + (parseInt(numWeek) + 1));
+		showSearchResults();
+	})
+};
+
+// handle clicks of previous week arrow
+var handlePreviousWeekClick = function() {
+	$(".previousWeekBtn").click(function() {
+		var numWeek = getNum($(".calendarBtns").attr('id'), "calendarBtns");
+		// don't show more than two weeks back (could be changed)
+		if (parseInt(numWeek) >= -2) {
+			$(".calendarBtns").attr('id', 'calendarBtns' + (parseInt(numWeek) - 1));
+			showSearchResults();
+		}
+	})
 };
 
