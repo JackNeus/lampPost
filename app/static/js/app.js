@@ -40,7 +40,7 @@ $(document).ready(function(){
 var setupSearch = function() {
 	// allow user to pick start date and toggle the filter
 	$(function() {
-		$('s#datepicker').datepicker();
+		$('#datepicker').datepicker();
 	});
 	$('#filter-btn').click(function() {
 		$('.datetime').slideToggle(200);
