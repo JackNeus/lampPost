@@ -42,8 +42,11 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				</select>
 			</div>
 
-			<div class="d-flex flex-row align-items-start justify-content-end filters">
-			  <div class="mr-auto datetime">
+			<div class="d-flex flex-column align-items-start justify-content-end filters">
+			  <div id="all-events">
+				  <button type="button" id="all-events-filter-btn" class="btn filter-btn">* All Events</button>
+			  </div>
+			  <div class="datetime">
 				  <label for="datepicker">Search from date: </label>
 				  <input type="text" id="datepicker"
 					   class="form-control" name="datepicker">

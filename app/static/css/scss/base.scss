@@ -80,7 +80,7 @@ html, body {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 // Debug Style
@@ -181,8 +181,14 @@ html, body {
 	input[type=text] {
 		font-size: 0.65em;
 	}
-	.datetime {
+
+	div {
 		display: none;
+	}
+
+	.filter-btn {
+		background-color: $primary-color;
+		color: white;
 	}
 }
 
