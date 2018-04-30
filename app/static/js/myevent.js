@@ -30,7 +30,7 @@ var checkSort = function() {
 	$(".sort-direction-btn").click(function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
-		showSearchResults();
+		showMyEvents();
 	});
 };
 

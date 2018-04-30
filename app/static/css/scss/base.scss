@@ -140,12 +140,14 @@ html, body {
 
 	.sort-box {
 		padding-top: 1vh;
+
 		.sort-direction {
 			cursor: pointer;
 			padding-left: 5px;
 			font-size: 1.7em;
 			display: inline-block;
 			float: left;
+			margin-top: -5px;
 		}
 
 		.select-style {
@@ -156,7 +158,6 @@ html, body {
 		    overflow: hidden;
 		    background: #fafafa url("../graphics/sort-down.png") no-repeat 95% 50%;
 		    float: left;
-		    margin-top: 1vh;
 		}
 		
 		.select-style select {
