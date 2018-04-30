@@ -58,60 +58,82 @@ var setupSearch = function() {
 var setupDataRetrieval = function() {
 	// searches each time a key is typed in search box
 	$("#search-box").keyup(function() {
-		if ($("#datepicker").val())
+		if ($("#datepicker").val()) {
 			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
-		else query = $(this).val();
+			
+			if (query != prevQuery) {
+				fetchData(query);
+			
+				prevQuery = query;
+			
+				// only update url is search box changes
+				if ($(this).val() !== getUrlParameter('search')) {
+					// update url with eventid paramter
+					var newurl = window.location.protocol + "//" + 
+							 window.location.host + 
+							 window.location.pathname + 
+							 addUrlParameter(document.location.search, 'search', $(this).val());
+					window.history.pushState({ path: newurl }, '', newurl);
+				}
+			}
+		}
+		else {
+			query = $(this).val();
 
-		// don't make api call if query hasn't changed
-		if (query != prevQuery) {
-			fetchData(query);
+			// don't make api call if query hasn't changed
+			if (query != prevQuery) {
+				fetchData(query);
 			
-			prevQuery = query;
+				prevQuery = query;
 			
-			// update url with eventid paramter
-			var newurl = window.location.protocol + "//" + 
-					 window.location.host + 
-					 window.location.pathname + 
-					 addUrlParameter(document.location.search, 'search', query);
-			window.history.pushState({ path: newurl }, '', newurl);
+				// update url with eventid paramter
+				var newurl = window.location.protocol + "//" + 
+						 window.location.host + 
+						 window.location.pathname + 
+						 addUrlParameter(document.location.search, 'search', query);
+				window.history.pushState({ path: newurl }, '', newurl);
+			}
 		}
 	});
 
 	// fetch data after date chosen in datepicker filter
 	$("#datepicker").change(function() {
-		var date_py = java2py_date($(this).val());
-	  	fetchData($("#search-box").val() + "/" + date_py);
+		if ($(this).val() !== "") {
+			var date_py = java2py_date($(this).val());
+		  	fetchData($("#search-box").val() + "/" + date_py);
+	  	}
+	  	else fetchData($("#search-box").val());
 	});
 };
 
   // fetch data given a query string
-	function fetchData(query) {
-		search_requests_in_progress += 1;
-		$("#loading-spinner").removeClass("hidden");
+function fetchData(query) {
+	search_requests_in_progress += 1;
+	$("#loading-spinner").removeClass("hidden");
 
-		var success_callback = function(data){
-		    if (data["status"] === "Success")
-				event_data = data["data"];
-			else
-				event_data = [];
-			setupUserFavorites();
-		};
-		var cleanup_callback = function() {
-			search_requests_in_progress -= 1;
-			if (search_requests_in_progress == 0) {
-				$("#loading-spinner").addClass("hidden");
-			}
+	var success_callback = function(data){
+	    if (data["status"] === "Success")
+			event_data = data["data"];
+		else
+			event_data = [];
+		setupUserFavorites();
+	};
+	var cleanup_callback = function() {
+		search_requests_in_progress -= 1;
+		if (search_requests_in_progress == 0) {
+			$("#loading-spinner").addClass("hidden");
 		}
-		$.ajax({
-			url: base_url + '/api/event/search/' + query,
-			dataType: 'json',
-			headers: {
-				'Authorization': ('Token ' + $.cookie('api_token'))
-			},
-			success: success_callback,
-			complete: cleanup_callback
-		});
 	}
+	$.ajax({
+		url: base_url + '/api/event/search/' + query,
+		dataType: 'json',
+		headers: {
+			'Authorization': ('Token ' + $.cookie('api_token'))
+		},
+		success: success_callback,
+		complete: cleanup_callback
+	});
+}
 
 // Get list of events which user has favorited
 var setupUserFavorites = function() {

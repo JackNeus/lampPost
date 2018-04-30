@@ -402,9 +402,14 @@ html, body {
 	}
 }
 
+.calendarBtns {
+	display: none;
+}
+
 .calendar-view-row {
 	display: flex; 
 	flex-wrap: nowrap; 
+	flex-direction: row;
 	width: 100%;
 	border-left: 2px solid black;
 	
@@ -418,10 +423,11 @@ html, body {
 		.dayTitle {
 		 	border-bottom: 2px solid black;
 		 	width: 100%;
-		 	align-self: center;
 		}
 		
 		.dayResults {
+			display: flex;
+			flex-direction: column;
 			.smallSearchResult {
 				margin-right: 0;
 				overflow: wrap;

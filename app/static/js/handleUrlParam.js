@@ -13,6 +13,7 @@ var checkEditEventUrlParameter = function() {
 	return editMode;
 }
 
+// check if the calendar view url parameter exists. If so, return true. 
 var checkCalendarParameter = function() {
 	var calendarMode = getUrlParameter('calendar');
 	if (calendarMode === undefined)
@@ -27,6 +28,7 @@ var checkSearchUrlParameter = function() {
 	var searchQuery = getUrlParameter('search');
 	if (searchQuery) {
 		$("#search-box").val(searchQuery);
+		prevQuery = searchQuery; // set previous query variable found in app.js
 	}
 };
 

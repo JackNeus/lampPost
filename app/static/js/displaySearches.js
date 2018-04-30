@@ -165,12 +165,13 @@ function makeDate(start, end) {
 	return date_str + " " + makeTimeStr(start_date, end_date);
 }
 
-function makeDateStr(start_date) {
+// returns date in mm/dd or mm/dd/yyyy format
+function makeDateStr(start_date, include_year) {
 	var today = new Date();
 	
 	var date_str = (start_date.getMonth() + 1) + '/' + start_date.getDate();
 	// don't show year unless year is different than current year
-	if (start_date.getFullYear() != today.getFullYear())
+	if (start_date.getFullYear() != today.getFullYear() || include_year)
 		date_str += "/" + (start_date.getFullYear());
 	return date_str;
 }
