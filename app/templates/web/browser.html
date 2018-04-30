@@ -32,7 +32,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 			    		placeholder="Search for events here!" value=""></input>
 				</div>
 			</div>
-			<div class="searchButtons">
+			<div class="searchButtons align-items-center">
 				<div class="filter-button btn" id="filter-btn" title="Filter">
 				  <i class="fas fa-filter"></i>
 			  	</div>
@@ -40,6 +40,14 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 					<option value="Date">Sort By Date</option>
 					<option value="Popularity">Sort By Popularity</option>
 				</select>
+				<div class="sort-direction">
+					<div id="sort-direction-btn-up" class="sort-direction-btn hidden">
+						<i class="fas fa-angle-up"></i>
+					</div>
+					<div id="sort-direction-btn-down" class="sort-direction-btn">
+						<i class="fas fa-angle-down"></i>
+					</div>
+				</div>
 			</div>
 
 			<div class="d-flex flex-row align-items-start justify-content-end filters">

@@ -27,6 +27,11 @@ var checkSort = function() {
 		if (event_data != [])
 			showMyEvents();
 	});
+	$(".sort-direction-btn").click(function() {
+		$("#sort-direction-btn-up").toggleClass("hidden");
+		$("#sort-direction-btn-down").toggleClass("hidden");
+		showSearchResults();
+	});
 };
 
 function checkDisplay() {

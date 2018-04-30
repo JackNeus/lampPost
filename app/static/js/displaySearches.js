@@ -66,9 +66,23 @@ var sortResults = function () {
 		});
 	}
 
-	if (sortByDate) 	sortEventsByDate();
-	else 			sortEventsByPopularity();
+	if (sortByDate) {
+		sortEventsByDate();
+	}
+	else { 
+		sortEventsByPopularity();
+	}
 };
+
+// Return True if descending, False if ascending.
+function getSortDirection() {
+	if ($("#sort-direction-btn-down").is(":visible")) {
+		return true;
+	} 
+	else {
+		return false;
+	}
+}
 
 /*----------------------------- UTILITY FUNCTIONS ----------------------------*/
 
@@ -92,6 +106,9 @@ function sortEventsByDate() {
 						new Date(a.instances[0].start_datetime),
 						'seconds');
 	});
+	if (!getSortDirection()) {
+		event_data.reverse();
+	}
 }
 
 // sort the events by popularity
@@ -99,6 +116,9 @@ function sortEventsByPopularity() {
 	event_data.sort(function (a, b) {
 		return parseInt(b.favorites) - parseInt(a.favorites);
 	});
+	if (!getSortDirection()) {
+		event_data.reverse();
+	}
 }
 
 // calculates the difference between date1 and date2 in ms, with an

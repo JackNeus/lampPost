@@ -163,12 +163,19 @@ html, body {
 	display: flex; 
 	flex-wrap: nowrap; 
 	margin-right: 2vh;
+
+	.filter-button {
+		margin: 2vh 2vh;
+		padding-left: 0;
+	}
+
+	.sort-direction {
+		cursor: pointer;
+		padding-left: 5px;
+		font-size: 1.8em;
+	}
 }
 
-.filter-button {
-	margin: 2vh 2vh;
-	padding-left: 0;
-}
 
 .filters {
 	margin: 0vh 2vh;
