@@ -32,20 +32,24 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 			    		placeholder="Search for events here!" value=""></input>
 				</div>
 			</div>
-			<div class="searchButtons align-items-center">
+			<div class="flex-container-row searchButtons align-items-start flex-wrap">
 				<div class="filter-button btn" id="filter-btn" title="Filter">
 				  <i class="fas fa-filter"></i>
 			  	</div>
-			  	<select class="ml-auto" name="sort" id="searchSort">
-					<option value="Date">Sort By Date</option>
-					<option value="Popularity">Sort By Popularity</option>
-				</select>
-				<div class="sort-direction">
-					<div id="sort-direction-btn-up" class="sort-direction-btn hidden">
-						<i class="fas fa-angle-up"></i>
+			  	<div class="ml-auto sort-box align-items-start">
+				  	<div class="select-style">
+					  	<select name="sort" id="searchSort">
+							<option value="Date">Sort By Date</option>
+							<option value="Popularity">Sort By Popularity</option>
+						</select>
 					</div>
-					<div id="sort-direction-btn-down" class="sort-direction-btn">
-						<i class="fas fa-angle-down"></i>
+					<div class="sort-direction">
+						<div id="sort-direction-btn-up" class="sort-direction-btn hidden">
+							<i class="fas fa-arrow-up"></i>
+						</div>
+						<div id="sort-direction-btn-down" class="sort-direction-btn">
+							<i class="fas fa-arrow-down"></i>
+						</div>
 					</div>
 				</div>
 			</div>
