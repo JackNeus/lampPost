@@ -164,13 +164,6 @@ function populateEventViewPanel(eventNum) {
 		document.getElementById("eventPhoto").innerHTML =
 		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
 	}
-	else {
-		// Add C&H image
-		var photoNum = Math.floor(Math.random() * 81); + 1;
-		document.getElementById("eventPhoto").innerHTML =
-			"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
-			+ photoNum + ".png\">";
-	}
 	
 	// highlight fire button if appropriate
 	if ($("#resultFireBtn" + eventNum).hasClass("selected")) {
