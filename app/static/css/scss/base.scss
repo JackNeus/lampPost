@@ -67,6 +67,12 @@ html, body {
 	}
 }
 
+.danger-button {
+	color: #dc3545;
+ 	&:hover {
+ 		color: #c9302c;
+ 	}
+  
 ::placeholder {
 	color: $light-color !important;
 	opacity: 1;
@@ -295,7 +301,7 @@ html, body {
 		color: $med-color;
 		margin: 0;
 		line-height: 30px;
-		font-size: 15px;
+		font-size: 20px;
 	}
 	.event-view-subtitle{
 	    color: $med-color;
@@ -308,6 +314,7 @@ html, body {
 		font-family: FontAwesome;
 		line-height: 0 !important;
 		padding: 0;
+		margin-left:2vh;
 		&.selected {
 			color: $orange;
 			&:hover {
@@ -342,10 +349,13 @@ html, body {
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
 	}
-
-	#reportBtn {
-		color:white;
-		float:right;
+	.calendar-btn {
+		text-decoration: none !important;
+  	}
+  
+	.reportBtn {
+		font-size: 1.5em;
+		cursor: pointer;
 	}
 }
 

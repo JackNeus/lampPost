@@ -58,12 +58,13 @@ html #bigRow, body #bigRow {
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
+  margin-bottom: 0;
   max-width: 100%;
-  width: 100%;
   flex-shrink: 1000;
   font-size: 16px !important; }
 
 #searchSort {
+  margin: 2vh 0vh;
   border: 1px solid #AAA;
   color: #333333;
   font-size: 0.75em;
@@ -72,12 +73,42 @@ html #bigRow, body #bigRow {
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-height: 4.25vh;
+  float: left;
+  font: 100% "Avenir-Light", "Arial-Light", sans-serif;
+  font-size: 14px !important; }
+
+#myEventSortBtn {
   margin: 2vh 2vh;
-  flex-grow: 1000;
-  flex-shrink: 0; }
+  margin-left: 0;
+  border: 1px solid #AAA;
+  color: #333333;
+  font-size: 0.75em;
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 4.25vh;
+  float: left;
+  font: 100% "Avenir-Light", "Arial-Light", sans-serif;
+  font-size: 14px !important; }
+
+#searchRow {
+  min-height: 4.25vh; }
+
+.searchButtons {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-right: 2vh; }
+
+.filter-button {
+  margin: 2vh 2vh;
+  padding-left: 0; }
 
 .filters {
-  margin: 0vh 2vh; }
+  margin: 0vh 2vh;
+  margin-bottom: 2vh; }
   .filters label {
     font-size: 0.75em; }
   .filters input[type=text] {
@@ -165,7 +196,7 @@ html #bigRow, body #bigRow {
     color: #555555;
     margin: 0;
     line-height: 30px;
-    font-size: 15px; }
+    font-size: 20px; }
   .event-view .event-view-subtitle {
     color: #555555;
     margin: 0;
@@ -175,7 +206,8 @@ html #bigRow, body #bigRow {
     font-size: 45px;
     font-family: FontAwesome;
     line-height: 0 !important;
-    padding: 0; }
+    padding: 0;
+    margin-left: 2vh; }
     .event-view .eventFireBtn.selected {
       color: #ee7f2d; }
       .event-view .eventFireBtn.selected:hover {
@@ -202,6 +234,8 @@ html #bigRow, body #bigRow {
     color: #555555;
     margin: 0;
     border-bottom: 2px solid #2d9eee; }
+  .event-view .calendar-btn {
+    text-decoration: none !important; }
   .event-view #reportBtn {
     color: white;
     float: right; }
@@ -265,8 +299,16 @@ html #bigRow, body #bigRow {
   height: 88vh;
   flex: 70%;
   float: left; }
+
+.searchBoxCol {
+  flex: 40%; }
+
 @media screen and (max-width: 600px) {
   .flex-container-row {
-    flex-direction: column; } }
+    flex-direction: column; }
+
+  #leftCol {
+    max-height: 55vh;
+    height: auto; } }
 
 /*# sourceMappingURL=base.css.map */
