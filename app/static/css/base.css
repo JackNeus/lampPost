@@ -334,8 +334,12 @@ html #bigRow, body #bigRow {
     font-size: 50px;
     text-align: center;
     padding-top: 30px;
-    padding-bottom: 10px; }
+    padding-bottom: 20px; }
   #interiorWelcomeDiv .welcomeText {
-    font-size: 22px; }
+    font-size: 23px; }
+    #interiorWelcomeDiv .welcomeText .keyword {
+      font-size: 25px;
+      font-weight: bold;
+      color: #2d9eee; }
 
 /*# sourceMappingURL=base.css.map */
