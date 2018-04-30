@@ -36,6 +36,10 @@ html, body {
 
 	// Other Style
 	background-color: $background-color;
+
+	.scroll-disabled {
+		overflow: hidden;
+	}
 }
 
 // Navbar style
@@ -65,6 +69,11 @@ html, body {
 		padding-right: 0vw;
 		margin-bottom: 2vh;
 	}
+}
+
+.container-fluid {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 
 .danger-button {
@@ -140,7 +149,6 @@ html, body {
 
 #myEventSortBtn {
 	margin: 2vh 2vh;
-	margin-left: 0;
 	border: 1px solid #AAA;
 	color: $dark-color;
 	font-size: 0.75em;
@@ -190,7 +198,7 @@ html, body {
 	flex-grow: 1000;
  	min-height: 10vh;
  	border-right: 4px solid $primary-color;
-	border-left: 4px solid $primary-color;
+	// border-left: 4px solid $primary-color;
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
 	cursor: pointer;
