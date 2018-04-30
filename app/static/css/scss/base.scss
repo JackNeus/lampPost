@@ -72,8 +72,8 @@ html, body {
  	&:hover {
  		color: #c9302c;
  	}
-}
-
+ }
+  
 ::placeholder {
 	color: $light-color !important;
 	opacity: 1;
@@ -109,7 +109,6 @@ html, body {
 }
 
 #searches {
-	border-bottom: 5px solid $primary-color;
 	padding-top: 1vh;
 }
 
@@ -425,6 +424,7 @@ html, body {
 	height: 88vh;
 	flex: 25%;
     float: left;
+    border-right: 5px solid $primary-color;
 }
 #rightCol {
 	max-height: 88vh;

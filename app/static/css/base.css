@@ -1,15 +1,15 @@
 /* rgb values for primary-color */
 html, body {
-  font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
+  font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
   background-color: #eeeeee; }
   html .h1, html h1, body .h1, body h1 {
-    font: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
+    font-family: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
     font-size: 36px; }
   html .h2, html h2, body .h2, body h2 {
-    font: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
+    font-family: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
     font-size: 26px; }
   html .h3, html h3, body .h3, body h3 {
-    font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
+    font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
     font-size: 20px; }
 
 html .logo, body .logo {
@@ -30,6 +30,15 @@ html #bigRow, body #bigRow {
   padding-left: 0vw;
   padding-right: 0vw;
   margin-bottom: 2vh; }
+
+.danger-button {
+  color: #dc3545; }
+  .danger-button:hover {
+    color: #c9302c; }
+
+::placeholder {
+  color: #999999 !important;
+  opacity: 1; }
 
 .hidden {
   display: none; }
@@ -60,23 +69,21 @@ html #bigRow, body #bigRow {
   margin: 2vh 2vh;
   margin-bottom: 0;
   max-width: 100%;
+  width: 100%;
   flex-shrink: 1000;
   font-size: 16px !important; }
 
 #searchSort {
-  margin: 2vh 0vh;
   border: 1px solid #AAA;
   color: #333333;
   font-size: 0.75em;
   overflow: hidden;
+  margin: 2vh 0vh;
   border-radius: 2px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
   text-overflow: ellipsis;
   white-space: nowrap;
-  min-height: 4.25vh;
-  float: left;
-  font: 100% "Avenir-Light", "Arial-Light", sans-serif;
-  font-size: 14px !important; }
+  min-height: 4.25vh; }
 
 #myEventSortBtn {
   margin: 2vh 2vh;
@@ -123,7 +130,6 @@ html #bigRow, body #bigRow {
   border-left: 4px solid #2d9eee;
   border-top: 2px solid #2d9eee;
   border-bottom: 2px solid #2d9eee;
-  border-radius: 0px 10px 10px 0px;
   cursor: pointer;
   margin: 0vh 2vh 0vh 0vh;
   overflow: hidden;
@@ -140,25 +146,26 @@ html #bigRow, body #bigRow {
     background-color: #2d9eee;
     box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
     z-index: 2;
-    position: relative; }
+    position: relative;
+    border-top: 3px solid #2d9eee;
+    border-bottom: 3px solid #2d9eee; }
     .smallSearchResult.selected .resultTitle {
       color: white; }
     .smallSearchResult.selected .resultTime {
       color: white; }
     .smallSearchResult.selected:hover {
-      background-color: rgba(29, 158, 238, 0.8);
-      border: 3px solid #2d9eee; }
+      background-color: rgba(29, 158, 238, 0.8); }
   .smallSearchResult:hover {
     box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
     z-index: 1;
     position: relative;
     background-color: rgba(29, 158, 238, 0.2);
-    border: 3px solid #2d9eee; }
+    border-top: 3px solid #2d9eee;
+    border-bottom: 3px solid #2d9eee; }
   .smallSearchResult .resultContents {
     padding-left: 0.8vw;
     padding-right: 0.8vw;
     padding-top: 0.6vh;
-    padding-bottom: 0.6vh;
     text-overflow: ellipsis;
     overflow: hidden; }
     .smallSearchResult .resultContents .resultFireBtn {
@@ -176,6 +183,17 @@ html #bigRow, body #bigRow {
         color: #333333 !important;
         font-size: 0.85em;
         font-weight: bold; }
+
+.searches-resizer {
+  max-height: 88vh;
+  height: 88vh;
+  width: 5px;
+  float: left;
+  z-index: 500;
+  background-color: #2d9eee;
+  cursor: col-resize; }
+  .searches-resizer:hover {
+    background-color: #ee7f2d; }
 
 .event-view {
   max-height: 100%;
@@ -236,9 +254,9 @@ html #bigRow, body #bigRow {
     border-bottom: 2px solid #2d9eee; }
   .event-view .calendar-btn {
     text-decoration: none !important; }
-  .event-view #reportBtn {
-    color: white;
-    float: right; }
+  .event-view .reportBtn {
+    font-size: 1.5em;
+    cursor: pointer; }
 
 .flex-container-row {
   display: flex;
@@ -290,7 +308,7 @@ html #bigRow, body #bigRow {
 #leftCol {
   max-height: 88vh;
   height: 88vh;
-  flex: 30%;
+  flex: 25%;
   float: left;
   border-right: 5px solid #2d9eee; }
 
