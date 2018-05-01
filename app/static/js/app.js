@@ -9,9 +9,6 @@ function setBaseUrl(url) {
 var event_data = [];
 var user_fav_data = [];
 
-// should we sort the results
-var sorting = false;
-
 // Keep track of previous search query
 var prevQuery = null;
 
@@ -56,7 +53,6 @@ $(document).ready(function(){
 });
 
 function addTrendingResults() {
-	sorting = false;
 	$("#trendingLabel").show();
 
 	search_requests_in_progress += 1;
@@ -144,7 +140,6 @@ var setupDataRetrieval = function() {
 			addTrendingResults();
 			return;
 		}
-		sorting = true;
 		// when loading an actual query (length > 0), clear the ``trending events" label
 		$("#trendingLabel").hide();
 

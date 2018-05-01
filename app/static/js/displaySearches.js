@@ -6,8 +6,7 @@ var showSearchResults = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	if (sorting)
-		sortResults(); 			// sort by date or popularity
+	sortResults(); 			// sort by date or popularity
 	createSearchResults();  // create html code for each search result and display them
 	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load
