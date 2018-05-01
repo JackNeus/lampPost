@@ -143,6 +143,9 @@
       <div class="close"><div class="icon-container"><i class="icon fa fa-times" onclick="$('#footer').fadeOut('slow');"></i></div></div>
 	    <script type="text/javascript">
 		    slideFooter();
+        setTimeout(function() {
+            $('.footer').fadeOut('fast');
+            }, 15000);
 	    </script>
 	  </div>
 	{% endif %}
