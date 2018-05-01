@@ -19,10 +19,8 @@ var createSearchResults = function() {
 		+   `</div>`
 	  	+`</div>`;
 
-	  	// add the created html to the "searches" element in browser.html if it is from searches
-	  	// otherwise add it to the trending section
+	  	// add the created html to the "searches" element in browser.html
 	  	$("#searches").append(searchResult);
-
 	  	// number the given ids to match the event number so that the elements
 	  	// can be differentiated
 	  	numberIds(["smallSearchResult", "resultFireBtn", "resultFireNum",
