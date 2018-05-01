@@ -113,57 +113,47 @@ Date.timeBetween = function( date1, date2, units ) {
 	var difference_ms = date2_ms - date1_ms;
 
 	// Return difference in days or seconds
-	if (units == 'days') return Math.round(difference_ms/one_day);
-	else return difference_ms/1000;
+	if (units == 'days') {
+		// make sure to round up correctly
+		if (difference_ms < 0)
+			return -1*Math.ceil(-difference_ms/one_day);
+		else 	return Math.ceil(difference_ms/one_day);
+	}
+	else return (difference_ms/1000);
 }
 
 // makes desired date string to be used in the search results
 function makeDate(start, end) {
 	var start_date = new Date(start);
 	var end_date = new Date(end);
-	var today = new Date();
-
-	// Special cases for dates within a week of current date
-	var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday",
-			    "Thursday", "Friday", "Saturday"];
-	var time_diff = Date.timeBetween(today, start_date, 'days');
-
-	var date_str = weekdays[start_date.getDay()] += " ";
-	date_str += (start_date.getMonth() + 1) + '/' + start_date.getDate();
-
-	if (time_diff == -1)
-		date_str += " (Yesterday) ";
-	else if (time_diff == 0)
-		date_str += " (Today) ";
-	else if (time_diff == 1)
-		date_str += " (Tomorrow) ";
-
-
-	// don't show year unless year is different than current year
-	if (start_date.getFullYear() != today.getFullYear())
-		date_str += "/" + (start_date.getFullYear());
+	
+	var start_date_str = makeDayOfWeekString(start_date) + makeDayMonthYearString(start_date);
+	if ((start_date.getDate() != end_date.getDate()))
+		var end_date_str = makeDayOfWeekString(end_date) + makeDayMonthYearString(end_date);
 
 	// create time strings in hh:mm format
 	var start_hour = start_date.getHours();
 	var end_hour = end_date.getHours();
 
 	// Convert from military hours to a more readable format
-	var suffix = "am";
+	var end_suffix = "am";
+	var start_suffix = "am";
 	if (start_hour == 0) {
 		start_hour = 12;
 	}
 	if (start_hour > 12) {
 		start_hour -= 12;
+		start_suffix = "pm";
 	}
 	if (end_hour == 0) {
 		end_hour = 12;
 	}
 	else if (end_hour == 12) {
-		suffix = "pm";
+		end_suffix = "pm";
 	}
 	else if (end_hour > 12) {
-		suffix = "pm";
 		end_hour -= 12;
+		end_suffix = "pm";
 	}
 	// minutes
 	start_time = start_hour + ":" +
@@ -171,10 +161,51 @@ function makeDate(start, end) {
 	end_time = end_hour + ":" +
 			("0" + end_date.getMinutes()).slice(-2);
 
-	if (start_time === end_time) {
-		return date_str + " @" + start_time + suffix;
+	// create date string in correct format for different cases
+	if (end_date_str) {
+		var firstDay = start_date_str + " " + start_time + start_suffix;
+		var secondDay = end_date_str + " " + end_time + end_suffix;
+		return firstDay + "-" + secondDay;
 	}
-	else {
-		return date_str + " " + start_time + "-" + end_time + suffix;
-	}
+	else if ((start_time + start_suffix) === (end_time + end_suffix)) 
+		return start_date_str + " @" + start_time + start_suffix;
+	else if (start_suffix === end_suffix)
+		return start_date_str + " " + start_time + "-" + end_time + end_suffix;
+	else
+		return start_date_str + " " + start_time + start_suffix + "-" + end_time + end_suffix;
+}
+
+// returns date in mm/dd or mm/dd/yyyy format
+function makeDayMonthYearString(start_date, include_year) {
+	var today = new Date();
+	
+	var date_str = (start_date.getMonth() + 1) + '/' + start_date.getDate();
+	// don't show year unless year is different than current year
+	if (start_date.getFullYear() != today.getFullYear() || include_year)
+		date_str += "/" + (start_date.getFullYear());
+	return date_str;
+}
+
+// creates date string in format 'dayName mm/dd' or 'dayName mm/dd/yyyy'
+function makeDayOfWeekString(date) {
+	var today = new Date();
+	today.setHours(0);
+	today.setMinutes(0);
+	today.setSeconds(0);
+	today.setMilliseconds(0);
+	
+	var weekdays = ["Sun", "Mon", "Tue", "Wed",
+			    "Thu", "Fri", "Sat"];
+	var time_diff = Date.timeBetween(today, date, 'days');
+
+	var date_str = weekdays[date.getDay()] += " ";
+
+	if (time_diff == -1)
+		date_str += " (Yesterday) ";
+	else if (time_diff == 0)
+		date_str += " (Today) ";
+	else if (time_diff == 1)
+		date_str += " (Tomorrow) ";
+		
+	return date_str;
 }
