@@ -8,8 +8,6 @@ var selected_title = "";
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
-		// hide welcome message
-		$("#welcomeDiv").hide();
 
 		// hide any footer
 		$(".footer").hide();
@@ -128,7 +126,7 @@ function populateEventViewPanel(eventNum) {
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
-		// Location
+		// Locatiom
 		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));

@@ -10,7 +10,7 @@ h1 {
   .col404 {
     min-width: 900px;
     margin: auto;
-    width: 55vw; } }
+    width: 45vw; } }
 @media screen and (max-width: 850px) {
   .message {
     font-size: 40px; } }
