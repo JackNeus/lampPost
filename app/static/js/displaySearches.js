@@ -11,8 +11,9 @@ var showSearchResults = function() {
 	// create html code for each search result and display them
 	// show results differently for calendar view
 	if ($("#calendarViewBtn").hasClass("calendarMode"))
+		createCalenderViewResults();
+	else 
 		createSearchResults();
-	else createCalenderViewResults();
 	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button

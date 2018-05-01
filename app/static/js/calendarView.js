@@ -2,11 +2,11 @@
 var handleCalendarView = function() {
 	$("#calendarViewBtn").click(function() {
 		// Add calendar parameter to URL.
-		if (getUrlParameter('calendar') === undefined) {
-			updateUrl(addUrlParameter(document.location.search, 'calendar'));
+		if (getUrlParameter('cal') === undefined) {
+			updateUrl(addUrlParameter(document.location.search, 'cal'));
 		}
 		else {
-			updateUrl(removeUrlParameter(document.location.search, 'calendar'));
+			updateUrl(removeUrlParameter(document.location.search, 'cal'));
 		}
 		
 		toggleCalendarView();
@@ -18,20 +18,25 @@ var toggleCalendarView = function() {
 	// toggle column size proportions
 	$("#bigRow").toggleClass('calendar-view');
 	$(".calendarBtns").toggle();
+	
+	// make sure to update event view and recheck event url paramater
+	$("#event-view").hide();
+	urlParamEventId = checkEventUrlParameter();
 		
 	// toggle calendar/list view button
 	if ($("#calendarViewBtn").hasClass("calendarMode")) {
-		var listBtn = `<i class="fas fa-list"></i>`;
-		$("#calendarViewBtn").html(listBtn);
-		$("#calendarViewBtn").prop('title', 'List View');
-		$(".calendarBtns").attr('id', 'calendarBtns0');
-		addSearchFromDate();
-	}
-	else {
 		var calendarBtn = `<i class="fas fa-calendar"></i>`;
 		$("#calendarViewBtn").html(calendarBtn);
 		$("#calendarViewBtn").prop('title', 'Calendar View');
 		removeSearchFromDate();
+		
+	}
+	else {
+		var listBtn = `<i class="fas fa-list"></i>`;
+		$("#calendarViewBtn").html(listBtn);
+		$("#calendarViewBtn").prop('title', 'List View');
+		calWeek = 0; // reset week to 0 (current week)
+		addSearchFromDate();
 	}
 	
 	$("#calendarViewBtn").toggleClass("calendarMode");
@@ -44,7 +49,6 @@ var toggleCalendarView = function() {
 		$("#searches").html("");
 		fetchData(query);
 	}
-	//showSearchResults();
 	handleNextWeekClick();
 	handlePreviousWeekClick();
 };
@@ -53,9 +57,7 @@ var toggleCalendarView = function() {
 var handleNextWeekClick = function() {
 	$(".nextWeekBtn").unbind("click");
 	$(".nextWeekBtn").click(function() {
-		var numWeek = getNum($(".calendarBtns").attr('id'), "calendarBtns");
-		console.log(numWeek);
-		$(".calendarBtns").attr('id', 'calendarBtns' + (parseInt(numWeek) + 1));
+		calWeek++;
 		showSearchResults();
 	})
 };
@@ -64,21 +66,17 @@ var handleNextWeekClick = function() {
 var handlePreviousWeekClick = function() {
 	$(".previousWeekBtn").unbind("click");
 	$(".previousWeekBtn").click(function() {
-		var numWeek = getNum($(".calendarBtns").attr('id'), "calendarBtns");
-		// don't show more than two weeks back (could be changed)
-		if (parseInt(numWeek) >= -2) {
-			$(".calendarBtns").attr('id', 'calendarBtns' + (parseInt(numWeek) - 1));
-			showSearchResults();
-		}
+		calWeek--;
+		showSearchResults();
 	})
 };
 
-// adds the date three weeks prior to today to the datepicker
+// adds the date a year prior to today to the datepicker
 var addSearchFromDate = function() {
 	var today = new Date();
-	var twoWeeksAgo = new Date();
-	twoWeeksAgo.setDate(today.getDate() - 3*7);
-	var dateStr = makeDateStr(twoWeeksAgo, true);
+	var timeAgo = new Date();
+	timeAgo.setDate(today.getDate() - 12*7);
+	var dateStr = makeDateStr(timeAgo, true);
 	$("#datepicker").val(dateStr);
 };
 

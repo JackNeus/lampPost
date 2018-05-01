@@ -417,7 +417,9 @@ html, body {
 		max-width: 14%;
 		min-width: 14%;
 		border-right: 2px solid black;
+		border-bottom: 2px solid black;
 		max-height: 88vh;
+		min-height: 55vh;
 		height: auto;
 		
 		.dayTitle {

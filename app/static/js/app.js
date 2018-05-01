@@ -18,6 +18,9 @@ var urlParamEventId = null;
 // Keep track of the number of search requests currently out.
 var search_requests_in_progress = 0;
 
+// Keep track of current week in calendar view
+var calWeek = 0;
+
 // Allow for external population of event_data.
 // Currently only used for USE_MOCK_DATA flag.
 function setData(data) {
@@ -58,41 +61,21 @@ var setupSearch = function() {
 var setupDataRetrieval = function() {
 	// searches each time a key is typed in search box
 	$("#search-box").keyup(function() {
-		if ($("#datepicker").val()) {
+		if ($("#datepicker").val()) 
 			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
-			
-			if (query != prevQuery) {
-				fetchData(query);
-			
-				prevQuery = query;
-			
-				// only update url is search box changes
-				if ($(this).val() !== getUrlParameter('search')) {
-					// update url with eventid paramter
-					var newurl = window.location.protocol + "//" + 
-							 window.location.host + 
-							 window.location.pathname + 
-							 addUrlParameter(document.location.search, 'search', $(this).val());
-					window.history.pushState({ path: newurl }, '', newurl);
-				}
-			}
-		}
-		else {
-			query = $(this).val();
+		else  
+			var query = $(this).val();
 
-			// don't make api call if query hasn't changed
-			if (query != prevQuery) {
-				fetchData(query);
-			
-				prevQuery = query;
-			
-				// update url with eventid paramter
-				var newurl = window.location.protocol + "//" + 
-						 window.location.host + 
-						 window.location.pathname + 
-						 addUrlParameter(document.location.search, 'search', query);
-				window.history.pushState({ path: newurl }, '', newurl);
+		// don't make api call if query hasn't changed
+		if (query != prevQuery) {
+			fetchData(query);
+		
+			// update url with eventid paramter only if search box changes
+			if ($(this).val() !== getUrlParameter('search')) {
+				updateUrl(addUrlParameter(document.location.search, 'search', $(this).val()));
 			}
+			
+			prevQuery = query;
 		}
 	});
 
