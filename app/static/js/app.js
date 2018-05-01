@@ -65,6 +65,7 @@ function addTrendingResults() {
 	var success_callback = function(data){
 	    if (data["status"] === "Success") {
 	    	// updating this is enough
+	    	// other code automatically makes a call to showSearchResults()
 			event_data = data["data"];
 		}
 		else {
@@ -186,7 +187,7 @@ var setupUserFavorites = function() {
 	};
 
 	var updateSearch = function() {
-		showSearchResults(false);
+		showSearchResults();
 		
 		// update event view if url has eventId
 		if (urlParamEventId) {

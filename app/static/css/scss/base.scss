@@ -448,7 +448,7 @@ html, body {
 }
 
 #interiorWelcomeDiv {
-	padding-left: 50px;
+	padding-left: 5vw;
 	#welcomeMessage {
 		font-size: 50px;
 		text-align: center;
@@ -464,6 +464,13 @@ html, body {
 		}
 	}
 	
+}
+
+#welcome {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 85%;
 }
 
 #trendingLabel {
