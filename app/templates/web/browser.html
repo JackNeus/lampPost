@@ -54,20 +54,20 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 
 		<!-- Fills in with both search results, and trending events. -->
+
 		<div class="flex-container-scroll" id="searches-wrapper">
+			<div id="trendingLabel"> Trending Events </div>
 			<div id="searches">
             	<div class="searchPost"></div>
         	</div>
-        	<div id="trendingEvents">
-        		<div class="searchPost"> </div>
-        	</div>
+        	
 			<div class="fa fa-spinner fa-spin hidden centered" id="loading-spinner"></div>
         </div>
 
   	</div>
 
  	<div class="flex-container-col" id = "rightCol">
- 		<div id="welcomeDiv"> 
+ 		<div id="welcomeDiv" style="display:none"> 
  			<div id = "interiorWelcomeDiv"> 
 	 			<h1 id = "welcomeMessage"> Welcome to LampPost! </h1>
 

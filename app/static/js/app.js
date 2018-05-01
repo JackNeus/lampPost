@@ -9,6 +9,9 @@ function setBaseUrl(url) {
 var event_data = [];
 var user_fav_data = [];
 
+// should we sort the results
+var sorting = false;
+
 // Keep track of previous search query
 var prevQuery = null;
 
@@ -25,9 +28,18 @@ function setData(data) {
 }
 
 $(document).ready(function(){
+	$("#welcomeDiv").hide();
+	var hideWelcome = false;
+
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
+
+	// if some event is being displayed, hide welcome
+	if (urlParamEventId) {
+		hideWelcome = true;
+	}
+
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
 	
@@ -37,14 +49,27 @@ $(document).ready(function(){
 
 	// add the trending events
 	addTrendingResults();
+
+	if (!hideWelcome)
+		$("#welcomeDiv").show();
+
 });
 
 function addTrendingResults() {
+
+	$("#trendingLabel").show();
+
+	search_requests_in_progress += 1;
+	$("#loading-spinner").removeClass("hidden");
+
 	var success_callback = function(data){
-	    if (data["status"] === "Success")
+	    if (data["status"] === "Success") {
+	    	// updating this is enough
 			event_data = data["data"];
-		else
+		}
+		else {
 			event_data = [];
+		}
 		setupUserFavorites();
 	};
 	var cleanup_callback = function() {
@@ -62,7 +87,6 @@ function addTrendingResults() {
 		success: success_callback,
 		complete: cleanup_callback
 	});
-	showSearchResults();
 }
 
 // Sets up sort and filter functionality for search box
@@ -77,7 +101,7 @@ var setupSearch = function() {
 
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
-		showSearchResults();
+		showSearchResults(false);
 	});
 };
 
@@ -113,6 +137,16 @@ var setupDataRetrieval = function() {
 
   // fetch data given a query string
 	function fetchData(query) {
+
+		if (query.length == 0) {
+			// then let's just show the trending events
+			addTrendingResults();
+			return;
+		}
+
+		// when loading an actual query (length > 0), clear the ``trending events" label
+		$("#trendingLabel").hide();
+
 		search_requests_in_progress += 1;
 		$("#loading-spinner").removeClass("hidden");
 
@@ -152,7 +186,7 @@ var setupUserFavorites = function() {
 	};
 
 	var updateSearch = function() {
-		showSearchResults();
+		showSearchResults(false);
 		
 		// update event view if url has eventId
 		if (urlParamEventId) {

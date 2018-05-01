@@ -342,4 +342,10 @@ html #bigRow, body #bigRow {
       font-weight: bold;
       color: #2d9eee; }
 
+#trendingLabel {
+  text-align: center;
+  font-size: 24px;
+  color: darkorange;
+  font-weight: bold; }
+
 /*# sourceMappingURL=base.css.map */
