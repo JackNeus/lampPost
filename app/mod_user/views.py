@@ -7,10 +7,12 @@ from flask_login import login_required, current_user
 
 @mod_user.route('/login', methods=['GET'])
 def login():
+	if current_user.is_authenticated:
+		return make_response(redirect("/browse"))
+
 	C = CASClient.CASClient(request.args)
 	auth_attempt = C.Authenticate()
 	if "netid" in auth_attempt:  # Successfully authenticated.
-		print("HERE")
 		controller.login(auth_attempt["netid"])
 		# TODO: Redirect to where user came from.
 		response = make_response(redirect("/browse"))

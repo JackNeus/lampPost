@@ -1,6 +1,6 @@
 import argparse
 import sys
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, flash
 from mongoengine import register_connection
 
 # Command line flags.
@@ -22,9 +22,15 @@ if args.test_mode:
         print("Supplied configuration not found.")
 else:
     try:
-        app.config.from_pyfile("../dev_config.cfg")
+        app.config.from_pyfile("../prod_config.cfg")
+        print("Running app in PROD mode.")
     except FileNotFoundError:
-        print("Development configuration not found.")
+        print("Production configuration not found.")
+        try:
+            app.config.from_pyfile("../dev_config.cfg")
+            print("Running app in DEV mode. If this is production, terminate immediately.")
+        except FileNotFoundError:
+            print("Development configuration not found.")
 
 CONFIG = app.config
 
@@ -45,6 +51,11 @@ except Exception as e:
 @app.errorhandler(404)
 def error(e):
     return render_template("404.html"), 404
+
+@app.errorhandler(500)
+def error(e):
+    flash("Error. Something went very wrong.")
+    return redirect("/browse")
 
 from app.mod_web import web_module
 app.register_blueprint(web_module)

@@ -4,39 +4,42 @@ $dark-color: #333333;
 $med-color: #555555;
 $light-color: #999999;
 $orange: #ee7f2d;
-$font-light: "Avenir-Light";
-$font-med: "Avenir-Medium";
-$font-heavy: "Avenir-Heavy";
+$font-light: "Avenir-Light", "Arial-Light", sans-serif;
+$font-med: "Avenir-Medium", "Arial-Medium", sans-serif;
+$font-heavy: "Avenir-Heavy", "Arial-Heavy", sans-serif;
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
 $primary-color-b: 238;
-
 
 // Page style
 html, body {
 	// Font Style
 
 	// Base font
-	font: 100% $font-med;
+	font-family: 100% $font-med;
 	// Headers
 	.h1, h1 {
-		font: 100% $font-heavy;
+		font-family: 100% $font-heavy;
 		font-size:36px;
 	}
 
 	.h2, h2 {
-		font: 100% $font-heavy;
+		font-family: 100% $font-heavy;
 		font-size:26px;
 	}
 
 	.h3, h3 {
-		font: 100% $font-med;
+		font-family: 100% $font-med;
 		font-size:20px;
 	}
 
 	// Other Style
 	background-color: $background-color;
+
+	.scroll-disabled {
+		overflow: hidden;
+	}
 }
 
 // Navbar style
@@ -66,6 +69,23 @@ html, body {
 		padding-right: 0vw;
 		margin-bottom: 2vh;
 	}
+}
+
+.container-fluid {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.danger-button {
+	color: #dc3545;
+ 	&:hover {
+ 		color: #c9302c;
+ 	}
+ }
+  
+::placeholder {
+	color: $light-color !important;
+	opacity: 1;
 }
 
 .hidden {
@@ -104,6 +124,7 @@ html, body {
 #searchBox {
 	padding: 0;
 	margin: 2vh 2vh;
+	margin-bottom: 0;
 	max-width: 100%;
 	width: 100%;
 	flex-shrink: 1000;
@@ -114,18 +135,52 @@ html, body {
 	border: 1px solid #AAA;
 	color: $dark-color;
 	font-size: 0.75em;
+
+	overflow: hidden;
+	margin: 2vh 0vh;
+	border-radius: 2px;
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    min-height: 4.25vh
+}
+
+#myEventSortBtn {
+	margin: 2vh 2vh;
+	border: 1px solid #AAA;
+	color: $dark-color;
+	font-size: 0.75em;
 	overflow: hidden;
 	border-radius: 2px;
 	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin: 2vh 2vh;
-      flex-grow: 1000;
-      flex-shrink: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 4.25vh;
+    float:left;
+    font: 100% $font-light;
+	font-size: 14px !important;
+}
+
+#searchRow {
+ 	min-height: 4.25vh;
+}
+
+.searchButtons {
+	display: flex; 
+	flex-wrap: nowrap; 
+	margin-right: 2vh;
+}
+
+.filter-button {
+	margin: 2vh 2vh;
+	padding-left: 0;
 }
 
 .filters {
 	margin: 0vh 2vh;
+	margin-bottom: 2vh;
 
 	label {
 		font-size: 0.75em;
@@ -143,10 +198,9 @@ html, body {
 	flex-grow: 1000;
  	min-height: 10vh;
  	border-right: 4px solid $primary-color;
-	border-left: 4px solid $primary-color;
+	// border-left: 4px solid $primary-color;
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
-	border-radius: 0px 10px 10px 0px;
 	cursor: pointer;
 	margin: 0vh 2vh 0vh 0vh;
  	overflow: hidden;
@@ -172,9 +226,10 @@ html, body {
 		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
 		z-index: 2;
 		position: relative;
+		border-top: 3px solid $primary-color;
+		border-bottom: 3px solid $primary-color;
 		&:hover {
 			background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.8);
-		 	border: 3px solid $primary-color;
 		}
  	}
  	&:hover {
@@ -182,13 +237,14 @@ html, body {
 		z-index: 1;
 		position: relative;
  		background-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.2);
-		border: 3px solid $primary-color;
+		border-top: 3px solid $primary-color;
+		border-bottom: 3px solid $primary-color;
  	}
 	.resultContents {
 		padding-left: 0.8vw;
 		padding-right: 0.8vw;
 		padding-top: 0.6vh;
-		padding-bottom: 0.6vh;
+
 		text-overflow: ellipsis;
 		overflow: hidden;
 		.resultFireBtn {
@@ -215,6 +271,19 @@ html, body {
 }
 
 
+.searches-resizer {
+	max-height: 88vh;
+	height: 88vh;
+	width: 5px;
+	float: left;
+	z-index: 500;
+	background-color: $primary-color;
+	cursor: col-resize;
+	&:hover {
+		background-color: $orange;
+	}
+}
+
 // Event event
 // TODO: Move to seperate file?
 .event-view {
@@ -240,7 +309,7 @@ html, body {
 		color: $med-color;
 		margin: 0;
 		line-height: 30px;
-		font-size: 15px;
+		font-size: 20px;
 	}
 	.event-view-subtitle{
 	    color: $med-color;
@@ -253,6 +322,7 @@ html, body {
 		font-family: FontAwesome;
 		line-height: 0 !important;
 		padding: 0;
+		margin-left:2vh;
 		&.selected {
 			color: $orange;
 			&:hover {
@@ -287,10 +357,13 @@ html, body {
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
 	}
-
-	#reportBtn {
-		color:white;
-		float:right;
+	.calendar-btn {
+		text-decoration: none !important;
+  	}
+  
+	.reportBtn {
+		font-size: 1.5em;
+		cursor: pointer;
 	}
 }
 
@@ -329,6 +402,21 @@ html, body {
   width: 100%;
   text-align:center;
   height: 6.4vh;
+
+  .flashedMessage {
+    padding-top: 1.5vh;
+	padding-bottom: 1.5vh;
+  }
+
+  .close {
+  	position: absolute;
+  	right: 1vh;
+
+  	top: 50%;
+
+  	font-size: 24px;
+  	margin-top: -12px;
+  }
 }
 
 .successFlash {
@@ -342,7 +430,7 @@ html, body {
 #leftCol {
 	max-height: 88vh;
 	height: 88vh;
-	flex: 30%;
+	flex: 25%;
     float: left;
     border-right: 5px solid $primary-color;
 }
@@ -353,13 +441,16 @@ html, body {
     float: left;
 }
 
-.flashedMessage {
-  padding-top: 1.5vh;
-  padding-bottom: 1.5vh;
+.searchBoxCol {
+	flex: 40%;
 }
 
 @media screen and (max-width: 600px) {
     .flex-container-row {
         flex-direction: column;
+    }
+    #leftCol {
+    	   max-height: 55vh;
+    	   height: auto;
     }
 }

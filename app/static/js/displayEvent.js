@@ -13,7 +13,7 @@ var handleEventViewClick = function() {
 		$(".footer").hide();
 		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
 		var eventId = event_data[eventNum - 1]._id;
-		
+
 		// if currently showing the event edit form, don't animate
 		// highlight again
 		if ($(".eventFormView").css("display") == "block") {
@@ -39,8 +39,10 @@ var handleEventViewClick = function() {
 
 		// don't update if click on already selected search result
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter
-			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+			// update url with eventid paramter if event is different than 
+			// event currently in url
+			if (getUrlParameter('event') !== eventId)
+				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
 
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
@@ -89,6 +91,7 @@ function highlightSelectedSearchResult(eventNum) {
 
 // Update the popularity of an event when the fire button is clicked
 var handleEventFireBtnClick = function (eventNum) {
+	$(".eventFireBtn").unbind("click");
 	$(".eventFireBtn").click(function(e) {
 		updateFireBtn(this, eventNum);
 		e.stopPropagation();
@@ -102,30 +105,23 @@ function setTitle(title) {
 
 // Populate event view panel with event_data[eventNum-1] (basic layout)
 function populateEventViewPanel(eventNum) {
-
 	$(".event-view").hide();
 
 	// Clickable fire button that displays "Favorite" when hovered over
-	var fireBtn = 
-		`<div class="eventFireBtn btn" id="eventFireBtn">`
-	    +		`<i class="fas fa-fire"></i>`
-	    + `</div>`;
+	var fireBtn = $("#eventFireBtn");
+
 	  
 	// Number of favorites
-	var fireNum = 
-		`<p class="eventFireNum" id="eventFireNum">`
-	    + 	$("#resultFireNum" + eventNum).text()
-	    + `</p>`;
-	
+	var fireNum = $("#eventFireNum");
+	var fireCount = $("#resultFireNum" + eventNum).text();
+	fireNum.html(fireCount);
+
 	// hide welcome image
 	$("#welcome").css("display", "none");
 	
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
 	$("#eventSubtitle").html("");
-	$("#eventFireBtn").remove();
-	$("#eventFireNum").remove();
-	$("#mainHeaderLine").append(fireBtn).append(fireNum);
 	
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
@@ -134,15 +130,14 @@ function populateEventViewPanel(eventNum) {
 		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
-		$("#eventSubtitle").append("<br>");
+
 		document.getElementById("eventSubtitle").innerHTML +=
-			"<a class=\"btn btn-primary\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> Add to 	Google Calendar! </a>";
+			"<a class=\"calendar-btn\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>";
+		$("#eventSubtitle").append("<br>");
 	}
 
 	selected_title = event_data[eventNum-1].title;
-	$("#eventSubtitle").append("<a id=\"reportBtn\" class=\"btn btn-danger\" data-toggle=\"modal\"" 
-		+"data-target=\"#myModal\" onclick=\"setTitle(selected_title)\"> <i class=\"fas fa-exclamation-triangle\"></i> Report </a>");
-
+	
 	// upon clicking report button, clear elements and fill id
 	$("#reportBtn").click(function() {
 		// fill this element of the form with the correct value
@@ -168,13 +163,6 @@ function populateEventViewPanel(eventNum) {
 	if ("poster" in event_data[eventNum-1]) {
 		document.getElementById("eventPhoto").innerHTML =
 		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
-	}
-	else {
-		// Add C&H image
-		var photoNum = Math.floor(Math.random() * 81); + 1;
-		document.getElementById("eventPhoto").innerHTML =
-			"<img class=\"img-fluid fit\" src=\"../../static/graphics/images/CH/"
-			+ photoNum + ".png\">";
 	}
 	
 	// highlight fire button if appropriate

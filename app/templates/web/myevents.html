@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set no_scroll = True %}
 
 <!-- SCRIPTS -->
 
@@ -7,6 +8,7 @@
 <script src="/static/js/myevent.js?v=0"></script>
 <script src="/static/js/handleUrlParam.js?v=0"></script>
 <script src="/static/js/handleFavorites.js?v=0"></script>
+<script src="/static/js/add.js?v=0"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -26,12 +28,10 @@ setBaseUrl("{{ config.BASE_URL }}");
 	   	<h1 style="text-align:center; padding-top:1vh">My Events</h1>
 	   	
 	   	<!-- Sort by date or popularity -->
-		<div class="d-flex flex-row align-items-start">
-			<select class="p-2 ml-auto" name="sort" id="searchSort">
-				<option value="Date">Sort By Date</option>
-				<option value="Popularity">Sort By Popularity</option>
-			</select>
-		</div>
+		<select name="sort" id="myEventSortBtn">
+			<option value="Date">Sort By Date</option>
+			<option value="Popularity">Sort By Popularity</option>
+		</select>
 			
 		<!-- Fills in with "search" results from events.json -->
 		<div class="flex-container-scroll" id="searches"></div>
@@ -130,6 +130,13 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 						<div class="form-group">
 							{{ form.poster.label }}
+							<div id="current-poster" class="hidden">
+								<span>
+									<a id="poster-link" target="_blank" href="">Current Poster</a>
+									<i id="delete-poster-button" class="fas fa-times-circle danger-button delete-poster-button" title="Remove poster"></i>
+								</span>
+								{{ form.deletePoster(class="hidden") }}
+							</div>
 							{{ form.poster(class="form-control-file") }}
 							<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
 						</div>
@@ -141,20 +148,13 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 						<button type="submit" class="btn btn-primary">Submit!</button>
 
-
-
 						<div class="errors" style="text-align:center; color:red">
 							{% for i in errors %}
 								{{ i.capitalize() }}: {{errors[i][0]}} <br />
 							{% endfor %}
 						</div>
-
-
 					</form>				
 			</div>
-
-			<!-- So the footer doesn't cover key areas -->
-			<div id="emptyBottomSpace"> </div>
 
 		</div>	
 	</div>

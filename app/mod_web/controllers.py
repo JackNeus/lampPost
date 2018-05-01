@@ -11,7 +11,6 @@ def form_to_event_object(form):
 	eventData = {}
 	eventData['title'] = form.title.data
 	eventData['description'] = form.description.data
-	# TODO: let's actually let users determine this
 	eventData['visibility'] = int(form.visibility.data)
 
 	showings = []
@@ -26,6 +25,11 @@ def form_to_event_object(form):
 	eventData['creator'] = current_user.netid
 	eventData['host'] = form.host.data
 
+	# If deletePoster field is not empty,
+	# delete the poster field.
+	if (form.deletePoster != ""):
+		eventData["poster"] = None
+
 	if (form.link.data != ""):
 		eventData['trailer'] = form.link.data
 	return eventData, len(showings)
@@ -36,7 +40,7 @@ def make_edit_request(event_id, edits):
 		
 def make_delete_request(event_id):
 	headers = { "Authorization" : "Token %s" % current_user.token }
-	return requests.post(CONFIG["BASE_URL"] + "/api/event/delete/"+event_id, headers=headers)
+	return requests.delete(CONFIG["BASE_URL"] + "/api/event/delete/"+event_id, headers=headers)
 		
 
 def upload_file(event_id, file):
