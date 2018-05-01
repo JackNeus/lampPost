@@ -56,7 +56,7 @@ $(document).ready(function(){
 });
 
 function addTrendingResults() {
-
+	sorting = false;
 	$("#trendingLabel").show();
 
 	search_requests_in_progress += 1;
@@ -144,7 +144,7 @@ var setupDataRetrieval = function() {
 			addTrendingResults();
 			return;
 		}
-
+		sorting = true;
 		// when loading an actual query (length > 0), clear the ``trending events" label
 		$("#trendingLabel").hide();
 
