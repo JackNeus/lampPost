@@ -25,16 +25,66 @@ function setData(data) {
 }
 
 $(document).ready(function(){
+	$("#welcomeDiv").hide();
+	var hideWelcome = false;
+
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
+
+	// if some event is being displayed, hide welcome
+	if (urlParamEventId) {
+		hideWelcome = true;
+	}
+
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
 	
 	// setup search bar functionality
 	setupSearch();
 	setupDataRetrieval();
+
+	// add the trending events
+	addTrendingResults();
+
+	if (!hideWelcome)
+		$("#welcomeDiv").show();
+
 });
+
+function addTrendingResults() {
+	$("#trendingLabel").show();
+
+	search_requests_in_progress += 1;
+	$("#loading-spinner").removeClass("hidden");
+
+	var success_callback = function(data){
+	    if (data["status"] === "Success") {
+	    	// updating this is enough
+	    	// other code automatically makes a call to showSearchResults()
+			event_data = data["data"];
+		}
+		else {
+			event_data = [];
+		}
+		setupUserFavorites();
+	};
+	var cleanup_callback = function() {
+		search_requests_in_progress -= 1;
+		if (search_requests_in_progress == 0) {
+			$("#loading-spinner").addClass("hidden");
+		}
+	}
+	$.ajax({
+		url: base_url + '/api/event/trending',
+		dataType: 'json',
+		headers: {
+			'Authorization': ('Token ' + $.cookie('api_token'))
+		},
+		success: success_callback,
+		complete: cleanup_callback
+	});
+}
 
 // Sets up sort and filter functionality for search box
 var setupSearch = function() {
@@ -48,7 +98,7 @@ var setupSearch = function() {
 
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
-		showSearchResults();
+		showSearchResults(false);
 	});
 };
 
@@ -84,6 +134,15 @@ var setupDataRetrieval = function() {
 
   // fetch data given a query string
 	function fetchData(query) {
+
+		if (query.length == 0) {
+			// then let's just show the trending events
+			addTrendingResults();
+			return;
+		}
+		// when loading an actual query (length > 0), clear the ``trending events" label
+		$("#trendingLabel").hide();
+
 		search_requests_in_progress += 1;
 		$("#loading-spinner").removeClass("hidden");
 
