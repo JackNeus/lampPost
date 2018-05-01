@@ -101,6 +101,7 @@ def get_raw_event(event_entry):
         return []
     raw = event_entry.to_mongo()
     raw["_id"] = str(raw["_id"])
+    del raw["creator"]
     for i in range(len(raw["instances"])):
         raw["instances"][i]["start_datetime"] = str(raw["instances"][i]["start_datetime"])
         raw["instances"][i]["end_datetime"] = str(raw["instances"][i]["end_datetime"])
