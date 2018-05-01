@@ -404,6 +404,17 @@ html #bigRow, body #bigRow {
   float: left;
 }
 
+#eventInfoView {
+  flex: 50%;
+  float: left;
+}
+
+#eventPosterView {
+  height: 100%;
+  flex: 50%;
+  float: left;
+}
+
 .searchBoxCol {
   flex: 40%;
 }
