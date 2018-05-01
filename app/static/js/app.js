@@ -40,10 +40,22 @@ $(document).ready(function(){
 var setupSearch = function() {
 	// allow user to pick start date and toggle the filter
 	$(function() {
-		$('s#datepicker').datepicker();
+		$('#datepicker').datepicker();
 	});
+
 	$('#filter-btn').click(function() {
+		$('#all-events').slideToggle(200);
 		$('.datetime').slideToggle(200);
+	});
+
+	$("#all-events-filter-btn").click(function() {
+		if ($('#search-box').val() === "*") {
+			$('#search-box').val('');
+		}
+		else {
+			$('#search-box').val('*'); 
+		}
+		$('#search-box').keyup();
 	});
 
 	// allow user to sort by date or popularity
@@ -54,8 +66,7 @@ var setupSearch = function() {
 
 // Updates search results after input to search box or change in filters
 var setupDataRetrieval = function() {
-	// searches each time a key is typed in search box
-	$("#search-box").keyup(function() {
+	var trigger_search = function() {
 		if ($("#datepicker").val())
 			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
 		else query = $(this).val();
@@ -73,7 +84,10 @@ var setupDataRetrieval = function() {
 					 addUrlParameter(document.location.search, 'search', query);
 			window.history.pushState({ path: newurl }, '', newurl);
 		}
-	});
+	};
+
+	// searches each time a key is typed in search box
+	$("#search-box").keyup(trigger_search);
 
 	// fetch data after date chosen in datepicker filter
 	$("#datepicker").change(function() {

@@ -47,7 +47,7 @@ html #bigRow, body #bigRow {
   opacity: 1; }
 
 .hidden {
-  display: none; }
+  display: none !important; }
 
 .debug-data {
   display: none;
@@ -125,8 +125,11 @@ html #bigRow, body #bigRow {
     font-size: 0.75em; }
   .filters input[type=text] {
     font-size: 0.65em; }
-  .filters .datetime {
+  .filters div {
     display: none; }
+  .filters .filter-btn {
+    background-color: #2d9eee;
+    color: white; }
 
 .smallSearchResult {
   flex-grow: 1000;
