@@ -297,7 +297,6 @@ def report_event(eventid):
 		try:
 			data = request.get_json()
 		except Exception as e:
-			raise e
 			return gen_error_response("JSON was malformatted.")
 
 		if "reason" not in data:
@@ -325,3 +324,15 @@ def trending_events():
 		return gen_data_response(trending_events)
 	except Exception as e:
 		return gen_error_response(error_handler.main_handler(e))
+
+# Send in feedback.
+@mod_api.route("/feedback", methods=["PUT"])
+def send_feedback():
+	try:
+		if not request.is_json:
+			return gen_error_response("Request was not JSON.")
+
+		try:
+			data = request.get_json()
+		except Exception as e:
+			raise gen_error_response("JSON was malformatted.")
