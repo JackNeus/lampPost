@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set no_scroll = True %}
 
 <!-- SCRIPTS -->
 
@@ -147,20 +148,13 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 						<button type="submit" class="btn btn-primary">Submit!</button>
 
-
-
 						<div class="errors" style="text-align:center; color:red">
 							{% for i in errors %}
 								{{ i.capitalize() }}: {{errors[i][0]}} <br />
 							{% endfor %}
 						</div>
-
-
 					</form>				
 			</div>
-
-			<!-- So the footer doesn't cover key areas -->
-			<div id="emptyBottomSpace"> </div>
 
 		</div>	
 	</div>
