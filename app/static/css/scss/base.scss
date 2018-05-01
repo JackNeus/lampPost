@@ -82,7 +82,7 @@ html, body {
  		color: #c9302c;
  	}
  }
-  
+
 ::placeholder {
 	color: $light-color !important;
 	opacity: 1;
@@ -100,7 +100,7 @@ html, body {
 
 #searches-wrapper {
 	min-height: 75px;
-	border-top: 5px solid $med-color;	
+	border-top: 5px solid $med-color;
 	position: relative;
 
 	.centered{
@@ -115,10 +115,6 @@ html, body {
 	#loading-spinner {
 		font-size: 1.7em;
 	}
-}
-
-#searches {
-	padding-top: 1vh;
 }
 
 #searchBox {
@@ -168,8 +164,8 @@ html, body {
 }
 
 .searchButtons {
-	display: flex; 
-	flex-wrap: nowrap; 
+	display: flex;
+	flex-wrap: nowrap;
 	margin-right: 2vh;
 }
 
@@ -227,6 +223,7 @@ html, body {
 		.resultTime {
 			color: white;
 		}
+		margin: 0vh;
 		border-radius: 0px;
 		background-color: $primary-color;
 		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
@@ -276,7 +273,8 @@ html, body {
 	}
 }
 
-
+// We got rid of this temporarily
+// TODO: Delete?
 .searches-resizer {
 	max-height: 88vh;
 	height: 88vh;
@@ -353,9 +351,13 @@ html, body {
 	    padding-bottom: 2vh;
 	}
 	img {
-		float: top;
 		width: 100%;
-		height: auto;
+	}
+	.posterImage {
+		img {
+			height: 75vh;
+			width: auto;
+		}
 	}
 	.eventSection {
 		padding-top: 20px;
@@ -366,7 +368,7 @@ html, body {
 	.calendar-btn {
 		text-decoration: none !important;
   	}
-  
+
 	.reportBtn {
 		font-size: 1.5em;
 		cursor: pointer;
@@ -436,7 +438,7 @@ html, body {
 #leftCol {
 	max-height: 88vh;
 	height: 88vh;
-	flex: 25%;
+	flex: 30%;
     float: left;
     border-right: 5px solid $primary-color;
 }
@@ -477,7 +479,7 @@ html, body {
 			color:$primary-color;
 		}
 	}
-	
+
 }
 
 #welcome {
@@ -488,9 +490,8 @@ html, body {
 }
 
 #trendingLabel {
-	text-align:center; 
-	font-size:24px; 
-	color:darkorange; 
+	text-align:center;
+	font-size:24px;
+	color:darkorange;
 	font-weight:bold;
 }
-

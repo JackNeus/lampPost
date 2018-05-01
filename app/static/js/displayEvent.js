@@ -19,7 +19,7 @@ var handleEventViewClick = function() {
 		// if currently showing the event edit form, don't animate
 		// highlight again
 		if ($(".eventFormView").css("display") == "block") {
-		
+
 			// hide the form view
 			$("#event-form").hide();
 
@@ -31,24 +31,24 @@ var handleEventViewClick = function() {
 			$(".fa-pencil-alt").removeClass("fa-inverse");
 			$(".deleteBtn").removeClass("selectedIcon");
 			$(".fa-trash-alt").removeClass("fa-inverse");
-			
+
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
-		
+
 		// Get rid of the edit parameter, if it exists.
 		updateUrl(removeEditParameter(document.location.search));
 
 		// don't update if click on already selected search result
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter if event is different than 
+			// update url with eventid paramter if event is different than
 			// event currently in url
 			if (getUrlParameter('event') !== eventId)
 				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
 
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
-			
+
 			// populate and display event view
 			highlightSelectedSearchResult(eventNum);
 			populateEventViewPanel(eventNum);
@@ -71,8 +71,8 @@ function getGoogleCalLink(eventNum, i) {
 	end_time = end_dt.split(" ")[1];
 
 
-	out_url += "&dates=" + start_date.replace(/-/g, "") + "T" + start_time.replace(/:/g, "") + "/"; 
-	out_url += end_date.replace(/-/g, "") + "T" + end_time.replace(/:/g, "") + ""; 
+	out_url += "&dates=" + start_date.replace(/-/g, "") + "T" + start_time.replace(/:/g, "") + "/";
+	out_url += end_date.replace(/-/g, "") + "T" + end_time.replace(/:/g, "") + "";
 
 	out_url += "&ctz=America/New_York";
 	out_url += "&location=" + event_data[eventNum].instances[i].location;
@@ -100,7 +100,7 @@ var handleEventFireBtnClick = function (eventNum) {
 	});
 };
 
-// set title of report popup 
+// set title of report popup
 function setTitle(title) {
 	$("#reportPopupTitle").html("\"" + title + "\"");
 }
@@ -112,7 +112,7 @@ function populateEventViewPanel(eventNum) {
 	// Clickable fire button that displays "Favorite" when hovered over
 	var fireBtn = $("#eventFireBtn");
 
-	  
+
 	// Number of favorites
 	var fireNum = $("#eventFireNum");
 	var fireCount = $("#resultFireNum" + eventNum).text();
@@ -120,11 +120,11 @@ function populateEventViewPanel(eventNum) {
 
 	// hide welcome image
 	$("#welcome").css("display", "none");
-	
+
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
 	$("#eventSubtitle").html("");
-	
+
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
@@ -139,7 +139,7 @@ function populateEventViewPanel(eventNum) {
 	}
 
 	selected_title = event_data[eventNum-1].title;
-	
+
 	// upon clicking report button, clear elements and fill id
 	$("#reportBtn").click(function() {
 		// fill this element of the form with the correct value
@@ -156,25 +156,45 @@ function populateEventViewPanel(eventNum) {
 		setTitle(selected_title);
 		$('#myModal').modal('show');
 	}
-	
+
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
 	$("#eventDescription").html(event_data[eventNum-1].description);
 
 	// If the event has a poster, display that.
+	document.getElementById("bannerImage").innerHTML = "";
+	document.getElementById("posterImage").innerHTML = "";
+	document.getElementById("otherImage").innerHTML = "";
 	if ("poster" in event_data[eventNum-1]) {
-		document.getElementById("eventPhoto").innerHTML =
-		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
+		renderImage(event_data[eventNum-1].poster);
 	}
-	else {
-		document.getElementById("eventPhoto").innerHTML = "";
-	}
-	
+
 	// highlight fire button if appropriate
 	if ($("#resultFireBtn" + eventNum).hasClass("selected")) {
 		$("#eventFireBtn").addClass("selected");
 	}
 	else $("#eventFireBtn").removeClass("selected");
-	
+
 	$("#event-view").show();
+}
+
+function renderImage(url){
+    var img = new Image();
+    img.addEventListener("load", function(){
+		// Determine where the image should go based off of its aspect ratio
+		var ratio = this.naturalWidth / this.naturalHeight;
+		var scaledWidth = document.getElementById("event-view-info").clientHeight * ratio;
+		var proportion = scaledWidth / document.getElementById("event-view-info").clientWidth;
+		if (2.5 <= ratio) {
+			document.getElementById("bannerImage").innerHTML =
+			"<img class=\"img-fluid\" src=\""+img.src+"\">";
+		} else if (ratio < 0.8 && (proportion < 0.6)) {
+			document.getElementById("posterImage").innerHTML =
+			"<img class=\"img-cover\" src=\""+img.src+"\">";
+		} else {
+			document.getElementById("otherImage").innerHTML =
+			"<img class=\"img-fluid\" src=\""+img.src+"\">";
+		}
+    });
+    img.src = url;
 }
