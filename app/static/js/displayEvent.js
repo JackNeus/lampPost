@@ -164,6 +164,9 @@ function populateEventViewPanel(eventNum) {
 		document.getElementById("eventPhoto").innerHTML =
 		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
 	}
+	else {
+		document.getElementById("eventPhoto").innerHTML = "";
+	}
 	
 	// highlight fire button if appropriate
 	if ($("#resultFireBtn" + eventNum).hasClass("selected")) {
