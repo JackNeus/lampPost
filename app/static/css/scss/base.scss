@@ -77,12 +77,12 @@ html, body {
 }
 
 .danger-button {
-	color: #dc3545;
+	color: $light-color;
  	&:hover {
- 		color: #c9302c;
+ 		color: #eebd2b;
  	}
  }
-  
+
 ::placeholder {
 	color: $light-color !important;
 	opacity: 1;
@@ -100,7 +100,7 @@ html, body {
 
 #searches-wrapper {
 	min-height: 75px;
-	border-top: 5px solid $med-color;	
+	border-top: 5px solid $med-color;
 	position: relative;
 
 	.centered{
@@ -168,8 +168,8 @@ html, body {
 }
 
 .searchButtons {
-	display: flex; 
-	flex-wrap: nowrap; 
+	display: flex;
+	flex-wrap: nowrap;
 	margin-right: 2vh;
 }
 
@@ -364,11 +364,17 @@ html, body {
 		border-bottom: 2px solid $primary-color;
 	}
 	.calendar-btn {
+		padding-right: 10px;
 		text-decoration: none !important;
+		color: $light-color;
+	 	&:hover {
+	 		color: $primary-color;
+	 	}
   	}
-  
+
 	.reportBtn {
-		font-size: 1.5em;
+		padding-right: 15px;
+		font-size: 1.2em;
 		cursor: pointer;
 	}
 }
@@ -477,7 +483,7 @@ html, body {
 			color:$primary-color;
 		}
 	}
-	
+
 }
 
 #welcome {
@@ -488,9 +494,8 @@ html, body {
 }
 
 #trendingLabel {
-	text-align:center; 
-	font-size:24px; 
-	color:darkorange; 
+	text-align:center;
+	font-size:24px;
+	color:darkorange;
 	font-weight:bold;
 }
-

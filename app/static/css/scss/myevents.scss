@@ -1,8 +1,10 @@
+$med-color: #555555;
+
 .invisible {
   display: none; }
 
 label {
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 #reportBtn {
@@ -18,16 +20,35 @@ label {
  	max-height: 88vh;
  }
 
- .selectedIcon {
- 	background-color: #555555;
+
+ .deleteBtn {
+    color: $med-color;
+ 	cursor: pointer;
+    &:hover {
+        color: #990000;
+        background-color: white;
+    }
+    &.selectedIcon {
+        color: #990000;
+        background-color: white;
+    }
  }
 
- .delete-poster-button {
- 	cursor: pointer;
+ .editBtn {
+    color: $med-color;
+  	cursor: pointer;
+    &:hover {
+        color: #339933;
+        background-color: white;
+     }
+     &.selectedIcon {
+         color: #339933;
+         background-color: white;
+     }
  }
  .eventFormView {
 	height: 88vh;
-    overflow-y: scroll;  
+    overflow-y: scroll;
 }
 
 /*# sourceMappingURL=addEvent.css.map */

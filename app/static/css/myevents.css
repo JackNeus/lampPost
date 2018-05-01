@@ -1,29 +1,53 @@
 .invisible {
-  display: none; }
+  display: none;
+}
 
 label {
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 #reportBtn {
-  display: none; }
+  display: none;
+}
 
 .req:after {
   content: " *";
-  color: red; }
+  color: red;
+}
 
 #rightCol {
-  max-height: 88vh; }
+  max-height: 88vh;
+}
 
-.selectedIcon {
-  background-color: #555555; }
+.deleteBtn {
+  color: #555555;
+  cursor: pointer;
+}
+.deleteBtn:hover {
+  color: #990000;
+  background-color: white;
+}
+.deleteBtn.selectedIcon {
+  color: #990000;
+  background-color: white;
+}
 
-.delete-poster-button {
-  cursor: pointer; }
+.editBtn {
+  color: #555555;
+  cursor: pointer;
+}
+.editBtn:hover {
+  color: #339933;
+  background-color: white;
+}
+.editBtn.selectedIcon {
+  color: #339933;
+  background-color: white;
+}
 
 .eventFormView {
   height: 88vh;
-  overflow-y: scroll; }
+  overflow-y: scroll;
+}
 
 /*# sourceMappingURL=addEvent.css.map */
-
-/*# sourceMappingURL=myevents.css.map */
