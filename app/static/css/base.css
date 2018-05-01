@@ -335,5 +335,30 @@ html #bigRow, body #bigRow {
   #leftCol {
     max-height: 55vh;
     height: auto; } }
+#interiorWelcomeDiv {
+  padding-left: 5vw; }
+  #interiorWelcomeDiv #welcomeMessage {
+    font-size: 50px;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 20px; }
+  #interiorWelcomeDiv .welcomeText {
+    font-size: 23px; }
+    #interiorWelcomeDiv .welcomeText .keyword {
+      font-size: 25px;
+      font-weight: bold;
+      color: #2d9eee; }
+
+#welcome {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%; }
+
+#trendingLabel {
+  text-align: center;
+  font-size: 24px;
+  color: darkorange;
+  font-weight: bold; }
 
 /*# sourceMappingURL=base.css.map */
