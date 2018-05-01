@@ -114,10 +114,8 @@ Date.timeBetween = function( date1, date2, units ) {
 
 	// Return difference in days or seconds
 	if (units == 'days') {
-		// make sure to round up correctly
-		if (difference_ms < 0)
-			return -1*Math.ceil(-difference_ms/one_day);
-		else 	return Math.ceil(difference_ms/one_day);
+		// make sure to round down correctly
+		return Math.floor(difference_ms/one_day);
 	}
 	else return (difference_ms/1000);
 }
