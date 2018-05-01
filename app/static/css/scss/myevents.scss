@@ -1,4 +1,5 @@
 $med-color: #555555;
+$primary-color: #2d9eee;
 
 .invisible {
   display: none; }
@@ -25,11 +26,11 @@ label {
     color: $med-color;
  	cursor: pointer;
     &:hover {
-        color: #990000;
+        color: #cc0000;
         background-color: white;
     }
     &.selectedIcon {
-        color: #990000;
+        color: #cc0000;
         background-color: white;
     }
  }
@@ -38,11 +39,11 @@ label {
     color: $med-color;
   	cursor: pointer;
     &:hover {
-        color: #339933;
+        color: $primary-color;
         background-color: white;
      }
      &.selectedIcon {
-         color: #339933;
+         color: $primary-color;
          background-color: white;
      }
  }

@@ -83,6 +83,8 @@ var handleDeleteMyEvent = function() {
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
 			highlightSelectedSearchResult(eventNum);
 
+		// show event
+		populateEventViewPanel(eventNum);
 
 		// delete event if user confirms deletion
 		$("#smallSearchResult" + eventNum).show(function () {

@@ -79,7 +79,7 @@ html, body {
 .danger-button {
 	color: $light-color;
  	&:hover {
- 		color: #eebd2b;
+ 		color: #cc0000;
  	}
  }
 
@@ -265,7 +265,7 @@ html, body {
 				}
 			}
 			&:hover {
-				color: rgba(255, 165, 0, 0.5);
+				color: rgba(238, 127, 45, 0.75);
 			}
 			.resultFireNum {
 				color: $dark-color !important;
@@ -336,7 +336,7 @@ html, body {
 			}
 		}
 		&:hover {
-			color: rgba(255, 165, 0, 0.5);
+			color: rgba(238, 127, 45, 0.75);
 		}
 	}
 	.eventFireNum {

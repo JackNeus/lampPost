@@ -52,7 +52,7 @@ html #bigRow, body #bigRow {
   color: #999999;
 }
 .danger-button:hover {
-  color: #eebd2b;
+  color: #cc0000;
 }
 
 ::placeholder {
@@ -228,7 +228,7 @@ html #bigRow, body #bigRow {
   color: #ee7f2d;
 }
 .smallSearchResult .resultContents .resultFireBtn:hover {
-  color: rgba(255, 165, 0, 0.5);
+  color: rgba(238, 127, 45, 0.75);
 }
 .smallSearchResult .resultContents .resultFireBtn .resultFireNum {
   color: #333333 !important;
@@ -293,7 +293,7 @@ html #bigRow, body #bigRow {
   color: #ee7f2d;
 }
 .event-view .eventFireBtn:hover {
-  color: rgba(255, 165, 0, 0.5);
+  color: rgba(238, 127, 45, 0.75);
 }
 .event-view .eventFireNum {
   color: #333333;
@@ -401,17 +401,6 @@ html #bigRow, body #bigRow {
   max-height: 88vh;
   height: 88vh;
   flex: 70%;
-  float: left;
-}
-
-#eventInfoView {
-  flex: 50%;
-  float: left;
-}
-
-#eventPosterView {
-  height: 100%;
-  flex: 50%;
   float: left;
 }
 

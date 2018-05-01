@@ -24,11 +24,11 @@ label {
   cursor: pointer;
 }
 .deleteBtn:hover {
-  color: #990000;
+  color: #cc0000;
   background-color: white;
 }
 .deleteBtn.selectedIcon {
-  color: #990000;
+  color: #cc0000;
   background-color: white;
 }
 
@@ -37,11 +37,11 @@ label {
   cursor: pointer;
 }
 .editBtn:hover {
-  color: #339933;
+  color: #2d9eee;
   background-color: white;
 }
 .editBtn.selectedIcon {
-  color: #339933;
+  color: #2d9eee;
   background-color: white;
 }
 
