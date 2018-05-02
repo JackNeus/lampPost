@@ -1,6 +1,7 @@
 $background-color: #eeeeee;
 $primary-color: #2d9eee;
-$font-stack: "Avenir-Medium";
+$font-header: "Avenir-Heavy", "Arial", "Helvetica-Light", sans-serif;
+$font-button: "Avenir-Medium", "Arial", "Helvetica-Light", sans-serif;
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
@@ -8,7 +9,7 @@ $primary-color-b: 238;
 
 html, body {
 	// Font Style
-	font: 100% $font-stack;
+	font-family: $font-header;
 
 	#id_navbar {
 		display:none;
@@ -37,7 +38,6 @@ html, body {
 				border-radius: 10px;
 				padding: 1vw;
 				.welcome {
-					font-weight: bold;
 					font-size: 45px;
 					@media screen and (max-width: 768px) {
 						font-size: 35px;
@@ -47,6 +47,7 @@ html, body {
 					text-shadow: 2px 2px 0px #000;
 				}
 				.btn-outline-primary {
+					font-family: $font-button;
 					min-width: 202px;
 					color: white;
 					border-color: $primary-color;
@@ -71,9 +72,10 @@ html, body {
   			 		-webkit-filter: drop-shadow(2px 2px 0px #000);
   					filter: drop-shadow(2px 2px 0px #000);
 					width: 200px;
-					margin-bottom: 1vh;
+					margin-bottom: 12px;
 					@media screen and (max-width: 768px) {
 						width: 155px;
+						margin-bottom: 9px;
 					}
 				}
 			}

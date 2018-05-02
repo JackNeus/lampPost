@@ -1,6 +1,6 @@
 /* rgb values for primary-color */
 html, body {
-  font: 100% "Avenir-Medium";
+  font-family: "Avenir-Heavy", "Arial", "Helvetica-Light", sans-serif;
 }
 html #id_navbar, body #id_navbar {
   display: none;
@@ -31,7 +31,6 @@ html .splashScreen .headerBox .loginBox, body .splashScreen .headerBox .loginBox
   padding: 1vw;
 }
 html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
-  font-weight: bold;
   font-size: 45px;
   margin-bottom: 1em;
   color: white;
@@ -43,6 +42,7 @@ html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox 
   }
 }
 html .splashScreen .headerBox .loginBox .btn-outline-primary, body .splashScreen .headerBox .loginBox .btn-outline-primary {
+  font-family: "Avenir-Medium", "Arial", "Helvetica-Light", sans-serif;
   min-width: 202px;
   color: white;
   border-color: #2d9eee;
@@ -66,10 +66,11 @@ html .splashScreen .headerBox .loginBox img, body .splashScreen .headerBox .logi
   -webkit-filter: drop-shadow(2px 2px 0px #000);
   filter: drop-shadow(2px 2px 0px #000);
   width: 200px;
-  margin-bottom: 1vh;
+  margin-bottom: 12px;
 }
 @media screen and (max-width: 768px) {
   html .splashScreen .headerBox .loginBox img, body .splashScreen .headerBox .loginBox img {
     width: 155px;
+    margin-bottom: 9px;
   }
 }
