@@ -131,38 +131,6 @@ html, body {
 	font-size: 16px !important;
 }
 
-#searchSort {
-	border: 1px solid #AAA;
-	color: $dark-color;
-	font-size: 0.75em;
-
-	overflow: hidden;
-	margin: 2vh 0vh;
-	border-radius: 2px;
-	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    min-height: 4.25vh
-}
-
-#myEventSortBtn {
-	margin: 2vh 2vh;
-	border: 1px solid #AAA;
-	color: $dark-color;
-	font-size: 0.75em;
-	overflow: hidden;
-	border-radius: 2px;
-	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-height: 4.25vh;
-    float:left;
-    font: 100% $font-light;
-	font-size: 14px !important;
-}
-
 #searchRow {
  	min-height: 4.25vh;
  	display: flex;
@@ -175,11 +143,49 @@ html, body {
 	display: flex; 
 	flex-wrap: nowrap; 
 	margin-right: 2vh;
-}
+	font-size: 14px;
 
-.filter-button {
-	margin: 2vh 2vh;
-	padding-left: 0;
+	.filter-button {
+		padding-left: 0;
+		font-size: 1.25em;
+		margin-left: 2vh;
+	}
+
+	.sort-box {
+		padding-top: 1vh;
+
+		.sort-direction {
+			cursor: pointer;
+			padding-left: 5px;
+			font-size: 1.55em;
+			display: inline-block;
+			float: left;
+		}
+
+		.select-style {
+		    border: 1px solid #ccc;
+		    width: 175px;
+		    min-width: 175px;	
+		    border-radius: 3px;
+		    overflow: hidden;
+		    background: #fafafa url("../graphics/sort-down.png") no-repeat 95% 50%;
+		    float: left;
+		}
+		
+		.select-style select {
+		    padding: 5px 8px;
+		    width: 130%;
+		    border: none;
+		    box-shadow: none;
+		    background: transparent;
+		    background-image: none;
+		    -webkit-appearance: none;
+		}
+
+		.select-style select:focus {
+		    outline: none;
+		}
+	}
 }
 
 .calendar-view-button {

@@ -117,7 +117,14 @@ var setupSearch = function() {
 	$("#searchSort").change(function() {
 		showSearchResults(false);
 	});
+
 	handleCalendarView();
+
+	$(".sort-direction-btn").click(function() {
+		$("#sort-direction-btn-up").toggleClass("hidden");
+		$("#sort-direction-btn-down").toggleClass("hidden");
+		showSearchResults();
+	});
 };
 
 // Updates search results after input to search box or change in filters
