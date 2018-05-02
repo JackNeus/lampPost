@@ -143,7 +143,19 @@ def addEvent():
 def myfavorites():
 	return render_template("web/myfavorites.html")
 
-@mod_web.route('/about')
+@mod_web.route('/about', methods=['GET', 'POST'])
 def about():
-	return render_template("web/about.html")
+	if request.method == "POST":
+		form = FeedbackForm(request.form)
+		eventData = {"feedback": request.form["feedback"]}
+		r = requests.put(CONFIG["BASE_URL"]+"/api/feedback/", json = eventData)
+		r = json.loads(r.text)
+		if r["status"] == "Success":
+			flash("Thank you! Your feedback has been reported.")
+			return render_template("web/about.html", formF=FeedbackForm())
+		else:
+			flash("Error in reporting feedback: " + r["error_msg"])
+			return render_template("web/about.html", formF=FeedbackForm())
+
+	return render_template("web/about.html", formF=FeedbackForm())
 

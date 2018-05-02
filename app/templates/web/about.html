@@ -26,8 +26,6 @@
 
 		<div id="theTeam"> 
 
-			<div> <p class="bigTag"> Your Feedback! </p> </div>
-
 		  	
 			<div> <p class="bigTag"> The Team </p> </div>
 		  	<div class="flex-container-row align-items-center justify-content-center" id = "photoRow">
@@ -55,9 +53,18 @@
 			</div>
 
 			<div id="abtFoot">
-				<p> LampPost is an application under development for COS 333, Spring 2018. </p>
-				<p> Thanks to our advisor Ashley Kling and professor Brian Kernighan. </p>
+				<p> LampPost is an application under development for COS 333, Spring 2018. Thanks to our advisor Ashley Kling and professor Brian Kernighan. </p>
 			</div>
+
+
+			<div> <p class="bigTag"> Your Feedback! </p> </div>
+
+			<form id="feedbackForm" action="/about" method="POST" role="form" enctype="multipart/form-data">
+				<div class="form-group">
+					{{ formF.feedback(placeholder="We'd love to hear from you. Any comments about your experience using the site, what you like, and/or what you don't like are appreciated.", class="form-control", rows="4", maxlength="3000") }}
+				</div>
+				<button type="submit" class="btn btn-primary submitAddButton">Submit!</button>
+			</form>
 		</div>
 
 	</div>

@@ -26,3 +26,6 @@ class ReportForm(FlaskForm):
     event_id = TextField()
     category = RadioField('Reason:', choices=[("Duplicate event", "Duplicate event"), ("Spam/Offensive","Spam/Offensive"), ("Other", "Other")])
     description = TextAreaField('Description')
+
+class FeedbackForm(FlaskForm):
+    feedback = TextAreaField('Feedback')
