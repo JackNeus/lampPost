@@ -326,7 +326,7 @@ def trending_events():
 		return gen_error_response(error_handler.main_handler(e))
 
 # Send in feedback.
-@mod_api.route("/feedback", methods=["PUT"])
+@mod_api.route("/feedback/", methods=["PUT"])
 def send_feedback():
 	try:
 		if not request.is_json:
@@ -335,8 +335,8 @@ def send_feedback():
 		try:
 			data = request.get_json()
 		except Exception as e:
-			raise gen_error_response("JSON was malformatted.")
+			return gen_error_response("JSON was malformatted.")
 
-		return controller.add_feedback(data)
+		return gen_data_response(controller.add_feedback(data))
 	except Exception as e:
 		return gen_error_response(error_handler.main_handler(e))
