@@ -32,7 +32,7 @@ html .splashScreen .headerBox .loginBox, body .splashScreen .headerBox .loginBox
 }
 html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
   font-size: 45px;
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
   color: white;
   text-shadow: 2px 2px 0px #000;
 }
@@ -54,6 +54,8 @@ html .splashScreen .headerBox .loginBox .btn-outline-primary:hover, body .splash
 html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
   border-radius: 5px;
   margin-bottom: 1em;
+  margin-left: 3%;
+  margin-right: 3%;
   max-width: 100%;
   overflow: hidden;
   text-align: center;

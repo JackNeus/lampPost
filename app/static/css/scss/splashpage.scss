@@ -42,7 +42,7 @@ html, body {
 					@media screen and (max-width: 768px) {
 						font-size: 35px;
 					}
-					margin-bottom: 1em;
+					margin-bottom: 0.5em;
 					color: white;
 					text-shadow: 2px 2px 0px #000;
 				}
@@ -59,6 +59,8 @@ html, body {
 				a {
 					border-radius: 5px;
 				  	margin-bottom: 1em;
+					margin-left: 3%;
+					margin-right: 3%;
 				  	max-width: 100%;
 				  	overflow: hidden;
 				  	text-align: center;
