@@ -154,32 +154,31 @@ var setupDataRetrieval = function() {
 	});
 };
 
-  // fetch data given a query string
-	function fetchData(query) {
+// fetch data given a query string
+function fetchData(query) {
 
-		if (query.length == 0) {
-			// then let's just show the trending events
-			addTrendingResults();
-			return;
-		}
-		// when loading an actual query (length > 0), clear the ``trending events" label
-		$("#trendingLabel").hide();
+	if (query.length == 0) {
+		// then let's just show the trending events
+		addTrendingResults();
+		return;
+	}
+	// when loading an actual query (length > 0), clear the ``trending events" label
+	$("#trendingLabel").hide();
 
-		search_requests_in_progress += 1;
-		$("#loading-spinner").removeClass("hidden");
+	search_requests_in_progress += 1;
+	$("#loading-spinner").removeClass("hidden");
 
-		var success_callback = function(data){
-		    if (data["status"] === "Success")
-				event_data = data["data"];
-			else
-				event_data = [];
-			setupUserFavorites();
-		};
-		var cleanup_callback = function() {
-			search_requests_in_progress -= 1;
-			if (search_requests_in_progress == 0) {
-				$("#loading-spinner").addClass("hidden");
-			}
+	var success_callback = function(data){
+	    if (data["status"] === "Success")
+			event_data = data["data"];
+		else
+			event_data = [];
+		setupUserFavorites();
+	};
+	var cleanup_callback = function() {
+		search_requests_in_progress -= 1;
+		if (search_requests_in_progress == 0) {
+			$("#loading-spinner").addClass("hidden");
 		}
 	}
 	$.ajax({
