@@ -336,3 +336,7 @@ def send_feedback():
 			data = request.get_json()
 		except Exception as e:
 			raise gen_error_response("JSON was malformatted.")
+
+		return controller.add_feedback(data)
+	except Exception as e:
+		return gen_error_response(error_handler.main_handler(e))
