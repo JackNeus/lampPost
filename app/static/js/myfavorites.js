@@ -20,7 +20,7 @@ var setupUserFavorites = function() {
 		if (data["status"] === "Success") {
 			user_fav_data = data["data"];
 			event_data = data["data"];
-			showSearchResults();
+			showMyFavorites();
 			var urlParamEventId = checkEventUrlParameter();
 			if (urlParamEventId) updateUrlParamEventView(urlParamEventId);
 		}
