@@ -123,19 +123,21 @@ function populateEventViewPanel(eventNum) {
 
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
-	$("#eventSubtitle").html("");
+	$("#eventSetting").html("");
 
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
-		$("#eventSubtitle").append("<a class=\"calendar-btn\" target=\"_blank\" href=\""
+		$("#eventSetting").append("<a class=\"ticket-btn\" target=\"_blank\" href=\"/welcome\"> "
+			+ "<i class=\"fa fa-ticket-alt\" data-fa-transform=\"rotate-135\"></i> </a>");
+		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\""
 			+ getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>");
 		// Location
-		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
+		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
-		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
+		$("#eventSetting").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 
-		$("#eventSubtitle").append("<br>");
+		$("#eventSetting").append("<br>");
 	}
 
 	selected_title = event_data[eventNum-1].title;
@@ -161,13 +163,25 @@ function populateEventViewPanel(eventNum) {
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
 	$("#eventDescription").html(event_data[eventNum-1].description);
 
-	// If the event has a poster, display that.
+	// If the event has a poster, display that
 	if ("poster" in event_data[eventNum-1]) {
 		document.getElementById("eventPhoto").innerHTML =
 		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
 	}
 	else {
 		document.getElementById("eventPhoto").innerHTML = "";
+	}
+
+	// If the event has a video, embed it
+	if ("trailer" in event_data[eventNum-1]) {
+		var videoID = getVidID(event_data[eventNum-1].trailer);
+		document.getElementById("eventVideo-data").innerHTML = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"
+			+ videoID + "?rel=0&amp;showinfo=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>";
+		document.getElementById("eventVideo").style.display = "block";
+	}
+	else {
+		document.getElementById("eventVideo-data").innerHTML = "";
+		document.getElementById("eventVideo").style.display = "none";
 	}
 
 	// highlight fire button if appropriate
@@ -177,4 +191,11 @@ function populateEventViewPanel(eventNum) {
 	else $("#eventFireBtn").removeClass("selected");
 
 	$("#event-view").show();
+}
+
+// A function to extract the unique youtube video ID from an arbitrary Youtube
+// video link. Regex coverage credit to https://gist.github.com/ghalusa/6c7f3a00fd2383e5ef33
+function getVidID(url) {
+	var regex = new RegExp('(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})', 'i');
+	return url.match(regex)[1];
 }
