@@ -169,18 +169,12 @@ function makeDate(start, end) {
 	if ((start_date.getDate() != end_date.getDate()) || 
 	    (start_date.getMonth() != end_date.getMonth()))
 		var end_date_str = makeDayOfWeekString(end_date) + makeDayMonthYearString(end_date);
-	
-	// get hour of date
-	var start_hour = start_date.getHours();
-	var end_hour = end_date.getHours();
 
 	// Convert from military hours to a more readable format
-	var start_suffix = getSuffix(start_hour);
-	var end_suffix = getSuffix(end_hour);
-
-	// Get time in hh:mm format
 	start_time = makeHourMinuteString(start_date);
 	end_time = makeHourMinuteString(end_date);
+	var start_suffix = getSuffix(start_date);
+	var end_suffix = getSuffix(end_date);
 
 	// create date string in correct format for different cases
 	if (end_date_str) {
@@ -194,8 +188,6 @@ function makeDate(start, end) {
 		return start_date_str + " " + start_time + "-" + end_time + end_suffix;
 	else
 		return start_date_str + " " + start_time + start_suffix + "-" + end_time + end_suffix;
-
-	return date_str + " " + makeTimeStr(start_date, end_date);
 }
 
 // returns date in mm/dd or mm/dd/yyyy format
@@ -235,18 +227,20 @@ function makeDayOfWeekString(date) {
 
 // make time string in hh:mm format
 function makeHourMinuteString(date) {
-	return getStandardHour(date.getHours()) + ":" +
+	return getStandardHour(date) + ":" +
 		("0" + date.getMinutes()).slice(-2);
 }
 
-// figure out if hour is am or pm
-function getSuffix(hour) {
+// figure out if date is am or pm
+function getSuffix(date) {
+	var hour = date.getHours();
 	var suffix = (hour >= 12) ? "pm" : "am";
 	return suffix;
 }
 
-// figure out if hour is am or pm
-function getStandardHour(hour) {
+// figure out if date is am or pm
+function getStandardHour(date) {
+	var hour = date.getHours();
 	if (hour > 12) return hour - 12;
 	if (hour == 0) return 12;
 	return hour;
