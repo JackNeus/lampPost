@@ -49,7 +49,8 @@ $(document).ready(function(){
 	setupDataRetrieval();
 
 	// add the trending events
-	addTrendingResults();
+	if (!checkCalendarParameter() && !$("#search-box").val())
+ 		addTrendingResults();
 
 	if (!hideWelcome)
 		$("#welcomeDiv").show();
