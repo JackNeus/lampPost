@@ -14,6 +14,7 @@ var showSearchResults = function() {
 		createCalenderViewResults();
 	else 
 		createSearchResults();
+  
 	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button

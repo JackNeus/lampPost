@@ -17,6 +17,9 @@ label {
 .selectedIcon {
   background-color: #555555; }
 
+.delete-poster-button {
+  cursor: pointer; }
+
 .eventFormView {
   height: 88vh;
   overflow-y: scroll; }

@@ -16,15 +16,17 @@ html, body {
     html .splashScreen .headerBox, body .splashScreen .headerBox {
       position: relative;
       width: 100%;
-      padding-left: 40vw;
       text-align: center;
       margin-top: 30vh; }
-      html .splashScreen .headerBox .loginBox h1, body .splashScreen .headerBox .loginBox h1 {
+      html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
         font-weight: bold;
-        font-size: 50px;
+        font-size: 45px;
         margin-bottom: 1em;
         color: white;
         text-shadow: 2px 2px 0px #000; }
+        @media screen and (max-width: 768px) {
+          html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
+            font-size: 35px; } }
       html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
         border: none;
         background-color: #2d9eee;
@@ -32,7 +34,6 @@ html, body {
         color: white;
         margin-bottom: 1em;
         max-width: 100%;
-        min-width: 300px;
         overflow: hidden;
         text-align: center; }
       html .splashScreen .headerBox .loginBox p, body .splashScreen .headerBox .loginBox p {

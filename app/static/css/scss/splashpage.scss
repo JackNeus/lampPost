@@ -24,17 +24,19 @@ html, body {
 		background-size: cover;
 		background-repeat: no-repeat;
 		text-align: center;
-		
+
 		.headerBox {
 			position: relative;
 			width: 100%;
-			padding-left:40vw;
 			text-align: center;
 			margin-top: 30vh;
 			.loginBox {
-				h1 {
+				.welcome {
 					font-weight: bold;
-					font-size: 50px;
+					font-size: 45px;
+					@media screen and (max-width: 768px) {
+						font-size: 35px;
+					}
 					margin-bottom: 1em;
 					color: white; 
 					text-shadow: 2px 2px 0px #000;
@@ -47,7 +49,6 @@ html, body {
 					color: white;
 				  	margin-bottom: 1em;
 				  	max-width: 100%;
-				  	min-width: 300px;
 				  	overflow: hidden;
 				  	text-align: center;
 				  }
