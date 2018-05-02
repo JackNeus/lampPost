@@ -36,21 +36,8 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				<div class="filter-button btn" id="filter-btn" title="Filter">
 				  <i class="fas fa-filter"></i>
 			  	</div>
-			  	<div class="ml-auto d-flex flex-nowrap sort-box align-items-start">
-				  	<div class="select-style">
-					  	<select name="sort" id="searchSort">
-							<option value="Date">Sort By Date</option>
-							<option value="Popularity">Sort By Popularity</option>
-						</select>
-					</div>
-					<div class="sort-direction">
-						<div id="sort-direction-btn-up" class="sort-direction-btn hidden">
-							<i class="fas fa-arrow-up"></i>
-						</div>
-						<div id="sort-direction-btn-down" class="sort-direction-btn">
-							<i class="fas fa-arrow-down"></i>
-						</div>
-					</div>
+			  	<div class="ml-auto d-flex flex-nowrap align-items-start">
+			  		{% include "web/sortbox.html" %}
 				</div>
 			</div>
 
