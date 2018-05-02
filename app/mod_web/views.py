@@ -132,7 +132,7 @@ def addEvent():
 					return render_template("web/add.html", form=EventForm(), numRows=numShowings)
 
 				flash("Success! Your event has been added.")
-				return redirect("add")
+				return redirect("/myevents?event="+event_id)
 			else:
 				flash("Error. " + r["error_msg"])
 				return render_template("web/add.html", form=EventForm(), numRows=numShowings)

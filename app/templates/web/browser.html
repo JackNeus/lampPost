@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% set no_scroll = True %}
 
 <!--****************************** SCRIPTS **********************************-->
 
@@ -41,8 +42,11 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				</div>
 			</div>
 
-			<div class="d-flex flex-row align-items-start justify-content-end filters">
-			  <div class="mr-auto datetime">
+			<div class="d-flex flex-column align-items-start justify-content-end filters">
+			  <div id="all-events">
+				  <button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
+			  </div>
+			  <div class="datetime">
 				  <label for="datepicker">Search from date: </label>
 				  <input type="text" id="datepicker"
 					   class="form-control" name="datepicker">
@@ -52,17 +56,41 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 		</form>
 
 
-		<!-- Fills in with "search" results from events.json -->
+		<!-- Fills in with both search results, and trending events. -->
+
 		<div class="flex-container-scroll" id="searches-wrapper">
+			<div id="trendingLabel"> Trending Events </div>
 			<div id="searches">
             	<div class="searchPost"></div>
         	</div>
+        	
 			<div class="fa fa-spinner fa-spin hidden centered" id="loading-spinner"></div>
         </div>
 
   	</div>
 
  	<div class="flex-container-col" id = "rightCol">
+ 		<div id="welcomeDiv" style="display:none"> 
+ 			<div id = "interiorWelcomeDiv"> 
+	 			<h1 id = "welcomeMessage"> Welcome to LampPost! </h1>
+
+				  <div class="row">
+				    <div class="col-md-6">
+	 					<p class = "welcomeText" > Get started by:
+	 					<ul class="welcomeText">
+	 						<li> <a class="keyword"> Browsing </a> through trending events on the left! </li>
+	 						<li> <a class="keyword"> Searching </a> for events by keyword/date/location. </li>
+	 						<li> <a class="keyword"> Exporting </a> your favorites to Google Calendar. </li>
+	 						<li> <a class="keyword"> Adding </a> your own event! </li>
+	 					</ul>
+	 					</p>
+	 				</div>
+				    <div class="col-md-6">
+				      <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/lamppostMeme.png">
+				    </div>
+				  </div>
+	 		</div>
+ 		</div>
  		{% include "web/eventview.html" %}
 	</div>
 </div>

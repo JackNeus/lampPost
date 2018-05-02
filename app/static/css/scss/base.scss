@@ -36,6 +36,10 @@ html, body {
 
 	// Other Style
 	background-color: $background-color;
+
+	.scroll-disabled {
+		overflow: hidden;
+	}
 }
 
 // Navbar style
@@ -67,6 +71,11 @@ html, body {
 	}
 }
 
+.container-fluid {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
 .danger-button {
 	color: #dc3545;
  	&:hover {
@@ -80,7 +89,7 @@ html, body {
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 // Debug Style
@@ -121,7 +130,6 @@ html, body {
 	flex-shrink: 1000;
 	font-size: 16px !important;
 }
-
 
 #searchRow {
  	min-height: 4.25vh;
@@ -188,8 +196,14 @@ html, body {
 	input[type=text] {
 		font-size: 0.65em;
 	}
-	.datetime {
+
+	div {
 		display: none;
+	}
+
+	.filter-btn {
+		background-color: $primary-color;
+		color: white;
 	}
 }
 
@@ -197,7 +211,7 @@ html, body {
 	flex-grow: 1000;
  	min-height: 10vh;
  	border-right: 4px solid $primary-color;
-	border-left: 4px solid $primary-color;
+	// border-left: 4px solid $primary-color;
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
 	cursor: pointer;
@@ -453,3 +467,37 @@ html, body {
     	   height: auto;
     }
 }
+
+#interiorWelcomeDiv {
+	padding-left: 5vw;
+	#welcomeMessage {
+		font-size: 50px;
+		text-align: center;
+		padding-top: 30px;
+		padding-bottom: 20px;
+	}
+	.welcomeText {
+		font-size:23px;
+		.keyword {
+			font-size:25px;
+			font-weight:bold;
+			color:$primary-color;
+		}
+	}
+	
+}
+
+#welcome {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 85%;
+}
+
+#trendingLabel {
+	text-align:center; 
+	font-size:24px; 
+	color:darkorange; 
+	font-weight:bold;
+}
+

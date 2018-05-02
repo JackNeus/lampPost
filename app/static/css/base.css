@@ -11,6 +11,8 @@ html, body {
   html .h3, html h3, body .h3, body h3 {
     font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
     font-size: 20px; }
+  html .scroll-disabled, body .scroll-disabled {
+    overflow: hidden; }
 
 html .logo, body .logo {
   width: 200px; }
@@ -31,6 +33,10 @@ html #bigRow, body #bigRow {
   padding-right: 0vw;
   margin-bottom: 2vh; }
 
+.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important; }
+
 .danger-button {
   color: #dc3545; }
   .danger-button:hover {
@@ -41,7 +47,7 @@ html #bigRow, body #bigRow {
   opacity: 1; }
 
 .hidden {
-  display: none; }
+  display: none !important; }
 
 .debug-data {
   display: none;
@@ -87,7 +93,6 @@ html #bigRow, body #bigRow {
 
 #myEventSortBtn {
   margin: 2vh 2vh;
-  margin-left: 0;
   border: 1px solid #AAA;
   color: #333333;
   font-size: 0.75em;
@@ -123,14 +128,16 @@ html #bigRow, body #bigRow {
     font-size: 0.75em; }
   .filters input[type=text] {
     font-size: 0.65em; }
-  .filters .datetime {
+  .filters div {
     display: none; }
+  .filters .filter-btn {
+    background-color: #2d9eee;
+    color: white; }
 
 .smallSearchResult {
   flex-grow: 1000;
   min-height: 10vh;
   border-right: 4px solid #2d9eee;
-  border-left: 4px solid #2d9eee;
   border-top: 2px solid #2d9eee;
   border-bottom: 2px solid #2d9eee;
   cursor: pointer;
@@ -331,5 +338,30 @@ html #bigRow, body #bigRow {
   #leftCol {
     max-height: 55vh;
     height: auto; } }
+#interiorWelcomeDiv {
+  padding-left: 5vw; }
+  #interiorWelcomeDiv #welcomeMessage {
+    font-size: 50px;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 20px; }
+  #interiorWelcomeDiv .welcomeText {
+    font-size: 23px; }
+    #interiorWelcomeDiv .welcomeText .keyword {
+      font-size: 25px;
+      font-weight: bold;
+      color: #2d9eee; }
+
+#welcome {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%; }
+
+#trendingLabel {
+  text-align: center;
+  font-size: 24px;
+  color: darkorange;
+  font-weight: bold; }
 
 /*# sourceMappingURL=base.css.map */
