@@ -88,12 +88,22 @@
 		   </div>
           </li>
           </div>
+          <!-- include whether or not user is logged in -->
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
           <li class="nav-item">
              <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
           </li>
+
           {% else %}
+          <!-- include whether or not user is logged in -->
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
 		 <a class="nav-link" href="/login"> Login </a>
 	    {% endif %}
+
         </ul>
       </div>
     </nav>

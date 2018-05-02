@@ -143,3 +143,7 @@ def addEvent():
 def myfavorites():
 	return render_template("web/myfavorites.html")
 
+@mod_web.route('/about')
+def about():
+	return render_template("web/about.html")
+
