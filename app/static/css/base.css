@@ -75,25 +75,9 @@ html #bigRow, body #bigRow {
   margin: 2vh 2vh;
   margin-bottom: 0;
   max-width: 100%;
+  width: 100%;
   flex-shrink: 1000;
   font-size: 16px !important; }
-
-#searchSort {
-  margin: 2vh 0vh;
-  border: 1px solid #AAA;
-  color: #333333;
-  font-size: 0.75em;
-  overflow: hidden;
-  margin: 2vh 0vh;
-  border-radius: 2px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  min-height: 4.25vh;
-  float: left;
-  font: 100% "Avenir-Light", "Arial-Light", sans-serif;
-  font-size: 14px !important; }
 
 #searchRow {
   min-height: 4.25vh;
@@ -105,14 +89,38 @@ html #bigRow, body #bigRow {
 .searchButtons {
   display: flex;
   flex-wrap: nowrap;
-  margin-right: 2vh; }
+  margin-right: 2vh;
+  font-size: 14px; }
   .searchButtons .filter-button {
-    margin: 2vh 2vh;
-    padding-left: 0; }
-  .searchButtons .sort-direction {
-    cursor: pointer;
-    padding-left: 5px;
-    font-size: 1.8em; }
+    padding-left: 0;
+    font-size: 1.25em;
+    margin-left: 2vh; }
+  .searchButtons .sort-box {
+    padding-top: 1vh; }
+    .searchButtons .sort-box .sort-direction {
+      cursor: pointer;
+      padding-left: 5px;
+      font-size: 1.55em;
+      display: inline-block;
+      float: left; }
+    .searchButtons .sort-box .select-style {
+      border: 1px solid #ccc;
+      width: 175px;
+      min-width: 175px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: #fafafa url("../graphics/sort-down.png") no-repeat 95% 50%;
+      float: left; }
+    .searchButtons .sort-box .select-style select {
+      padding: 5px 8px;
+      width: 130%;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      background-image: none;
+      -webkit-appearance: none; }
+    .searchButtons .sort-box .select-style select:focus {
+      outline: none; }
 
 .calendar-view-button {
   margin-top: 2vh; }
@@ -337,7 +345,9 @@ html #bigRow, body #bigRow {
   flex-wrap: nowrap;
   flex-direction: row;
   width: 100%;
-  border-left: 2px solid black; }
+  border-left: 2px solid black;
+  margin-left: 1.5vh;
+  margin-right: 0vh; }
   .calendar-view-row .dayCol {
     max-width: 14%;
     min-width: 14%;
@@ -381,7 +391,6 @@ html #bigRow, body #bigRow {
   #leftCol {
     max-height: 55vh;
     height: auto; } }
-
 #interiorWelcomeDiv {
   padding-left: 5vw; }
   #interiorWelcomeDiv #welcomeMessage {
@@ -406,6 +415,7 @@ html #bigRow, body #bigRow {
   text-align: center;
   font-size: 24px;
   color: darkorange;
-  font-weight: bold; }
+  font-weight: bold;
+  display: none; }
 
 /*# sourceMappingURL=base.css.map */
