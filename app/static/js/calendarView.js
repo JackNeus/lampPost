@@ -29,7 +29,8 @@ var toggleCalendarView = function() {
 		$("#calendarViewBtn").html(calendarBtn);
 		$("#calendarViewBtn").prop('title', 'Calendar View');
 		removeSearchFromDate();
-		
+		$("#searches").html("");
+		fetchData($("#search-box").val());
 	}
 	else {
 		var listBtn = `<i class="fas fa-list"></i>`;
@@ -37,18 +38,18 @@ var toggleCalendarView = function() {
 		$("#calendarViewBtn").prop('title', 'List View');
 		calWeek = 0; // reset week to 0 (current week)
 		addSearchFromDate();
+		
+		// fetch data again since searching from an earlier date by default
+		if ($("#search-box").val())
+			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
+		else
+			var query = "*/" + java2py_date($("#datepicker").val());
+		$("#searches").html("");
+		fetchData(query);
 	}
 	
 	$("#calendarViewBtn").toggleClass("calendarMode");
 	
-	// fetch data again since searching from an earlier date by default
-	if ($("#search-box").val()) {
-		if ($("#datepicker").val())
-			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
-		else query = $("#search-box").val();
-		$("#searches").html("");
-		fetchData(query);
-	}
 	handleNextWeekClick();
 	handlePreviousWeekClick();
 };
