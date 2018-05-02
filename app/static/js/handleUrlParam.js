@@ -13,12 +13,22 @@ var checkEditEventUrlParameter = function() {
 	return editMode;
 }
 
+// check if the calendar view url parameter exists. If so, return true. 
+var checkCalendarParameter = function() {
+	var calendarMode = getUrlParameter('cal');
+	if (calendarMode === undefined)
+		return false;
+	return calendarMode;
+	
+};
+
 // check if the search url parameter exists. If so, fill in the 
 // search box with that value
 var checkSearchUrlParameter = function() {
 	var searchQuery = getUrlParameter('search');
 	if (searchQuery) {
 		$("#search-box").val(searchQuery);
+		prevQuery = searchQuery; // set previous query variable found in app.js
 	}
 };
 
@@ -93,8 +103,10 @@ var addUrlParameter = function(search, key, val){
 
 // Remove the edit parameter from search. 
 // This should probably be made more generic in the future.
-var removeEditParameter = function(search) {
-	params = search.replace(new RegExp('&?edit'), '');
+// TODO: allow removal of parameters with values
+// TODO: fix a bug where if the parameter exists anywhere in the url (e.g. as search string), it gets removed
+var removeUrlParameter = function(search, parameter) {
+	params = search.replace(new RegExp('&?' + parameter), '');
 	return params;
 }
 

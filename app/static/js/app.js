@@ -18,6 +18,9 @@ var urlParamEventId = null;
 // Keep track of the number of search requests currently out.
 var search_requests_in_progress = 0;
 
+// Keep track of current week in calendar view
+var calWeek = 0;
+
 // Allow for external population of event_data.
 // Currently only used for USE_MOCK_DATA flag.
 function setData(data) {
@@ -31,6 +34,7 @@ $(document).ready(function(){
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
+	if (checkCalendarParameter()) toggleCalendarView();
 
 	// if some event is being displayed, hide welcome
 	if (urlParamEventId) {
@@ -45,7 +49,8 @@ $(document).ready(function(){
 	setupDataRetrieval();
 
 	// add the trending events
-	addTrendingResults();
+	if (!checkCalendarParameter() && !$("#search-box").val())
+ 		addTrendingResults();
 
 	if (!hideWelcome)
 		$("#welcomeDiv").show();
@@ -112,6 +117,9 @@ var setupSearch = function() {
 	$("#searchSort").change(function() {
 		showSearchResults(false);
 	});
+
+	handleCalendarView();
+
 	$(".sort-direction-btn").click(function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
@@ -121,23 +129,23 @@ var setupSearch = function() {
 
 // Updates search results after input to search box or change in filters
 var setupDataRetrieval = function() {
+
 	var trigger_search = function() {
 		if ($("#datepicker").val())
 			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
-		else query = $(this).val();
+		else  
+			var query = $(this).val();
 
 		// don't make api call if query hasn't changed
 		if (query != prevQuery) {
 			fetchData(query);
+		
+			// update url with eventid paramter only if search box changes
+			if ($(this).val() !== getUrlParameter('search')) {
+				updateUrl(addUrlParameter(document.location.search, 'search', $(this).val()));
+			}
 			
 			prevQuery = query;
-			
-			// update url with eventid paramter
-			var newurl = window.location.protocol + "//" + 
-					 window.location.host + 
-					 window.location.pathname + 
-					 addUrlParameter(document.location.search, 'search', query);
-			window.history.pushState({ path: newurl }, '', newurl);
 		}
 	};
 
@@ -146,48 +154,51 @@ var setupDataRetrieval = function() {
 
 	// fetch data after date chosen in datepicker filter
 	$("#datepicker").change(function() {
-		var date_py = java2py_date($(this).val());
-	  	fetchData($("#search-box").val() + "/" + date_py);
+		if ($(this).val() !== "") {
+			var date_py = java2py_date($(this).val());
+		  	fetchData($("#search-box").val() + "/" + date_py);
+	  	}
+	  	else fetchData($("#search-box").val());
 	});
 };
 
-  // fetch data given a query string
-	function fetchData(query) {
+// fetch data given a query string
+function fetchData(query) {
 
-		if (query.length == 0) {
-			// then let's just show the trending events
-			addTrendingResults();
-			return;
-		}
-		// when loading an actual query (length > 0), clear the ``trending events" label
-		$("#trendingLabel").hide();
-
-		search_requests_in_progress += 1;
-		$("#loading-spinner").removeClass("hidden");
-
-		var success_callback = function(data){
-		    if (data["status"] === "Success")
-				event_data = data["data"];
-			else
-				event_data = [];
-			setupUserFavorites();
-		};
-		var cleanup_callback = function() {
-			search_requests_in_progress -= 1;
-			if (search_requests_in_progress == 0) {
-				$("#loading-spinner").addClass("hidden");
-			}
-		}
-		$.ajax({
-			url: base_url + '/api/event/search/' + query,
-			dataType: 'json',
-			headers: {
-				'Authorization': ('Token ' + $.cookie('api_token'))
-			},
-			success: success_callback,
-			complete: cleanup_callback
-		});
+	if (query.length == 0) {
+		// then let's just show the trending events
+		addTrendingResults();
+		return;
 	}
+	// when loading an actual query (length > 0), clear the ``trending events" label
+	$("#trendingLabel").hide();
+
+	search_requests_in_progress += 1;
+	$("#loading-spinner").removeClass("hidden");
+
+	var success_callback = function(data){
+	    if (data["status"] === "Success")
+			event_data = data["data"];
+		else
+			event_data = [];
+		setupUserFavorites();
+	};
+	var cleanup_callback = function() {
+		search_requests_in_progress -= 1;
+		if (search_requests_in_progress == 0) {
+			$("#loading-spinner").addClass("hidden");
+		}
+	}
+	$.ajax({
+		url: base_url + '/api/event/search/' + query,
+		dataType: 'json',
+		headers: {
+			'Authorization': ('Token ' + $.cookie('api_token'))
+		},
+		success: success_callback,
+		complete: cleanup_callback
+	});
+}
 
 // Get list of events which user has favorited
 var setupUserFavorites = function() {

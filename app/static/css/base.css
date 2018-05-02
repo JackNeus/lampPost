@@ -80,7 +80,11 @@ html #bigRow, body #bigRow {
   font-size: 16px !important; }
 
 #searchRow {
-  min-height: 4.25vh; }
+  min-height: 4.25vh;
+  display: flex;
+  margin-right: 2vh;
+  flex-wrap: nowrap;
+  align-items: stretch; }
 
 .searchButtons {
   display: flex;
@@ -117,6 +121,9 @@ html #bigRow, body #bigRow {
       -webkit-appearance: none; }
     .searchButtons .sort-box .select-style select:focus {
       outline: none; }
+
+.calendar-view-button {
+  margin-top: 2vh; }
 
 .filters {
   margin: 0vh 2vh;
@@ -325,10 +332,59 @@ html #bigRow, body #bigRow {
   flex: 70%;
   float: left; }
 
+.calendar-view #leftCol {
+  flex: 60%; }
+.calendar-view #rightCol {
+  flex: 40%; }
+
+.calendarBtns {
+  display: none; }
+
+.calendar-view-row {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  width: 100%;
+  border-left: 2px solid black;
+  margin-left: 1.5vh;
+  margin-right: 0vh; }
+  .calendar-view-row .dayCol {
+    max-width: 14%;
+    min-width: 14%;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    max-height: 88vh;
+    min-height: 55vh;
+    height: auto; }
+    .calendar-view-row .dayCol .dayTitle {
+      border-bottom: 2px solid black;
+      width: 100%; }
+    .calendar-view-row .dayCol .dayResults {
+      display: flex;
+      flex-direction: column; }
+      .calendar-view-row .dayCol .dayResults .smallSearchResult {
+        margin-right: 0;
+        overflow: wrap;
+        border-right: none;
+        border-left: none;
+        border-top: none;
+        border-radius: 0; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTitle {
+          font-size: 0.8em;
+          line-height: 1em;
+          height: 3em;
+          overflow: hidden; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTime {
+          font-size: 0.6em; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireBtn {
+          display: none; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireNum {
+          display: none; }
+
 .searchBoxCol {
   flex: 40%; }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 825px) {
   .flex-container-row {
     flex-direction: column; }
 
@@ -359,6 +415,7 @@ html #bigRow, body #bigRow {
   text-align: center;
   font-size: 24px;
   color: darkorange;
-  font-weight: bold; }
+  font-weight: bold;
+  display: none; }
 
 /*# sourceMappingURL=base.css.map */

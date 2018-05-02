@@ -7,6 +7,7 @@
 <script src="/static/js/app.js?v=1"></script>
 <script src="/static/js/handleUrlParam.js?v=0"></script>
 <script src="/static/js/handleFavorites.js?v=0"></script>
+<script src="/static/js/calendarView.js?v=0"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -24,13 +25,16 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 <!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
 <div class="container-fluid">
-<div class="flex-container-row" id="bigRow">
+<div class="flex-container-row list-view" id="bigRow">
    <div class="flex-container-col" id="leftCol">
    		<form onsubmit="return false;">
-   			<div class="flex-container-row" id="searchRow">
+   			<div class="" id="searchRow">
 				<div class="form-group searchBoxCol" id="searchBox">
 			    		<input id="search-box" class="form-control"
 			    		placeholder="Search for events here!" value=""></input>
+				</div>
+				<div class="calendar-view-button btn" id="calendarViewBtn" title="Calendar View">
+					<i class="fas fa-calendar"></i>
 				</div>
 			</div>
 			<div class="flex-container-row searchButtons align-items-start flex-wrap">
@@ -58,6 +62,14 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 		<!-- Fills in with both search results, and trending events. -->
 
 		<div class="flex-container-scroll" id="searches-wrapper">
+			<div class="calendarBtns" id="calendarBtns">
+				<div class="previousWeekBtn btn" id="previousWeekBtn" title="Previous Week">
+						<i class="fas fa-arrow-left"></i>
+				</div>
+				<div class="nextWeekBtn btn" id="nextWeekBtn" title="Next Week">
+						<i class="fas fa-arrow-right"></i>
+				</div>
+			</div>
 			<div id="trendingLabel"> Trending Events </div>
 			<div id="searches">
             	<div class="searchPost"></div>
