@@ -59,9 +59,7 @@
     {% block header %}{% endblock %}
   </head>
 
-
-
-  <body>
+  <body class="{{ 'scroll-disabled' if no_scroll is defined and no_scroll else '' }}">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-dark bg-inverse" id="id_navbar">
       <a class="navbar-brand" href="/"><img src = "../../static/graphics/logoNavBar.svg" class="image-fluid logo"></a>
@@ -145,6 +143,9 @@
       <div class="close"><div class="icon-container"><i class="icon fa fa-times" onclick="$('#footer').fadeOut('slow');"></i></div></div>
 	    <script type="text/javascript">
 		    slideFooter();
+        setTimeout(function() {
+            $('.footer').fadeOut('fast');
+            }, 15000);
 	    </script>
 	  </div>
 	{% endif %}

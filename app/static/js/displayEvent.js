@@ -8,6 +8,8 @@ var selected_title = "";
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
+		// hide welcome message
+		$("#welcomeDiv").hide();
 
 		// hide any footer
 		$(".footer").hide();
@@ -35,10 +37,11 @@ var handleEventViewClick = function() {
 		}
 		
 		// Get rid of the edit parameter, if it exists.
-		updateUrl(removeEditParameter(document.location.search));
-
-		// don't update if click on already selected search result
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+		updateUrl(removeUrlParameter(document.location.search, 'edit'));
+		
+		// change view/handling if in calendar view mode
+		var calendarMode = checkCalendarParameter();
+		if (calendarMode) {
 			// update url with eventid paramter if event is different than 
 			// event currently in url
 			if (getUrlParameter('event') !== eventId)
@@ -48,6 +51,23 @@ var handleEventViewClick = function() {
 			selected_event = event_data[eventNum - 1];
 			
 			// populate and display event view
+			highlightSelectedSearchResultByElement($(this));
+			populateEventViewPanel(eventNum);
+			handleEventFireBtnClick(eventNum);
+		}
+
+		// don't update if click on already selected search result
+		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+			// update url with eventid paramter if event is different than 
+			// event currently in url
+			if (getUrlParameter('event') !== eventId)
+				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+
+			// store currently selected event
+			selected_event = event_data[eventNum - 1];
+			
+			// populate and display event view
+			animateSelectedSearchResult(eventNum);
 			highlightSelectedSearchResult(eventNum);
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
@@ -81,11 +101,20 @@ function getGoogleCalLink(eventNum, i) {
 // highlight search result that's been selected and display event view
 function highlightSelectedSearchResult(eventNum) {
 	// toggle highlighting in search results.
-	$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
 	$(".smallSearchResult").removeClass("selected");
 	$("#smallSearchResult" + eventNum).addClass("selected");
+}
 
-	// Animate selection
+// highlight search result that's been selected and display event view
+function highlightSelectedSearchResultByElement(element) {
+	// toggle highlighting in search results.
+	$(".smallSearchResult").removeClass("selected");
+	$(element).addClass("selected");
+}
+
+// Animate selection
+function animateSelectedSearchResult(eventNum) {
+	$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
 	$("#smallSearchResult" + eventNum).animate({"margin-right": '0vh'});
 }
 
@@ -126,7 +155,7 @@ function populateEventViewPanel(eventNum) {
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
-		// Locatiom
+		// Location
 		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
@@ -163,6 +192,9 @@ function populateEventViewPanel(eventNum) {
 	if ("poster" in event_data[eventNum-1]) {
 		document.getElementById("eventPhoto").innerHTML =
 		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
+	}
+	else {
+		document.getElementById("eventPhoto").innerHTML = "";
 	}
 	
 	// highlight fire button if appropriate
