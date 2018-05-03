@@ -14,11 +14,25 @@ label {
 #rightCol {
   max-height: 88vh; }
 
-.selectedIcon {
-  background-color: #555555; }
-
-.delete-poster-button {
+.deleteBtn {
+  color: #555555;
   cursor: pointer; }
+  .deleteBtn:hover {
+    color: #cc0000;
+    background-color: white; }
+  .deleteBtn.selectedIcon {
+    color: #cc0000;
+    background-color: white; }
+
+.editBtn {
+  color: #555555;
+  cursor: pointer; }
+  .editBtn:hover {
+    color: #2d9eee;
+    background-color: white; }
+  .editBtn.selectedIcon {
+    color: #2d9eee;
+    background-color: white; }
 
 .eventFormView {
   height: 88vh;

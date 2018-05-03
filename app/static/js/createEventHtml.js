@@ -85,8 +85,7 @@ var createCalenderViewResults = function() {
 	var searchResult = "";
 	searchResult += `<div class="calendar-view-row">`;
 	
-	var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", 
-				"Thursday", "Friday", "Saturday"];
+	var daysInWeek = 7;
 	
 	// figure out first date of calendar week view
 	var today = new Date();
@@ -94,6 +93,8 @@ var createCalenderViewResults = function() {
 	firstDay.setDate(today.getDate() + (calWeek * 7));
 	firstDay.setHours(0);
 	firstDay.setMinutes(0);
+	firstDay.setSeconds(0);
+	firstDay.setMilliseconds(0);
 	
 	// day of week string of first day of calendar view
 	var firstDayStr = firstDay.getDay();
@@ -103,7 +104,7 @@ var createCalenderViewResults = function() {
 	
 	// create html for each day of week, starting from firstDay
 	var currentDate = new Date(firstDay);
-	for (var i = firstDayStr; i < daysOfWeek.length; i++) {
+	for (var i = firstDayStr; i < daysInWeek; i++) {
 		searchResult += createDayColumn(currentDate, i, count);
 		currentDate.setDate(currentDate.getDate() + 1);
 		count++;
@@ -170,7 +171,7 @@ var createDayColumn = function(currentDate, i, count) {
 	`<div class="flex-container-col dayCol">`
 	+  `<div class="dayTitle" id="dayTitle` + count + `">` 
 	+ 	`<div class="dayName">` + daysOfWeek[i].substring(0, 3) + `</div>`
-	+ 	`<div class="date" id="date` + count + `">` + makeDateStr(currentDate) + `</div>`
+	+ 	`<div class="date" id="date` + count + `">` + makeDayMonthYearString(currentDate) + `</div>`
 	+   `</div>`
 	+  `<div class="dayResults" id="` + daysOfWeek[i] + `"></div>`
 	+ `</div>`;
