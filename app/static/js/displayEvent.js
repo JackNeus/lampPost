@@ -51,7 +51,6 @@ var handleEventViewClick = function() {
 			selected_event = event_data[eventNum - 1];
 			
 			// populate and display event view
-			highlightSelectedSearchResultByElement($(this));
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
@@ -67,8 +66,6 @@ var handleEventViewClick = function() {
 			selected_event = event_data[eventNum - 1];
 			
 			// populate and display event view
-			animateSelectedSearchResult(eventNum);
-			highlightSelectedSearchResult(eventNum);
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
@@ -98,24 +95,21 @@ function getGoogleCalLink(eventNum, i) {
 	return out_url;
 }
 
-// highlight search result that's been selected and display event view
-function highlightSelectedSearchResult(eventNum) {
-	// toggle highlighting in search results.
-	$(".smallSearchResult").removeClass("selected");
-	$("#smallSearchResult" + eventNum).addClass("selected");
-}
-
-// highlight search result that's been selected and display event view
-function highlightSelectedSearchResultByElement(element) {
-	// toggle highlighting in search results.
-	$(".smallSearchResult").removeClass("selected");
-	$(element).addClass("selected");
-}
-
 // Animate selection
-function animateSelectedSearchResult(eventNum) {
-	$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
-	$("#smallSearchResult" + eventNum).animate({"margin-right": '0vh'});
+function selectSearchResult(eventNum) {
+	var selected_event = $(".smallSearchResult.selected");
+	var event_to_select = $("#smallSearchResult" + eventNum);
+
+	// toggle highlighting in search results.
+	$(".smallSearchResult").removeClass("selected");
+	event_to_select.addClass("selected");
+
+	// Close previously selected event, if it's not the one we want to open.
+	if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
+		selected_event.animate({"margin-right": '2vh'});
+	}
+	// Open new events.
+	event_to_select.animate({"margin-right": '0vh'});
 }
 
 // Update the popularity of an event when the fire button is clicked
@@ -135,6 +129,9 @@ function setTitle(title) {
 // Populate event view panel with event_data[eventNum-1] (basic layout)
 function populateEventViewPanel(eventNum) {
 	$(".event-view").hide();
+
+	// Search pane stuff.
+	selectSearchResult(eventNum);
 
 	// Clickable fire button that displays "Favorite" when hovered over
 	var fireBtn = $("#eventFireBtn");

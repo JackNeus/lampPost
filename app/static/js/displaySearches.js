@@ -66,7 +66,7 @@ var checkHighlightEventInUrl = function() {
 		if (event != undefined) {
 			eventNum = event_data.indexOf(event) + 1;
 			selected_event = event;
-			$("#smallSearchResult" + eventNum).addClass("selected");
+			selectSearchResult(eventNum);
 		}
 	}
 };

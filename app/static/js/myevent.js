@@ -44,8 +44,7 @@ function checkDisplay() {
 		var eventNum = event_data.findIndex(function(event){return event._id === eventId;}) + 1;
 		
 		// Graphical commands to select event result.
-		animateSelectedSearchResult(eventNum);
-		highlightSelectedSearchResult(eventNum);
+		selectSearchResult(eventNum);
 		selectEditBtn($("#editBtn"+eventNum));
 
 		// If the user attempted to edit an event and was unsuccessful,
@@ -105,7 +104,7 @@ var handleDeleteMyEvent = function() {
 		// toggle highlighting in search results
 		eventNum = getNum($(this).attr('id'), "deleteBtn");
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
-			highlightSelectedSearchResult(eventNum);
+			selectSearchResult(eventNum);
 		
 		// delete event if user confirms deletion
 		$("#smallSearchResult" + eventNum).show(function () {
@@ -174,8 +173,7 @@ var renderEditForm = function(eventNum) {
 
 	// toggle highlighting in search results
 	if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-		animateSelectedSearchResult(eventNum);
-		highlightSelectedSearchResult(eventNum);
+		selectSearchResult(eventNum);
 	}
 
 	// hide the event display
@@ -280,7 +278,6 @@ var setupUserFavorites = function() {
 		if (urlParamEventId) {
 			updateUrlParamEventView(urlParamEventId);
 		}
-		console.log("About to check display.");
 		checkDisplay();
 	};
 	$.ajax({
