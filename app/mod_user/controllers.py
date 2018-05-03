@@ -1,8 +1,9 @@
-from app import app
+from app import app, CONFIG
 from flask import Blueprint, jsonify, request, render_template
 from flask_login import LoginManager, login_user, logout_user, current_user
 from app.mod_api import controllers as mod_api_controllers
 from .models import *
+from datetime import timedelta
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -30,7 +31,12 @@ def login(netid):
 	uid = user.id
 	user = load_user(uid)
 	if user != None:
-		login_user(user)
+		# User should stay logged in for one week.
+		
+		# This breaks stuff, because it doesn't necessarily restore
+		# cookies like the API token.
+		# Re-enable this when all cookies are part of the session.
+		login_user(user, remember = True, duration = timedelta(days=CONFIG["SESSION_LENGTH"]))
 	else:
 		raise UserDoesNotExistError
 
