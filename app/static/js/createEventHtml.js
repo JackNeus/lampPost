@@ -11,7 +11,7 @@ var createSearchResults = function() {
 		+	      `<h2 class="resultTitle">` + event_data[i].title + `</h2>`
 		+	      `<div id="eventInstances"></div>`
 		+	   `</div>`
-		+	   `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
+		+	   `<div class="resultFireBtn btn" title="Favorite" data-toggle="tooltip" id="resultFireBtn">`
 		+	      `<i class="fas fa-fire"></i>`
 		+	   `</div>`
 		+	   `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
