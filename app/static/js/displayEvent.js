@@ -49,7 +49,7 @@ var handleEventViewClick = function() {
 
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
-			
+
 			// populate and display event view
 			highlightSelectedSearchResultByElement($(this));
 			populateEventViewPanel(eventNum);
@@ -187,12 +187,11 @@ function populateEventViewPanel(eventNum) {
 	$("#eventDescription").html(event_data[eventNum-1].description);
 
 	// If the event has a poster, display that.
+	document.getElementById("bannerImage").innerHTML = "";
+	document.getElementById("posterImage").innerHTML = "";
+	document.getElementById("otherImage").innerHTML = "";
 	if ("poster" in event_data[eventNum-1]) {
-		document.getElementById("eventPhoto").innerHTML =
-		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
-	}
-	else {
-		document.getElementById("eventPhoto").innerHTML = "";
+		renderImage(event_data[eventNum-1].poster);
 	}
 
 	// highlight fire button if appropriate
@@ -202,4 +201,33 @@ function populateEventViewPanel(eventNum) {
 	else $("#eventFireBtn").removeClass("selected");
 
 	$("#event-view").show();
+}
+
+function renderImage(url){
+    var img = new Image();
+    img.src = url;
+    img.addEventListener("load", function(){
+		// Determine where the image should go based off of its aspect ratio
+		// <ratio> gives the aspect ratio of the image
+		// <proportion> gives the proportion of the event-view pane that the image
+		//              takes up by width
+		var ratio = this.naturalWidth / this.naturalHeight;
+		var scaledWidth = document.getElementById("event-view-info").clientHeight
+						  * ratio;
+		var proportion = scaledWidth
+						 / document.getElementById("event-view-info").clientWidth;
+		if (2.5 <= ratio) {
+			// We put thin and wide images above the description
+			document.getElementById("bannerImage").innerHTML =
+			"<img class=\"img-fluid\" src=\""+img.src+"\">";
+		} else if (proportion < 0.6) {
+			// We put tall images next to the description if the screen is wide enough
+			document.getElementById("posterImage").innerHTML =
+			"<img class=\"img-cover\" src=\""+img.src+"\">";
+		} else {
+			// Otherwise, we put the image below the description
+			document.getElementById("otherImage").innerHTML =
+			"<img class=\"img-fluid\" src=\""+img.src+"\">";
+		}
+    });
 }

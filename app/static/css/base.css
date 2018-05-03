@@ -86,10 +86,6 @@ html #bigRow, body #bigRow {
   font-size: 1.7em;
 }
 
-#searches {
-  padding-top: 1vh;
-}
-
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
@@ -139,6 +135,11 @@ html #bigRow, body #bigRow {
   display: flex;
   flex-wrap: nowrap;
   margin-right: 2vh;
+
+.filter-button {
+  margin: 2vh 2vh;
+  padding-left: 0;
+}
   font-size: 14px; }
   .searchButtons .filter-button {
     padding-left: 0;
@@ -213,6 +214,7 @@ html #bigRow, body #bigRow {
   margin-bottom: 0.3em;
 }
 .smallSearchResult.selected {
+  margin: 0vh;
   border-radius: 0px;
   background-color: #2d9eee;
   box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
@@ -422,7 +424,7 @@ html #bigRow, body #bigRow {
 #leftCol {
   max-height: 88vh;
   height: 88vh;
-  flex: 25%;
+  flex: 30%;
   float: left;
   border-right: 5px solid #2d9eee;
 }

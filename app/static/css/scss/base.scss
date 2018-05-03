@@ -117,10 +117,6 @@ html, body {
 	}
 }
 
-#searches {
-	padding-top: 1vh;
-}
-
 #searchBox {
 	padding: 0;
 	margin: 2vh 2vh;
@@ -241,6 +237,7 @@ html, body {
 		.resultTime {
 			color: white;
 		}
+		margin: 0vh;
 		border-radius: 0px;
 		background-color: $primary-color;
 		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
@@ -290,7 +287,8 @@ html, body {
 	}
 }
 
-
+// We got rid of this temporarily
+// TODO: Delete?
 .searches-resizer {
 	max-height: 88vh;
 	height: 88vh;
@@ -367,9 +365,13 @@ html, body {
 	    padding-bottom: 2vh;
 	}
 	img {
-		float: top;
 		width: 100%;
-		height: auto;
+	}
+	.posterImage {
+		img {
+			height: 75vh;
+			width: auto;
+		}
 	}
 	.eventSection {
 		padding-top: 20px;
@@ -456,7 +458,7 @@ html, body {
 #leftCol {
 	max-height: 88vh;
 	height: 88vh;
-	flex: 25%;
+	flex: 30%;
     float: left;
     border-right: 5px solid $primary-color;
 }
