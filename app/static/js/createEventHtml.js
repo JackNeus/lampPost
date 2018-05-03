@@ -93,6 +93,8 @@ var createCalenderViewResults = function() {
 	firstDay.setDate(today.getDate() + (calWeek * 7));
 	firstDay.setHours(0);
 	firstDay.setMinutes(0);
+	firstDay.setSeconds(0);
+	firstDay.setMilliseconds(0);
 	
 	// day of week string of first day of calendar view
 	var firstDayStr = firstDay.getDay();
