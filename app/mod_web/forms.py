@@ -1,7 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms_components import TimeField
-from wtforms import StringField, TextField, TextAreaField, RadioField, FieldList, DateField, FileField, validators
+from wtforms import StringField, TextField, TextAreaField, RadioField, FieldList, DateField, FileField, validators, SelectMultipleField, widgets
 from wtforms.validators import Required, DataRequired
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 class EventForm(FlaskForm):
     event_id = TextField()
@@ -21,6 +25,7 @@ class EventForm(FlaskForm):
     deletePoster = TextField()
     poster = FileField('Event Photo/Poster')
     link = StringField('Promo Video')
+    tags = MultiCheckboxField('Tags:', choices=[("Music","CornflowerBlue"), ("Dance", "IndianRed"), ("Lecture", "purple"), ("Theater", "green"), ("Street", "gray"),("Orientation", "orange")])
 
 class ReportForm(FlaskForm):
     event_id = TextField()

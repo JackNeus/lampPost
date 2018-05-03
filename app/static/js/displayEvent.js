@@ -162,7 +162,6 @@ function populateEventViewPanel(eventNum) {
 		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
-
 		$("#eventSubtitle").append("<br>");
 	}
 

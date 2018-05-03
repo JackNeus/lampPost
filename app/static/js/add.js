@@ -17,7 +17,6 @@ $(document).on("keypress", ":input:not(textarea)", function(event) {
 	return event.keyCode != 13;
 });
 
-
 var currentNumShowing = 1;
 var maxShowings = 4;
 
