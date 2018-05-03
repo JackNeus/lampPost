@@ -152,7 +152,7 @@ def about():
 		r = json.loads(r.text)
 		if r["status"] == "Success":
 			flash("Thank you! Your feedback has been reported.")
-			return render_template("web/about.html", formF=FeedbackForm())
+			return redirect("about")
 		else:
 			flash("Error in reporting feedback: " + r["error_msg"])
 			return render_template("web/about.html", formF=FeedbackForm())
