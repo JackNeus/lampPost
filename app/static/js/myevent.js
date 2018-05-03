@@ -24,13 +24,28 @@ $(document).ready(function(){
 var checkSort = function() {
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
-		if (event_data != [])
+		if (event_data != []) {
 			showMyEvents();
+			handleDeletePoster();
+			handleDeleteMyEvent();
+			handleEditMyEvent();
+			var urlParamEventId = checkEventUrlParameter();
+			if (urlParamEventId) {
+				updateUrlParamEventView(urlParamEventId);
+			}
+		}
 	});
 	$(".sort-direction-btn").click(function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
 		showMyEvents();
+		handleDeletePoster();
+		handleDeleteMyEvent();
+		handleEditMyEvent();
+		var urlParamEventId = checkEventUrlParameter();
+		if (urlParamEventId) {
+			updateUrlParamEventView(urlParamEventId);
+		}
 	});
 };
 
