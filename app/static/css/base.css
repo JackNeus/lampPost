@@ -1,18 +1,18 @@
 /* rgb values for primary-color */
 html, body {
-  font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
+  font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
   background-color: #eeeeee;
 }
 html .h1, html h1, body .h1, body h1 {
-  font-family: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
+  font-family: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
   font-size: 36px;
 }
 html .h2, html h2, body .h2, body h2 {
-  font-family: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
+  font-family: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
   font-size: 26px;
 }
 html .h3, html h3, body .h3, body h3 {
-  font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
+  font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
   font-size: 20px;
 }
 html .scroll-disabled, body .scroll-disabled {
@@ -26,7 +26,7 @@ html .navbar-expand-md, body .navbar-expand-md {
   background-color: #2d9eee;
 }
 html .nav-link, body .nav-link {
-  font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
+  font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
   font-size: 24px;
 }
 html .dropdown-content, body .dropdown-content {
@@ -129,12 +129,12 @@ html #bigRow, body #bigRow {
   display: flex;
   margin-right: 2vh;
   flex-wrap: nowrap;
-  align-items: stretch; }
 
 .searchButtons {
   display: flex;
   flex-wrap: nowrap;
   margin-right: 2vh;
+}
 
 .filter-button {
   margin: 2vh 2vh;
@@ -351,11 +351,6 @@ html #bigRow, body #bigRow {
   margin: 0;
   border-bottom: 2px solid #2d9eee;
 }
-.event-view .calendar-btn {
-  padding-right: 10px;
-  text-decoration: none !important;
-  color: #999999;
-}
 .event-view .calendar-btn:hover {
   color: #2d9eee;
 }
@@ -436,6 +431,9 @@ html #bigRow, body #bigRow {
   float: left;
 }
 
+.searchBoxCol {
+  flex: 40%;
+}
 .calendar-view #leftCol {
   flex: 60%; }
 .calendar-view #rightCol {
