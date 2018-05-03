@@ -27,12 +27,12 @@ setBaseUrl("{{ config.BASE_URL }}");
 	   
 	   	<h1 style="text-align:center; padding-top:1vh">My Events</h1>
 	   	
-	   	<!-- Sort by date or popularity -->
-		<select name="sort" id="myEventSortBtn">
-			<option value="Date">Sort By Date</option>
-			<option value="Popularity">Sort By Popularity</option>
-		</select>
-			
+		<div class="searchButtons justify-content-center align-items-center">
+			<div class="d-flex flex-nowrap sort-box">
+				{% include "web/sortbox.html" %}
+			</div>
+		</div>	
+
 		<!-- Fills in with "search" results from events.json -->
 		<div class="flex-container-scroll" id="searches"></div>
 	    </div>

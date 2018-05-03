@@ -131,51 +131,65 @@ html, body {
 	font-size: 16px !important;
 }
 
-#searchSort {
-	border: 1px solid #AAA;
-	color: $dark-color;
-	font-size: 0.75em;
-
-	overflow: hidden;
-	margin: 2vh 0vh;
-	border-radius: 2px;
-	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    min-height: 4.25vh
-}
-
-#myEventSortBtn {
-	margin: 2vh 2vh;
-	border: 1px solid #AAA;
-	color: $dark-color;
-	font-size: 0.75em;
-	overflow: hidden;
-	border-radius: 2px;
-	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-height: 4.25vh;
-    float:left;
-    font: 100% $font-light;
-	font-size: 14px !important;
-}
-
 #searchRow {
  	min-height: 4.25vh;
+ 	display: flex;
+ 	margin-right: 2vh;
+ 	flex-wrap: nowrap;
+ 	align-items: stretch;
 }
 
 .searchButtons {
 	display: flex;
 	flex-wrap: nowrap;
 	margin-right: 2vh;
+	font-size: 14px;
+
+	.filter-button {
+		padding-left: 0;
+		font-size: 1.25em;
+		margin-left: 2vh;
+	}
+
+	.sort-box {
+		padding-top: 1vh;
+
+		.sort-direction {
+			cursor: pointer;
+			padding-left: 5px;
+			font-size: 1.55em;
+			display: inline-block;
+			float: left;
+		}
+
+		.select-style {
+		    border: 1px solid #ccc;
+		    width: 175px;
+		    min-width: 175px;	
+		    border-radius: 3px;
+		    overflow: hidden;
+		    background: #fafafa url("../graphics/sort-down.png") no-repeat 95% 50%;
+		    float: left;
+		}
+		
+		.select-style select {
+		    padding: 5px 8px;
+		    width: 130%;
+		    border: none;
+		    box-shadow: none;
+		    background: transparent;
+		    background-image: none;
+		    -webkit-appearance: none;
+		}
+
+		.select-style select:focus {
+		    outline: none;
+		}
+	}
 }
 
-.filter-button {
-	margin: 2vh 2vh;
-	padding-left: 0;
+.calendar-view-button {
+	margin-top: 2vh;
 }
 
 .filters {
@@ -453,11 +467,81 @@ html, body {
     float: left;
 }
 
+.calendar-view {
+	#leftCol {
+		flex: 60%;
+	}
+	#rightCol {
+		flex: 40%;
+	}
+}
+
+.calendarBtns {
+	display: none;
+}
+
+.calendar-view-row {
+	display: flex; 
+	flex-wrap: nowrap; 
+	flex-direction: row;
+	width: 100%;
+	border-left: 2px solid black;
+	margin-left: 1.5vh;
+	margin-right: 0vh;
+	
+	.dayCol {
+		max-width: 14%;
+		min-width: 14%;
+		border-right: 2px solid black;
+		border-bottom: 2px solid black;
+		max-height: 88vh;
+		min-height: 55vh;
+		height: auto;
+		
+		.dayTitle {
+		 	border-bottom: 2px solid black;
+		 	width: 100%;
+		}
+		
+		.dayResults {
+			display: flex;
+			flex-direction: column;
+			.smallSearchResult {
+				margin-right: 0;
+				overflow: wrap;
+				border-right: none;
+				border-left: none;
+				border-top: none;
+				border-radius: 0;
+				.resultContents {
+					.resultTitle {
+						font-size: 0.8em;
+						line-height: 1em;
+						height: 3em;
+						overflow: hidden;
+					}
+					.resultTime {
+						font-size: 0.6em;
+					}
+					.resultFireBtn {
+						display: none;
+					}
+			
+					.resultFireNum {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+
+}
+
 .searchBoxCol {
 	flex: 40%;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 825px) {
     .flex-container-row {
         flex-direction: column;
     }
@@ -498,4 +582,5 @@ html, body {
 	font-size:24px;
 	color:darkorange;
 	font-weight:bold;
+	display: none;
 }
