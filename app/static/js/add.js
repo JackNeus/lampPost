@@ -7,6 +7,7 @@ $(document).ready(function(){
       	format: 'mm/dd/yyyy',
     	container: container,
       	todayHighlight: true,
+      	assumeNearbyYear: true,
       	autoclose: true
     };
 	date_input.datepicker(options);
