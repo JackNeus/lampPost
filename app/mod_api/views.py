@@ -327,6 +327,7 @@ def trending_events():
 
 # Send in feedback.
 @mod_api.route("/feedback/", methods=["PUT"])
+@mod_api.route("/feedback", methods=["PUT"])
 def send_feedback():
 	try:
 		if not request.is_json:

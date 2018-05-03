@@ -136,7 +136,7 @@ def make_search_request(query, start_datetime=None, token=None):
 		params += "/" + str(start_datetime)
 	return make_request("get", "/event/search/", params, token)
 
-def make_feedback_request(data, token=None):
+def make_feedback_request(data=None, token=None):
 	return make_request("put", "/feedback/", json=data, token=token)
 
 user_ids = {}
@@ -667,6 +667,11 @@ def test_valid_feedback():
 	r = make_feedback_request(test_json)
 	assert is_success(r)
 
+# Invalid feedback check.
+def test_invalid_feedback():
+	r = make_feedback_request()
+	assert is_error(r)
+
 # Execution order of tests.
 # Only tests in this list will be executed.
 # Please do not modify the order of the tests.
@@ -713,7 +718,8 @@ test_search_empty,
 test_search_no_auth,
 test_search_all,
 test_search_default_starttime,
-test_valid_feedback
+test_valid_feedback,
+test_invalid_feedback
 ]
 
 if __name__ == '__main__':
