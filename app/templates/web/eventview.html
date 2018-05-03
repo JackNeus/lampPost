@@ -11,9 +11,11 @@
             <p class="event-view-host mr-auto" id="eventHost"></p>
             <div class="d-flex flex-row align-items-end">
     	   		<h3 class="event-view-subtitle mr-auto" id="eventSubtitle"></h3>
+                {% if current_user.is_authenticated %}
                 <a id="reportBtn" class="reportBtn" data-toggle="modal" data-target="#myModal" onclick="setTitle(selected_title)" title="Report event">
                     <i class="fas fa-flag danger-button"></i>
                 </a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -44,7 +46,9 @@
         <div class="modal-content" style="width:50vw">
           <div class="modal-header">
             <h4 class="modal-title" > Report <a id="reportPopupTitle" style="font-weight:bold"> </a>?</h4>
+            
             <button type="button" class="close" data-dismiss="modal">&times;</button>
+            
           </div>
 
         <form id="reportForm"  method="POST" role="form" enctype="multipart/form-data">
