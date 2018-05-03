@@ -17,20 +17,20 @@ html, body {
 	// Font Style
 
 	// Base font
-	font-family: 100% $font-med;
+	font-family: $font-med;
 	// Headers
 	.h1, h1 {
-		font-family: 100% $font-heavy;
+		font-family: $font-heavy;
 		font-size:36px;
 	}
 
 	.h2, h2 {
-		font-family: 100% $font-heavy;
+		font-family: $font-heavy;
 		font-size:26px;
 	}
 
 	.h3, h3 {
-		font-family: 100% $font-med;
+		font-family: $font-med;
 		font-size:20px;
 	}
 
@@ -361,10 +361,9 @@ html, body {
 	.event-view-info {
 	    width: 100%;
 	    background-color: white;
-	    height: 75vh;
+	    height: 76vh;
 	    overflow-y: scroll;
 	    overflow-x: hidden;
-	    padding-bottom: 2vh;
 	}
 	img {
 		float: top;
@@ -377,6 +376,19 @@ html, body {
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
 	}
+	.event-view-data {
+		font-size:20px;
+		color: $light-color;
+		line-height: normal;
+		margin: 0px;
+	}
+	.ticket-btn {
+		text-decoration: none !important;
+		color: $light-color;
+	 	&:hover {
+	 		color: gold;
+	 	}
+  	}
 	.calendar-btn {
 		padding-right: 10px;
 		text-decoration: none !important;
@@ -387,8 +399,9 @@ html, body {
   	}
 
 	.reportBtn {
-		padding-right: 15px;
-		font-size: 1.2em;
+		padding-right: 20px;
+		padding-top: 10px;
+		font-size: 1.0em;
 		cursor: pointer;
 	}
 }
@@ -583,4 +596,18 @@ html, body {
 	color:darkorange;
 	font-weight:bold;
 	display: none;
+}
+
+.video-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+.video-responsive iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
 }
