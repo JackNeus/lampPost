@@ -73,11 +73,21 @@ html, body {
 				 img {
   			 		-webkit-filter: drop-shadow(2px 2px 0px #000);
   					filter: drop-shadow(2px 2px 0px #000);
-					width: 200px;
-					margin-bottom: 12px;
+				}
+				.welcomeLogo {
+					width: 45%;
 					@media screen and (max-width: 768px) {
-						width: 155px;
-						margin-bottom: 9px;
+						padding-top: 4%;
+						width: 90%;
+					}
+				}
+				.welcomeText {
+					padding-top: 4%;
+					width: 45%;
+					@media screen and (max-width: 768px) {
+						width: 90%;
+						padding-top: 5%;
+						padding-bottom: 5%;
 					}
 				}
 			}
