@@ -17,6 +17,11 @@ $(document).on("keypress", ":input:not(textarea)", function(event) {
 	return event.keyCode != 13;
 });
 
+// don't delete values when we tab through datepicker
+$(".applyDatepicker").datepicker({
+    forceParse: false
+});
+
 
 var currentNumShowing = 1;
 var maxShowings = 4;
@@ -81,11 +86,6 @@ $(document).ready(function(){
 
 	// initialize the event to be available to Princeton students
 	$("#visibility-0").attr("checked", "checked");
-
-	// slide the rows that we do need
-	for (var i = 1; i <= currentNumShowing; i++) {
-		$("#form-row-"+i.toString()).show();
-	}
 
 	// hide the rows that we don't need
 	for (var i = currentNumShowing + 1; i <= 4; i++) {
