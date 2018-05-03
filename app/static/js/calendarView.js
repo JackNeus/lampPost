@@ -17,6 +17,10 @@ var handleCalendarView = function() {
 var toggleCalendarView = function() {
 	// toggle column size proportions
 	$("#bigRow").toggleClass('calendar-view');
+	$("#searchSort").toggle();
+	$(".select-style").toggle();
+	$(".sort-direction").toggle();
+	$(".sort-box").toggle();
 	$(".calendarBtns").toggle();
 	
 	// make sure to update event view and recheck event url paramater
