@@ -111,3 +111,7 @@ class ReportEntry(Document):
     report_time = DateTimeField(required = True)
     reason = StringField(required = True, min_length = 5)
     event_dump = StringField(required = True)
+
+class FeedbackEntry(Document):
+    feedback_dump = StringField(required = True)
+    feedback_time = DateTimeField(required = True)

@@ -33,6 +33,12 @@ html .splashScreen .headerBox .loginBox, body .splashScreen .headerBox .loginBox
 html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
   font-size: 45px;
   margin-bottom: 0.5em;
+  margin-top: 30vh;
+}
+html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
+  font-weight: bold;
+  font-size: 45px;
+  margin-bottom: 1em;
   color: white;
   text-shadow: 2px 2px 0px #000;
 }
@@ -56,6 +62,12 @@ html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginB
   margin-bottom: 1em;
   margin-left: 3%;
   margin-right: 3%;
+html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
+  border: none;
+  background-color: #2d9eee;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 1em;
   max-width: 100%;
   overflow: hidden;
   text-align: center;
