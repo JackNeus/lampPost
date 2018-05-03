@@ -27,7 +27,7 @@ var showMyEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortResults(); 			// sort events by date
+	sortResults(); 				// sort events by date
 	createMyEventResults(); 	// create html code for each created event and display them
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button

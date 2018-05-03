@@ -1,4 +1,4 @@
-// DEPENDENCIES: displaySearches.js, createEventHtml.js
+// DEPENDENCIES: displaySearches.js, displayEvent.js, createEventHtml.js
 
 var event_data = [];
 var user_fav_data = [];
@@ -14,7 +14,6 @@ $(document).ready(function(){
 	loadEvents();
 	// hide the form that users would edit events with
 	$("#event-form").hide();
-	checkDisplay();
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({});
 });
@@ -34,10 +33,28 @@ var checkSort = function() {
 	});
 };
 
+// Take advantage of a jinja variable to force rendering of
+// edit form at page load.
 function checkDisplay() {
-	var i = $("#displayEventForm").length
+	let i = $("#displayEventForm").length;	
 	if (i > 0) {
 		$("#event-form").show();
+
+		var eventId = $("#event_id").val();
+		var eventNum = event_data.findIndex(function(event){return event._id === eventId;}) + 1;
+		
+		// Graphical commands to select event result.
+		animateSelectedSearchResult(eventNum);
+		highlightSelectedSearchResult(eventNum);
+		selectEditBtn($("#editBtn"+eventNum));
+
+		// If the user attempted to edit an event and was unsuccessful,
+		// the url parameter will not be set. We need to manually check for this.
+		//
+		// Usually, we update the DOM according to the value of the URL.
+		// Here, we update the URL according to the DOM.
+		updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+		updateUrl(addUrlParameter(document.location.search, 'edit'));
 	}
 }
 
@@ -153,14 +170,13 @@ var renderEditForm = function(eventNum) {
 	$(".footer").hide();
 
 	unselectIcons();
-
-	// make the icon "selected"
-	editBtn.addClass("selectedIcon");
-	editBtn.find(".fa-pencil-alt").addClass("fa-inverse");
+	selectEditBtn(editBtn);
 
 	// toggle highlighting in search results
-	if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
+	if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+		animateSelectedSearchResult(eventNum);
 		highlightSelectedSearchResult(eventNum);
+	}
 
 	// hide the event display
 	$(".event-view").hide();
@@ -233,6 +249,12 @@ var renderEditForm = function(eventNum) {
 	$("#event-form").show();
 }
 
+var selectEditBtn = function(editBtn) {
+	// make the icon "selected"
+	editBtn.addClass("selectedIcon");
+	editBtn.find(".fa-pencil-alt").addClass("fa-inverse");
+}
+
 var handleDeletePoster = function() {
 	$("#delete-poster-button").click(function() {
 		if (confirm("Are you sure you wish to remove the poster?")) {
@@ -258,6 +280,8 @@ var setupUserFavorites = function() {
 		if (urlParamEventId) {
 			updateUrlParamEventView(urlParamEventId);
 		}
+		console.log("About to check display.");
+		checkDisplay();
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,

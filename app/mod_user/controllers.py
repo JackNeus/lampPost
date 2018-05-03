@@ -32,7 +32,12 @@ def login(netid):
 	user = load_user(uid)
 	if user != None:
 		# User should stay logged in for one week.
-		login_user(user, remember = True, duration = timedelta(days=7))
+		
+		# This breaks stuff, because it doesn't necessarily restore
+		# cookies like the API token.
+		# Re-enable this when all cookies are part of the session.
+		#login_user(user, remember = True, duration = timedelta(days=7))
+		login_user(user)
 	else:
 		raise UserDoesNotExistError
 
