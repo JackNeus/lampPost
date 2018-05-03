@@ -46,7 +46,7 @@
         <div class="modal-content" style="width:50vw">
           <div class="modal-header">
             <h4 class="modal-title" > Report <a id="reportPopupTitle" style="font-weight:bold"> </a>?</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <button onclick="clearReportForm()" type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
 
         <form id="reportForm"  method="POST" role="form" enctype="multipart/form-data">
@@ -77,7 +77,7 @@
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary submitAddButton">Submit!</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clearReportForm()">Close</button>
           </div>
         </form>
 

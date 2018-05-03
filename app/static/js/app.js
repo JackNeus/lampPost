@@ -238,6 +238,13 @@ var setupUserFavorites = function() {
 	}
 }
 
+function clearReportForm() {
+	// clear the elements
+	$("#description").val("");
+	// there was not an error (this will stop the modal from popping up over and over)
+	$("#wasError").remove();
+}
+
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
 
 // converts java date string into python date string (mm/dd/yy to yy-mm-dd)
