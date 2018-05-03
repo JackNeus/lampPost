@@ -49,10 +49,10 @@ html #bigRow, body #bigRow {
 }
 
 .danger-button {
-  color: #dc3545;
+  color: #999999;
 }
 .danger-button:hover {
-  color: #c9302c;
+  color: #cc0000;
 }
 
 ::placeholder {
@@ -124,21 +124,56 @@ html #bigRow, body #bigRow {
   font: 100% "Avenir-Light", "Arial-Light", sans-serif;
   font-size: 14px !important;
 }
-
 #searchRow {
   min-height: 4.25vh;
-}
+  display: flex;
+  margin-right: 2vh;
+  flex-wrap: nowrap;
+  align-items: stretch; }
 
 .searchButtons {
   display: flex;
   flex-wrap: nowrap;
   margin-right: 2vh;
-}
 
 .filter-button {
   margin: 2vh 2vh;
   padding-left: 0;
 }
+  font-size: 14px; }
+  .searchButtons .filter-button {
+    padding-left: 0;
+    font-size: 1.25em;
+    margin-left: 2vh; }
+  .searchButtons .sort-box {
+    padding-top: 1vh; }
+    .searchButtons .sort-box .sort-direction {
+      cursor: pointer;
+      padding-left: 5px;
+      font-size: 1.55em;
+      display: inline-block;
+      float: left; }
+    .searchButtons .sort-box .select-style {
+      border: 1px solid #ccc;
+      width: 175px;
+      min-width: 175px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: #fafafa url("../graphics/sort-down.png") no-repeat 95% 50%;
+      float: left; }
+    .searchButtons .sort-box .select-style select {
+      padding: 5px 8px;
+      width: 130%;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      background-image: none;
+      -webkit-appearance: none; }
+    .searchButtons .sort-box .select-style select:focus {
+      outline: none; }
+
+.calendar-view-button {
+  margin-top: 2vh; }
 
 .filters {
   margin: 0vh 2vh;
@@ -225,7 +260,7 @@ html #bigRow, body #bigRow {
   color: #ee7f2d;
 }
 .smallSearchResult .resultContents .resultFireBtn:hover {
-  color: rgba(255, 165, 0, 0.5);
+  color: rgba(238, 127, 45, 0.75);
 }
 .smallSearchResult .resultContents .resultFireBtn .resultFireNum {
   color: #333333 !important;
@@ -290,7 +325,7 @@ html #bigRow, body #bigRow {
   color: #ee7f2d;
 }
 .event-view .eventFireBtn:hover {
-  color: rgba(255, 165, 0, 0.5);
+  color: rgba(238, 127, 45, 0.75);
 }
 .event-view .eventFireNum {
   color: #333333;
@@ -306,11 +341,9 @@ html #bigRow, body #bigRow {
   padding-bottom: 2vh;
 }
 .event-view img {
+  float: top;
   width: 100%;
-}
-.event-view .posterImage img {
-  height: 75vh;
-  width: auto;
+  height: auto;
 }
 .event-view .eventSection {
   padding-top: 20px;
@@ -319,10 +352,16 @@ html #bigRow, body #bigRow {
   border-bottom: 2px solid #2d9eee;
 }
 .event-view .calendar-btn {
+  padding-right: 10px;
   text-decoration: none !important;
+  color: #999999;
+}
+.event-view .calendar-btn:hover {
+  color: #2d9eee;
 }
 .event-view .reportBtn {
-  font-size: 1.5em;
+  padding-right: 15px;
+  font-size: 1.2em;
   cursor: pointer;
 }
 
@@ -397,11 +436,60 @@ html #bigRow, body #bigRow {
   float: left;
 }
 
+.calendar-view #leftCol {
+  flex: 60%; }
+.calendar-view #rightCol {
+  flex: 40%; }
+
+.calendarBtns {
+  display: none; }
+
+.calendar-view-row {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  width: 100%;
+  border-left: 2px solid black;
+  margin-left: 1.5vh;
+  margin-right: 0vh; }
+  .calendar-view-row .dayCol {
+    max-width: 14%;
+    min-width: 14%;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    max-height: 88vh;
+    min-height: 55vh;
+    height: auto; }
+    .calendar-view-row .dayCol .dayTitle {
+      border-bottom: 2px solid black;
+      width: 100%; }
+    .calendar-view-row .dayCol .dayResults {
+      display: flex;
+      flex-direction: column; }
+      .calendar-view-row .dayCol .dayResults .smallSearchResult {
+        margin-right: 0;
+        overflow: wrap;
+        border-right: none;
+        border-left: none;
+        border-top: none;
+        border-radius: 0; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTitle {
+          font-size: 0.8em;
+          line-height: 1em;
+          height: 3em;
+          overflow: hidden; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTime {
+          font-size: 0.6em; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireBtn {
+          display: none; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireNum {
+          display: none; }
+
 .searchBoxCol {
   flex: 40%;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 825px) {
   .flex-container-row {
     flex-direction: column;
   }
@@ -441,4 +529,6 @@ html #bigRow, body #bigRow {
   font-size: 24px;
   color: darkorange;
   font-weight: bold;
-}
+  display: none; }
+
+/*# sourceMappingURL=base.css.map */
