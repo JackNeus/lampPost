@@ -1,4 +1,4 @@
-// DEPENDENCIES: handleFavorites.js
+// DEPENDENCIES: displaySearches.js, handleFavorites.js
 
 // keep track of current event shown in event view
 var selected_event = null;
@@ -51,6 +51,7 @@ var handleEventViewClick = function() {
 			selected_event = event_data[eventNum - 1];
 
 			// populate and display event view
+			highlightSearchResult($(this));
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
@@ -93,21 +94,29 @@ function getGoogleCalLink(eventNum, i) {
 	return out_url;
 }
 
+// Toggle highlighting in search results.
+function highlightSearchResult(elt) {
+	$(".smallSearchResult").removeClass("selected");
+	elt.addClass("selected");
+}
+
 // Animate selection
 function selectSearchResult(eventNum) {
-	var selected_event = $(".smallSearchResult.selected");
-	var event_to_select = $("#smallSearchResult" + eventNum);
+	// Don't allow this to happen if we're in calendar view.
+	// Seriously. 
+	if (!inCalendarView()) {
+		var selected_event = $(".smallSearchResult.selected");
+		var event_to_select = $("#smallSearchResult" + eventNum);
 
-	// toggle highlighting in search results.
-	$(".smallSearchResult").removeClass("selected");
-	event_to_select.addClass("selected");
+		highlightSearchResult(event_to_select);
 
-	// Close previously selected event, if it's not the one we want to open.
-	if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
-		selected_event.animate({"margin-right": '2vh'});
+		// Close previously selected event, if it's not the one we want to open.
+		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
+			selected_event.animate({"margin-right": '2vh'});
+		}
+		// Open new events.
+		event_to_select.animate({"margin-right": '0vh'});
 	}
-	// Open new events.
-	event_to_select.animate({"margin-right": '0vh'});
 }
 
 // Update the popularity of an event when the fire button is clicked
