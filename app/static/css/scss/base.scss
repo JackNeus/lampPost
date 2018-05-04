@@ -616,7 +616,6 @@ html, body {
 	display: none;
 }
 
-<<<<<<< HEAD
 @media screen and (max-width: 768px) {
 	#leftCol, #rightCol {
 		width: 100vw !important;
@@ -645,13 +644,11 @@ html, body {
 /* override (for flex in display-body) */
 .flex-container-col.slick-slide {
   display: flex;
-=======
+}
 #myModal {
-	padding-top:25vh; 
+	padding-top:25vh;
 	padding-left:10vw
 }
-
 .modal-content {
 	width:50vw;
->>>>>>> develop
 }
