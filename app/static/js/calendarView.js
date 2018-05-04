@@ -52,6 +52,7 @@ var toggleCalendarView = function() {
 };
 
 // handle clicks of next week arrow
+// TODO: make date update in datepicker
 var handleNextWeekClick = function() {
 	$(".nextWeekBtn").unbind("click");
 	$(".nextWeekBtn").click(function() {
