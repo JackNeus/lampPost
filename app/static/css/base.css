@@ -421,4 +421,25 @@ html #bigRow, body #bigRow {
   font-weight: bold;
   display: none; }
 
+.badge-primary {
+  font-size: 15px; }
+
+#MusicTag {
+  background-color: CornflowerBlue; }
+
+#DanceTag {
+  background-color: purple; }
+
+#LectureTag {
+  background-color: IndianRed; }
+
+#TheaterTag {
+  background-color: green; }
+
+#StreetTag {
+  background-color: gray; }
+
+#OrientationTag {
+  background-color: orange; }
+
 /*# sourceMappingURL=base.css.map */

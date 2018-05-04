@@ -9,6 +9,15 @@ from .models import *
 import json
 import requests
 
+tagColors = {
+	"Music": "CornflowerBlue",
+	"Dance": "IndianRed",
+	"Lecture": "purple",
+	"Theater": "green",
+	"Street": "gray",
+	"Orientation": "orange"
+}
+
 # Homepage
 @mod_web.route('/')
 def home():
