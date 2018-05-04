@@ -2,10 +2,10 @@
 *.pyc
 *.cfg
 env/*
-*/.DS_Store
+*.DS_Store
 # Sass
 .sass-cache/
 *.css.map
-*.css
+app/static/css/*.css
 test/tmp/*
 tmp/*
