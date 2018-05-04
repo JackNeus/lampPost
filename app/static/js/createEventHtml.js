@@ -206,16 +206,23 @@ var addEventInstances = function(i) {
 
 // create title for week based on month name and year if different from current year
 var createWeekTitle = function(date) {
-	var months = ["January", "February", "March", "April", "May",
-			  "June", "July", "August", "September", 
-			  "October", "November", "December"]
+	var months = ["Jan", "Feb", "Mar", "Apr", "May",
+			  "Jun", "Jul", "Aug", "Sep", 
+			  "Oct", "Nov", "Dec"]
 	var monthIndex = date.getMonth();
+	var title = months[monthIndex];
+	var endOfWeek = new Date(date);
+	endOfWeek.setDate(date.getDate() + 6);
 	var today = new Date();
 	
 	if (date.getFullYear() != today.getFullYear())
-		var title = months[monthIndex] + " " + date.getFullYear();
-	else
-		var title = months[monthIndex];
+		title += " " + date.getFullYear();
+		
+	if (endOfWeek.getMonth() !== date.getMonth())
+		title += " " + date.getDate() + " - " + months[endOfWeek.getMonth()] + " " + endOfWeek.getDate();
+	else 
+		title += " " + date.getDate() + "-" + 
+		 	   endOfWeek.getDate();
 	
 	$("#weekTitle").text(title);
 };

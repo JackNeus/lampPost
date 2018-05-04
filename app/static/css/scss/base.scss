@@ -512,8 +512,16 @@ html, body {
 			font-size: 2em;
 			font-weight: bold;
 			color: white;
-			margin-left: 4vh;
-			margin-right: 4vh;
+			margin-left: 2vh;
+			margin-right: 2vh;
+		}
+		
+		.previousWeekBtn {
+			margin-left: 4vw;
+		}
+		
+		.nextWeekBtn {
+			margin-right: 4vw;
 		}
 	}
 }
