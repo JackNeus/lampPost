@@ -11,12 +11,16 @@
 		<div class="spacer col-md-5"></div>
 		<div class="headerBox col-xs-12 col-md-6">
 			<div class="loginBox">
-				<p class="welcome lamppostTitle">
+        <p class="welcome lamppostTitle">
 					<img src = "../../static/graphics/logoWhite.svg" class="image-responsive welcomeLogo">
 					<img src = "../../static/graphics/welcomeText.svg" align="bottom" class="image-responsive welcomeText">
 				</p>
-				<a class="homeLink btn btn-outline-primary btn-lg" href="/login">Login with PUID</a>
-				<a class="homeLink btn btn-outline-primary btn-lg" href="/welcome?proceed">Continue as Guest</a>
+				{% if current_user.is_authenticated %}
+          <a class="homeLink btn btn-outline-primary btn-lg" href="/welcome?proceed">Continue to Site</a>
+				{% else %}
+          <a class="homeLink btn btn-outline-primary btn-lg" href="/login">Login with PUID</a>
+          <a class="homeLink btn btn-outline-primary btn-lg" href="/welcome?proceed">Continue as Guest</a>
+				{% endif %}
 			</div>
 		</div>
 		<div class="spacer col-md-2"></div>

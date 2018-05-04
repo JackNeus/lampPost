@@ -41,7 +41,6 @@ var updateUrlParamEventView = function(eventId) {
 	if (event != undefined) {
 		eventNum = event_data.indexOf(event) + 1;
 		selected_event = event;
-		highlightSelectedSearchResult(eventNum);
 		if (checkEditEventUrlParameter()) {
 			renderEditForm(eventNum);
 		}
