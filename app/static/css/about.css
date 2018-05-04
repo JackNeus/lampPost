@@ -48,6 +48,9 @@ h1 {
   font-style: italic;
   font-size: 15px; }
 
+#abtBlankFooter {
+  padding-top: 5vh; }
+
 html {
   height: 100%; }
 

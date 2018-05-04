@@ -149,6 +149,9 @@ def about():
 		form = FeedbackForm(request.form)
 		eventData = {"feedback": request.form["feedback"]}
 		r = requests.put(CONFIG["BASE_URL"]+"/api/feedback/", json = eventData)
+		if r.status_code != 200:
+				flash("Error: something went wrong. Please contact a developer.")
+				return render_template("web/about.html", formF=FeedbackForm())
 		r = json.loads(r.text)
 		if r["status"] == "Success":
 			flash("Thank you! Your feedback has been reported.")

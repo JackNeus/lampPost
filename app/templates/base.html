@@ -83,26 +83,21 @@
           <li class="nav-item">
           	<a class="nav-link" id="userProfileLink" href="#">My Account</a>
           	   <div class="dropdown-content" id="userProfileDropdown">
-		      <a class="nav-link" href="/myevents">Manage My Events</a>
-		      <a class="nav-link" href="/myfavorites">Favorite Events</a>
-		   </div>
+		              <a class="nav-link" href="/myevents">Manage My Events</a>
+		              <a class="nav-link" href="/myfavorites">Favorite Events</a>
+		          </div>
           </li>
           </div>
-          <!-- include whether or not user is logged in -->
-          <li class="nav-item">
-            <a class="nav-link" href="/about">About</a>
-          </li>
           <li class="nav-item">
              <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
           </li>
 
           {% else %}
-          <!-- include whether or not user is logged in -->
+            <a class="nav-link" href="/login"> Login </a>
+	         {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="/about">About</a>
           </li>
-		 <a class="nav-link" href="/login"> Login </a>
-	    {% endif %}
 
         </ul>
       </div>
