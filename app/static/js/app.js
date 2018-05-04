@@ -133,7 +133,7 @@ var setupSearch = function() {
 // searches for events immediately based on search box and datepicker values
 var trigger_search = function() {
 	// default search for calendar view: all events since one year ago
-	if (checkCalendarParameter() && !$("#search-box").val())
+	if (inCalendarView() && !$("#search-box").val())
 		var query = "*/" + getDaysAgo(365);
 	else if ($("#search-box").val()) {
 		if ($("#datepicker").val())
@@ -166,7 +166,7 @@ var setupDataRetrieval = function() {
 
 	// fetch data after date chosen in datepicker filter
 	$("#datepicker").change(function() {
-		if (!checkCalendarParameter()) {
+		if (!inCalendarView()) {
 			if ($(this).val() !== "") {
 				var date_py = java2py_date($(this).val());
 				if ($("#search-box").val() !== "")
@@ -182,7 +182,7 @@ var setupDataRetrieval = function() {
 // fetch data given a query string
 function fetchData(query) {
 
-	if (query.length == 0 && !checkCalendarParameter()) {
+	if (query.length == 0 && !inCalendarView()) {
 		// then let's just show the trending events
 		addTrendingResults();
 		return;
