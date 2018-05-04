@@ -2,10 +2,6 @@
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="/static/css/add.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-
-
 <script src="/static/js/add.js"> </script>
 
 <body>
@@ -44,7 +40,7 @@
 	        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
 	        			</div>
 					{% endfor %}
-					<small id="fileHelp" class="form-text text-muted"> If you indicate the audience as "Princeton students", the event will only be visible to CAS-authenticated users. Otherwise, the general public can view it. </small>
+					<small id="fileHelp" class="form-text text-muted"> If you indicate the audience as "Princeton community", the event will only be visible to CAS-authenticated users. Otherwise, the general public can view it. </small>
 				</div>
 
 
@@ -59,8 +55,9 @@
 					<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!</small>
 				</div>
 
+
 				{% for i in range(form.locations.__len__()) %}
-					<div class="form-row" id="form-row-{{i+1}}">
+					<div class="form-row" id="form-row-{{i+1}}" style={{"display:none;" if i > 0 else "" }}>
 						<div class="form-group col-md-4">
         					{{ form.locations.__getitem__(i).label(class="numbered req", maxlength="100") }}
         					{{ form.locations.__getitem__(i)(class="form-control") }}
