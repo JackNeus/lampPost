@@ -145,16 +145,19 @@ var setupSearch = function() {
 // searches for events immediately based on search box and datepicker values
 var trigger_search = function() {
 	// default search for calendar view: all events since one year ago
-	if (inCalendarView() && !$("#search-box").val())
+	if (inCalendarView() && !$("#search-box").val()) {
+		$("#search-box").val("*");
 		var query = "*/" + getDaysAgo(365);
+	}
 	else if ($("#search-box").val()) {
 		if ($("#datepicker").val())
 			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
 		else  
 			var query = $("#search-box").val();
 	}
-	else
+	else {
 		var query = "";
+	}
 		
 	// don't make api call if query hasn't changed (unless view mode has changed)
 	if (query != prevQuery || change_view_mode) {
