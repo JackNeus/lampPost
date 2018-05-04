@@ -50,6 +50,9 @@ class EventEntry(Document):
     trailer = URLField(max_length = 100)
     poster = URLField()
 
+    # Tags system.
+    tags = ListField(StringField())
+
     def clean(self):
         if self.poster is not None and not self.poster.startswith(CONFIG["S3_LOCATION"]):
             raise ReadableError("Poster URL did not point to an authorized location.")

@@ -394,7 +394,9 @@ def test_edit_event_valid():
 					  				 "location": "Princeton University"},
 					  				 {"start_datetime": "3pm April 2 2100",
 					  				 "end_datetime": "4pm April 2 2100",
-					  				 "location": "Yale University"}]}
+					  				 "location": "Yale University"}],
+					  "tags": ["Dance", "Party"],
+					  "tags": []}
 		# Try editing each field separately.
 		for field in event_edits:
 			edit = {field: event_edits[field]}
