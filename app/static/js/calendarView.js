@@ -44,9 +44,9 @@ var toggleCalendarView = function() {
 	}
 	
 	$("#searches").html("");
-	trigger_search();	// get new search results
 	
 	$("#calendarViewBtn").toggleClass("calendarMode");
+	trigger_search();	// get new search results
 	handleNextWeekClick();
 	handlePreviousWeekClick();
 };
