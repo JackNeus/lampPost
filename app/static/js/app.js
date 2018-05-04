@@ -27,7 +27,7 @@ var calWeek = 0;
 // option the user was using, and then switch to popularity.
 // When trending events are not displayed, we restore the
 // user's settings.
-var user_sort_option;
+var user_sort_option = "Date";
 
 // Allow for external population of event_data.
 // Currently only used for USE_MOCK_DATA flag.
