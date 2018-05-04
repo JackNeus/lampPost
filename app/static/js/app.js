@@ -146,8 +146,7 @@ var setupSearch = function() {
 var trigger_search = function() {
 	// default search for calendar view: all events since one year ago
 	if (inCalendarView() && !$("#search-box").val()) {
-		$("#search-box").val("*");
-		var query = $("#search-box").val() + java2py_date(getDaysAgo(365));
+		var query = "*/" + java2py_date(getDaysAgo(365));
 	}
 	else if ($("#search-box").val()) {
 		if (inCalendarView())
