@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="/static/css/about.css">
+<body>
+
+	<div class="colAbt"> 
+		<h1 class="message"> About lampPost </h1>
+
+		<div id="probSol">
+		  <div class="row">
+		    <div class="col">
+		      <p class="bigTagC">  The Problem </p>
+		      <p> It can be hard to make sense of the overload of information about events on Princeton's campus. With hundreds of posters, listserv emails, and Facebook events, it can be hard to find the events you are interested in, or remember about them when the time comes. </p>
+		    </div>
+		    <div class="col">
+		      <p class="bigTagC">  The Solution </p>
+		      <ul>
+		      <li> With lampPost, you have access to a searchable repository of all the events happening around Princeton. </li>
+		      <li> All showings have buttons to export the time to your personal Google Calendar, so you can find them later. </li>
+		      <li> Look at trending events, determined by those favorited by users. </li>
+		      <li> If your event isn't included, fill out a quick form to immediately add it! </li>
+		  	</ul>
+		  	</div>
+		  </div>
+		</div>
+
+		<div id="theTeam"> 
+
+		  	
+			<div> <p class="bigTag"> The Team </p> </div>
+		  	<div class="flex-container-row align-items-center justify-content-center" id = "photoRow" style="flex-wrap:nowrap">
+		  		
+		  		<div>
+			      <img class="teamPhoto img-fluid fit" id="welcome" src="../../static/graphics/images/lmberg.jpg"> </img>
+			      Lauren von Berg '20
+			    </div>
+			    <div>
+			      <img class="teamPhoto img-fluid fit" id="welcome" src="../../static/graphics/images/rbova.png"> </img>
+			      Reilly Bova '20
+			    </div>
+			    <div>
+			      <img class="teamPhoto img-fluid fit" id="welcome" src="../../static/graphics/images/rrliu.jpg"> </img>
+			      Robert Liu '20
+			    </div>
+			    <div>
+			      <img class="teamPhoto img-fluid fit" id="welcome" src="../../static/graphics/images/jneus.jpg"> </img>
+			      Jack Neus '20
+			    </div>
+			    <div>
+			      <img class="teamPhoto img-fluid fit" id="welcome" src="../../static/graphics/images/tpollner.jpg"> </img>
+			      Tristan Pollner '20
+			    </div>
+			</div>
+
+			<div id="abtFoot">
+				<p> LampPost is an application under development for COS 333, Spring 2018. We would like to extend our thanks to our adviser Ashley Kling and professor Brian Kernighan. The project would not be possible without their advice and support. </p>
+			</div>
+
+
+			<div> <p class="bigTag"> Your Feedback! </p> </div>
+
+			<form id="feedbackForm" action="/about" method="POST" role="form" enctype="multipart/form-data">
+				<div class="form-group">
+					{{ formF.feedback(placeholder="We'd love to hear from you. Any comments about your experience using the site, what you like, and/or what you don't like are appreciated.", class="form-control", rows="4", maxlength="3000") }}
+				</div>
+				<button type="submit" class="btn btn-primary submitAddButton">Submit!</button>
+			</form>
+
+			<div id="abtBlankFooter"> </div>
+		</div>
+
+	</div>
+
+</body>
+{% endblock %}

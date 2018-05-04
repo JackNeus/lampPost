@@ -35,7 +35,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -45,7 +45,7 @@
 
     <!-- Time picker and date picker -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.css"/>
     <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
     <script src="static/js/jquery.cookie.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
@@ -88,17 +88,22 @@
           <li class="nav-item">
           	<a class="nav-link" id="userProfileLink" href="#">My Account</a>
           	   <div class="dropdown-content" id="userProfileDropdown">
-		      <a class="nav-link" href="/myevents">Manage My Events</a>
-		      <a class="nav-link" href="/myfavorites">Favorite Events</a>
-		   </div>
+		              <a class="nav-link" href="/myevents">Manage My Events</a>
+		              <a class="nav-link" href="/myfavorites">Favorite Events</a>
+		          </div>
           </li>
           </div>
           <li class="nav-item">
              <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
           </li>
+
           {% else %}
-		 <a class="nav-link" href="/login"> Login </a>
-	    {% endif %}
+            <a class="nav-link" href="/login"> Login </a>
+	         {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+
         </ul>
       </div>
     </nav>

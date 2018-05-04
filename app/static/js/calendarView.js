@@ -8,7 +8,13 @@ var handleCalendarView = function() {
 		else {
 			updateUrl(removeUrlParameter(document.location.search, 'cal'));
 		}
+<<<<<<< HEAD
 
+=======
+		
+		// update that view mode has changed
+		change_view_mode = true;
+>>>>>>> develop
 		toggleCalendarView();
 	})
 };
@@ -32,15 +38,14 @@ var toggleCalendarView = function() {
 		var calendarBtn = `<i class="fas fa-calendar"></i>`;
 		$("#calendarViewBtn").html(calendarBtn);
 		$("#calendarViewBtn").prop('title', 'Calendar View');
-		removeSearchFromDate();
-		$("#searches").html("");
-		fetchData($("#search-box").val());
+		
 	}
 	else {
 		var listBtn = `<i class="fas fa-list"></i>`;
 		$("#calendarViewBtn").html(listBtn);
 		$("#calendarViewBtn").prop('title', 'List View');
 		calWeek = 0; // reset week to 0 (current week)
+<<<<<<< HEAD
 		addSearchFromDate();
 
 		// fetch data again since searching from an earlier date by default
@@ -54,11 +59,20 @@ var toggleCalendarView = function() {
 
 	$("#calendarViewBtn").toggleClass("calendarMode");
 
+=======
+	}
+	
+	$("#searches").html("");
+	trigger_search();	// get new search results
+	
+	$("#calendarViewBtn").toggleClass("calendarMode");
+>>>>>>> develop
 	handleNextWeekClick();
 	handlePreviousWeekClick();
 };
 
 // handle clicks of next week arrow
+// TODO: make date update in datepicker
 var handleNextWeekClick = function() {
 	$(".nextWeekBtn").unbind("click");
 	$(".nextWeekBtn").click(function() {
@@ -75,6 +89,7 @@ var handlePreviousWeekClick = function() {
 		showSearchResults();
 	})
 };
+<<<<<<< HEAD
 
 // adds the date a year prior to today to the datepicker
 var addSearchFromDate = function() {
@@ -89,3 +104,5 @@ var addSearchFromDate = function() {
 var removeSearchFromDate = function() {
 	$("#datepicker").val("");
 };
+=======
+>>>>>>> develop
