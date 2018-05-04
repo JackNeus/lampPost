@@ -116,10 +116,10 @@ var handleDeleteMyEvent = function() {
 		deleteBtn.addClass("selectedIcon");
 
 		// toggle highlighting in search results
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
-	
-		selectSearchResult(eventNum);
-		
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+			selectSearchResult(eventNum);
+		}
+
 		// show event
 		populateEventViewPanel(eventNum);
 
@@ -186,6 +186,7 @@ var renderEditForm = function(eventNum) {
 	$(".footer").hide();
 
 	// make the icon "selected"
+	unselectIcons();
 	selectEditBtn(editBtn);
 
 	// toggle highlighting in search results
@@ -267,7 +268,6 @@ var renderEditForm = function(eventNum) {
 var selectEditBtn = function(editBtn) {
 	// make the icon "selected"
 	editBtn.addClass("selectedIcon");
-	editBtn.find(".fa-pencil-alt").addClass("fa-inverse");
 }
 
 var handleDeletePoster = function() {

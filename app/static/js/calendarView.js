@@ -81,7 +81,7 @@ var addSearchFromDate = function() {
 	var today = new Date();
 	var timeAgo = new Date();
 	timeAgo.setDate(today.getDate() - 12*7);
-	var dateStr = makeDateStr(timeAgo, true);
+	var dateStr = makeDayMonthYearString(timeAgo, true);
 	$("#datepicker").val(dateStr);
 };
 
