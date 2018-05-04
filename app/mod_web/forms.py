@@ -25,7 +25,7 @@ class EventForm(FlaskForm):
     deletePoster = TextField()
     poster = FileField('Event Photo/Poster')
     link = StringField('Promo Video')
-    tags = MultiCheckboxField('Tags:', choices=[("Music","Music"), ("Dance", "Dance"), ("Lecture", "Lecture"), ("Theater", "Theater"), ("Street", "Street"),("Orientation", "Orientation")])
+    tags = MultiCheckboxField('Tags:', choices=[("Music","Music"), ("Dance", "Dance"), ("Talk", "Talk"), ("Theater", "Theater"), ("Street", "Street"),("Orientation", "Orientation")])
 
 class ReportForm(FlaskForm):
     event_id = TextField()
