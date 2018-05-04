@@ -190,8 +190,10 @@ var setupDataRetrieval = function() {
 		  	}
 		  	else fetchData($("#search-box").val());
 		}
-		else 
+		else {
+			calWeek = 0;
 			showSearchResults();
+		}
 	});
 };
 

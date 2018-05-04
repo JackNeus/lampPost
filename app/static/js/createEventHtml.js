@@ -101,6 +101,9 @@ var createCalenderViewResults = function() {
 	// day of week string of first day of calendar view
 	var firstDayStr = firstDay.getDay();
 	
+	// title the week with the month
+	createWeekTitle(firstDay);
+	
 	// stores number of search results
 	count = 1;
 	
@@ -173,7 +176,7 @@ var createDayColumn = function(currentDate, i, count) {
 	`<div class="flex-container-col dayCol">`
 	+  `<div class="dayTitle" id="dayTitle` + count + `">` 
 	+ 	`<div class="dayName">` + daysOfWeek[i].substring(0, 3) + `</div>`
-	+ 	`<div class="date" id="date` + count + `">` + makeDayMonthYearString(currentDate) + `</div>`
+	+ 	`<div class="date" id="date` + count + `">` + makeDayMonthYearString(currentDate, false) + `</div>`
 	+   `</div>`
 	+  `<div class="dayResults" id="` + daysOfWeek[i] + `"></div>`
 	+ `</div>`;
@@ -201,9 +204,25 @@ var addEventInstances = function(i) {
 	}
 };
 
+// create title for week based on month name and year if different from current year
+var createWeekTitle = function(date) {
+	var months = ["January", "February", "March", "April", "May",
+			  "June", "July", "August", "September", 
+			  "October", "November", "December"]
+	var monthIndex = date.getMonth();
+	var today = new Date();
+	
+	if (date.getFullYear() != today.getFullYear())
+		var title = months[monthIndex] + " " + date.getFullYear();
+	else
+		var title = months[monthIndex];
+	
+	$("#weekTitle").text(title);
+};
+
 // return a time element for a given instance
 var getEventTimeElement = function(startDate, endDate) {
-	var timeStr = makeDate(startDate, endDate);
+	var timeStr = makeDate(startDate, endDate, true);
 	var timeElement = $('<p />').attr({
 			class: "resultTime"
 		}).append(timeStr);
