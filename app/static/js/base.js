@@ -1,8 +1,8 @@
 // Global javascript that is always loaded
 $(document).ready(function() {
 	// initialize layout
-	document.isMobile = ($(window).width() < WIDTH_THRESHOLD);
-	if (document.isMobile) {
+	document.isMobile_Master = ($(window).width() < WIDTH_THRESHOLD);
+	if (document.isMobile_Master) {
 		viewMobile_Master();
 	}
 	else viewDesktop_Master();
@@ -12,4 +12,4 @@ $(document).ready(function() {
 
 	// Render the proper logo
 	logoRender();
-})
+});

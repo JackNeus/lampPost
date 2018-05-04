@@ -66,7 +66,7 @@ html, body {
 	    z-index: 6;
 	}
 
-	#bigRow {
+	#browserView {
 		padding-left: 0vw;
 		padding-right: 0vw;
 		margin-bottom: 2vh;
@@ -419,6 +419,12 @@ html, body {
 	overflow: hidden;
 }
 
+.flex-container-bigrow {
+	display: flex;
+	flex-flow: row nowrap;
+	overflow: hidden;
+}
+
 .searchRow {
 	display: flex;
 	flex-flow: column nowrap;
@@ -560,14 +566,19 @@ html, body {
 	flex: 40%;
 }
 
-@media screen and (max-width: 768px) {
-    .flex-container-row {
-        flex-direction: column;
-    }
-    #leftCol {
-    	   max-height: 55vh;
-    	   height: auto;
-    }
+/* THINGS FOR SLICK CAROUSEL */
+.slick-list {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+.slick-track {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+.slick-slide {
+  height: auto;
 }
 
 #interiorWelcomeDiv {
@@ -602,4 +613,34 @@ html, body {
 	color:darkorange;
 	font-weight:bold;
 	display: none;
+}
+
+@media screen and (max-width: 768px) {
+	#leftCol, #rightCol {
+		width: 100vw !important;
+		flex: 100%;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+/* THINGS FOR SLICK CAROUSEL */
+.slick-list {
+  /* flex-container-row */
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+.slick-track {
+  /* flex-container-row */
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+.slick-slide {
+  /* so that height is stretched (safari) */
+  height: auto;
+}
+/* override (for flex in display-body) */
+.flex-container-col.slick-slide {
+  display: flex;
 }

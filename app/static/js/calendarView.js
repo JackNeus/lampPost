@@ -8,7 +8,7 @@ var handleCalendarView = function() {
 		else {
 			updateUrl(removeUrlParameter(document.location.search, 'cal'));
 		}
-		
+
 		toggleCalendarView();
 	})
 };
@@ -16,17 +16,17 @@ var handleCalendarView = function() {
 // toggle view for calendar and display the correct week calendar results
 var toggleCalendarView = function() {
 	// toggle column size proportions
-	$("#bigRow").toggleClass('calendar-view');
+	$("#browserView").toggleClass('calendar-view');
 	$("#searchSort").toggle();
 	$(".select-style").toggle();
 	$(".sort-direction").toggle();
 	$(".sort-box").toggle();
 	$(".calendarBtns").toggle();
-	
+
 	// make sure to update event view and recheck event url paramater
 	$("#event-view").hide();
 	urlParamEventId = checkEventUrlParameter();
-		
+
 	// toggle calendar/list view button
 	if ($("#calendarViewBtn").hasClass("calendarMode")) {
 		var calendarBtn = `<i class="fas fa-calendar"></i>`;
@@ -42,7 +42,7 @@ var toggleCalendarView = function() {
 		$("#calendarViewBtn").prop('title', 'List View');
 		calWeek = 0; // reset week to 0 (current week)
 		addSearchFromDate();
-		
+
 		// fetch data again since searching from an earlier date by default
 		if ($("#search-box").val())
 			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
@@ -51,9 +51,9 @@ var toggleCalendarView = function() {
 		$("#searches").html("");
 		fetchData(query);
 	}
-	
+
 	$("#calendarViewBtn").toggleClass("calendarMode");
-	
+
 	handleNextWeekClick();
 	handlePreviousWeekClick();
 };
@@ -89,4 +89,3 @@ var addSearchFromDate = function() {
 var removeSearchFromDate = function() {
 	$("#datepicker").val("");
 };
-
