@@ -155,8 +155,7 @@ def remove_user_favorite(user, eventid):
 
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
-# For each token, events with tokens (whitespace delimited) matching the token are aggregated.
-# The current event fields queried are title, location, and host.
+# For each token, events matching the token (there are a set of queries against different fields) are aggregated
 # The intersection of results for the tokens is returned.
 # Only events ending after start_datetime are included in search results.
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
@@ -168,15 +167,19 @@ def search_events(query, start_datetime, user=None):
 	tokens = query.split()
 	results = []
 	for token in tokens:
+		escaped_token = re.escape(token)
+
 		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
 		prefix_re = re.compile("(\s+|^)%s" % token, re.IGNORECASE)
 		full_word_re = re.compile("(\s+|^)%s(\s+|$)" % token, re.IGNORECASE)
+		exact_word_re = re.compile("^%s$" % escaped_token, re.IGNORECASE)
 
 		# Queries to run.
 		queries = [{"title": prefix_re},
 			{"host": prefix_re},
 			{"instances__location": prefix_re},
-			{"description": full_word_re}]
+			{"description": full_word_re},
+			{"tags": exact_word_re}]
 
 		sources = list(map(lambda query: set(EventEntry.objects(**query, **query_settings)), queries))
 		events = set().union(*sources)
