@@ -57,37 +57,8 @@
 				</div>
 
 
-				<!-- Need to split up these for loops, so that we can initialize rows 2 thru 4 to be hidden. This 
-				allows us to not have the bug where we stutter upon refresh. -->
-
-				{% for i in range(1) %}
-					<div class="form-row" id="form-row-{{i+1}}">
-							<div class="form-group col-md-4">
-	        					{{ form.locations.__getitem__(i).label(class="numbered req", maxlength="100") }}
-	        					{{ form.locations.__getitem__(i)(class="form-control") }}
-	        				</div>
-
-	        				<div class="form-group col-md-2">
-								{{ form.startDates.__getitem__(i).label(class="numbered req") }}
-								{{ form.startDates.__getitem__(i)(class="form-control") }}
-							</div>
-							<div class="form-group col-md-2">
-								{{ form.startTimes.__getitem__(i).label(class="numbered req") }}
-								{{ form.startTimes.__getitem__(i)(class="form-control") }}
-							</div>
-							<div class="form-group col-md-2">
-								{{ form.endDates.__getitem__(i).label(class="numbered req") }}
-								{{ form.endDates.__getitem__(i)(class="form-control") }}
-							</div>
-							<div class="form-group col-md-2">
-								{{ form.endTimes.__getitem__(i).label(class="numbered req") }}
-								{{ form.endTimes.__getitem__(i)(class="form-control") }}
-							</div>
-	        		</div>
-        		{% endfor %}
-
-				{% for i in range(1, form.locations.__len__()) %}
-					<div class="form-row" id="form-row-{{i+1}}" style="display:none">
+				{% for i in range(form.locations.__len__()) %}
+					<div class="form-row" id="form-row-{{i+1}}" style={{"display:none;" if i > 0 else "" }}>
 						<div class="form-group col-md-4">
         					{{ form.locations.__getitem__(i).label(class="numbered req", maxlength="100") }}
         					{{ form.locations.__getitem__(i)(class="form-control") }}
@@ -115,7 +86,7 @@
 				<div class="form-group">
 					{{ form.poster.label }}
 					{{ form.poster(class="form-control-file") }}
-					<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended. For optimal rendering, choose a horizontal one!</small>
+					<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
 				</div>
 
 				<div class="form-group">
