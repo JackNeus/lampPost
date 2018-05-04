@@ -1,15 +1,16 @@
 /* rgb values for primary-color */
 html, body {
-  font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
+  font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
   background-color: #eeeeee; }
   html .h1, html h1, body .h1, body h1 {
-    font-family: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
+    font-family: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
     font-size: 36px; }
   html .h2, html h2, body .h2, body h2 {
-    font-family: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
+    font-family: 100% "Avenir-Heavy", "Arial-Heavy", sans-serif;
     font-size: 26px; }
   html .h3, html h3, body .h3, body h3 {
-    font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
+    font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
+
     font-size: 20px; }
   html .scroll-disabled, body .scroll-disabled {
     overflow: hidden; }
@@ -19,6 +20,7 @@ html .logo, body .logo {
 html .navbar-expand-md, body .navbar-expand-md {
   background-color: #2d9eee; }
 html .nav-link, body .nav-link {
+
   font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
   font-size: 24px; }
 html .dropdown-content, body .dropdown-content {
@@ -76,20 +78,6 @@ html #bigRow, body #bigRow {
   flex-shrink: 1000;
   font-size: 16px !important; }
 
-#myEventSortBtn {
-  margin: 2vh 2vh;
-  border: 1px solid #AAA;
-  color: #333333;
-  font-size: 0.75em;
-  overflow: hidden;
-  border-radius: 2px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-height: 4.25vh;
-  float: left;
-  font-family: "Avenir-Light", "Arial Narrow", "Helvetica-Light", sans-serif;
-  font-size: 14px !important; }
 
 #searchRow {
   min-height: 4.25vh;
@@ -206,10 +194,11 @@ html #bigRow, body #bigRow {
           color: #ee7f2d; }
       .smallSearchResult .resultContents .resultFireBtn:hover {
         color: rgba(238, 127, 45, 0.75); }
-    .smallSearchResult .resultContents .resultFireNum {
-      color: #333333 !important;
-      font-size: 0.85em;
-      font-weight: bold; }
+
+      .smallSearchResult .resultContents .resultFireBtn .resultFireNum {
+        color: #333333 !important;
+        font-size: 0.85em;
+        font-weight: bold; }
 
 .searches-resizer {
   max-height: 88vh;
@@ -435,5 +424,12 @@ html #bigRow, body #bigRow {
   color: darkorange;
   font-weight: bold;
   display: none; }
+
+#myModal {
+  padding-top: 25vh;
+  padding-left: 10vw; }
+
+.modal-content {
+  width: 50vw; }
 
 /*# sourceMappingURL=base.css.map */

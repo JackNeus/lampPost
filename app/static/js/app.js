@@ -24,6 +24,14 @@ var calWeek = 0;
 // Keep track of whether the view mode just changed (to/from calendar view)
 var change_view_mode;
 
+// Keep track of the user's settings.
+// This is used in relation to the trending events display.
+// When we display trending, we record what sort
+// option the user was using, and then switch to popularity.
+// When trending events are not displayed, we restore the
+// user's settings.
+var user_sort_option = "Date";
+
 // Allow for external population of event_data.
 // Currently only used for USE_MOCK_DATA flag.
 function setData(data) {
@@ -62,6 +70,10 @@ $(document).ready(function(){
 
 function addTrendingResults() {
 	$("#trendingLabel").show();
+
+	// Switch sort to popularity.
+	user_sort_option = $("#searchSort").val();
+	$("#searchSort").val("Popularity");
 
 	search_requests_in_progress += 1;
 	$("#loading-spinner").removeClass("hidden");
@@ -189,6 +201,8 @@ function fetchData(query) {
 	}
 	// when loading an actual query (length > 0), clear the ``trending events" label
 	$("#trendingLabel").hide();
+	// restore user's sorting options
+	$("#searchSort").val(user_sort_option);
 
 	search_requests_in_progress += 1;
 	$("#loading-spinner").removeClass("hidden");
