@@ -21,6 +21,9 @@ var search_requests_in_progress = 0;
 // Keep track of current week in calendar view
 var calWeek = 0;
 
+// Keep track of whether the view mode just changed (to/from calendar view)
+var change_view_mode;
+
 // Allow for external population of event_data.
 // Currently only used for USE_MOCK_DATA flag.
 function setData(data) {
@@ -127,45 +130,59 @@ var setupSearch = function() {
 	});
 };
 
+// searches for events immediately based on search box and datepicker values
+var trigger_search = function() {
+	// default search for calendar view: all events since one year ago
+	if (checkCalendarParameter() && !$("#search-box").val())
+		var query = "*/" + getDaysAgo(365);
+	else if ($("#search-box").val()) {
+		if ($("#datepicker").val())
+			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
+		else  
+			var query = $("#search-box").val();
+	}
+	else
+		var query = "";
+		
+	// don't make api call if query hasn't changed (unless view mode has changed)
+	if (query != prevQuery || change_view_mode) {
+		fetchData(query);
+	
+		// update url with eventid paramter only if search box changes
+		if ($("#search-box").val() !== getUrlParameter('search')) {
+			updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
+		}
+		
+		prevQuery = query;
+		change_view_mode = false;
+	}
+};
+
 // Updates search results after input to search box or change in filters
 var setupDataRetrieval = function() {
-
-	var trigger_search = function() {
-		if ($("#datepicker").val())
-			var query = $(this).val() + "/" + java2py_date($("#datepicker").val());
-		else  
-			var query = $(this).val();
-
-		// don't make api call if query hasn't changed
-		if (query != prevQuery) {
-			fetchData(query);
-		
-			// update url with eventid paramter only if search box changes
-			if ($(this).val() !== getUrlParameter('search')) {
-				updateUrl(addUrlParameter(document.location.search, 'search', $(this).val()));
-			}
-			
-			prevQuery = query;
-		}
-	};
 
 	// searches each time a key is typed in search box
 	$("#search-box").keyup(trigger_search);
 
 	// fetch data after date chosen in datepicker filter
 	$("#datepicker").change(function() {
-		if ($(this).val() !== "") {
-			var date_py = java2py_date($(this).val());
-		  	fetchData($("#search-box").val() + "/" + date_py);
-	  	}
-	  	else fetchData($("#search-box").val());
+		if (!checkCalendarParameter()) {
+			if ($(this).val() !== "") {
+				var date_py = java2py_date($(this).val());
+				if ($("#search-box").val() !== "")
+			  		fetchData($("#search-box").val() + "/" + date_py);
+		  	}
+		  	else fetchData($("#search-box").val());
+		}
+		else 
+			showSearchResults();
 	});
 };
 
 // fetch data given a query string
 function fetchData(query) {
 
-	if (query.length == 0) {
+	if (query.length == 0 && !checkCalendarParameter()) {
 		// then let's just show the trending events
 		addTrendingResults();
 		return;
@@ -252,3 +269,12 @@ function java2py_date( date_java ){
 
 	return date_py;
 }
+
+// return date in mm/dd/yyyy format n days ago
+var getDaysAgo = function(n) {
+	var today = new Date();
+	var timeAgo = new Date();
+	timeAgo.setDate(today.getDate() - n);
+	var dateStr = makeDayMonthYearString(timeAgo, true);
+	return timeAgo;
+};

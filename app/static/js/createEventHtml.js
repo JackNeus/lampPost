@@ -88,9 +88,11 @@ var createCalenderViewResults = function() {
 	var daysInWeek = 7;
 	
 	// figure out first date of calendar week view
-	var today = new Date();
-	var firstDay = new Date();
-	firstDay.setDate(today.getDate() + (calWeek * 7));
+	if ($("#datepicker").val())
+		var firstDay = new Date($("#datepicker").val());
+	else
+		var firstDay = new Date();
+	firstDay.setDate(firstDay.getDate() + (calWeek * 7));
 	firstDay.setHours(0);
 	firstDay.setMinutes(0);
 	firstDay.setSeconds(0);
