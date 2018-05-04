@@ -117,8 +117,8 @@ var handleDeleteMyEvent = function() {
 
 		// toggle highlighting in search results
 		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-		  selectSearchResult(eventNum);
-    }
+			selectSearchResult(eventNum);
+		}
 
 		// show event
 		populateEventViewPanel(eventNum);
@@ -185,6 +185,7 @@ var renderEditForm = function(eventNum) {
 	// hide the footer
 	$(".footer").hide();
 
+	// make the icon "selected"
 	unselectIcons();
 	selectEditBtn(editBtn);
 

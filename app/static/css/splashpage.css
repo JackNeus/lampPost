@@ -1,90 +1,72 @@
 /* rgb values for primary-color */
 html, body {
-  font-family: "Avenir-Heavy", "Arial", "Helvetica-Light", sans-serif;
-}
-html #id_navbar, body #id_navbar {
-  display: none;
-}
-html .splashScreen, body .splashScreen {
-  position: absolute;
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #eeeeee;
-  background-image: url("../graphics/images/winter_lamppost.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  text-align: center;
-}
-html .splashScreen .row, body .splashScreen .row {
-  margin: 0px;
-}
-html .splashScreen .headerBox, body .splashScreen .headerBox {
-  position: relative;
-  width: 100%;
-  text-align: center;
-  margin-top: 20vh;
-}
-html .splashScreen .headerBox .loginBox, body .splashScreen .headerBox .loginBox {
-  background-color: rgba(40, 40, 40, 0.7);
-  border-radius: 10px;
-  padding: 1vw;
-}
-html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
-  font-size: 45px;
-  margin-bottom: 0.5em;
-  margin-top: 30vh;
-}
-html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
-  font-weight: bold;
-  font-size: 45px;
-  margin-bottom: 1em;
-  color: white;
-  text-shadow: 2px 2px 0px #000;
-}
-@media screen and (max-width: 768px) {
-  html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
-    font-size: 35px;
-  }
-}
-html .splashScreen .headerBox .loginBox .btn-outline-primary, body .splashScreen .headerBox .loginBox .btn-outline-primary {
-  font-family: "Avenir-Medium", "Arial", "Helvetica-Light", sans-serif;
-  min-width: 202px;
-  color: white;
-  border-color: #2d9eee;
-}
-html .splashScreen .headerBox .loginBox .btn-outline-primary:hover, body .splashScreen .headerBox .loginBox .btn-outline-primary:hover {
-  background-color: #2d9eee;
-  border-color: white;
-}
-html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
-  border-radius: 5px;
-  margin-bottom: 1em;
-  margin-left: 3%;
-  margin-right: 3%;
-html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
-  border: none;
-  background-color: #2d9eee;
-  border-radius: 5px;
-  color: white;
-  margin-bottom: 1em;
-  max-width: 100%;
-  overflow: hidden;
-  text-align: center;
-}
-html .splashScreen .headerBox .loginBox p, body .splashScreen .headerBox .loginBox p {
-  padding: 0;
-  margin: 0;
-}
-html .splashScreen .headerBox .loginBox img, body .splashScreen .headerBox .loginBox img {
-  -webkit-filter: drop-shadow(2px 2px 0px #000);
-  filter: drop-shadow(2px 2px 0px #000);
-  width: 200px;
-  margin-bottom: 12px;
-}
-@media screen and (max-width: 768px) {
-  html .splashScreen .headerBox .loginBox img, body .splashScreen .headerBox .loginBox img {
-    width: 155px;
-    margin-bottom: 9px;
-  }
-}
+  font-family: "Avenir-Heavy", "Arial", "Helvetica-Light", sans-serif; }
+  html #id_navbar, body #id_navbar {
+    display: none; }
+  html .splashScreen, body .splashScreen {
+    position: absolute;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #eeeeee;
+    background-image: url("../graphics/images/winter_lamppost.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center; }
+    html .splashScreen .row, body .splashScreen .row {
+      margin: 0px; }
+    html .splashScreen .headerBox, body .splashScreen .headerBox {
+      position: relative;
+      width: 100%;
+      text-align: center;
+      margin-top: 20vh; }
+      html .splashScreen .headerBox .loginBox, body .splashScreen .headerBox .loginBox {
+        background-color: rgba(40, 40, 40, 0.7);
+        border-radius: 10px;
+        padding: 1vw; }
+        html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
+          font-size: 45px;
+          margin-bottom: 0.5em;
+          color: white;
+          text-shadow: 2px 2px 0px #000; }
+          @media screen and (max-width: 768px) {
+            html .splashScreen .headerBox .loginBox .welcome, body .splashScreen .headerBox .loginBox .welcome {
+              font-size: 35px; } }
+        html .splashScreen .headerBox .loginBox .btn-outline-primary, body .splashScreen .headerBox .loginBox .btn-outline-primary {
+          font-family: "Avenir-Medium", "Arial", "Helvetica-Light", sans-serif;
+          min-width: 202px;
+          color: white;
+          border-color: #2d9eee; }
+          html .splashScreen .headerBox .loginBox .btn-outline-primary:hover, body .splashScreen .headerBox .loginBox .btn-outline-primary:hover {
+            background-color: #2d9eee;
+            border-color: white; }
+        html .splashScreen .headerBox .loginBox a, body .splashScreen .headerBox .loginBox a {
+          border-radius: 5px;
+          margin-bottom: 1em;
+          margin-left: 3%;
+          margin-right: 3%;
+          max-width: 100%;
+          overflow: hidden;
+          text-align: center; }
+        html .splashScreen .headerBox .loginBox p, body .splashScreen .headerBox .loginBox p {
+          padding: 0;
+          margin: 0; }
+        html .splashScreen .headerBox .loginBox img, body .splashScreen .headerBox .loginBox img {
+          -webkit-filter: drop-shadow(2px 2px 0px #000);
+          filter: drop-shadow(2px 2px 0px #000); }
+        html .splashScreen .headerBox .loginBox .welcomeLogo, body .splashScreen .headerBox .loginBox .welcomeLogo {
+          width: 45%; }
+          @media screen and (max-width: 768px) {
+            html .splashScreen .headerBox .loginBox .welcomeLogo, body .splashScreen .headerBox .loginBox .welcomeLogo {
+              padding-top: 4%;
+              width: 90%; } }
+        html .splashScreen .headerBox .loginBox .welcomeText, body .splashScreen .headerBox .loginBox .welcomeText {
+          padding-top: 4%;
+          width: 45%; }
+          @media screen and (max-width: 768px) {
+            html .splashScreen .headerBox .loginBox .welcomeText, body .splashScreen .headerBox .loginBox .welcomeText {
+              width: 90%;
+              padding-top: 5%;
+              padding-bottom: 5%; } }
+
+/*# sourceMappingURL=splashpage.css.map */
