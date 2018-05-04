@@ -42,6 +42,8 @@ def validation_error(e):
 				readable = " is the wrong type."
 			elif message.find("not a valid") is not -1:
 				readable = " is not a valid id."
+			elif message.find("Unknown string format") is not -1:
+				readable = " has the wrong format."
 			else:
 				readable = str(errors[key])
 			report = report + str(key).capitalize() + readable + " "

@@ -1,4 +1,4 @@
-// DEPENDENCIES: handleFavorites.js
+// DEPENDENCIES: displaySearches.js, handleFavorites.js
 
 // keep track of current event shown in event view
 var selected_event = null;
@@ -19,7 +19,7 @@ var handleEventViewClick = function() {
 		// if currently showing the event edit form, don't animate
 		// highlight again
 		if ($(".eventFormView").css("display") == "block") {
-		
+
 			// hide the form view
 			$("#event-form").hide();
 
@@ -31,16 +31,17 @@ var handleEventViewClick = function() {
 			$(".fa-pencil-alt").removeClass("fa-inverse");
 			$(".deleteBtn").removeClass("selectedIcon");
 			$(".fa-trash-alt").removeClass("fa-inverse");
-			
+
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
-		
-		// Get rid of the edit parameter, if it exists.
-		updateUrl(removeEditParameter(document.location.search));
 
-		// don't update if click on already selected search result
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+		// Get rid of the edit parameter, if it exists.
+		updateUrl(removeUrlParameter(document.location.search, 'edit'));
+		
+		// change view/handling if in calendar view mode
+		var calendarMode = checkCalendarParameter();
+		if (calendarMode) {
 			// update url with eventid paramter if event is different than 
 			// event currently in url
 			if (getUrlParameter('event') !== eventId)
@@ -48,9 +49,22 @@ var handleEventViewClick = function() {
 
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
-			
+
 			// populate and display event view
-			highlightSelectedSearchResult(eventNum);
+			highlightSearchResult($(this));
+			populateEventViewPanel(eventNum);
+			handleEventFireBtnClick(eventNum);
+		}
+		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+			// update url with eventid paramter if event is different than 
+			// event currently in url
+			if (getUrlParameter('event') !== eventId)
+				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+
+			// store currently selected event
+			selected_event = event_data[eventNum - 1];
+
+			// populate and display event view
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
@@ -71,8 +85,8 @@ function getGoogleCalLink(eventNum, i) {
 	end_time = end_dt.split(" ")[1];
 
 
-	out_url += "&dates=" + start_date.replace(/-/g, "") + "T" + start_time.replace(/:/g, "") + "/"; 
-	out_url += end_date.replace(/-/g, "") + "T" + end_time.replace(/:/g, "") + ""; 
+	out_url += "&dates=" + start_date.replace(/-/g, "") + "T" + start_time.replace(/:/g, "") + "/";
+	out_url += end_date.replace(/-/g, "") + "T" + end_time.replace(/:/g, "") + "";
 
 	out_url += "&ctz=America/New_York";
 	out_url += "&location=" + event_data[eventNum].instances[i].location;
@@ -80,15 +94,29 @@ function getGoogleCalLink(eventNum, i) {
 	return out_url;
 }
 
-// highlight search result that's been selected and display event view
-function highlightSelectedSearchResult(eventNum) {
-	// toggle highlighting in search results.
-	$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
+// Toggle highlighting in search results.
+function highlightSearchResult(elt) {
 	$(".smallSearchResult").removeClass("selected");
-	$("#smallSearchResult" + eventNum).addClass("selected");
+	elt.addClass("selected");
+}
 
-	// Animate selection
-	$("#smallSearchResult" + eventNum).animate({"margin-right": '0vh'});
+// Animate selection
+function selectSearchResult(eventNum) {
+	// Don't allow this to happen if we're in calendar view.
+	// Seriously. 
+	if (!inCalendarView()) {
+		var selected_event = $(".smallSearchResult.selected");
+		var event_to_select = $("#smallSearchResult" + eventNum);
+
+		highlightSearchResult(event_to_select);
+
+		// Close previously selected event, if it's not the one we want to open.
+		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
+			selected_event.animate({"margin-right": '2vh'});
+		}
+		// Open new events.
+		event_to_select.animate({"margin-right": '0vh'});
+	}
 }
 
 // Update the popularity of an event when the fire button is clicked
@@ -100,7 +128,7 @@ var handleEventFireBtnClick = function (eventNum) {
 	});
 };
 
-// set title of report popup 
+// set title of report popup
 function setTitle(title) {
 	$("#reportPopupTitle").html("\"" + title + "\"");
 }
@@ -109,10 +137,13 @@ function setTitle(title) {
 function populateEventViewPanel(eventNum) {
 	$(".event-view").hide();
 
+	// Search pane stuff.
+	selectSearchResult(eventNum);
+
 	// Clickable fire button that displays "Favorite" when hovered over
 	var fireBtn = $("#eventFireBtn");
 
-	  
+
 	// Number of favorites
 	var fireNum = $("#eventFireNum");
 	var fireCount = $("#resultFireNum" + eventNum).text();
@@ -120,26 +151,26 @@ function populateEventViewPanel(eventNum) {
 
 	// hide welcome image
 	$("#welcome").css("display", "none");
-	
+
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
 	$("#eventSubtitle").html("");
-	
+
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
+		$("#eventSubtitle").append("<a class=\"calendar-btn\" target=\"_blank\" href=\""
+			+ getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>");
 		// Location
 		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
 		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 
-		document.getElementById("eventSubtitle").innerHTML +=
-			"<a class=\"calendar-btn\" target=\"_blank\" href=\"" + getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>";
 		$("#eventSubtitle").append("<br>");
 	}
 
 	selected_title = event_data[eventNum-1].title;
-	
+
 	// upon clicking report button, clear elements and fill id
 	$("#reportBtn").click(function() {
 		// fill this element of the form with the correct value
@@ -156,25 +187,53 @@ function populateEventViewPanel(eventNum) {
 		setTitle(selected_title);
 		$('#myModal').modal('show');
 	}
-	
+
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
 	$("#eventDescription").html(event_data[eventNum-1].description);
 
 	// If the event has a poster, display that.
+	document.getElementById("bannerImage").innerHTML = "";
+	document.getElementById("posterImage").innerHTML = "";
+	document.getElementById("otherImage").innerHTML = "";
 	if ("poster" in event_data[eventNum-1]) {
-		document.getElementById("eventPhoto").innerHTML =
-		"<img class=\"img-fluid fit\" src=\""+event_data[eventNum-1].poster+"\">";
+		renderImage(event_data[eventNum-1].poster);
 	}
-	else {
-		document.getElementById("eventPhoto").innerHTML = "";
-	}
-	
+
 	// highlight fire button if appropriate
 	if ($("#resultFireBtn" + eventNum).hasClass("selected")) {
 		$("#eventFireBtn").addClass("selected");
 	}
 	else $("#eventFireBtn").removeClass("selected");
-	
+
 	$("#event-view").show();
+}
+
+function renderImage(url){
+    var img = new Image();
+    img.src = url;
+    img.addEventListener("load", function(){
+		// Determine where the image should go based off of its aspect ratio
+		// <ratio> gives the aspect ratio of the image
+		// <proportion> gives the proportion of the event-view pane that the image
+		//              takes up by width
+		var ratio = this.naturalWidth / this.naturalHeight;
+		var scaledWidth = document.getElementById("event-view-info").clientHeight
+						  * ratio;
+		var proportion = scaledWidth
+						 / document.getElementById("event-view-info").clientWidth;
+		if (2.5 <= ratio) {
+			// We put thin and wide images above the description
+			document.getElementById("bannerImage").innerHTML =
+			"<img class=\"img-fluid\" src=\""+img.src+"\">";
+		} else if (proportion < 0.6) {
+			// We put tall images next to the description if the screen is wide enough
+			document.getElementById("posterImage").innerHTML =
+			"<img class=\"img-cover\" src=\""+img.src+"\">";
+		} else {
+			// Otherwise, we put the image below the description
+			document.getElementById("otherImage").innerHTML =
+			"<img class=\"img-fluid\" src=\""+img.src+"\">";
+		}
+    });
 }

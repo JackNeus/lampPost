@@ -78,7 +78,8 @@ def myevents():
 				return render_template("web/myevents.html", form=EventForm())
 
 			# make API request
-			r = controller.make_edit_request(request.form['event_id'], eventData)
+			event_id = request.form['event_id']
+			r = controller.make_edit_request(event_id, eventData)
 			
 			if r.status_code != 200:
 				flash("Something went wrong. Please contact a developer.")
@@ -87,7 +88,7 @@ def myevents():
 			r = json.loads(r.text)
 			if r["status"] == "Success":
 				flash("Success! Your event has been edited.")
-				return redirect("myevents")
+				return redirect("/myevents?event=%s" % event_id)
 			else:
 				flash("Error. " + r["error_msg"])
 				return render_template("web/myevents.html", form=EventForm(), display=True, numRows=numShowings)
@@ -142,4 +143,23 @@ def addEvent():
 @mod_web.route('/myfavorites')
 def myfavorites():
 	return render_template("web/myfavorites.html")
+
+@mod_web.route('/about', methods=['GET', 'POST'])
+def about():
+	if request.method == "POST":
+		form = FeedbackForm(request.form)
+		eventData = {"feedback": request.form["feedback"]}
+		r = requests.put(CONFIG["BASE_URL"]+"/api/feedback/", json = eventData)
+		if r.status_code != 200:
+				flash("Error: something went wrong. Please contact a developer.")
+				return render_template("web/about.html", formF=FeedbackForm())
+		r = json.loads(r.text)
+		if r["status"] == "Success":
+			flash("Thank you! Your feedback has been reported.")
+			return redirect("about")
+		else:
+			flash("Error in reporting feedback: " + r["error_msg"])
+			return render_template("web/about.html", formF=FeedbackForm())
+
+	return render_template("web/about.html", formF=FeedbackForm())
 

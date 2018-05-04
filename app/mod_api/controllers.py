@@ -38,7 +38,7 @@ def get_event(id):
 		# More than 1 event returned for the given ID, which is very bad.
 		raise InternalError("More than one event exists for that id.")
 	return event[0]
-	
+
 # Returns event objects for all event ids in ids
 def get_favorite_events(ids):
 	events = []
@@ -235,3 +235,8 @@ def send_report_email(report):
 		print(response.status_code)
 		print(response.body)
 		print(response.headers)
+
+def add_feedback(data):
+	new_feedback = FeedbackEntry(feedback_dump=str(data), feedback_time=datetime.now())
+	new_feedback.save()
+	return new_feedback.to_json()

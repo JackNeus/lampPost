@@ -1,4 +1,4 @@
-// DEPENDENCIES: displaySearches.js, createEventHtml.js
+// DEPENDENCIES: displaySearches.js, displayEvent.js, createEventHtml.js
 
 var event_data = [];
 var user_fav_data = [];
@@ -14,7 +14,6 @@ $(document).ready(function(){
 	loadEvents();
 	// hide the form that users would edit events with
 	$("#event-form").hide();
-	checkDisplay();
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({});
 });
@@ -24,30 +23,65 @@ $(document).ready(function(){
 var checkSort = function() {
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
-		if (event_data != [])
+		if (event_data != []) {
 			showMyEvents();
+			handleDeletePoster();
+			handleDeleteMyEvent();
+			handleEditMyEvent();
+			var urlParamEventId = checkEventUrlParameter();
+			if (urlParamEventId) {
+				updateUrlParamEventView(urlParamEventId);
+			}
+		}
+	});
+	$(".sort-direction-btn").click(function() {
+		$("#sort-direction-btn-up").toggleClass("hidden");
+		$("#sort-direction-btn-down").toggleClass("hidden");
+		showMyEvents();
+		handleDeletePoster();
+		handleDeleteMyEvent();
+		handleEditMyEvent();
+		var urlParamEventId = checkEventUrlParameter();
+		if (urlParamEventId) {
+			updateUrlParamEventView(urlParamEventId);
+		}
 	});
 };
 
+// Take advantage of a jinja variable to force rendering of
+// edit form at page load.
 function checkDisplay() {
-	var i = $("#displayEventForm").length
+	let i = $("#displayEventForm").length;	
 	if (i > 0) {
 		$("#event-form").show();
+
+		var eventId = $("#event_id").val();
+		var eventNum = event_data.findIndex(function(event){return event._id === eventId;}) + 1;
+		
+		// Graphical commands to select event result.
+		selectSearchResult(eventNum);
+		selectEditBtn($("#editBtn"+eventNum));
+
+		// If the user attempted to edit an event and was unsuccessful,
+		// the url parameter will not be set. We need to manually check for this.
+		//
+		// Usually, we update the DOM according to the value of the URL.
+		// Here, we update the URL according to the DOM.
+		updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+		updateUrl(addUrlParameter(document.location.search, 'edit'));
 	}
 }
 
 // make all icons not "selected"
 function unselectIcons() {
 	$(".deleteBtn").removeClass("selectedIcon");
-	$(".fa-trash-alt").removeClass("fa-inverse");
 	$(".editBtn").removeClass("selectedIcon");
-	$(".fa-pencil-alt").removeClass("fa-inverse");
 }
 
 // load user events
 var loadEvents = function() {
 	var userId = $("#userData").data("uid");
-	
+
 	var callback = function(data) {
 		if (data["status"] === "Success") {
 			event_data = data["data"];
@@ -77,14 +111,18 @@ var handleDeleteMyEvent = function() {
 		unselectIcons();
 
 		// make the icon "selected"
-		$(this).addClass("selectedIcon");
-		$(this).find(".fa-trash-alt").addClass("fa-inverse");
+		eventNum = getNum($(this).attr('id'), "deleteBtn");
+		var deleteBtn = $("#deleteBtn"+eventNum);
+		deleteBtn.addClass("selectedIcon");
 
 		// toggle highlighting in search results
-		eventNum = getNum($(this).attr('id'), "deleteBtn");
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
-			highlightSelectedSearchResult(eventNum);
-		
+		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+			selectSearchResult(eventNum);
+		}
+
+		// show event
+		populateEventViewPanel(eventNum);
+
 		// delete event if user confirms deletion
 		$("#smallSearchResult" + eventNum).show(function () {
 			var result = confirm("Are you sure you would like to delete this event?");
@@ -95,9 +133,9 @@ var handleDeleteMyEvent = function() {
 					$(".event-view").hide();
 					$("#event-form").hide();
 				}
-			
+
 				var eventId = event_data[eventNum - 1]._id;
-			
+
 				var callback = function() {
 					loadEvents();
 				}
@@ -120,7 +158,7 @@ var handleDeleteMyEvent = function() {
 // allow user to change events
 var handleEditMyEvent = function() {
 
-	$(".editBtn").click( function(e) { 
+	$(".editBtn").click( function(e) {
 		var eventNum = getNum($(this).attr('id'), "editBtn");
 		var eventId = event_data[eventNum - 1]._id;
 
@@ -128,7 +166,7 @@ var handleEditMyEvent = function() {
 		if (getUrlParameter('edit') === undefined) {
 			updateUrl(addUrlParameter(document.location.search, 'edit'));
 		}
-		
+
 		// Update event parameter in URL, if necessary.
 
 		// don't update if click on already selected search result
@@ -147,15 +185,14 @@ var renderEditForm = function(eventNum) {
 	// hide the footer
 	$(".footer").hide();
 
-	unselectIcons();
-
 	// make the icon "selected"
-	editBtn.addClass("selectedIcon");
-	editBtn.find(".fa-pencil-alt").addClass("fa-inverse");
+	unselectIcons();
+	selectEditBtn(editBtn);
 
 	// toggle highlighting in search results
-	if (!($("#smallSearchResult" + eventNum).hasClass("selected")))
-		highlightSelectedSearchResult(eventNum);
+	if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
+		selectSearchResult(eventNum);
+	}
 
 	// hide the event display
 	$(".event-view").hide();
@@ -165,7 +202,7 @@ var renderEditForm = function(eventNum) {
 	$("#title").val(event_data[eventNum - 1].title);
 	$("#description").val(event_data[eventNum - 1].description);
 	$("#host").val(event_data[eventNum - 1].host);
-  
+
 	$("#visibility-"+(1-event_data[eventNum-1].visibility)).attr('checked', 'checked');
 
 	var numShowings = event_data[eventNum - 1].instances.length;
@@ -228,6 +265,11 @@ var renderEditForm = function(eventNum) {
 	$("#event-form").show();
 }
 
+var selectEditBtn = function(editBtn) {
+	// make the icon "selected"
+	editBtn.addClass("selectedIcon");
+}
+
 var handleDeletePoster = function() {
 	$("#delete-poster-button").click(function() {
 		if (confirm("Are you sure you wish to remove the poster?")) {
@@ -241,18 +283,18 @@ var handleDeletePoster = function() {
 var setupUserFavorites = function() {
 	var userId = $("#userData").data("uid");
 	var callback = function(data) {
-		if (data["status"] === "Success") 
+		if (data["status"] === "Success")
 			user_fav_data = data["data"];
 		else
 			user_fav_data = [];
 		showMyEvents();
-		handleDeletePoster();
 		handleDeleteMyEvent();
 		handleEditMyEvent();
 		var urlParamEventId = checkEventUrlParameter();
 		if (urlParamEventId) {
 			updateUrlParamEventView(urlParamEventId);
 		}
+		checkDisplay();
 	};
 	$.ajax({
 			url: base_url + '/api/user/fav/get/'+ userId,
@@ -271,6 +313,6 @@ var showNoEvents = function() {
 	// clear previous search results
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
-	
+
 	currentSearches.innerHTML = `<h5>You have no events :( Go to 'Add Event' to create one!</h5>`;
 }
