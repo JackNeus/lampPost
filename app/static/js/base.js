@@ -9,4 +9,7 @@ $(document).ready(function() {
 
 	// Dynamically reformat the website based on window pane width
 	$(window).resize(viewChange_Master);
+
+	// Render the proper logo
+	logoRender();
 })
