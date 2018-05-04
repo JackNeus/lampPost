@@ -480,6 +480,7 @@ html, body {
 }
 
 #leftCol {
+	min-width: 275px;
 	max-height: 88vh;
 	height: 88vh;
 	flex: 30%;
