@@ -35,8 +35,7 @@ function viewToDesktop_Master() {
 
 // Function to handle view changes that apply to entire website on resize
 function viewChange_Master() {
-    var width = $(window).width();
-    var isMobile = (width < WIDTH_THRESHOLD);
+    var isMobile = ($(window).width() < WIDTH_THRESHOLD);
     if (document.isMobile_Master && !isMobile) viewToDesktop_Master();
     else if (!document.isMobile_Master && isMobile) viewToMobile_Master();
 
@@ -88,8 +87,7 @@ function viewToDesktop_Browser() {
 
 // Function to handle view changes that apply to browser webpages on resize
 function viewChange_Browser() {
-    var width = $(window).width();
-    var isMobile = (width < WIDTH_THRESHOLD);
+    var isMobile = ($(window).width() < WIDTH_THRESHOLD);
     if (document.isMobile_Browser && !isMobile) viewToDesktop_Browser();
     else if (!document.isMobile_Browser && isMobile) viewToMobile_Browser();
 }

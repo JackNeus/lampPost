@@ -38,11 +38,11 @@ var handleEventViewClick = function() {
 
 		// Get rid of the edit parameter, if it exists.
 		updateUrl(removeUrlParameter(document.location.search, 'edit'));
-		
+
 		// change view/handling if in calendar view mode
 		var calendarMode = checkCalendarParameter();
 		if (calendarMode) {
-			// update url with eventid paramter if event is different than 
+			// update url with eventid paramter if event is different than
 			// event currently in url
 			if (getUrlParameter('event') !== eventId)
 				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
@@ -56,7 +56,7 @@ var handleEventViewClick = function() {
 			handleEventFireBtnClick(eventNum);
 		}
 		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter if event is different than 
+			// update url with eventid paramter if event is different than
 			// event currently in url
 			if (getUrlParameter('event') !== eventId)
 				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
@@ -114,6 +114,10 @@ function highlightSelectedSearchResultByElement(element) {
 function animateSelectedSearchResult(eventNum) {
 	$(".smallSearchResult.selected").animate({"margin-right": '2vh'});
 	$("#smallSearchResult" + eventNum).animate({"margin-right": '0vh'});
+	// Trigger slick action if mobile
+	if ($(window).width() < WIDTH_THRESHOLD) {
+		$('#browserView').slick("slickNext");
+	}
 }
 
 // Update the popularity of an event when the fire button is clicked
