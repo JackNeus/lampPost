@@ -439,6 +439,10 @@ html #bigRow, body #bigRow {
 .badge-primary {
   font-size: 15px; }
 
+.badge-border {
+  padding-left: 14px;
+  padding-top: 13px; }
+
 #MusicTag {
   background-color: CornflowerBlue; }
 

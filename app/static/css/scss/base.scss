@@ -606,6 +606,11 @@ html, body {
     font-size:15px;
 }
 
+.badge-border {
+	padding-left: 14px;
+	padding-top: 13px;
+}
+
 // badge colors
 #MusicTag {
   background-color: CornflowerBlue;
@@ -626,7 +631,6 @@ html, body {
 #StreetTag {
   background-color: gray;
 }
-
 
 #OrientationTag {
   background-color: orange;
