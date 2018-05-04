@@ -10,6 +10,7 @@ html, body {
     font-size: 26px; }
   html .h3, html h3, body .h3, body h3 {
     font-family: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
+
     font-size: 20px; }
   html .scroll-disabled, body .scroll-disabled {
     overflow: hidden; }
@@ -19,7 +20,8 @@ html .logo, body .logo {
 html .navbar-expand-md, body .navbar-expand-md {
   background-color: #2d9eee; }
 html .nav-link, body .nav-link {
-  font: 100% "Avenir-Medium", "Arial-Medium", sans-serif;
+
+  font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
   font-size: 24px; }
 html .dropdown-content, body .dropdown-content {
   display: none;
@@ -75,6 +77,7 @@ html #bigRow, body #bigRow {
   width: 100%;
   flex-shrink: 1000;
   font-size: 16px !important; }
+
 
 #searchRow {
   min-height: 4.25vh;
@@ -191,6 +194,7 @@ html #bigRow, body #bigRow {
           color: #ee7f2d; }
       .smallSearchResult .resultContents .resultFireBtn:hover {
         color: rgba(238, 127, 45, 0.75); }
+
       .smallSearchResult .resultContents .resultFireBtn .resultFireNum {
         color: #333333 !important;
         font-size: 0.85em;

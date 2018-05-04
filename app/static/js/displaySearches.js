@@ -5,15 +5,17 @@ var showSearchResults = function() {
 	// clear previous search results
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
-
-	sortResults(); 			// sort by date or popularity
 	
 	// create html code for each search result and display them
 	// show results differently for calendar view
-	if ($("#calendarViewBtn").hasClass("calendarMode"))
+	if (inCalendarView()) {
+		sortEventsByDate();	// sort by date
 		createCalenderViewResults();
-	else 
+	}
+	else {
+		sortResults(); 		// sort by date or popularity
 		createSearchResults();
+	}
   
 	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load
@@ -27,7 +29,7 @@ var showMyEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortResults(); 			// sort events by date
+	sortResults(); 				// sort events by date
 	createMyEventResults(); 	// create html code for each created event and display them
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button
@@ -66,7 +68,7 @@ var checkHighlightEventInUrl = function() {
 		if (event != undefined) {
 			eventNum = event_data.indexOf(event) + 1;
 			selected_event = event;
-			$("#smallSearchResult" + eventNum).addClass("selected");
+			selectSearchResult(eventNum);
 		}
 	}
 };
@@ -96,6 +98,11 @@ function getSortDirection() {
 	}
 }
 
+// return true if in calendar view
+function inCalendarView() {
+	return $("#calendarViewBtn").hasClass("calendarMode");
+}
+
 /*----------------------------- UTILITY FUNCTIONS ----------------------------*/
 
 // Given an id of the form 'smallSearchResultX', return X.
@@ -122,7 +129,7 @@ function sortEventsByDate() {
 		}
 		return time_between;
 	});
-	if (!getSortDirection()) {
+	if (!getSortDirection() && !inCalendarView()) {
 		event_data.reverse();
 	}
 }
@@ -153,23 +160,67 @@ Date.timeBetween = function( date1, date2, units ) {
 	var difference_ms = date2_ms - date1_ms;
 
 	// Return difference in days or seconds
-	if (units == 'days') return Math.round(difference_ms/one_day);
-	else return difference_ms/1000;
+	if (units == 'days') {
+		// make sure to round down correctly
+		return Math.floor(difference_ms/one_day);
+	}
+	else return (difference_ms/1000);
 }
 
 // makes desired date string to be used in the search results
 function makeDate(start, end) {
 	var start_date = new Date(start);
 	var end_date = new Date(end);
-	var today = new Date();
+	
+	var start_date_str = makeDayOfWeekString(start_date) + makeDayMonthYearString(start_date);
+	if ((start_date.getDate() != end_date.getDate()) || 
+	    (start_date.getMonth() != end_date.getMonth()))
+		var end_date_str = makeDayOfWeekString(end_date) + makeDayMonthYearString(end_date);
 
-	// Special cases for dates within a week of current date
+	// Convert from military hours to a more readable format
+	start_time = makeHourMinuteString(start_date);
+	end_time = makeHourMinuteString(end_date);
+	var start_suffix = getSuffix(start_date);
+	var end_suffix = getSuffix(end_date);
+
+	// create date string in correct format for different cases
+	if (end_date_str) {
+		var firstDay = start_date_str + " " + start_time + start_suffix;
+		var secondDay = end_date_str + " " + end_time + end_suffix;
+		return firstDay + "-" + secondDay;
+	}
+	else if ((start_time + start_suffix) === (end_time + end_suffix)) 
+		return start_date_str + " @" + start_time + start_suffix;
+	else if (start_suffix === end_suffix)
+		return start_date_str + " " + start_time + "-" + end_time + end_suffix;
+	else
+		return start_date_str + " " + start_time + start_suffix + "-" + end_time + end_suffix;
+}
+
+// returns date in mm/dd or mm/dd/yyyy format
+function makeDayMonthYearString(date, include_year) {
+	var today = new Date();
+	
+	var date_str = (date.getMonth() + 1) + '/' + date.getDate();
+	// don't show year unless year is different than current year
+	if (date.getFullYear() != today.getFullYear() || include_year)
+		date_str += "/" + (date.getFullYear());
+	return date_str;
+}
+
+// creates date string in format 'dayName mm/dd' or 'dayName mm/dd/yyyy'
+function makeDayOfWeekString(date) {
+	var today = new Date();
+	today.setHours(0);
+	today.setMinutes(0);
+	today.setSeconds(0);
+	today.setMilliseconds(0);
+	
 	var weekdays = ["Sun", "Mon", "Tue", "Wed",
 			    "Thu", "Fri", "Sat"];
-	var time_diff = Date.timeBetween(today, start_date, 'days');
+	var time_diff = Date.timeBetween(today, date, 'days');
 
-	var date_str = weekdays[start_date.getDay()] += " ";
-	date_str += (start_date.getMonth() + 1) + '/' + start_date.getDate();
+	var date_str = weekdays[date.getDay()] += " ";
 
 	if (time_diff == -1)
 		date_str += " (Yesterday) ";
@@ -177,61 +228,27 @@ function makeDate(start, end) {
 		date_str += " (Today) ";
 	else if (time_diff == 1)
 		date_str += " (Tomorrow) ";
-
-
-	// don't show year unless year is different than current year
-	if (start_date.getFullYear() != today.getFullYear())
-		date_str += "/" + (start_date.getFullYear());
-
-	return date_str + " " + makeTimeStr(start_date, end_date);
-}
-
-// returns date in mm/dd or mm/dd/yyyy format
-function makeDateStr(start_date, include_year) {
-	var today = new Date();
-	
-	var date_str = (start_date.getMonth() + 1) + '/' + start_date.getDate();
-	// don't show year unless year is different than current year
-	if (start_date.getFullYear() != today.getFullYear() || include_year)
-		date_str += "/" + (start_date.getFullYear());
+		
 	return date_str;
 }
 
-// create time strings in hh:mm format
-function makeTimeStr(start_date, end_date) {
-	// get hour of date
-	var start_hour = start_date.getHours();
-	var end_hour = end_date.getHours();
-	
-	// Convert from military hours to a more readable format
-	var suffix = "am";
-	if (start_hour == 0) {
-		start_hour = 12;
-	}
-	if (start_hour > 12) {
-		start_hour -= 12;
-	}
-	if (end_hour == 0) {
-		end_hour = 12;
-	}
-	else if (end_hour == 12) {
-		suffix = "pm";
-	}
-	else if (end_hour > 12) {
-		suffix = "pm";
-		end_hour -= 12;
-	}
-	
-	// minutes
-	start_time = start_hour + ":" +
-			("0" + start_date.getMinutes()).slice(-2);
-	end_time = end_hour + ":" +
-			("0" + end_date.getMinutes()).slice(-2);
+// make time string in hh:mm format
+function makeHourMinuteString(date) {
+	return getStandardHour(date) + ":" +
+		("0" + date.getMinutes()).slice(-2);
+}
 
-	if (start_time === end_time) {
-		return "@" + start_time + suffix;
-	}
-	else {
-		return start_time + "-" + end_time + suffix;
-	}
+// figure out if date is am or pm
+function getSuffix(date) {
+	var hour = date.getHours();
+	var suffix = (hour >= 12) ? "pm" : "am";
+	return suffix;
+}
+
+// figure out if date is am or pm
+function getStandardHour(date) {
+	var hour = date.getHours();
+	if (hour > 12) return hour - 12;
+	if (hour == 0) return 12;
+	return hour;
 }

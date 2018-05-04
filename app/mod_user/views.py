@@ -3,7 +3,7 @@ from . import CASClient as CASClient
 from . import user_module as mod_user
 from flask import abort, Blueprint, jsonify, make_response, request, redirect, render_template
 from flask_login import login_required, current_user
-
+from app import CONFIG
 
 @mod_user.route('/login', methods=['GET'])
 def login():
@@ -17,7 +17,10 @@ def login():
 		# TODO: Redirect to where user came from.
 		response = make_response(redirect("/browse"))
 		# Generate Authorization Token for API use.
-		response.set_cookie('api_token', current_user.token)
+
+		# Convert from days to seconds
+		cookie_expiration_time = CONFIG["SESSION_LENGTH"] * 24 * 3600 
+		response.set_cookie('api_token', current_user.token, max_age=cookie_expiration_time)
 		return response
 	elif "location" in auth_attempt:  # Redirect to CAS.
 		return redirect(auth_attempt["location"])
