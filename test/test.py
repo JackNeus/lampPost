@@ -676,14 +676,14 @@ def test_search_tag():
 
 		# Search for Conference and the tag "Academic"
 		# This should match.
-		r = make_search_request("Conference Academic", None, token=generate_auth_token("bwk"))
+		r = make_search_request("Conference AcAdEmIc", None, token=generate_auth_token("bwk"))
 		assert is_success(r)
 		event_ids = get_ids(r["data"])
 		assert expected_ids == event_ids
 
 		# Search for Conference and part of the tag "Academic"
 		# This should not match anything.
-		r = make_search_request("Conference Academ", None, token=generate_auth_token("bwk"))
+		r = make_search_request("Conference AcaDem", None, token=generate_auth_token("bwk"))
 		assert is_success(r)
 		assert get_ids(r["data"]) == set()
 	make_test_multi(test, len(dummy_events), get_dummy_event_now)
