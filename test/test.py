@@ -208,7 +208,7 @@ def test_add_event_missing_field():
 
 def test_add_event_bad_type():		
 	# String fields type check.
-	for field in ["title", "host", "description"]:
+	for field in ["title", "host", "description", "tags"]:
 		# Incorrectly-typed value.
 		bad_value = deepcopy(base_event)
 		bad_value[field] = 123
@@ -218,6 +218,12 @@ def test_add_event_bad_type():
 			assert "different" in r["error_msg"]
 		else:
 			assert "wrong type" in r["error_msg"]
+	# Test string fields inside tags.
+	bad_value = deepcopy(base_event)
+	bad_value["tags"] = [123, 456]
+	r = make_add_event_request(bad_value, generate_auth_token(base_event["creator"]))
+	assert is_error(r)
+	assert "wrong type" in r["error_msg"]
 
 def test_add_event_bad_field_length_short():		
 	# String fields length check.
@@ -394,7 +400,9 @@ def test_edit_event_valid():
 					  				 "location": "Princeton University"},
 					  				 {"start_datetime": "3pm April 2 2100",
 					  				 "end_datetime": "4pm April 2 2100",
-					  				 "location": "Yale University"}]}
+					  				 "location": "Yale University"}],
+					  "tags": ["Dance", "Party"],
+					  "tags": []}
 		# Try editing each field separately.
 		for field in event_edits:
 			edit = {field: event_edits[field]}
