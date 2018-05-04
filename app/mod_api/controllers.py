@@ -155,8 +155,7 @@ def remove_user_favorite(user, eventid):
 
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
-# For each token, events with tokens (whitespace delimited) matching the token are aggregated.
-# The current event fields queried are title, location, and host.
+# For each token, events matching the token (there are a set of queries against different fields) are aggregated
 # The intersection of results for the tokens is returned.
 # Only events ending after start_datetime are included in search results.
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
