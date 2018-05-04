@@ -168,15 +168,19 @@ def search_events(query, start_datetime, user=None):
 	tokens = query.split()
 	results = []
 	for token in tokens:
+		escaped_token = re.escape(token)
+
 		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
 		prefix_re = re.compile("(\s+|^)%s" % token, re.IGNORECASE)
 		full_word_re = re.compile("(\s+|^)%s(\s+|$)" % token, re.IGNORECASE)
+		exact_word_re = re.compile("^%s$" % escaped_token, re.IGNORECASE)
 
 		# Queries to run.
 		queries = [{"title": prefix_re},
 			{"host": prefix_re},
 			{"instances__location": prefix_re},
-			{"description": full_word_re}]
+			{"description": full_word_re},
+			{"tags": exact_word_re}]
 
 		sources = list(map(lambda query: set(EventEntry.objects(**query, **query_settings)), queries))
 		events = set().union(*sources)

@@ -626,7 +626,6 @@ def test_search_no_auth():
 		expected = filter(lambda x: "visibility" not in x or x["visibility"] == 0, new_events)
 		expected_ids = get_ids(expected)
 		event_ids = get_ids(r["data"])
-
 		assert expected_ids == event_ids
 	make_test_multi(test, len(dummy_events), get_dummy_event)
 
@@ -661,6 +660,32 @@ def test_search_starttime():
 		expected_ids = get_ids(new_events)
 		event_ids = get_ids(r["data"])
 		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event_now)
+
+def test_search_tag():
+	def test(new_events):
+		expected = filter(lambda x: x["title"] == "Conference Series #2", new_events)
+		expected_ids = get_ids(expected)
+
+		# Search for Conference.
+		# This should match.
+		r = make_search_request("Conference", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+		# Search for Conference and the tag "Academic"
+		# This should match.
+		r = make_search_request("Conference Academic", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+		# Search for Conference and part of the tag "Academic"
+		# This should not match anything.
+		r = make_search_request("Conference Academ", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		assert get_ids(r["data"]) == set()
 	make_test_multi(test, len(dummy_events), get_dummy_event_now)
 
 # Valid feedback check.
@@ -720,6 +745,7 @@ test_search_empty,
 test_search_no_auth,
 test_search_all,
 test_search_default_starttime,
+test_search_tag,
 test_valid_feedback,
 test_invalid_feedback
 ]
