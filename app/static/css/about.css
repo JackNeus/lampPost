@@ -1,0 +1,60 @@
+h1 {
+  padding-top: 3vh;
+  padding-bottom: 1vh; }
+
+.message {
+  text-align: center;
+  font-size: 40px; }
+
+@media screen and (min-width: 900px) {
+  .colAbt {
+    min-width: 900px;
+    margin: auto;
+    width: 74vw; } }
+@media screen and (max-width: 850px) {
+  .message {
+    font-size: 34px; } }
+#probSol {
+  padding-bottom: 2vh; }
+
+.bigTagC {
+  color: #2d9eee;
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px; }
+
+.bigTag {
+  color: #2d9eee;
+  font-weight: bold;
+  font-size: 25px; }
+
+#photoRow {
+  text-align: center; }
+  #photoRow .teamPhoto {
+    max-width: 170px; }
+
+.colAbt {
+  padding-left: 4vw;
+  padding-right: 4vw; }
+
+#theTeam {
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; }
+
+#abtFoot {
+  padding-top: 2vh;
+  font-style: italic;
+  font-size: 15px; }
+
+#abtBlankFooter {
+  padding-top: 5vh; }
+
+html {
+  height: 100%; }
+
+body {
+  height: 100%; }
+
+/*# sourceMappingURL=about.css.map */

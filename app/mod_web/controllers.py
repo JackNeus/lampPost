@@ -1,6 +1,6 @@
 from .models import *
 from app import CONFIG, app
-
+from flask import escape
 import copy
 from flask_login import current_user
 from werkzeug.utils import secure_filename
@@ -9,31 +9,31 @@ import requests
 
 def form_to_event_object(form):
 	eventData = {}
-	eventData['title'] = form.title.data
-	eventData['description'] = form.description.data
-	eventData['visibility'] = int(form.visibility.data)
+	eventData['title'] = escape(form.title.data)
+	eventData['description'] = escape(form.description.data)
+	eventData['visibility'] = escape(int(form.visibility.data))
 
 	showings = []
 	for i in range(int(form.numShowings.data)):
 		instanceDict = {}
-		instanceDict["location"] = form.locations.data[i]
-		instanceDict["start_datetime"] = str(form.startDates.data[i]) + " " + str(form.startTimes.data[i])
-		instanceDict["end_datetime"] = str(form.endDates.data[i]) + " " + str(form.endTimes.data[i])
+		instanceDict["location"] = escape(form.locations.data[i])
+		instanceDict["start_datetime"] = str(escape(form.startDates.data[i])) + " " + str(escape(form.startTimes.data[i]))
+		instanceDict["end_datetime"] = str(escape(form.endDates.data[i])) + " " + str(escape(form.endTimes.data[i]))
 		showings.append(instanceDict)
 
 	eventData['instances'] = showings
 	eventData['creator'] = current_user.netid
-	eventData['host'] = form.host.data
+	eventData['host'] = escape(form.host.data)
 
 	eventData['tags'] = form.tags.data
 
 	# If deletePoster field is not empty,
 	# delete the poster field.
-	if (form.deletePoster != ""):
+	if (escape(form.deletePoster) != ""):
 		eventData["poster"] = None
 
-	if (form.link.data != ""):
-		eventData['trailer'] = form.link.data
+	if (escape(form.link.data) != ""):
+		eventData['trailer'] = escape(form.link.data)
 	return eventData, len(showings)
 
 def make_edit_request(event_id, edits):
