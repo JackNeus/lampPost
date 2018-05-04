@@ -622,6 +622,9 @@ html, body {
 		flex: 100%;
 		-webkit-overflow-scrolling: touch;
 	}
+	#leftCol {
+		min-width: 0px;
+	}
 }
 
 /* THINGS FOR SLICK CAROUSEL */
