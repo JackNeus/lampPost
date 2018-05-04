@@ -241,6 +241,9 @@ var setupUserFavorites = function() {
 function clearReportForm() {
 	// clear the elements
 	$("#description").val("");
+	$('#category-0').prop('checked', false);
+	$('#category-1').prop('checked', false);
+	$('#category-2').prop('checked', false);
 	// there was not an error (this will stop the modal from popping up over and over)
 	$("#wasError").remove();
 }
