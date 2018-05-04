@@ -7,7 +7,8 @@ $(document).ready(function(){
       	format: 'mm/dd/yyyy',
     	container: container,
       	todayHighlight: true,
-      	autoclose: true,
+      	assumeNearbyYear: true,
+      	autoclose: true
     };
 	date_input.datepicker(options);
 	});
@@ -16,7 +17,6 @@ $(document).ready(function(){
 $(document).on("keypress", ":input:not(textarea)", function(event) {
 	return event.keyCode != 13;
 });
-
 
 var currentNumShowing = 1;
 var maxShowings = 4;
@@ -112,8 +112,12 @@ $(document).ready(function(){
 
 	// have endDate automatically update to the value in startDate when startDate is changed
 	$("input[name^='startDate']").change(function(){
+		// let's only do this when endDate is empty and startDate is non-empty (deleting startDate shouldn't
+		// delete whatever is in endDate)
 		var id = "#endDates-" + $(this).attr("name").substr(-1);
-		$(id).val($(this).val());
+		if ($(id).val() == "" && $(this).val() != "") {
+			$(id).datepicker('setDate', $(this).val());
+		}
 	});
 
 	
