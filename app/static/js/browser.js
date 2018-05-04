@@ -11,4 +11,15 @@ $(document).ready(function() {
 
 	// Dynamically reformat the website based on window pane width
 	$(window).resize(viewChange_Browser);
+
+    // Add search button for mobile view
+    $("#navbarLogo").after("<button class=\"mobile-search-button navbar-toggler ml-auto\" "
+        + "id=\"mobileSearchButton\" type=\"button\"> <i class=\"fas fa-search\"></i></button>");
+
+    $("#mobileSearchButton").click(mobileClick);
 });
+
+function mobileClick() {
+    // Handle clicking of the search button if in mobile view
+    if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickPrev");
+}

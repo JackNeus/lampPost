@@ -45,7 +45,7 @@ function viewChange_Master() {
 
 // Handle the src svg of the logo
 function logoRender() {
-    if ($(window).width() < 400) {
+    if ($(window).width() < 415) {
         document.getElementById("navbarLogo").innerHTML =
             "<img class=\"image-fluid logo\" id=\"navbarLogo\" "
             + "src = \"../../static/graphics/logoMobileWhite.svg\">";
