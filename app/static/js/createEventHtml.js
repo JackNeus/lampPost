@@ -49,15 +49,15 @@ var createMyEventResults = function() {
 		+	    `</div>`
 		+		`<div class="d-flex flex-column align-items-start justify-content-start">`
 		+			`<div class="d-flex flex-row ml-auto">`
-		+	    	  `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
+		+	    	  `<div class="resultFireBtn btn" data-toggle="tooltip" title="Favorite" id="resultFireBtn">`
 		+		 	  `<i class="fas fa-fire"></i>`
 		+	    	  `</div>`
 		+			  `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
 		+			`</div>`
-		+    	  	`<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn">`
+		+    	  	`<div class="deleteBtn btn ml-auto" data-toggle="tooltip" title="Delete Event" id="deleteBtn">`
 		+  	  		  `<i class="fas fa-trash-alt"></i>`
 		+   	 	`</div>`
-		+    		`<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn">`
+		+    		`<div class="editBtn btn ml-auto" data-toggle="tooltip" title="Edit Event" id="editBtn">`
 		+       	  `<i class="fas fa-pencil-alt"></i>`
 		+    		`</div>`
 		+		`</div>`

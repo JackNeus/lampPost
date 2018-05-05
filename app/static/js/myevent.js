@@ -9,6 +9,28 @@ function setBaseUrl(url) {
 	base_url = url;
 }
 
+// code from Stack Overflow
+// https://stackoverflow.com/questions/5796718/html-entity-decode
+var decodeEntities = (function() {
+  // this prevents any overhead from creating the object each time
+  var element = document.createElement('div');
+
+  function decodeHTMLEntities (str) {
+    if(str && typeof str === 'string') {
+      // strip script/html tags
+      str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+      str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+      element.innerHTML = str;
+      str = element.textContent;
+      element.textContent = '';
+    }
+
+    return str;
+  }
+
+  return decodeHTMLEntities;
+})();
+
 $(document).ready(function(){
 	checkSort();
 	loadEvents();
@@ -198,10 +220,10 @@ var renderEditForm = function(eventNum) {
 	$(".event-view").hide();
 
 	// fill the form with the correct values
-	$("#event_id").val(event_data[eventNum - 1]._id);
-	$("#title").val(event_data[eventNum - 1].title);
-	$("#description").val(event_data[eventNum - 1].description);
-	$("#host").val(event_data[eventNum - 1].host);
+	$("#event_id").val(decodeEntities(event_data[eventNum - 1]._id));
+	$("#title").val(decodeEntities(event_data[eventNum - 1].title));
+	$("#description").val(decodeEntities(event_data[eventNum - 1].description));
+	$("#host").val(decodeEntities(event_data[eventNum - 1].host));
 
 	$("#visibility-"+(1-event_data[eventNum-1].visibility)).attr('checked', 'checked');
 
@@ -232,7 +254,7 @@ var renderEditForm = function(eventNum) {
 
 	// fill in correct values in any relevant form rows
 	for (var i = 0; i < numShowings; i++) {
-		$("#locations-" + i).val(event_data[eventNum - 1].instances[i]["location"]);
+		$("#locations-" + i).val(decodeEntities(event_data[eventNum - 1].instances[i]["location"]));
 		starts = event_data[eventNum - 1].instances[i]["start_datetime"].split(" ");
 		ends = event_data[eventNum - 1].instances[i]["end_datetime"].split(" ");
 
@@ -259,7 +281,7 @@ var renderEditForm = function(eventNum) {
 		$("#poster-link").attr('href', event_data[eventNum - 1].poster);
 		$("#current-poster").toggleClass("hidden");
 	}
-	$("#link").val(event_data[eventNum - 1].trailer);
+	$("#link").val(decodeEntities(event_data[eventNum - 1].trailer));
 
 	// make sure everything is unchecked to begin with
 	$("input[name='tags'").prop("checked", false);
@@ -269,7 +291,6 @@ var renderEditForm = function(eventNum) {
 	for (var i = 0; i < eventTags.length; i++) {
 		$("input[value=\'" + eventTags[i] + "\']").prop("checked", true);
 	}
-
 	// display the form
 	$("#event-form").show();
 }

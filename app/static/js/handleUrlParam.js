@@ -28,6 +28,7 @@ var checkSearchUrlParameter = function() {
 	var searchQuery = getUrlParameter('search');
 	if (searchQuery) {
 		$("#search-box").val(searchQuery);
+		$("#search-box").keyup();
 		prevQuery = searchQuery; // set previous query variable found in app.js
 	}
 };

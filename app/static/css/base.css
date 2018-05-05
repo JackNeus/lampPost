@@ -436,6 +436,7 @@ html #bigRow, body #bigRow {
   font-weight: bold;
   display: none; }
 
+<<<<<<< HEAD
 .badge-primary {
   font-size: 15px; }
 
@@ -461,6 +462,8 @@ html #bigRow, body #bigRow {
 #OrientationTag {
   background-color: orange; }
 
+=======
+>>>>>>> develop
 #myModal {
   padding-top: 25vh;
   padding-left: 10vw; }
