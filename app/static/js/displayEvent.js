@@ -53,11 +53,6 @@ var handleEventViewClick = function() {
 		// change view/handling if in calendar view mode
 		var calendarMode = checkCalendarParameter();
 		if (calendarMode) {
-			// update url with eventid paramter if event is different than
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
@@ -67,11 +62,6 @@ var handleEventViewClick = function() {
 			handleEventFireBtnClick(eventNum);
 		}
 		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter if event is different than
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
@@ -118,6 +108,9 @@ function selectSearchResult(eventNum) {
 	// Don't allow this to happen if we're in calendar view.
 	// Seriously.
 	if (!inCalendarView()) {
+		var event_id = event_data[eventNum - 1]._id;
+		updateUrl(addUrlParameter(document.location.search, 'event', event_id));
+
 		var selected_event = $(".smallSearchResult.selected");
 		var event_to_select = $("#smallSearchResult" + eventNum);
 
@@ -149,6 +142,8 @@ function setTitle(title) {
 function populateEventViewPanel(eventNum) {
 	$(".event-view").hide();
 
+	// Remove edit parameter.
+	updateUrl(removeUrlParameter(document.location.search, "edit"));
 	// Search pane stuff.
 	selectSearchResult(eventNum);
 
@@ -216,7 +211,6 @@ function populateEventViewPanel(eventNum) {
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
 	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
-	console.log(urlify(event_data[eventNum-1].description).substring(0, 30));
 
 	// If the event has a poster, display that.
 	document.getElementById("bannerImage").innerHTML = "";

@@ -1,4 +1,4 @@
-// DEPENDENCIES: displaySearches.js, displayEvent.js, createEventHtml.js
+// DEPENDENCIES: displaySearches.js, displayEvent.js, createEventHtml.js, handleUrlParam.js
 
 var event_data = [];
 var user_fav_data = [];
@@ -126,7 +126,7 @@ var loadEvents = function() {
 
 // allow user to delete events
 var handleDeleteMyEvent = function() {
-	$(".deleteBtn").click( function() {
+	$(".deleteBtn").click( function(e) {
 		// hide the footer
 		$(".footer").hide();
 
@@ -155,8 +155,17 @@ var handleDeleteMyEvent = function() {
 				}
 
 				var eventId = event_data[eventNum - 1]._id;
-
+				if ($("#smallSearchResult"+eventNum).hasClass("selected")) {
+					var eventSelected = true;
+				}
+				else {
+					var eventSelected = false;
+				}
+				
 				var callback = function() {
+					if (eventSelected) {
+						updateUrl(removeUrlParameter(removeUrlParameter(document.location.search, "event"), "edit"));
+					}
 					loadEvents();
 				}
 				$.ajax({
@@ -174,6 +183,8 @@ var handleDeleteMyEvent = function() {
 		});
 		// Trigger slick action if mobile
 		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
+
+		e.stopPropagation();
 	});
 }
 
@@ -184,18 +195,6 @@ var handleEditMyEvent = function() {
 		var eventNum = getNum($(this).attr('id'), "editBtn");
 		var eventId = event_data[eventNum - 1]._id;
 
-		// Add edit parameter to URL.
-		if (getUrlParameter('edit') === undefined) {
-			updateUrl(addUrlParameter(document.location.search, 'edit'));
-		}
-
-		// Update event parameter in URL, if necessary.
-
-		// don't update if click on already selected search result
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter
-			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-		}
 		renderEditForm(eventNum);
 		// Trigger slick action if mobile
 		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
@@ -296,6 +295,8 @@ var renderEditForm = function(eventNum) {
 }
 
 var selectEditBtn = function(editBtn) {
+	updateUrl(addUrlParameter(document.location.search, 'edit'));
+	
 	// make the icon "selected"
 	editBtn.addClass("selectedIcon");
 }
