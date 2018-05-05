@@ -32,7 +32,12 @@ def validation_error(e):
 
 	if errors is not None:
 		for key in errors:
+			location = str(key).capitalize()
 			message = str(errors[key])
+
+			if key is "instances":
+				location = "Showings"
+
 			if message.find("too short") is not -1:
 				readable = " is too short."
 			elif message.find("too long") is not -1:
@@ -53,7 +58,7 @@ def validation_error(e):
 					readable = str(errors[key])
 				else:
 					readable = " was malformatted."
-			report = report + str(key).capitalize() + readable + " "
+			report = report + location + readable + " "
 
 	if report is not "":
 		return report
