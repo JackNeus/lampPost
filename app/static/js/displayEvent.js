@@ -5,6 +5,17 @@ var selected_event = null;
 // keep track of current title shown in event view
 var selected_title = "";
 
+
+// puts urls in text with hrefs so they are hyperlinked
+// function layout from https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+// regex from https://www.regextester.com/94502
+function urlify(text) {
+    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    return text.replace(urlRegex, function(url) {
+        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    })
+}
+
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
@@ -204,7 +215,8 @@ function populateEventViewPanel(eventNum) {
 
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
-	$("#eventDescription").html(event_data[eventNum-1].description);
+	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
+	console.log(urlify(event_data[eventNum-1].description).substring(0, 30));
 
 	// If the event has a poster, display that.
 	document.getElementById("bannerImage").innerHTML = "";
