@@ -179,12 +179,13 @@ def event_search(query, start_datetime):
 		try:
 			data = request.get_json()
 			# TODO: Uncomment this stuff when we have test coverage.
-			'''
+			
 			if "query" in data:
 				query = data["query"]
+			
 			if "start_datetime" in data:
 				start_datetime = data["start_datetime"]
-			'''
+			
 			if "tags" in data:
 				tags = data["tags"]
 		except Exception as e:
