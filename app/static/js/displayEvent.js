@@ -5,9 +5,7 @@ var selected_event = null;
 // keep track of current title shown in event view
 var selected_title = "";
 
-<<<<<<< HEAD
 var renderedImg;
-=======
 
 // puts urls in text with hrefs so they are hyperlinked
 // function layout from https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
@@ -18,7 +16,6 @@ function urlify(text) {
         return '<a target="_blank" href="' + url + '">' + url + '</a>';
     })
 }
->>>>>>> develop
 
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
@@ -166,10 +163,7 @@ function populateEventViewPanel(eventNum) {
 	
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
-<<<<<<< HEAD
 	$("#eventSetting").html("");
-=======
->>>>>>> develop
 
 	// clear tags
 	$(".badge-border").remove();
@@ -181,30 +175,19 @@ function populateEventViewPanel(eventNum) {
 			+ "</div>");
 	}
 	
-	
-
 	$("#eventSubtitle").html("");
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
-<<<<<<< HEAD
-		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\""
-=======
-		$("#eventSubtitle").append("<a class=\"calendar-btn\" title=\"Export to Google Calendar\" data-toggle=\"tooltip\""
-			+" target=\"_blank\" href=\""
->>>>>>> develop
+		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" title=\"Export to Google Calendar\" data-toggle=\"tooltip\""
+
 			+ getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>");
 		// Location
 		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
-<<<<<<< HEAD
 		$("#eventSetting").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 
 		$("#eventSetting").append("<br>");
-=======
-		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
-		$("#eventSubtitle").append("<br>");
->>>>>>> develop
 	}
 
 	selected_title = event_data[eventNum-1].title;
