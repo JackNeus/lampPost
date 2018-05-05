@@ -49,13 +49,23 @@ function processClick( num ) {
 		unNumberFirstShowing();
 	}
 
-	// remove the bigger ones instantly
+	// remove the bigger ones instantly, make them not required
 	for (i = num + 1; i <= maxShowings; i++) {
 		$("#form-row-" + i.toString()).slideUp("slow");
+		$("#locations-" + (i-1).toString()).prop("required", false);
+		$("#startDates-" + (i-1).toString()).prop("required", false);
+		$("#startTimes-" + (i-1).toString()).prop("required", false);
+		$("#endDates-" + (i-1).toString()).prop("required", false);
+		$("#endTimes-" + (i-1).toString()).prop("required", false);
 	}
-	// slide down relevant ones
+	// slide down relevant ones, and make these fields required
 	for (i = currentNumShowing + 1; i <= num; i++) {
 		$("#form-row-" + i.toString()).slideDown("slow");
+		$("#locations-" + (i-1).toString()).prop("required", true);
+		$("#startDates-" + (i-1).toString()).prop("required", true);
+		$("#startTimes-" + (i-1).toString()).prop("required", true);
+		$("#endDates-" + (i-1).toString()).prop("required", true);
+		$("#endTimes-" + (i-1).toString()).prop("required", true);
 	}
 	// change currentNumShowing
 	currentNumShowing = num;
@@ -70,6 +80,7 @@ $(document).ready(function(){
 
 	// if the form passes us a number of showings, initialize the radio button to that
 	// otherwise, initialize the first radio option (for number of showings) to be checked
+	// update currentNumShowing as appropriate
 	var i = $("#numRowsEventForm").length;
 	if (i > 0) {
 		currentNumShowing = parseInt($("#numRowsEventForm").text());
@@ -79,14 +90,28 @@ $(document).ready(function(){
 		currentNumShowing = 1;
 	}
 
-	// initialize the event to be available to Princeton students
-	$("#visibility-0").attr("checked", "checked");
+	// see if we are dealing with a prefilled form that was submitted with errors
+	var wereErrors = false;
+	var i = $("#wereErrorsAddForm").length;
+	if (i > 0) {
+		wereErrors = true;
+	}
+
+
+	// initialize the event to be available to general public, if there were no errors
+	if (!wereErrors) {
+		$("#visibility-0").attr("checked", "checked");
+	}
 
 	// hide the rows that we don't need
 	for (var i = currentNumShowing + 1; i <= 4; i++) {
 		$("#form-row-"+i.toString()).hide();
 	}
 
+	// show the rows that we do need
+	for (var i = 1; i <= currentNumShowing; i++) {
+		$("#form-row-"+i.toString()).show();
+	}
 
 	// number all our labels
 	// as far as I know, there is no good way to do this with wtforms (although it seems there should be)

@@ -6,8 +6,14 @@
 
 <body>
 
-	<!-- Hacky, but I can't think of another way. 
-	If this exists, the form will have this number of rows. -->
+	<!-- Hacky, but I can't think of another way. -->
+
+	<!-- If this exists, it means the submission had an error. -->
+	{% if wereErrors %}
+		<a id="wereErrorsAddForm" style="display:none"> {{ wereErrors }} </a>
+	{% endif %}
+
+	<!-- If this exists, the form will have this number of rows. -->
 	{% if numRows %}
 		<a id="numRowsEventForm" style="display:none"> {{ numRows }} </a>
 	{% endif %}
@@ -69,7 +75,7 @@
 						</div>
 						<div class="form-group col-md-2">
 							{{ form.startTimes.__getitem__(i).label(class="numbered req") }}
-							{{ form.startTimes.__getitem__(i)(class="form-control") }}
+							{{ form.startTimes.__getitem__(i)(class="form-control", autocomplete="off") }}
 						</div>
 						<div class="form-group col-md-2">
 							{{ form.endDates.__getitem__(i).label(class="numbered req") }}
@@ -77,7 +83,7 @@
 						</div>
 						<div class="form-group col-md-2">
 							{{ form.endTimes.__getitem__(i).label(class="numbered req") }}
-							{{ form.endTimes.__getitem__(i)(class="form-control") }}
+							{{ form.endTimes.__getitem__(i)(class="form-control", autocomplete="off") }}
 						</div>
         			</div>
     			{% endfor %}
