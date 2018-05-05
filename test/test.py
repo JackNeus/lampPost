@@ -405,11 +405,12 @@ def test_edit_event_valid():
 					  "tags": []}
 		# Try editing each field separately.
 		for field in event_edits:
-			edit = {field: event_edits[field]}
-			new_event[field] = deepcopy(event_edits[field])
-			r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
-			assert is_success(r)
-			assert compare_events(new_event, r["data"])
+			if field is not "instances":
+				edit = {field: event_edits[field]}
+				new_event[field] = deepcopy(event_edits[field])
+				r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
+				assert is_success(r)
+				assert compare_events(new_event, r["data"])
 	make_test(test)
 
 def test_edit_event_system_fields():
@@ -715,6 +716,25 @@ def test_search_tag_json():
 		assert expected_ids == event_ids
 	make_test_multi(test, len(dummy_events), get_dummy_event)
 
+def test_search_json_override():
+	def test(new_events):
+		# Query submitted via JSON should override the URL query.
+		r = make_search_request("first", None, token=generate_auth_token("bwk"), json={"query": "multiple"})
+		assert is_success(r)
+		expected = filter(lambda x: x["title"] in ["Conference Series #2"], new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+		# start_datetime should override the URL start_datetime.
+		r = make_search_request("This", "3:30pm April 16th 2030", token=generate_auth_token("bwk"), json={"start_datetime": "5pm April 20th 2030"})
+		assert is_success(r)
+		expected = filter(lambda x: x["title"] in ["Test #1", "Test #3"], new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
 # Valid feedback check.
 def test_valid_feedback():
 	test_json = "{'name': 'John', 'age': 30, 'car': None}"
@@ -774,6 +794,7 @@ test_search_all,
 test_search_default_starttime,
 test_search_tag,
 test_search_tag_json,
+test_search_json_override,
 test_valid_feedback,
 test_invalid_feedback
 ]

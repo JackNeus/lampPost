@@ -105,6 +105,15 @@ function inCalendarView() {
 
 /*----------------------------- UTILITY FUNCTIONS ----------------------------*/
 
+function getEventNum(event_data, id) {
+	for (var i = 0; i < event_data.length; i++) {
+		if (event_data[i]._id === id) {
+			return (i + 1);
+		}
+	}
+	return -1;
+}
+
 // Given an id of the form 'smallSearchResultX', return X.
 function getNum(searchId, titleSplit) {
 	return searchId.split(titleSplit).pop();

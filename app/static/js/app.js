@@ -39,13 +39,19 @@ function setData(data) {
 }
 
 $(document).ready(function(){
+	// Setup device view handler
+	INITIAL_PANE = 1;
+	browserView();
+	addSearchButton();
+
+	// Manage welcome "event""
 	$("#welcomeDiv").hide();
 	var hideWelcome = false;
 
 	// setup search bar functionality
 	setupSearch();
 	setupDataRetrieval();
-	
+
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
@@ -58,7 +64,7 @@ $(document).ready(function(){
 
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
-	
+
 
 	// add the trending events
 	if (!checkCalendarParameter() && !$("#search-box").val())
@@ -83,7 +89,7 @@ function addTrendingResults() {
 	    if (data["status"] === "Success") {
 	    	// updating this is enough
 	    	// other code automatically makes a call to showSearchResults()
-			event_data = data["data"];
+			event_data = toJavaEventData(data["data"]);
 		}
 		else {
 			event_data = [];
@@ -117,7 +123,7 @@ var setupSearch = function() {
 	$('#filter-btn').click(function() {
 		$(".filters").slideToggle(200);
 	});
-	
+
 	$('.filter-btn').click(function() {
 		$(this).toggleClass('selected');
 	});
@@ -129,7 +135,7 @@ var setupSearch = function() {
 			$(this).removeClass('selected');
 		}
 		else {
-			$('#search-box').val('*'); 
+			$('#search-box').val('*');
 			$(this).addClass('selected');
 		}
 		$('#search-box').keyup();
@@ -189,22 +195,20 @@ var trigger_search = function(force) {
 			var query = $("#search-box").val() + "/" + java2py_date(getDaysAgo(365));
 		else if ($("#datepicker").val())
 			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
-		else  
+		else
 			var query = $("#search-box").val();
 	}
 	else {
 		var query = "";
 	}
-		
+
 	// don't make api call if query hasn't changed (unless view mode has changed)
 	if (force || (query != prevQuery || change_view_mode)) {
 		fetchData(query);
-	
+
 		// update url with eventid paramter only if search box changes
-		if ($("#search-box").val() !== getUrlParameter('search')) {
-			updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
-		}
-		
+		updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
+
 		prevQuery = query;
 		change_view_mode = false;
 	}
@@ -254,7 +258,7 @@ function fetchData(query) {
 
 	var success_callback = function(data){
 	    if (data["status"] === "Success")
-			event_data = data["data"];
+			event_data = toJavaEventData(data["data"]);
 		else
 			event_data = [];
 		setupUserFavorites();
@@ -285,7 +289,7 @@ var setupUserFavorites = function() {
 
 	var success_callback = function(data) {
 		if (data["status"] === "Success")
-			user_fav_data = data["data"];
+			user_fav_data = toJavaEventData(data["data"]);
 		else
 			user_fav_data = [];
 
@@ -297,7 +301,7 @@ var setupUserFavorites = function() {
 
 	var updateSearch = function() {
 		showSearchResults();
-		
+
 		// update event view if url has eventId
 		if (urlParamEventId) {
 			updateUrlParamEventView(urlParamEventId);
@@ -309,7 +313,7 @@ var setupUserFavorites = function() {
 	if (userId === "") {
 		updateSearch();
 	}
-	else { 
+	else {
 		$.ajax({
 				url: base_url + '/api/user/fav/get/'+ userId,
 				dataType: 'json',
@@ -374,3 +378,23 @@ var getDaysAgo = function(n) {
 	var dateStr = makeDayMonthYearString(timeAgo, true);
 	return dateStr;
 };
+
+var toJavaEventData = function(data) {
+	for (var i = 0; i < data.length; i++) {
+		var instances = data[i].instances;
+		for (var j = 0; j < instances.length; j++) {
+			var javaStartDate = py2java_date(instances[j].start_datetime);
+			var javaEndDate = py2java_date(instances[j].end_datetime);
+			instances[j].start_datetime = javaStartDate;
+			instances[j].end_datetime = javaEndDate;
+		}
+	}
+	data.instances = instances;
+	return data;
+};
+
+// converts python date string into java date string (yyyy-mm-dd to yyyy/mm/dd)
+function py2java_date( date_py ) {
+	var date_java = date_py.replace(/-/g, '/');
+	return date_java;
+}

@@ -1,4 +1,4 @@
-// DEPENDENCIES: displaySearches.js, displayEvent.js, createEventHtml.js
+// DEPENDENCIES: displaySearches.js, displayEvent.js, createEventHtml.js, handleUrlParam.js
 
 var event_data = [];
 var user_fav_data = [];
@@ -73,13 +73,13 @@ var checkSort = function() {
 // Take advantage of a jinja variable to force rendering of
 // edit form at page load.
 function checkDisplay() {
-	let i = $("#displayEventForm").length;	
+	let i = $("#displayEventForm").length;
 	if (i > 0) {
 		$("#event-form").show();
 
 		var eventId = $("#event_id").val();
 		var eventNum = event_data.findIndex(function(event){return event._id === eventId;}) + 1;
-		
+
 		// Graphical commands to select event result.
 		selectSearchResult(eventNum);
 		selectEditBtn($("#editBtn"+eventNum));
@@ -106,7 +106,7 @@ var loadEvents = function() {
 
 	var callback = function(data) {
 		if (data["status"] === "Success") {
-			event_data = data["data"];
+			event_data = toJavaEventData(data["data"]);
 			setupUserFavorites();
 		}
 		else {
@@ -126,7 +126,7 @@ var loadEvents = function() {
 
 // allow user to delete events
 var handleDeleteMyEvent = function() {
-	$(".deleteBtn").click( function() {
+	$(".deleteBtn").click( function(e) {
 		// hide the footer
 		$(".footer").hide();
 
@@ -138,9 +138,7 @@ var handleDeleteMyEvent = function() {
 		deleteBtn.addClass("selectedIcon");
 
 		// toggle highlighting in search results
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			selectSearchResult(eventNum);
-		}
+		selectSearchResult(eventNum);
 
 		// show event
 		populateEventViewPanel(eventNum);
@@ -157,8 +155,17 @@ var handleDeleteMyEvent = function() {
 				}
 
 				var eventId = event_data[eventNum - 1]._id;
-
+				if ($("#smallSearchResult"+eventNum).hasClass("selected")) {
+					var eventSelected = true;
+				}
+				else {
+					var eventSelected = false;
+				}
+				
 				var callback = function() {
+					if (eventSelected) {
+						updateUrl(removeUrlParameter(removeUrlParameter(document.location.search, "event"), "edit"));
+					}
 					loadEvents();
 				}
 				$.ajax({
@@ -174,6 +181,10 @@ var handleDeleteMyEvent = function() {
 				unselectIcons();
 			}
 		});
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
+
+		e.stopPropagation();
 	});
 }
 
@@ -184,19 +195,9 @@ var handleEditMyEvent = function() {
 		var eventNum = getNum($(this).attr('id'), "editBtn");
 		var eventId = event_data[eventNum - 1]._id;
 
-		// Add edit parameter to URL.
-		if (getUrlParameter('edit') === undefined) {
-			updateUrl(addUrlParameter(document.location.search, 'edit'));
-		}
-
-		// Update event parameter in URL, if necessary.
-
-		// don't update if click on already selected search result
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter
-			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-		}
 		renderEditForm(eventNum);
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 		e.stopPropagation();
 	});
 }
@@ -212,9 +213,7 @@ var renderEditForm = function(eventNum) {
 	selectEditBtn(editBtn);
 
 	// toggle highlighting in search results
-	if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-		selectSearchResult(eventNum);
-	}
+	selectSearchResult(eventNum);
 
 	// hide the event display
 	$(".event-view").hide();
@@ -296,6 +295,8 @@ var renderEditForm = function(eventNum) {
 }
 
 var selectEditBtn = function(editBtn) {
+	updateUrl(addUrlParameter(document.location.search, 'edit'));
+	
 	// make the icon "selected"
 	editBtn.addClass("selectedIcon");
 }
@@ -314,7 +315,7 @@ var setupUserFavorites = function() {
 	var userId = $("#userData").data("uid");
 	var callback = function(data) {
 		if (data["status"] === "Success")
-			user_fav_data = data["data"];
+			user_fav_data = toJavaEventData(data["data"]);
 		else
 			user_fav_data = [];
 		showMyEvents();
@@ -345,4 +346,24 @@ var showNoEvents = function() {
 	currentSearches.innerHTML = "";
 
 	currentSearches.innerHTML = `<h5>You have no events :( Go to 'Add Event' to create one!</h5>`;
+}
+
+var toJavaEventData = function(data) {
+	for (var i = 0; i < data.length; i++) {
+		var instances = data[i].instances;
+		for (var j = 0; j < instances.length; j++) {
+			var javaStartDate = py2java_date(instances[j].start_datetime);
+			var javaEndDate = py2java_date(instances[j].end_datetime);
+			instances[j].start_datetime = javaStartDate;
+			instances[j].end_datetime = javaEndDate;
+		}
+	}
+	data.instances = instances;
+	return data;
+};
+
+// converts python date string into java date string (yyyy-mm-dd to yyyy/mm/dd)
+function py2java_date( date_py ) {
+	var date_java = date_py.replace(/-/g, '/');
+	return date_java;
 }

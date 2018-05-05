@@ -15,6 +15,7 @@ auth = HTTPTokenAuth(scheme='Token')
 success_text = "Success"
 error_text = "Error"
 failure_text = "Error"
+banned_text = "You're banned from lampPost. Please contact a developer."
 internal_failure_message = "Something went wrong. Please contact a developer."
 event_dne_text = "No event with that id exists."
 def gen_response(status):
@@ -90,8 +91,10 @@ def add_event():
 			return gen_error_response("Invalid authorization.")
 		if user.netid != data["creator"]:
 			return gen_error_response("Attempted to create event for different user.")
+		if controller.is_banned(user):
+			return gen_error_response(banned_text)
+		
 		# Try to add new event.
-
 		new_event = controller.add_event(data)
 		# Return id of newly added event.
 		return gen_data_response({"id": str(new_event.id)})
@@ -133,6 +136,8 @@ def edit_event(id):
 			return gen_error_response("Invalid authorization.")
 		if user.netid != event.creator:
 			return gen_error_response("Attempted to edit event for different user.")
+		if controller.is_banned(user):
+			return gen_error_response(banned_text)
 
 		updated_event = controller.edit_event(id, data)
 	except Exception as e:
@@ -179,13 +184,12 @@ def event_search(query, start_datetime):
 		try:
 			data = request.get_json()
 			# TODO: Uncomment this stuff when we have test coverage.
-			'''
+			
 			if "query" in data:
 				query = data["query"]
+			
 			if "start_datetime" in data:
 				start_datetime = data["start_datetime"]
-			'''
-			print(data)
 			if "tags" in data:
 				tags = data["tags"]
 		except Exception as e:

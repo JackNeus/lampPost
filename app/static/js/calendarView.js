@@ -8,7 +8,7 @@ var handleCalendarView = function() {
 		else {
 			updateUrl(removeUrlParameter(document.location.search, 'cal'));
 		}
-		$(this).tooltip('hide');		
+		$(this).tooltip('hide');
 		// update that view mode has changed
 		change_view_mode = true;
 		toggleCalendarView();
@@ -18,24 +18,24 @@ var handleCalendarView = function() {
 // toggle view for calendar and display the correct week calendar results
 var toggleCalendarView = function() {
 	// toggle column size proportions
-	$("#bigRow").toggleClass('calendar-view');
+	$("#browserView").toggleClass('calendar-view');
 	$("#searchSort").toggle();
 	$(".select-style").toggle();
 	$(".sort-direction").toggle();
 	$(".sort-box").toggle();
 	$(".calendarBtns").toggle();
-	
+
 	// make sure to update event view and recheck event url paramater
 	$("#event-view").hide();
 	urlParamEventId = checkEventUrlParameter();
-		
+
 	// toggle calendar/list view button
 	if ($("#calendarViewBtn").hasClass("calendarMode")) {
 		var calendarBtn = `<i class="fas fa-calendar"></i>`;
 		$("#calendarViewBtn").html(calendarBtn);
 		$("#calendarViewBtn").attr('data-original-title', 'Calendar View');
 		$("#calendarViewBtn").prop('title', 'Calendar View');
-		
+
 	}
 	else {
 		var listBtn = `<i class="fas fa-list"></i>`;
@@ -44,9 +44,8 @@ var toggleCalendarView = function() {
 		$("#calendarViewBtn").prop('title', 'List View');
 		calWeek = 0; // reset week to 0 (current week)
 	}
-	
+
 	$("#searches").html("");
-	
 	$("#calendarViewBtn").toggleClass("calendarMode");
 	trigger_search();	// get new search results
 	handleNextWeekClick();

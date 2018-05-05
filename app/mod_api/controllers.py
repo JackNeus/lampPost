@@ -27,6 +27,12 @@ def get_max_visibility(user):
 def is_visible(event, user):
 	return event.visibility <= get_max_visibility(user)
 
+def is_banned(user):
+	if user.netid in CONFIG["BANNED"]:
+		return True
+	else:
+		return False
+
 def add_event(data):
 	new_event = EventEntry.from_json(json.dumps(data))
 	new_event.save()
@@ -76,6 +82,9 @@ def edit_event(id, data):
 		field_data = data[field]
 		if field == "instances":
 			field_data = data[field]
+			for instance in field_data:
+				if instance["start_datetime"] or instance["end_datetime"] is " ":
+					raise ReadableError("Did not select a time.")
 			field_data = [InstanceEntry(location = instance["location"],
 										start_datetime = instance["start_datetime"],
 										end_datetime = instance["end_datetime"]) for instance in field_data]

@@ -93,7 +93,7 @@ var addUrlParameter = function(search, key, val){
 		params = search.replace(new RegExp('([\?&])' + key + '[^&]*'), '$1' + newParam);
 
 		// If nothing was replaced, then add the new param to the end
-		if (params === search) {
+		if (search.indexOf(key) == -1) {
 			params += '&' + newParam;
 		}
 	}
@@ -106,7 +106,7 @@ var addUrlParameter = function(search, key, val){
 // TODO: allow removal of parameters with values
 // TODO: fix a bug where if the parameter exists anywhere in the url (e.g. as search string), it gets removed
 var removeUrlParameter = function(search, parameter) {
-	params = search.replace(new RegExp('&?' + parameter), '');
+	params = search.replace(new RegExp('&?' + parameter + '(=[^&]*)?&?'), '');
 	return params;
 }
 

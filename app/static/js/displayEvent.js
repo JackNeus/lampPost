@@ -5,6 +5,17 @@ var selected_event = null;
 // keep track of current title shown in event view
 var selected_title = "";
 
+
+// puts urls in text with hrefs so they are hyperlinked
+// function layout from https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+// regex from https://www.regextester.com/94502
+function urlify(text) {
+    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    return text.replace(urlRegex, function(url) {
+        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    })
+}
+
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
@@ -38,29 +49,19 @@ var handleEventViewClick = function() {
 
 		// Get rid of the edit parameter, if it exists.
 		updateUrl(removeUrlParameter(document.location.search, 'edit'));
-		
+
 		// change view/handling if in calendar view mode
 		var calendarMode = checkCalendarParameter();
 		if (calendarMode) {
-			// update url with eventid paramter if event is different than 
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
 			// populate and display event view
-			highlightSearchResult($(this));
+			highlightSearchResult($(this), eventNum);
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
 		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter if event is different than 
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
@@ -68,6 +69,8 @@ var handleEventViewClick = function() {
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 	});
 }
 
@@ -95,7 +98,10 @@ function getGoogleCalLink(eventNum, i) {
 }
 
 // Toggle highlighting in search results.
-function highlightSearchResult(elt) {
+function highlightSearchResult(elt, eventNum) {
+	var event_id = event_data[eventNum - 1]._id;
+	updateUrl(addUrlParameter(document.location.search, 'event', event_id));
+
 	$(".smallSearchResult").removeClass("selected");
 	elt.addClass("selected");
 }
@@ -103,18 +109,17 @@ function highlightSearchResult(elt) {
 // Animate selection
 function selectSearchResult(eventNum) {
 	// Don't allow this to happen if we're in calendar view.
-	// Seriously. 
+	// Seriously.
 	if (!inCalendarView()) {
 		var selected_event = $(".smallSearchResult.selected");
 		var event_to_select = $("#smallSearchResult" + eventNum);
 
-		highlightSearchResult(event_to_select);
+		highlightSearchResult(event_to_select, eventNum);
 
 		// Close previously selected event, if it's not the one we want to open.
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
 			selected_event.animate({"margin-right": '2vh'});
 		}
-		// Open new events.
 		event_to_select.animate({"margin-right": '0vh'});
 	}
 }
@@ -137,6 +142,8 @@ function setTitle(title) {
 function populateEventViewPanel(eventNum) {
 	$(".event-view").hide();
 
+	// Remove edit parameter.
+	updateUrl(removeUrlParameter(document.location.search, "edit"));
 	// Search pane stuff.
 	selectSearchResult(eventNum);
 
@@ -203,7 +210,7 @@ function populateEventViewPanel(eventNum) {
 
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
-	$("#eventDescription").html(event_data[eventNum-1].description);
+	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
 
 	// If the event has a poster, display that.
 	document.getElementById("bannerImage").innerHTML = "";
