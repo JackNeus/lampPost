@@ -6,7 +6,7 @@ $light-color: #999999;
 $orange: #ee7f2d;
 $font-light: "Avenir-Light", "Arial Narrow", "Helvetica-Light", sans-serif;
 $font-med: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
-$font-heavy: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
+$font-heavy: "Avenir-Heavy", "Arial", "Helvetica-Bold", sans-serif;
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
@@ -125,10 +125,11 @@ html, body {
 	color: red;
 }
 
-#searches-wrapper {
+.searches-wrapper {
 	min-height: 75px;
 	border-top: 5px solid $med-color;
 	position: relative;
+	padding-top: 5px;
 
 	.centered{
 		margin: auto;
@@ -191,6 +192,10 @@ html, body {
 	flex-wrap: nowrap;
 	margin-right: 2vh;
 	font-size: 14px;
+
+	&.myevents {
+		padding-bottom: 2vh;
+	}
 
 	.filter-button {
 		padding-left: 0;
@@ -295,8 +300,15 @@ html, body {
  	overflow: hidden;
  	background: white;
 	color: $dark-color;
+	.resultTitleContainer {
+		width: 80%;
+		overflow: hidden;
+	}
 	.resultTitle {
 		font-size: 1.2em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		word-wrap: break-word;
 	}
 	.resultTime {
 		font-size: 1em;
@@ -460,7 +472,9 @@ html, body {
 	 		color: $primary-color;
 	 	}
   	}
-
+  	#eventDescription {
+  		white-space: pre-wrap;
+  	}
 	.reportBtn {
 		padding-right: 15px;
 		font-size: 1.2em;
