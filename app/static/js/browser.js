@@ -11,6 +11,8 @@ function browserView() {
 
 	// Dynamically reformat the website based on window pane width
 	$(window).resize(viewChange_Browser);
+	// Dynamically reformat event-view-info height
+	$(window).resize(eventViewResizeHeight);
 }
 
 // Add search button for mobile view of browser
@@ -32,4 +34,13 @@ function addViewButton() {
 function mobileClick() {
     // Handle clicking of the search button if in mobile view
     if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickPrev");
+}
+
+function eventViewResizeHeight() {
+	var totalHeight = document.getElementById("rightCol").clientHeight;
+	var headerHeight = document.getElementById("event-view-header").clientHeight;
+	var newHeight = totalHeight - headerHeight;
+	if (newHeight > 0) {
+		document.getElementById("event-view-info").style.height = newHeight + "px";
+	}
 }

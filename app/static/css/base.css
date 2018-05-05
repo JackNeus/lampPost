@@ -3,10 +3,10 @@ html, body {
   font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
   background-color: #eeeeee; }
   html .h1, html h1, body .h1, body h1 {
-    font-family: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
+    font-family: "Avenir-Heavy", "Arial", "Helvetica-Bold", sans-serif;
     font-size: 36px; }
   html .h2, html h2, body .h2, body h2 {
-    font-family: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
+    font-family: "Avenir-Heavy", "Arial", "Helvetica-Bold", sans-serif;
     font-size: 26px; }
   html .h3, html h3, body .h3, body h3 {
     font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
@@ -15,12 +15,20 @@ html, body {
     overflow: hidden; }
 
 html .logo, body .logo {
-  width: 200px; }
+  height: 60px;
+  padding-right: .5rem;
+  padding-left: .5rem; }
 html .navbar-expand-md, body .navbar-expand-md {
   background-color: #2d9eee; }
 html .nav-link, body .nav-link {
   font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
   font-size: 24px; }
+  @media screen and (min-width: 825px) and (max-width: 920px) {
+    html .nav-link, body .nav-link {
+      font-size: 20px; } }
+  @media screen and (min-width: 768px) and (max-width: 825px) {
+    html .nav-link, body .nav-link {
+      font-size: 17px; } }
 html .dropdown-content, body .dropdown-content {
   display: none;
   position: absolute;
@@ -28,7 +36,17 @@ html .dropdown-content, body .dropdown-content {
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 6; }
-html #bigRow, body #bigRow {
+html .mobile-search-button, body .mobile-search-button {
+  height: 40px;
+  width: 56px;
+  margin-right: 1rem; }
+html .navbar-toggler:hover, body .navbar-toggler:hover {
+  color: #2d9eee !important;
+  border-color: #2d9eee;
+  background-color: white; }
+  html .navbar-toggler:hover .navbar-toggler-icon, body .navbar-toggler:hover .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#1d9eee' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important; }
+html #browserView, body #browserView {
   padding-left: 0vw;
   padding-right: 0vw;
   margin-bottom: 2vh; }
@@ -53,18 +71,19 @@ html #bigRow, body #bigRow {
   display: none;
   color: red; }
 
-#searches-wrapper {
+.searches-wrapper {
   min-height: 75px;
   border-top: 5px solid #555555;
-  position: relative; }
-  #searches-wrapper .centered {
+  position: relative;
+  padding-top: 5px; }
+  .searches-wrapper .centered {
     margin: auto;
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0; }
-  #searches-wrapper #loading-spinner {
+  .searches-wrapper #loading-spinner {
     font-size: 1.7em; }
 
 .search-container {
@@ -78,6 +97,9 @@ html #bigRow, body #bigRow {
   width: 100%;
   flex-shrink: 1000;
   font-size: 16px !important; }
+
+#searches {
+  padding-bottom: 30px; }
 
 #myEventSortBtn {
   margin: 2vh 2vh;
@@ -106,6 +128,8 @@ html #bigRow, body #bigRow {
   flex-wrap: nowrap;
   margin-right: 2vh;
   font-size: 14px; }
+  .searchButtons.myevents {
+    padding-bottom: 2vh; }
   .searchButtons .filter-button {
     padding-left: 0;
     font-size: 1.25em;
@@ -169,6 +193,8 @@ html #bigRow, body #bigRow {
     .filters .filter-btn.selected {
       color: white;
       background-color: #2d9eee; }
+  .filters #tag-filters .form-check {
+    display: inline-block; }
 
 .smallSearchResult {
   flex-grow: 1000;
@@ -181,9 +207,15 @@ html #bigRow, body #bigRow {
   overflow: hidden;
   background: white;
   color: #333333; }
+  .smallSearchResult .resultTitleContainer {
+    width: 80%;
+    overflow: hidden; }
   .smallSearchResult .resultTitle {
-    font-size: 1.2em; }
+    font-size: 1.2em;
+    overflow: hidden;
+    text-overflow: ellipsis; }
   .smallSearchResult .resultTime {
+    padding-top: 1rem;
     font-size: 1em;
     color: #999999;
     margin-bottom: 0.3em; }
@@ -286,26 +318,33 @@ html #bigRow, body #bigRow {
   .event-view .event-view-info {
     width: 100%;
     background-color: white;
-    height: 75vh;
+    padding-bottom: 50px;
     overflow-y: scroll;
-    overflow-x: hidden;
-    padding-bottom: 2vh; }
+    overflow-x: hidden; }
+    .event-view .event-view-info .event-wrapper {
+      display: block !important; }
   .event-view img {
     width: 100%; }
   .event-view .posterImage img {
-    height: 75vh;
+    height: 76vh;
     width: auto; }
   .event-view .eventSection {
-    padding-top: 20px;
     color: #555555;
     margin: 0;
     border-bottom: 2px solid #2d9eee; }
+  .event-view .event-view-data {
+    font-size: 18px;
+    color: #999999;
+    line-height: normal;
+    margin: 0px; }
   .event-view .calendar-btn {
     padding-right: 10px;
     text-decoration: none !important;
     color: #999999; }
     .event-view .calendar-btn:hover {
       color: #2d9eee; }
+  .event-view #eventDescription {
+    white-space: pre-wrap; }
   .event-view .reportBtn {
     padding-right: 15px;
     font-size: 1.2em;
@@ -314,6 +353,11 @@ html #bigRow, body #bigRow {
 .flex-container-row {
   display: flex;
   flex-flow: row wrap;
+  overflow: hidden; }
+
+.flex-container-bigrow {
+  display: flex;
+  flex-flow: row nowrap;
   overflow: hidden; }
 
 .searchRow {
@@ -360,17 +404,30 @@ html #bigRow, body #bigRow {
   background-color: red; }
 
 #leftCol {
+  min-width: 275px;
   max-height: 88vh;
   height: 88vh;
-  flex: 30%;
+  flex: 35%;
   float: left;
   border-right: 5px solid #2d9eee; }
 
 #rightCol {
   max-height: 88vh;
   height: 88vh;
-  flex: 70%;
+  flex: 65%;
   float: left; }
+
+@media screen and (max-width: 767px) {
+  #leftCol, #rightCol {
+    width: 100vw !important;
+    flex: 100%;
+    -webkit-overflow-scrolling: touch; }
+
+  #leftCol {
+    min-width: 0px;
+    border-right: none; } }
+.slick-initialized .slick-slide {
+  display: flex !important; }
 
 .calendar-view #leftCol {
   flex: 60%; }
@@ -457,13 +514,20 @@ html #bigRow, body #bigRow {
 .searchBoxCol {
   flex: 40%; }
 
-@media screen and (max-width: 825px) {
-  .flex-container-row {
-    flex-direction: column; }
+/* THINGS FOR SLICK CAROUSEL */
+.slick-list {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch; }
 
-  #leftCol {
-    max-height: 55vh;
-    height: auto; } }
+.slick-track {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch; }
+
+.slick-slide {
+  height: auto; }
+
 #interiorWelcomeDiv {
   padding-left: 5vw; }
   #interiorWelcomeDiv #welcomeMessage {
@@ -477,6 +541,9 @@ html #bigRow, body #bigRow {
       font-size: 25px;
       font-weight: bold;
       color: #2d9eee; }
+  @media screen and (max-width: 768px) {
+    #interiorWelcomeDiv .welcome-img {
+      display: none; } }
 
 #welcome {
   display: block;
@@ -522,5 +589,18 @@ html #bigRow, body #bigRow {
 
 .modal-content {
   width: 50vw; }
+
+.video-responsive {
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0; }
+
+.video-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute; }
 
 /*# sourceMappingURL=base.css.map */

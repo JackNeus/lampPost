@@ -419,7 +419,7 @@ html, body {
 		line-height: 30px;
 		font-size: 20px;
 	}
-	.event-view-subtitle{
+	.event-view-subtitle {
 	    color: $med-color;
 		margin: 0;
 		line-height: normal;
@@ -449,25 +449,32 @@ html, body {
 	.event-view-info {
 	    width: 100%;
 	    background-color: white;
-	    height: 75vh;
+		padding-bottom: 50px;
 	    overflow-y: scroll;
 	    overflow-x: hidden;
-	    padding-bottom: 2vh;
+		.event-wrapper {
+			display: block !important;
+		}
 	}
 	img {
 		width: 100%;
 	}
 	.posterImage {
 		img {
-			height: 75vh;
+			height: 76vh;
 			width: auto;
 		}
 	}
 	.eventSection {
-		padding-top: 20px;
 		color: $med-color;
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
+	}
+	.event-view-data {
+		font-size:18px;
+		color: $light-color;
+		line-height: normal;
+		margin: 0px;
 	}
 	.calendar-btn {
 		padding-right: 10px;
@@ -481,8 +488,9 @@ html, body {
   		white-space: pre-wrap;
   	}
 	.reportBtn {
-		padding-right: 15px;
-		font-size: 1.2em;
+		padding-right: 20px;
+		padding-top: 10px;
+		font-size: 1.0em;
 		cursor: pointer;
 	}
 }
@@ -558,18 +566,18 @@ html, body {
 	min-width: 275px;
 	max-height: 88vh;
 	height: 88vh;
-	flex: 30%;
+	flex: 35%;
     float: left;
     border-right: 5px solid $primary-color;
 }
 #rightCol {
 	max-height: 88vh;
 	height: 88vh;
-	flex: 70%;
+	flex: 65%;
     float: left;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
 	#leftCol, #rightCol {
 		width: 100vw !important;
 		flex: 100%;
@@ -796,4 +804,18 @@ html, body {
 }
 .modal-content {
 	width:50vw;
+}
+
+.video-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+.video-responsive iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
 }

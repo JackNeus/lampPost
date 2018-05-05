@@ -10,9 +10,8 @@
                 </div>
                 <p class="eventFireNum" id="eventFireNum"></p>
             </div>
-            <p class="event-view-host mr-auto" id="eventHost"></p>
             <div class="d-flex flex-row align-items-end">
-    	   		<h3 class="event-view-subtitle mr-auto" id="eventSubtitle"></h3>
+                <h3 class="event-view-subtitle mr-auto" id="eventHost"></h3>
                 {% if current_user.is_authenticated %}
                 <span data-toggle="modal" data-target="#myModal">
                     <a id="reportBtn" class="reportBtn" data-toggle="tooltip" onclick="setTitle(selected_title)" title="Report this event">
@@ -25,14 +24,32 @@
     </div>
     <div class="d-flex flex-row align-items-start">
         <div class="event-view-info" id="event-view-info">
-            <div id="bannerImage"></div>
-            <div class="d-flex p-2">
-                <h2 class="eventSection">Description</h2>
+            <div class="flex-container-col event-wrapper">
+                <div id="bannerImage"></div>
+                <div class="flex-container-col">
+                    <div class="d-inline-flex p-2">
+                        <h2 class="eventSection">When / Where</h2>
+                    </div>
+                    <div class="d-inline-flex p-2">
+                        <p class="event-view-data" id="eventSetting"></p>
+            	    </div>
+                </div>
+                <div>
+                    <div class="d-inline-flex p-2">
+                        <h2 class="eventSection">Description</h2>
+                    </div>
+                    <div class="d-inline-flex p-2">
+                        <p class="event-view-data" id="eventDescription"></p>
+            	    </div>
+                </div>
+                <div id="eventVideo">
+                    <div class="d-inline-flex p-2">
+                        <h2 class="eventSection">Trailer</h2>
+                    </div>
+                    <div class="video-responsive" id="eventVideo-data"></div>
+                </div>
+                <div id="otherImage"></div>
             </div>
-            <div class="d-flex p-2">
-                <p id="eventDescription"></p>
-        	</div>
-            <div id="otherImage"></div>
         </div>
         <div class="posterImage" id="posterImage"></div>
     </div>
