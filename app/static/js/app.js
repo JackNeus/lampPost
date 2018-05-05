@@ -324,11 +324,9 @@ function getEvent(event_data, id) {
 }
 
 function getFavoritesOnly(event_data, favorite_data) {
-	console.log("here");
 	var favorite_events = [];
 	for (var i = 0; i < favorite_data.length; i++) {
 		var event_id = favorite_data[i]["_id"];
-		console.log(event_id);
 		var event = getEvent(event_data, event_id);
 		if (typeof(event) !== "undefined") {
 			favorite_events.push(event);
