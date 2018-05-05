@@ -40,7 +40,6 @@ function eventViewResizeHeight() {
 	var totalHeight = document.getElementById("rightCol").clientHeight;
 	var headerHeight = document.getElementById("event-view-header").clientHeight;
 	var newHeight = totalHeight - headerHeight;
-	console.log(newHeight);
 	if (newHeight > 0) {
 		document.getElementById("event-view-info").style.height = newHeight + "px";
 	}

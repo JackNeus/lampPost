@@ -5,6 +5,8 @@ var selected_event = null;
 // keep track of current title shown in event view
 var selected_title = "";
 
+var renderedImg;
+
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
@@ -200,6 +202,9 @@ function populateEventViewPanel(eventNum) {
 	if ("poster" in event_data[eventNum-1]) {
 		renderImage(event_data[eventNum-1].poster);
 	}
+	else {
+		renderedImg = null;
+	}
 
 	// If the event has a video, embed it
 	if ("trailer" in event_data[eventNum-1]) {
@@ -224,35 +229,37 @@ function populateEventViewPanel(eventNum) {
 }
 
 function renderImage(url){
-    var img = new Image();
-    img.src = url;
-    img.addEventListener("load", formatImage);
+    renderedImg = new Image();
+    renderedImg.src = url;
+    renderedImg.addEventListener("load", formatImage);
 	$(window).resize(formatImage);
 	function formatImage() {
-		document.getElementById("bannerImage").innerHTML = "";
-		document.getElementById("posterImage").innerHTML = "";
-		document.getElementById("otherImage").innerHTML = "";
-		// Determine where the image should go based off of its aspect ratio
-		// <ratio> gives the aspect ratio of the image
-		// <proportion> gives the proportion of the event-view pane that the image
-		//              takes up by width
-		var ratio = img.naturalWidth / img.naturalHeight;
-		var scaledWidth = document.getElementById("event-view-info").clientHeight
-						  * ratio;
-		var proportion = scaledWidth
-						 / document.getElementById("event-view-info").clientWidth;
-		if (2.5 <= ratio) {
-			// We put thin and wide images above the description
-			document.getElementById("bannerImage").innerHTML =
-			"<img class=\"img-fluid\" src=\""+img.src+"\">";
-		} else if (proportion < 0.6) {
-			// We put tall images next to the description if the screen is wide enough
-			document.getElementById("posterImage").innerHTML =
-			"<img class=\"img-cover\" src=\""+img.src+"\">";
-		} else {
-			// Otherwise, we put the image below the description
-			document.getElementById("otherImage").innerHTML =
-			"<img class=\"img-fluid\" src=\""+img.src+"\">";
+		if (renderedImg != null) {
+			document.getElementById("bannerImage").innerHTML = "";
+			document.getElementById("posterImage").innerHTML = "";
+			document.getElementById("otherImage").innerHTML = "";
+			// Determine where the image should go based off of its aspect ratio
+			// <ratio> gives the aspect ratio of the image
+			// <proportion> gives the proportion of the event-view pane that the image
+			//              takes up by width
+			var ratio = renderedImg.naturalWidth / renderedImg.naturalHeight;
+			var scaledWidth = document.getElementById("event-view-info").clientHeight
+							  * ratio;
+			var proportion = scaledWidth
+							 / document.getElementById("event-view-info").clientWidth;
+			if (2.5 <= ratio) {
+				// We put thin and wide images above the description
+				document.getElementById("bannerImage").innerHTML =
+				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
+			} else if (proportion < 0.6) {
+				// We put tall images next to the description if the screen is wide enough
+				document.getElementById("posterImage").innerHTML =
+				"<img class=\"img-cover\" src=\""+renderedImg.src+"\">";
+			} else {
+				// Otherwise, we put the image below the description
+				document.getElementById("otherImage").innerHTML =
+				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
+			}
 		}
 	}
 }
