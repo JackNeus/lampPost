@@ -29,7 +29,7 @@ def form_to_event_object(form):
 
 	# If deletePoster field is not empty,
 	# delete the poster field.
-	if (escape(form.deletePoster) != ""):
+	if (form.deletePoster.data != ""):
 		eventData["poster"] = None
 
 	if (escape(form.link.data) != ""):
