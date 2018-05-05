@@ -154,6 +154,10 @@ html, body {
 	font-size: 16px !important;
 }
 
+#searches {
+	padding-bottom: 30px;
+}
+
 #myEventSortBtn {
 	margin: 2vh 2vh;
 	border: 1px solid #AAA;
@@ -519,6 +523,22 @@ html, body {
     float: left;
 }
 
+@media screen and (max-width: 768px) {
+	#leftCol, #rightCol {
+		width: 100vw !important;
+		flex: 100%;
+		-webkit-overflow-scrolling: touch;
+	}
+	#leftCol {
+		min-width: 0px;
+		border-right: none;
+	}
+}
+
+.slick-initialized .slick-slide {
+    display: flex !important;
+}
+
 .calendar-view {
 	#leftCol {
 		flex: 60%;
@@ -623,7 +643,11 @@ html, body {
 			color:$primary-color;
 		}
 	}
-
+	@media screen and (max-width: 768px) {
+		.welcome-img {
+			display: none;
+		}
+	}
 }
 
 #welcome {
@@ -639,21 +663,6 @@ html, body {
 	color:darkorange;
 	font-weight:bold;
 	display: none;
-}
-
-@media screen and (max-width: 768px) {
-	#leftCol, #rightCol {
-		width: 100vw !important;
-		flex: 100%;
-		-webkit-overflow-scrolling: touch;
-	}
-	#leftCol {
-		min-width: 0px;
-	}
-}
-
-.slick-initialized .slick-slide {
-    display: flex !important;
 }
 
 #myModal {
