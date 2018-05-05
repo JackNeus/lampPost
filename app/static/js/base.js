@@ -1,12 +1,15 @@
+// Global javascript that is always loaded
+$(document).ready(function() {
+	// initialize layout
+	document.isMobile_Master = ($(window).width() < WIDTH_THRESHOLD);
+	if (document.isMobile_Master) {
+		viewMobile_Master();
+	}
+	else viewDesktop_Master();
 
-/* 
-// upon clicking a link in navbar, set that item to be active
-$(document).ready(function(){
+	// Dynamically reformat the website based on window pane width
+	$(window).resize(viewChange_Master);
 
-	$('.nav-item').on('click', function(e) {
-		console.log("test-message");
-	    $('.nav-item').removeClass('active');
-	    $(this).addClass('active');
-	});
-
-});*/
+	// Render the proper logo
+	logoRender();
+});

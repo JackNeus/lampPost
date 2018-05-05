@@ -15,6 +15,7 @@ auth = HTTPTokenAuth(scheme='Token')
 success_text = "Success"
 error_text = "Error"
 failure_text = "Error"
+banned_text = "You're banned from lampPost. Please contact a developer."
 internal_failure_message = "Something went wrong. Please contact a developer."
 event_dne_text = "No event with that id exists."
 def gen_response(status):
@@ -83,21 +84,17 @@ def add_event():
 		missing_fields = get_missing_fields(data)
 		if len(missing_fields) > 0:
 			return gen_error_response("Request was missing %s parameter(s)." % ",".join(missing_fields))
-	except Exception as e:
-		return gen_failure_response(str(e))
 
-	# Make sure creator matches authorized user.
-	try:
+		# Make sure creator matches authorized user.
 		user = User.get_user_in_token(request)
 		if user is None:
 			return gen_error_response("Invalid authorization.")
 		if user.netid != data["creator"]:
 			return gen_error_response("Attempted to create event for different user.")
-	except AuthorizationError:
-		return gen_error_response("Invalid authorization.")
-
-	# Try to add new event.
-	try:
+		if controller.is_banned(user):
+			return gen_error_response(banned_text)
+		
+		# Try to add new event.
 		new_event = controller.add_event(data)
 		# Return id of newly added event.
 		return gen_data_response({"id": str(new_event.id)})
@@ -139,6 +136,8 @@ def edit_event(id):
 			return gen_error_response("Invalid authorization.")
 		if user.netid != event.creator:
 			return gen_error_response("Attempted to edit event for different user.")
+		if controller.is_banned(user):
+			return gen_error_response(banned_text)
 
 		updated_event = controller.edit_event(id, data)
 	except Exception as e:
@@ -175,13 +174,31 @@ def delete_event(id):
 	except Exception as e:
 		return gen_error_response(error_handler.main_handler(e))
 
-@mod_api.route("/event/search/", defaults={"query":"","start_datetime":datetime.now()})
-@mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
-@mod_api.route("/event/search/<query>/<start_datetime>")
-def event_search(query, start_datetime):	
+@mod_api.route("/event/search/", defaults={"query":"","start_datetime":datetime.now()}, methods=["GET", "POST"])
+@mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()}, methods=["GET", "POST"])
+@mod_api.route("/event/search/<query>/<start_datetime>", methods=["GET", "POST"])
+def event_search(query, start_datetime):
+	tags = None
+	# Alternatively, allow user to send json parameters.
+	if request.is_json:
+		try:
+			data = request.get_json()
+			# TODO: Uncomment this stuff when we have test coverage.
+			
+			if "query" in data:
+				query = data["query"]
+			
+			if "start_datetime" in data:
+				start_datetime = data["start_datetime"]
+			if "tags" in data:
+				tags = data["tags"]
+		except Exception as e:
+			print(type(e))
+			return gen_failure_response("Request was malformatted.")
+
 	try:
 		user = get_user_in_token(request)
-		events = controller.search_events(query, start_datetime, user)
+		events = controller.search_events(query, start_datetime, user=user, tags=tags)
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:

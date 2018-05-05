@@ -11,7 +11,7 @@ var createSearchResults = function() {
 		+	      `<h2 class="resultTitle">` + event_data[i].title + `</h2>`
 		+	      `<div id="eventInstances"></div>`
 		+	   `</div>`
-		+	   `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
+		+	   `<div class="resultFireBtn btn" title="Favorite" data-toggle="tooltip" id="resultFireBtn">`
 		+	      `<i class="fas fa-fire"></i>`
 		+	   `</div>`
 		+	   `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
@@ -43,21 +43,21 @@ var createMyEventResults = function() {
 		+ `<div class="smallSearchResult" id="smallSearchResult">`
 		+   `<div class="resultContents">`
 		+	 `<div class="d-flex flex-row align-items-start">`
-		+	    `<div class="p-2 mr-auto">`
+		+	    `<div class="p-2 mr-auto resultTitleContainer">`
 		+	       `<h2 class="resultTitle">` + event_data[i].title + `</h2>`
 		+		 `<div id="eventInstances"></div>`
 		+	    `</div>`
 		+		`<div class="d-flex flex-column align-items-start justify-content-start">`
 		+			`<div class="d-flex flex-row ml-auto">`
-		+	    	  `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
+		+	    	  `<div class="resultFireBtn btn" data-toggle="tooltip" title="Favorite" id="resultFireBtn">`
 		+		 	  `<i class="fas fa-fire"></i>`
 		+	    	  `</div>`
 		+			  `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
 		+			`</div>`
-		+    	  	`<div class="deleteBtn btn ml-auto" title="Delete Event" id="deleteBtn">`
+		+    	  	`<div class="deleteBtn btn ml-auto" data-toggle="tooltip" title="Delete Event" id="deleteBtn">`
 		+  	  		  `<i class="fas fa-trash-alt"></i>`
 		+   	 	`</div>`
-		+    		`<div class="editBtn btn ml-auto" title="Edit Event" id="editBtn">`
+		+    		`<div class="editBtn btn ml-auto" data-toggle="tooltip" title="Edit Event" id="editBtn">`
 		+       	  `<i class="fas fa-pencil-alt"></i>`
 		+    		`</div>`
 		+		`</div>`
@@ -100,6 +100,9 @@ var createCalenderViewResults = function() {
 	
 	// day of week string of first day of calendar view
 	var firstDayStr = firstDay.getDay();
+	
+	// title the week with the month
+	createWeekTitle(firstDay);
 	
 	// stores number of search results
 	count = 1;
@@ -173,7 +176,7 @@ var createDayColumn = function(currentDate, i, count) {
 	`<div class="flex-container-col dayCol">`
 	+  `<div class="dayTitle" id="dayTitle` + count + `">` 
 	+ 	`<div class="dayName">` + daysOfWeek[i].substring(0, 3) + `</div>`
-	+ 	`<div class="date" id="date` + count + `">` + makeDayMonthYearString(currentDate) + `</div>`
+	+ 	`<div class="date" id="date` + count + `">` + makeDayMonthYearString(currentDate, false) + `</div>`
 	+   `</div>`
 	+  `<div class="dayResults" id="` + daysOfWeek[i] + `"></div>`
 	+ `</div>`;
@@ -201,9 +204,32 @@ var addEventInstances = function(i) {
 	}
 };
 
+// create title for week based on month name and year if different from current year
+var createWeekTitle = function(date) {
+	var months = ["Jan", "Feb", "Mar", "Apr", "May",
+			  "Jun", "Jul", "Aug", "Sep", 
+			  "Oct", "Nov", "Dec"]
+	var monthIndex = date.getMonth();
+	var title = months[monthIndex];
+	var endOfWeek = new Date(date);
+	endOfWeek.setDate(date.getDate() + 6);
+	var today = new Date();
+	
+	if (date.getFullYear() != today.getFullYear())
+		title += " " + date.getFullYear();
+		
+	if (endOfWeek.getMonth() !== date.getMonth())
+		title += " " + date.getDate() + " - " + months[endOfWeek.getMonth()] + " " + endOfWeek.getDate();
+	else 
+		title += " " + date.getDate() + "-" + 
+		 	   endOfWeek.getDate();
+	
+	$("#weekTitle").text(title);
+};
+
 // return a time element for a given instance
 var getEventTimeElement = function(startDate, endDate) {
-	var timeStr = makeDate(startDate, endDate);
+	var timeStr = makeDate(startDate, endDate, true);
 	var timeElement = $('<p />').attr({
 			class: "resultTime"
 		}).append(timeStr);

@@ -31,3 +31,6 @@ BYPASS_API_AUTH=
 
 # Length of session (in days)
 SESSION_LENGTH=7
+
+# NetIDs of banned users.
+BANNED=[]

@@ -8,6 +8,7 @@
 <script src="/static/js/handleUrlParam.js?v=1"></script>
 <script src="/static/js/handleFavorites.js?v=1"></script>
 <script src="/static/js/calendarView.js?v=1"></script>
+<script src="/static/js/browser.js?v=1"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -25,19 +26,19 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 <!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
 <div class="container-fluid">
-<div class="flex-container-row list-view" id="bigRow">
-   <div class="flex-container-col" id="leftCol">
-   		<form onsubmit="return false;">
+<div class="flex-container-bigrow" id="browserView">
+   <div class="flex-container-col slide" id="leftCol">
+   		<form class="search-container" onsubmit="return false;">
    			<div class="" id="searchRow">
 				<div class="form-group searchBoxCol" id="searchBox">
 			    		<input id="search-box" class="form-control"
 			    		placeholder="Search for events here!" value=""></input>
 				</div>
-				<div class="calendar-view-button btn" id="calendarViewBtn" title="Calendar View">
+				<div class="calendar-view-button btn" id="calendarViewBtn" data-toggle="tooltip" title="Calendar View">
 					<i class="fas fa-calendar"></i>
 				</div>
 			</div>
-			<div class="flex-container-row searchButtons align-items-start flex-wrap">
+			<div class="flex-row searchButtons align-items-start justify-content-between flex-wrap">
 				<div class="filter-button btn" id="filter-btn" title="Filter">
 				  <i class="fas fa-filter"></i>
 			  	</div>
@@ -46,28 +47,63 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				</div>
 			</div>
 
-			<div class="d-flex flex-column align-items-start justify-content-end filters">
-			  <div id="all-events">
-				  <button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
-			  </div>
-			  <div class="datetime">
-				  <label for="datepicker">Search from date: </label>
-				  <input type="text" id="datepicker"
-					   class="form-control" name="datepicker">
-			  </div>
+			<div class="filters flex-col" style="display:none;">
+				<div class="date-filter datetime d-flex flex-row flex-nowrap align-items-center justify-content-center">
+					<span for="datepicker">Search from date: </span>
+					<input type="text" id="datepicker" class="form-control" name="datepicker">
+				</div>
+				<div id="all-events">
+					<button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
+				</div>
+          		{% if current_user.is_authenticated %}
+				<div id="favorite-events">
+					<button type="button" id="favorite-events-filter-btn" class="btn filter-btn">Favorites Only</button>
+				</div>
+				{% endif %}
+
+				<div class="form-group" id="tag-filters">
+        				<div  class="form-check form-check-inline">
+    						<input class="form-check-input" type="checkbox" name="tags" id="tags-0" value="Music">
+    						<label class="form-check-label" for="inlineCheckbox0"> <span class="badge badge-primary" id="MusicTag"> Music </span> </label>
+	        			</div>
+        				<div  class="form-check form-check-inline">
+    						<input class="form-check-input" type="checkbox" name="tags" id="tags-1" value="Dance">
+    						<label class="form-check-label" for="inlineCheckbox1"> <span class="badge badge-primary" id="DanceTag"> Dance </span> </label>
+	        			</div>
+        				<div  class="form-check form-check-inline">
+    						<input class="form-check-input" type="checkbox" name="tags" id="tags-2" value="Talk">
+    						<label class="form-check-label" for="inlineCheckbox2"> <span class="badge badge-primary" id="TalkTag"> Talk </span> </label>
+	        			</div>
+        				<div  class="form-check form-check-inline">
+    						<input class="form-check-input" type="checkbox" name="tags" id="tags-3" value="Theater">
+    						<label class="form-check-label" for="inlineCheckbox3"> <span class="badge badge-primary" id="TheaterTag"> Theater </span> </label>
+	        			</div>
+        				<div  class="form-check form-check-inline">
+    						<input class="form-check-input" type="checkbox" name="tags" id="tags-4" value="Street">
+    						<label class="form-check-label" for="inlineCheckbox4"> <span class="badge badge-primary" id="StreetTag"> Street </span> </label>
+	        			</div>
+        				<div  class="form-check form-check-inline">
+    						<input class="form-check-input" type="checkbox" name="tags" id="tags-5" value="Orientation">
+    						<label class="form-check-label" for="inlineCheckbox5"> <span class="badge badge-primary" id="OrientationTag"> Orientation </span> </label>
+	        			</div>
+	  				</div>
+
 			 </div>
 
 		</form>
 
 		<!-- Fills in with both search results, and trending events. -->
 
-		<div class="flex-container-scroll" id="searches-wrapper">
+		<div class="flex-container-scroll searches-wrapper" id="searches-wrapper">
 			<div class="calendarBtns" id="calendarBtns">
-				<div class="previousWeekBtn btn" id="previousWeekBtn" title="Previous Week">
-						<i class="fas fa-arrow-left"></i>
-				</div>
-				<div class="nextWeekBtn btn" id="nextWeekBtn" title="Next Week">
-						<i class="fas fa-arrow-right"></i>
+				<div class="calendarHeader">
+          <div class="mr-auto previousWeekBtn btn" id="previousWeekBtn" title="Previous Week">
+              <i class="fas fa-arrow-left"></i>
+          </div>
+          <div class="weekTitle" id="weekTitle"></div>
+          <div class="ml-auto nextWeekBtn btn" id="nextWeekBtn" title="Next Week">
+              <i class="fas fa-arrow-right"></i>
+          </div>
 				</div>
 			</div>
 			<div id="trendingLabel"> Trending Events </div>
@@ -80,7 +116,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
   	</div>
 
- 	<div class="flex-container-col" id = "rightCol">
+ 	<div class="flex-container-col slide" id = "rightCol">
  		<div id="welcomeDiv" style="display:none">
  			<div id = "interiorWelcomeDiv">
 	 			<h1 id = "welcomeMessage"> Welcome to lampPost! </h1>
@@ -96,7 +132,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 	 					</ul>
 	 					</p>
 	 				</div>
-				    <div class="col-md-6">
+				    <div class="col-md-6 welcome-img">
 				      <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/lamppostMeme.png">
 				    </div>
 				  </div>

@@ -7,7 +7,7 @@
 	"start_datetime": "5pm April 20th 2030",
 	"end_datetime": "6pm April 20th 2030"
 }],
-"description": "This is the first test.",
+"description": "This is the first test. It is academic, but not tagged academic.",
 "poster": "http://princeton-lamppost.s3.amazonaws.com/my_image.jpg"
 },
 {
@@ -28,8 +28,10 @@
 	"location": "McCosh 50",
 	"start_datetime": "3:30pm April 16th 2030",
 	"end_datetime": "4:45pm April 16th 2030"
-}],
-"description": "This is an event with multiple instances."
+}
+],
+"description": "This is an event with multiple instances.",
+"tags": ["Academic", "Dance"]
 },
 {
 "title": "Test #3",
