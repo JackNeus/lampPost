@@ -29,14 +29,14 @@ setBaseUrl("{{ config.BASE_URL }}");
 	   
 	   	<h1 style="text-align:center; padding-top:1vh">My Events</h1>
 	   	
-		<div class="searchButtons justify-content-center align-items-center">
+		<div class="searchButtons justify-content-center align-items-center myevents">
 			<div class="d-flex flex-nowrap sort-box">
 				{% include "web/sortbox.html" %}
 			</div>
 		</div>	
 
 		<!-- Fills in with "search" results from events.json -->
-		<div class="flex-container-scroll" id="searches"></div>
+		<div class="flex-container-scroll searches-wrapper" id="searches"></div>
 	    </div>
 		
 	 	<div class="flex-container-col" id = "rightCol">

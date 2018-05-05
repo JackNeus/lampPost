@@ -43,7 +43,7 @@ var createMyEventResults = function() {
 		+ `<div class="smallSearchResult" id="smallSearchResult">`
 		+   `<div class="resultContents">`
 		+	 `<div class="d-flex flex-row align-items-start">`
-		+	    `<div class="p-2 mr-auto">`
+		+	    `<div class="p-2 mr-auto resultTitleContainer">`
 		+	       `<h2 class="resultTitle">` + event_data[i].title + `</h2>`
 		+		 `<div id="eventInstances"></div>`
 		+	    `</div>`
