@@ -286,6 +286,12 @@ html, body {
 			background-color: $primary-color;
 		}
 	}
+
+	#tag-filters {
+		.form-check {
+			display: inline-block;
+		}
+	}
 }
 
 .smallSearchResult {

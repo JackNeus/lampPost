@@ -146,6 +146,11 @@ var setupSearch = function() {
 		trigger_search(true);
 	});
 
+	// Tags filter
+	$(".form-check-input[name='tags']").change(function() {
+		trigger_search(true);
+	});
+
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
 		showSearchResults(false);
@@ -159,6 +164,15 @@ var setupSearch = function() {
 		showSearchResults();
 	});
 };
+
+var getSelectedTagFilters = function() {
+	var checked = $("input.form-check-input[type='checkbox']:checked");
+	tags = []
+	for (var i = 0; i < checked.length; i++) {
+		tags.push($(checked[i]).val());
+	}
+	return tags;
+}
 
 // searches for events immediately based on search box and datepicker values
 var trigger_search = function(force) {
@@ -236,6 +250,9 @@ function fetchData(query) {
 	// restore user's sorting options
 	$("#searchSort").val(user_sort_option);
 
+	// add tag filters
+	var data = {"tags": getSelectedTagFilters()};
+
 	search_requests_in_progress += 1;
 	$("#loading-spinner").removeClass("hidden");
 
@@ -253,8 +270,11 @@ function fetchData(query) {
 		}
 	}
 	$.ajax({
+		method: "POST",
 		url: base_url + '/api/event/search/' + query,
+		contentType: 'application/json',
 		dataType: 'json',
+		data: JSON.stringify(data),
 		headers: {
 			'Authorization': ('Token ' + $.cookie('api_token'))
 		},

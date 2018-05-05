@@ -175,7 +175,7 @@ def search_events(query, start_datetime, user=None, tags=None):
 	query_settings = {"visibility__lte": get_max_visibility(user),
 		"instances__end_datetime__gte": start_datetime}
 	# If tags is set, return ONLY events with some combination of those tags.
-	if tags is not None:
+	if tags is not None and len(tags) > 0:
 		escaped_tags = [re.escape(tag) for tag in tags]
 		tags_re = re.compile("^(%s)$" % "|".join(escaped_tags), re.IGNORECASE)
 		query_settings["tags"] = tags_re
