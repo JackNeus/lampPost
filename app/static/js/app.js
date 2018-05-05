@@ -193,9 +193,7 @@ var trigger_search = function(force) {
 		fetchData(query);
 
 		// update url with eventid paramter only if search box changes
-		if ($("#search-box").val() !== getUrlParameter('search')) {
-			updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
-		}
+		updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
 
 		prevQuery = query;
 		change_view_mode = false;
