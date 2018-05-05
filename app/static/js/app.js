@@ -135,6 +135,11 @@ var setupSearch = function() {
 		$('#search-box').keyup();
 	});
 
+	// My favorites filter
+	$("#favorite-events-filter-btn").click(function() {
+		trigger_search(true);
+	});
+
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
 		showSearchResults(false);
@@ -150,7 +155,9 @@ var setupSearch = function() {
 };
 
 // searches for events immediately based on search box and datepicker values
-var trigger_search = function() {
+var trigger_search = function(force) {
+	if (typeof(force) === "undefined") force = false;
+
 	// highlight all events button, if appropriate
 	if ($("#search-box").val() === "*") {
 		$("#all-events-filter-btn").addClass("selected");
@@ -172,7 +179,7 @@ var trigger_search = function() {
 		var query = "";
 		
 	// don't make api call if query hasn't changed (unless view mode has changed)
-	if (query != prevQuery || change_view_mode) {
+	if (force || (query != prevQuery || change_view_mode)) {
 		fetchData(query);
 	
 		// update url with eventid paramter only if search box changes
@@ -255,6 +262,11 @@ var setupUserFavorites = function() {
 			user_fav_data = data["data"];
 		else
 			user_fav_data = [];
+
+		// Filter button
+		if ($("#favorite-events-filter-btn").hasClass("selected")) {
+			event_data = getFavoritesOnly(event_data, user_fav_data);
+		}
 	};
 
 	var updateSearch = function() {
@@ -285,6 +297,25 @@ var setupUserFavorites = function() {
 }
 
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
+
+function getEvent(event_data, id) {
+	var event = $.grep(event_data, function(event){return event._id === id;})[0];
+	return event;
+}
+
+function getFavoritesOnly(event_data, favorite_data) {
+	console.log("here");
+	var favorite_events = [];
+	for (var i = 0; i < favorite_data.length; i++) {
+		var event_id = favorite_data[i]["_id"];
+		console.log(event_id);
+		var event = getEvent(event_data, event_id);
+		if (typeof(event) !== "undefined") {
+			favorite_events.push(event);
+		}
+	}
+	return favorite_events;
+}
 
 // converts java date string into python date string (mm/dd/yy to yy-mm-dd)
 function java2py_date( date_java ){
