@@ -83,7 +83,7 @@ function addTrendingResults() {
 	    if (data["status"] === "Success") {
 	    	// updating this is enough
 	    	// other code automatically makes a call to showSearchResults()
-			event_data = data["data"];
+			event_data = toJavaEventData(data["data"]);
 		}
 		else {
 			event_data = [];
@@ -237,7 +237,7 @@ function fetchData(query) {
 
 	var success_callback = function(data){
 	    if (data["status"] === "Success")
-			event_data = data["data"];
+			event_data = toJavaEventData(data["data"]);
 		else
 			event_data = [];
 		setupUserFavorites();
@@ -265,7 +265,7 @@ var setupUserFavorites = function() {
 
 	var success_callback = function(data) {
 		if (data["status"] === "Success")
-			user_fav_data = data["data"];
+			user_fav_data = toJavaEventData(data["data"]);
 		else
 			user_fav_data = [];
 
@@ -354,3 +354,23 @@ var getDaysAgo = function(n) {
 	var dateStr = makeDayMonthYearString(timeAgo, true);
 	return dateStr;
 };
+
+var toJavaEventData = function(data) {
+	for (var i = 0; i < data.length; i++) {
+		var instances = data[i].instances;
+		for (var j = 0; j < instances.length; j++) {
+			var javaStartDate = py2java_date(instances[j].start_datetime);
+			var javaEndDate = py2java_date(instances[j].end_datetime);
+			instances[j].start_datetime = javaStartDate;
+			instances[j].end_datetime = javaEndDate;
+		}
+	}
+	data.instances = instances;
+	return data;
+};
+
+// converts python date string into java date string (yyyy-mm-dd to yyyy/mm/dd)
+function py2java_date( date_py ) {
+	var date_java = date_py.replace(/-/g, '/');
+	return date_java;
+}
