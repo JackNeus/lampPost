@@ -257,8 +257,8 @@ var renderEditForm = function(eventNum) {
 		starts = event_data[eventNum - 1].instances[i]["start_datetime"].split(" ");
 		ends = event_data[eventNum - 1].instances[i]["end_datetime"].split(" ");
 
-		yearMonDayS = starts[0].split("-")
-		yearMonDayE = ends[0].split("-")
+		yearMonDayS = starts[0].split("/")
+		yearMonDayE = ends[0].split("/")
 		$("#startDates-" + i).val(yearMonDayS[1] + "/" + yearMonDayS[2] + "/" + yearMonDayS[0]);
 		$("#endDates-" + i).val(yearMonDayE[1] + "/" + yearMonDayE[2] + "/" + yearMonDayE[0]);
 
