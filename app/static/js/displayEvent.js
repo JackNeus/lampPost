@@ -5,6 +5,17 @@ var selected_event = null;
 // keep track of current title shown in event view
 var selected_title = "";
 
+
+// puts urls in text with hrefs so they are hyperlinked
+// function layout from https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+// regex from https://www.regextester.com/94502
+function urlify(text) {
+    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    return text.replace(urlRegex, function(url) {
+        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    })
+}
+
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
@@ -38,11 +49,11 @@ var handleEventViewClick = function() {
 
 		// Get rid of the edit parameter, if it exists.
 		updateUrl(removeUrlParameter(document.location.search, 'edit'));
-		
+
 		// change view/handling if in calendar view mode
 		var calendarMode = checkCalendarParameter();
 		if (calendarMode) {
-			// update url with eventid paramter if event is different than 
+			// update url with eventid paramter if event is different than
 			// event currently in url
 			if (getUrlParameter('event') !== eventId)
 				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
@@ -56,7 +67,7 @@ var handleEventViewClick = function() {
 			handleEventFireBtnClick(eventNum);
 		}
 		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter if event is different than 
+			// update url with eventid paramter if event is different than
 			// event currently in url
 			if (getUrlParameter('event') !== eventId)
 				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
@@ -68,6 +79,8 @@ var handleEventViewClick = function() {
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 	});
 }
 
@@ -103,7 +116,7 @@ function highlightSearchResult(elt) {
 // Animate selection
 function selectSearchResult(eventNum) {
 	// Don't allow this to happen if we're in calendar view.
-	// Seriously. 
+	// Seriously.
 	if (!inCalendarView()) {
 		var selected_event = $(".smallSearchResult.selected");
 		var event_to_select = $("#smallSearchResult" + eventNum);
@@ -114,7 +127,6 @@ function selectSearchResult(eventNum) {
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
 			selected_event.animate({"margin-right": '2vh'});
 		}
-		// Open new events.
 		event_to_select.animate({"margin-right": '0vh'});
 	}
 }
@@ -203,7 +215,8 @@ function populateEventViewPanel(eventNum) {
 
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
-	$("#eventDescription").html(event_data[eventNum-1].description);
+	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
+	console.log(urlify(event_data[eventNum-1].description).substring(0, 30));
 
 	// If the event has a poster, display that.
 	document.getElementById("bannerImage").innerHTML = "";
