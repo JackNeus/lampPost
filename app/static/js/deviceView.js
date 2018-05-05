@@ -1,5 +1,5 @@
-/* This file handles the mobile/desktop layout. As with the rest of the project,
-   this page was heavily influenced by Princeton Courses */
+/* This file handles the mobile/desktop layout. This page and implementation
+was heavily influenced by the mobile version of Princeton Courses */
 
 /*==============================================================================
 Constants
@@ -7,6 +7,8 @@ Constants
 
 // Mobile view screen width
 const WIDTH_THRESHOLD = 768;
+// Which pane should we initialize...?
+var INITIAL_PANE = 1;
 
 /*==============================================================================
 MASTER
@@ -63,7 +65,7 @@ Event browser
 // Mobile view layout that applies to browser webpages
 function viewMobile_Browser() {
     // Add slick to the viewport
-    $("#browserView").slick({infinite: false, edgeFriction: 0.15, slide: ".slide", initialSlide: 1, touchThreshold: 7});
+    $("#browserView").slick({infinite: false, edgeFriction: 0.15, slide: ".slide", initialSlide: INITIAL_PANE, touchThreshold: 7});
 }
 
 // Handle the transition to mobile view from desktop view
