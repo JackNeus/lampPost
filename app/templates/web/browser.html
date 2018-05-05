@@ -54,6 +54,11 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				<div id="all-events">
 					<button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
 				</div>
+          		{% if current_user.is_authenticated %}
+				<div id="favorite-events">
+					<button type="button" id="favorite-events-filter-btn" class="btn filter-btn">My Favorites</button>
+				</div>
+				{% endif %}
 			 </div>
 
 		</form>
