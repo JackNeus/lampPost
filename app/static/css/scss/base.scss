@@ -512,18 +512,18 @@ html, body {
 	min-width: 275px;
 	max-height: 88vh;
 	height: 88vh;
-	flex: 30%;
+	flex: 35%;
     float: left;
     border-right: 5px solid $primary-color;
 }
 #rightCol {
 	max-height: 88vh;
 	height: 88vh;
-	flex: 70%;
+	flex: 65%;
     float: left;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
 	#leftCol, #rightCol {
 		width: 100vw !important;
 		flex: 100%;
