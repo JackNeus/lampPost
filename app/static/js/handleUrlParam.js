@@ -93,7 +93,7 @@ var addUrlParameter = function(search, key, val){
 		params = search.replace(new RegExp('([\?&])' + key + '[^&]*'), '$1' + newParam);
 
 		// If nothing was replaced, then add the new param to the end
-		if (params === search) {
+		if (search.indexOf(key) == -1) {
 			params += '&' + newParam;
 		}
 	}

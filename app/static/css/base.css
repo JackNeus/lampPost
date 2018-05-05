@@ -67,6 +67,9 @@ html #bigRow, body #bigRow {
   #searches-wrapper #loading-spinner {
     font-size: 1.7em; }
 
+.search-container {
+  padding-bottom: 2vh; }
+
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
@@ -138,17 +141,34 @@ html #bigRow, body #bigRow {
   margin-top: 2vh; }
 
 .filters {
-  margin: 0vh 2vh;
-  margin-bottom: 2vh; }
-  .filters label {
-    font-size: 0.75em; }
-  .filters input[type=text] {
-    font-size: 0.65em; }
+  margin: 1vh 2vh;
+  font-size: 14px !important;
+  background-color: #dedede;
+  border-radius: 5px;
+  padding: 5px; }
   .filters div {
-    display: none; }
+    display: block;
+    margin-top: 2px; }
+  .filters .date-filter span {
+    margin-left: 5px;
+    margin-right: 5px;
+    float: left; }
+  .filters .date-filter #datepicker {
+    float: left;
+    font-size: 14px !important;
+    width: 100px;
+    padding: 3px 8px !important;
+    border-color: #80bdff; }
   .filters .filter-btn {
-    background-color: #2d9eee;
-    color: white; }
+    font-size: 14px !important;
+    border-color: #80bdff;
+    background-color: white;
+    padding: 3px 8px !important; }
+    .filters .filter-btn:hover {
+      border-color: #2d9eee; }
+    .filters .filter-btn.selected {
+      color: white;
+      background-color: #2d9eee; }
 
 .smallSearchResult {
   flex-grow: 1000;
@@ -324,7 +344,8 @@ html #bigRow, body #bigRow {
   height: 6.4vh; }
   .footer .flashedMessage {
     padding-top: 1.5vh;
-    padding-bottom: 1.5vh; }
+    padding-bottom: 1.5vh;
+    font-size: 24px; }
   .footer .close {
     position: absolute;
     right: 1vh;
@@ -358,25 +379,56 @@ html #bigRow, body #bigRow {
 
 .calendarBtns {
   display: none; }
+  .calendarBtns .calendarHeader {
+    background-color: #2d9eee;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    width: 100%;
+    margin-right: 0vh;
+    border-left: 2px solid #333333;
+    border-right: 2px solid #333333;
+    border-bottom: 2px solid #333333; }
+    .calendarBtns .calendarHeader .weekTitle {
+      font-family: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
+      font-size: 2em;
+      font-weight: bold;
+      color: white;
+      margin-left: 2vh;
+      margin-right: 2vh; }
+    .calendarBtns .calendarHeader .previousWeekBtn {
+      margin-left: 4vw; }
+    .calendarBtns .calendarHeader .nextWeekBtn {
+      margin-right: 4vw; }
 
 .calendar-view-row {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
   width: 100%;
-  border-left: 2px solid black;
-  margin-left: 1.5vh;
-  margin-right: 0vh; }
+  border-left: 2px solid #333333; }
   .calendar-view-row .dayCol {
-    max-width: 14%;
-    min-width: 14%;
-    border-right: 2px solid black;
-    border-bottom: 2px solid black;
+    max-width: 14.2857%;
+    min-width: 14.2857%;
+    border-right: 2px solid #333333;
+    border-bottom: 2px solid #333333;
     min-height: 55vh;
     height: auto; }
     .calendar-view-row .dayCol .dayTitle {
-      border-bottom: 2px solid black;
-      width: 100%; }
+      border-bottom: 2px solid #333333;
+      width: 100%;
+      text-align: center;
+      vertical-align: middle;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center; }
+      .calendar-view-row .dayCol .dayTitle .dayName {
+        margin: 0vh 0.5vh; }
+      .calendar-view-row .dayCol .dayTitle .date {
+        margin: 0vh 0.5vh; }
     .calendar-view-row .dayCol .dayResults {
       display: flex;
       flex-direction: column; }
@@ -387,17 +439,20 @@ html #bigRow, body #bigRow {
         border-left: none;
         border-top: none;
         border-radius: 0; }
-        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTitle {
-          font-size: 0.8em;
-          line-height: 1em;
-          height: 3em;
-          overflow: hidden; }
-        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTime {
-          font-size: 0.6em; }
-        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireBtn {
-          display: none; }
-        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireNum {
-          display: none; }
+        .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents {
+          max-height: 5.6em; }
+          .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTitle {
+            font-size: 0.9em;
+            line-height: 1em;
+            max-height: 3.8em;
+            overflow: hidden; }
+          .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultTime {
+            font-size: 0.6em;
+            line-height: 1em; }
+          .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireBtn {
+            display: none; }
+          .calendar-view-row .dayCol .dayResults .smallSearchResult .resultContents .resultFireNum {
+            display: none; }
 
 .searchBoxCol {
   flex: 40%; }
@@ -436,7 +491,6 @@ html #bigRow, body #bigRow {
   font-weight: bold;
   display: none; }
 
-<<<<<<< HEAD
 .badge-primary {
   font-size: 15px; }
 
@@ -462,8 +516,6 @@ html #bigRow, body #bigRow {
 #OrientationTag {
   background-color: orange; }
 
-=======
->>>>>>> develop
 #myModal {
   padding-top: 25vh;
   padding-left: 10vw; }
