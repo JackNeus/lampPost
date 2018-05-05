@@ -25,6 +25,8 @@ def form_to_event_object(form):
 	eventData['creator'] = current_user.netid
 	eventData['host'] = escape(form.host.data)
 
+	eventData['tags'] = form.tags.data
+
 	# If deletePoster field is not empty,
 	# delete the poster field.
 	if (escape(form.deletePoster) != ""):

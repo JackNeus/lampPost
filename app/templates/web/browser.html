@@ -27,17 +27,17 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 <div class="container-fluid">
 <div class="flex-container-row list-view" id="bigRow">
    <div class="flex-container-col" id="leftCol">
-   		<form onsubmit="return false;">
+   		<form class="search-container" onsubmit="return false;">
    			<div class="" id="searchRow">
 				<div class="form-group searchBoxCol" id="searchBox">
 			    		<input id="search-box" class="form-control"
 			    		placeholder="Search for events here!" value=""></input>
 				</div>
-				<div class="calendar-view-button btn" id="calendarViewBtn" title="Calendar View">
+				<div class="calendar-view-button btn" id="calendarViewBtn" data-toggle="tooltip" title="Calendar View">
 					<i class="fas fa-calendar"></i>
 				</div>
 			</div>
-			<div class="flex-container-row searchButtons align-items-start flex-wrap">
+			<div class="flex-row searchButtons align-items-start justify-content-between flex-wrap">
 				<div class="filter-button btn" id="filter-btn" title="Filter">
 				  <i class="fas fa-filter"></i>
 			  	</div>
@@ -46,15 +46,19 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				</div>
 			</div>
 
-			<div class="d-flex flex-column align-items-start justify-content-end filters">
-			  <div id="all-events">
-				  <button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
-			  </div>
-			  <div class="datetime">
-				  <label for="datepicker">Search from date: </label>
-				  <input type="text" id="datepicker"
-					   class="form-control" name="datepicker">
-			  </div>
+			<div class="filters flex-col" style="display:none;">
+				<div class="date-filter datetime d-flex flex-row flex-nowrap align-items-center justify-content-center">
+					<span for="datepicker">Search from date: </span>
+					<input type="text" id="datepicker" class="form-control" name="datepicker">
+				</div>
+				<div id="all-events">
+					<button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
+				</div>
+          		{% if current_user.is_authenticated %}
+				<div id="favorite-events">
+					<button type="button" id="favorite-events-filter-btn" class="btn filter-btn">My Favorites</button>
+				</div>
+				{% endif %}
 			 </div>
 
 		</form>
@@ -64,13 +68,13 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 		<div class="flex-container-scroll" id="searches-wrapper">
 			<div class="calendarBtns" id="calendarBtns">
 				<div class="calendarHeader">
-				<div class="mr-auto previousWeekBtn btn" id="previousWeekBtn" title="Previous Week">
-						<i class="fas fa-arrow-left"></i>
-				</div>
-				<div class="weekTitle" id="weekTitle"></div>
-				<div class="ml-auto nextWeekBtn btn" id="nextWeekBtn" title="Next Week">
-						<i class="fas fa-arrow-right"></i>
-				</div>
+          <div class="mr-auto previousWeekBtn btn" id="previousWeekBtn" title="Previous Week">
+              <i class="fas fa-arrow-left"></i>
+          </div>
+          <div class="weekTitle" id="weekTitle"></div>
+          <div class="ml-auto nextWeekBtn btn" id="nextWeekBtn" title="Next Week">
+              <i class="fas fa-arrow-right"></i>
+          </div>
 				</div>
 			</div>
 			<div id="trendingLabel"> Trending Events </div>

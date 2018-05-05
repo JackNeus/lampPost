@@ -42,6 +42,10 @@ $(document).ready(function(){
 	$("#welcomeDiv").hide();
 	var hideWelcome = false;
 
+	// setup search bar functionality
+	setupSearch();
+	setupDataRetrieval();
+	
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
@@ -55,9 +59,6 @@ $(document).ready(function(){
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
 	
-	// setup search bar functionality
-	setupSearch();
-	setupDataRetrieval();
 
 	// add the trending events
 	if (!checkCalendarParameter() && !$("#search-box").val())
@@ -114,18 +115,29 @@ var setupSearch = function() {
 	});
 
 	$('#filter-btn').click(function() {
-		$('#all-events').slideToggle(200);
-		$('.datetime').slideToggle(200);
+		$(".filters").slideToggle(200);
+	});
+	
+	$('.filter-btn').click(function() {
+		$(this).toggleClass('selected');
 	});
 
+	// All events filter
 	$("#all-events-filter-btn").click(function() {
 		if ($('#search-box').val() === "*") {
 			$('#search-box').val('');
+			$(this).removeClass('selected');
 		}
 		else {
 			$('#search-box').val('*'); 
+			$(this).addClass('selected');
 		}
 		$('#search-box').keyup();
+	});
+
+	// My favorites filter
+	$("#favorite-events-filter-btn").click(function() {
+		trigger_search(true);
 	});
 
 	// allow user to sort by date or popularity
@@ -143,7 +155,17 @@ var setupSearch = function() {
 };
 
 // searches for events immediately based on search box and datepicker values
-var trigger_search = function() {
+var trigger_search = function(force) {
+	if (typeof(force) === "undefined") force = false;
+
+	// highlight all events button, if appropriate
+	if ($("#search-box").val() === "*") {
+		$("#all-events-filter-btn").addClass("selected");
+	}
+	else if (prevQuery === "*") {
+		$("#all-events-filter-btn").removeClass("selected");
+	}
+
 	// default search for calendar view: all events since one year ago
 	if (inCalendarView() && !$("#search-box").val()) {
 		var query = "*/" + java2py_date(getDaysAgo(365));
@@ -161,7 +183,7 @@ var trigger_search = function() {
 	}
 		
 	// don't make api call if query hasn't changed (unless view mode has changed)
-	if (query != prevQuery || change_view_mode) {
+	if (force || (query != prevQuery || change_view_mode)) {
 		fetchData(query);
 	
 		// update url with eventid paramter only if search box changes
@@ -246,6 +268,11 @@ var setupUserFavorites = function() {
 			user_fav_data = data["data"];
 		else
 			user_fav_data = [];
+
+		// Filter button
+		if ($("#favorite-events-filter-btn").hasClass("selected")) {
+			event_data = getFavoritesOnly(event_data, user_fav_data);
+		}
 	};
 
 	var updateSearch = function() {
@@ -275,7 +302,36 @@ var setupUserFavorites = function() {
 	}
 }
 
+function clearReportForm() {
+	// clear the elements
+	$("#description").val("");
+	$('#category-0').prop('checked', false);
+	$('#category-1').prop('checked', false);
+	$('#category-2').prop('checked', false);
+	// there was not an error (this will stop the modal from popping up over and over)
+	$("#wasError").remove();
+}
+
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
+
+function getEvent(event_data, id) {
+	var event = $.grep(event_data, function(event){return event._id === id;})[0];
+	return event;
+}
+
+function getFavoritesOnly(event_data, favorite_data) {
+	console.log("here");
+	var favorite_events = [];
+	for (var i = 0; i < favorite_data.length; i++) {
+		var event_id = favorite_data[i]["_id"];
+		console.log(event_id);
+		var event = getEvent(event_data, event_id);
+		if (typeof(event) !== "undefined") {
+			favorite_events.push(event);
+		}
+	}
+	return favorite_events;
+}
 
 // converts java date string into python date string (mm/dd/yy to yy-mm-dd)
 function java2py_date( date_java ){
