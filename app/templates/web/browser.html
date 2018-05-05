@@ -95,11 +95,14 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 		<div class="flex-container-scroll" id="searches-wrapper">
 			<div class="calendarBtns" id="calendarBtns">
-				<div class="previousWeekBtn btn" id="previousWeekBtn" data-toggle="tooltip" title="Previous Week">
-						<i class="fas fa-arrow-left"></i>
-				</div>
-				<div class="nextWeekBtn btn" id="nextWeekBtn" data-toggle="tooltip" title="Next Week">
-						<i class="fas fa-arrow-right"></i>
+				<div class="calendarHeader">
+          <div class="mr-auto previousWeekBtn btn" id="previousWeekBtn" title="Previous Week">
+              <i class="fas fa-arrow-left"></i>
+          </div>
+          <div class="weekTitle" id="weekTitle"></div>
+          <div class="ml-auto nextWeekBtn btn" id="nextWeekBtn" title="Next Week">
+              <i class="fas fa-arrow-right"></i>
+          </div>
 				</div>
 			</div>
 			<div id="trendingLabel"> Trending Events </div>

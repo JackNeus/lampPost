@@ -172,10 +172,27 @@ def delete_event(id):
 @mod_api.route("/event/search/", defaults={"query":"","start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
 @mod_api.route("/event/search/<query>/<start_datetime>")
-def event_search(query, start_datetime):	
+def event_search(query, start_datetime):
+	tags = None
+	# Alternatively, allow user to send json parameters.
+	if request.is_json:
+		try:
+			data = request.get_json()
+			# TODO: Uncomment this stuff when we have test coverage.
+			'''
+			if "query" in data:
+				query = data["query"]
+			if "start_datetime" in data:
+				start_datetime = data["start_datetime"]
+			'''
+			if "tags" in data:
+				tags = data["tags"]
+		except Exception as e:
+			return gen_failure_response("Request was malformatted.")
+
 	try:
 		user = get_user_in_token(request)
-		events = controller.search_events(query, start_datetime, user)
+		events = controller.search_events(query, start_datetime, user=user, tags=tags)
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:

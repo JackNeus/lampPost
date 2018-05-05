@@ -168,7 +168,7 @@ Date.timeBetween = function( date1, date2, units ) {
 }
 
 // makes desired date string to be used in the search results
-function makeDate(start, end) {
+function makeDate(start, end, time_only) {
 	var start_date = new Date(start);
 	var end_date = new Date(end);
 	
@@ -189,12 +189,17 @@ function makeDate(start, end) {
 		var secondDay = end_date_str + " " + end_time + end_suffix;
 		return firstDay + "-" + secondDay;
 	}
-	else if ((start_time + start_suffix) === (end_time + end_suffix)) 
-		return start_date_str + " @" + start_time + start_suffix;
-	else if (start_suffix === end_suffix)
-		return start_date_str + " " + start_time + "-" + end_time + end_suffix;
-	else
-		return start_date_str + " " + start_time + start_suffix + "-" + end_time + end_suffix;
+	
+	// don't show start date if time_only option is true
+	if (time_only === true) start_date_str = "";
+	else start_date_str += " ";
+	
+	if ((start_time + start_suffix) === (end_time + end_suffix)) 
+		return start_date_str + "@" + start_time + start_suffix;
+	if (start_suffix === end_suffix)
+		return start_date_str + start_time + "-" + end_time + end_suffix;
+	
+	return start_date_str + start_time + start_suffix + "-" + end_time + end_suffix;
 }
 
 // returns date in mm/dd or mm/dd/yyyy format
@@ -203,6 +208,8 @@ function makeDayMonthYearString(date, include_year) {
 	
 	var date_str = (date.getMonth() + 1) + '/' + date.getDate();
 	// don't show year unless year is different than current year
+	if (include_year === false)
+		return date_str;
 	if (date.getFullYear() != today.getFullYear() || include_year)
 		date_str += "/" + (date.getFullYear());
 	return date_str;
