@@ -35,7 +35,7 @@ var toggleCalendarView = function() {
 		$("#calendarViewBtn").html(calendarBtn);
 		$("#calendarViewBtn").attr('data-original-title', 'Calendar View');
 		$("#calendarViewBtn").prop('title', 'Calendar View');
-
+		$('#weekTitle').text('');
 	}
 	else {
 		var listBtn = `<i class="fas fa-list"></i>`;
