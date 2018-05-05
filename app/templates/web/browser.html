@@ -33,12 +33,12 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 			    		<input id="search-box" class="form-control"
 			    		placeholder="Search for events here!" value=""></input>
 				</div>
-				<div class="calendar-view-button btn" id="calendarViewBtn" title="Calendar View">
+				<div class="calendar-view-button btn" id="calendarViewBtn" data-toggle="tooltip" title="Calendar View">
 					<i class="fas fa-calendar"></i>
 				</div>
 			</div>
 			<div class="flex-container-row searchButtons align-items-start flex-wrap">
-				<div class="filter-button btn" id="filter-btn" title="Filter">
+				<div class="filter-button btn" id="filter-btn" data-toggle="tooltip" title="Filters">
 				  <i class="fas fa-filter"></i>
 			  	</div>
 			  	<div class="ml-auto d-flex flex-nowrap align-items-start sort-box">
@@ -63,10 +63,10 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 		<div class="flex-container-scroll" id="searches-wrapper">
 			<div class="calendarBtns" id="calendarBtns">
-				<div class="previousWeekBtn btn" id="previousWeekBtn" title="Previous Week">
+				<div class="previousWeekBtn btn" id="previousWeekBtn" data-toggle="tooltip" title="Previous Week">
 						<i class="fas fa-arrow-left"></i>
 				</div>
-				<div class="nextWeekBtn btn" id="nextWeekBtn" title="Next Week">
+				<div class="nextWeekBtn btn" id="nextWeekBtn" data-toggle="tooltip" title="Next Week">
 						<i class="fas fa-arrow-right"></i>
 				</div>
 			</div>
