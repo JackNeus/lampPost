@@ -42,6 +42,10 @@ $(document).ready(function(){
 	$("#welcomeDiv").hide();
 	var hideWelcome = false;
 
+	// setup search bar functionality
+	setupSearch();
+	setupDataRetrieval();
+	
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
@@ -55,9 +59,6 @@ $(document).ready(function(){
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
 	
-	// setup search bar functionality
-	setupSearch();
-	setupDataRetrieval();
 
 	// add the trending events
 	if (!checkCalendarParameter() && !$("#search-box").val())
@@ -114,16 +115,22 @@ var setupSearch = function() {
 	});
 
 	$('#filter-btn').click(function() {
-		$('#all-events').slideToggle(200);
-		$('.datetime').slideToggle(200);
+		$(".filters").slideToggle(200);
+	});
+	
+	$('.filter-btn').click(function() {
+		$(this).toggleClass('selected');
 	});
 
+	// All events filter
 	$("#all-events-filter-btn").click(function() {
 		if ($('#search-box').val() === "*") {
 			$('#search-box').val('');
+			$(this).removeClass('selected');
 		}
 		else {
 			$('#search-box').val('*'); 
+			$(this).addClass('selected');
 		}
 		$('#search-box').keyup();
 	});
@@ -144,6 +151,14 @@ var setupSearch = function() {
 
 // searches for events immediately based on search box and datepicker values
 var trigger_search = function() {
+	// highlight all events button, if appropriate
+	if ($("#search-box").val() === "*") {
+		$("#all-events-filter-btn").addClass("selected");
+	}
+	else if (prevQuery === "*") {
+		$("#all-events-filter-btn").removeClass("selected");
+	}
+
 	// default search for calendar view: all events since one year ago
 	if (inCalendarView() && !$("#search-box").val()) {
 		var query = "*/" + java2py_date(getDaysAgo(365));
