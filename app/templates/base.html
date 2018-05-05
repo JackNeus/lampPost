@@ -26,10 +26,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/base.css?v=1">
     <link rel="stylesheet" type="text/css" href="/static/css/add.css?v=1">
+
+
     <script src="/static/js/displaySearches.js?v=0"></script>
     <script src="/static/js/displayEvent.js?v=0"></script>
     <script src="/static/js/createEventHtml.js?v=0"></script>
     <script src="/static/js/handleFavorites.js?v=0"></script>
+    
 
     <!-- Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -61,6 +64,8 @@
     <script src="/static/js/base.js?v=0"></script>
 
     <link rel="stylesheet" href="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.css">
+
+
     {% block header %}{% endblock %}
   </head>
 
@@ -83,23 +88,19 @@
           </li>
           {% endif %}
           </li>
-          {% if current_user.is_authenticated %}
-          <div class="userProfile">
-          <li class="nav-item">
-          	<a class="nav-link" id="userProfileLink" href="#">My Account</a>
-          	   <div class="dropdown-content" id="userProfileDropdown">
-		              <a class="nav-link" href="/myevents">Manage My Events</a>
-		              <a class="nav-link" href="/myfavorites">Favorite Events</a>
-		          </div>
-          </li>
-          </div>
-          <li class="nav-item">
-             <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
-          </li>
 
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+              <a class="nav-link" href="/myevents">My Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
+          </li>
           {% else %}
-            <a class="nav-link" href="/login"> Login </a>
-	         {% endif %}
+          <li class="nav-item">
+             <a class="nav-link" href="/login"> Login </a>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="/about">About</a>
           </li>

@@ -5,7 +5,20 @@ var selected_event = null;
 // keep track of current title shown in event view
 var selected_title = "";
 
+<<<<<<< HEAD
 var renderedImg;
+=======
+
+// puts urls in text with hrefs so they are hyperlinked
+// function layout from https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+// regex from https://www.regextester.com/94502
+function urlify(text) {
+    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    return text.replace(urlRegex, function(url) {
+        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    })
+}
+>>>>>>> develop
 
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
@@ -44,25 +57,15 @@ var handleEventViewClick = function() {
 		// change view/handling if in calendar view mode
 		var calendarMode = checkCalendarParameter();
 		if (calendarMode) {
-			// update url with eventid paramter if event is different than
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
 			// populate and display event view
-			highlightSearchResult($(this));
+			highlightSearchResult($(this), eventNum);
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
 		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter if event is different than
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
@@ -99,7 +102,10 @@ function getGoogleCalLink(eventNum, i) {
 }
 
 // Toggle highlighting in search results.
-function highlightSearchResult(elt) {
+function highlightSearchResult(elt, eventNum) {
+	var event_id = event_data[eventNum - 1]._id;
+	updateUrl(addUrlParameter(document.location.search, 'event', event_id));
+
 	$(".smallSearchResult").removeClass("selected");
 	elt.addClass("selected");
 }
@@ -112,7 +118,7 @@ function selectSearchResult(eventNum) {
 		var selected_event = $(".smallSearchResult.selected");
 		var event_to_select = $("#smallSearchResult" + eventNum);
 
-		highlightSearchResult(event_to_select);
+		highlightSearchResult(event_to_select, eventNum);
 
 		// Close previously selected event, if it's not the one we want to open.
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
@@ -140,6 +146,8 @@ function setTitle(title) {
 function populateEventViewPanel(eventNum) {
 	$(".event-view").hide();
 
+	// Remove edit parameter.
+	updateUrl(removeUrlParameter(document.location.search, "edit"));
 	// Search pane stuff.
 	selectSearchResult(eventNum);
 
@@ -155,21 +163,48 @@ function populateEventViewPanel(eventNum) {
 	// hide welcome image
 	$("#welcome").css("display", "none");
 
+	
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
+<<<<<<< HEAD
 	$("#eventSetting").html("");
+=======
+>>>>>>> develop
 
+	// clear tags
+	$(".badge-border").remove();
+
+	eventTags = event_data[eventNum-1].tags
+	for (var i = 0; i < eventTags.length; i++) {
+		$("#titleRow").append("<div class=\"badge-border\">" 
+			+ "<span class=\"badge badge-primary\" id=\"" + eventTags[i] + "Tag\">" + eventTags[i] + "</span>"
+			+ "</div>");
+	}
+	
+	
+
+	$("#eventSubtitle").html("");
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
+<<<<<<< HEAD
 		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\""
+=======
+		$("#eventSubtitle").append("<a class=\"calendar-btn\" title=\"Export to Google Calendar\" data-toggle=\"tooltip\""
+			+" target=\"_blank\" href=\""
+>>>>>>> develop
 			+ getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>");
 		// Location
 		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
+<<<<<<< HEAD
 		$("#eventSetting").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 
 		$("#eventSetting").append("<br>");
+=======
+		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
+		$("#eventSubtitle").append("<br>");
+>>>>>>> develop
 	}
 
 	selected_title = event_data[eventNum-1].title;
@@ -193,7 +228,7 @@ function populateEventViewPanel(eventNum) {
 
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
-	$("#eventDescription").html(event_data[eventNum-1].description);
+	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
 
 	// If the event has a poster, display that.
 	document.getElementById("bannerImage").innerHTML = "";
@@ -226,6 +261,9 @@ function populateEventViewPanel(eventNum) {
 
 	$("#event-view").show();
 	eventViewResizeHeight();
+
+	// show tips when hovering
+	$('[data-toggle="tooltip"]').tooltip();
 }
 
 function renderImage(url){

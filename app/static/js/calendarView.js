@@ -8,7 +8,7 @@ var handleCalendarView = function() {
 		else {
 			updateUrl(removeUrlParameter(document.location.search, 'cal'));
 		}
-
+		$(this).tooltip('hide');
 		// update that view mode has changed
 		change_view_mode = true;
 		toggleCalendarView();
@@ -33,12 +33,14 @@ var toggleCalendarView = function() {
 	if ($("#calendarViewBtn").hasClass("calendarMode")) {
 		var calendarBtn = `<i class="fas fa-calendar"></i>`;
 		$("#calendarViewBtn").html(calendarBtn);
+		$("#calendarViewBtn").attr('data-original-title', 'Calendar View');
 		$("#calendarViewBtn").prop('title', 'Calendar View');
-
+		$('#weekTitle').text('');
 	}
 	else {
 		var listBtn = `<i class="fas fa-list"></i>`;
 		$("#calendarViewBtn").html(listBtn);
+		$("#calendarViewBtn").attr('data-original-title', 'List View');
 		$("#calendarViewBtn").prop('title', 'List View');
 		calWeek = 0; // reset week to 0 (current week)
 	}
