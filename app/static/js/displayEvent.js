@@ -220,6 +220,7 @@ function populateEventViewPanel(eventNum) {
 	else $("#eventFireBtn").removeClass("selected");
 
 	$("#event-view").show();
+	eventViewResizeHeight();
 }
 
 function renderImage(url){
