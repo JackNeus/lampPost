@@ -260,7 +260,8 @@ html, body {
 	.resultTitle {
 		font-size: 1.2em;
 		overflow: hidden;
-		text-overflow: ellipsis;	
+		text-overflow: ellipsis;
+		word-wrap: break-word;
 	}
 	.resultTime {
 		font-size: 1em;
