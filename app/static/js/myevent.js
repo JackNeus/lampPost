@@ -224,7 +224,7 @@ var renderEditForm = function(eventNum) {
 	$("#description").val(decodeEntities(event_data[eventNum - 1].description));
 	$("#host").val(decodeEntities(event_data[eventNum - 1].host));
 
-	$("#visibility-"+(1-event_data[eventNum-1].visibility)).attr('checked', 'checked');
+	$("#visibility-"+(event_data[eventNum-1].visibility)).attr('checked', 'checked');
 
 	var numShowings = event_data[eventNum - 1].instances.length;
 	$("#numShowings-" + (numShowings - 1)).prop("checked", true);
