@@ -436,6 +436,34 @@ html #bigRow, body #bigRow {
   font-weight: bold;
   display: none; }
 
+<<<<<<< HEAD
+.badge-primary {
+  font-size: 15px; }
+
+.badge-border {
+  padding-left: 14px;
+  padding-top: 13px; }
+
+#MusicTag {
+  background-color: CornflowerBlue; }
+
+#DanceTag {
+  background-color: purple; }
+
+#TalkTag {
+  background-color: IndianRed; }
+
+#TheaterTag {
+  background-color: green; }
+
+#StreetTag {
+  background-color: gray; }
+
+#OrientationTag {
+  background-color: orange; }
+
+=======
+>>>>>>> develop
 #myModal {
   padding-top: 25vh;
   padding-left: 10vw; }

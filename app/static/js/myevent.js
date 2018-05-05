@@ -282,6 +282,15 @@ var renderEditForm = function(eventNum) {
 		$("#current-poster").toggleClass("hidden");
 	}
 	$("#link").val(decodeEntities(event_data[eventNum - 1].trailer));
+
+	// make sure everything is unchecked to begin with
+	$("input[name='tags'").prop("checked", false);
+
+	// check appropriate tags
+	eventTags = event_data[eventNum - 1].tags;
+	for (var i = 0; i < eventTags.length; i++) {
+		$("input[value=\'" + eventTags[i] + "\']").prop("checked", true);
+	}
 	// display the form
 	$("#event-form").show();
 }
