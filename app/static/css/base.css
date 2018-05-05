@@ -67,6 +67,9 @@ html #bigRow, body #bigRow {
   #searches-wrapper #loading-spinner {
     font-size: 1.7em; }
 
+.search-container {
+  padding-bottom: 2vh; }
+
 #searchBox {
   padding: 0;
   margin: 2vh 2vh;
@@ -138,17 +141,34 @@ html #bigRow, body #bigRow {
   margin-top: 2vh; }
 
 .filters {
-  margin: 0vh 2vh;
-  margin-bottom: 2vh; }
-  .filters label {
-    font-size: 0.75em; }
-  .filters input[type=text] {
-    font-size: 0.65em; }
+  margin: 1vh 2vh;
+  font-size: 14px !important;
+  background-color: #dedede;
+  border-radius: 5px;
+  padding: 5px; }
   .filters div {
-    display: none; }
+    display: block;
+    margin-top: 2px; }
+  .filters .date-filter span {
+    margin-left: 5px;
+    margin-right: 5px;
+    float: left; }
+  .filters .date-filter #datepicker {
+    float: left;
+    font-size: 14px !important;
+    width: 100px;
+    padding: 3px 8px !important;
+    border-color: #80bdff; }
   .filters .filter-btn {
-    background-color: #2d9eee;
-    color: white; }
+    font-size: 14px !important;
+    border-color: #80bdff;
+    background-color: white;
+    padding: 3px 8px !important; }
+    .filters .filter-btn:hover {
+      border-color: #2d9eee; }
+    .filters .filter-btn.selected {
+      color: white;
+      background-color: #2d9eee; }
 
 .smallSearchResult {
   flex-grow: 1000;
@@ -436,7 +456,6 @@ html #bigRow, body #bigRow {
   font-weight: bold;
   display: none; }
 
-<<<<<<< HEAD
 .badge-primary {
   font-size: 15px; }
 
@@ -462,8 +481,6 @@ html #bigRow, body #bigRow {
 #OrientationTag {
   background-color: orange; }
 
-=======
->>>>>>> develop
 #myModal {
   padding-top: 25vh;
   padding-left: 10vw; }
