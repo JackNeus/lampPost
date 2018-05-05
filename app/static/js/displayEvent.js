@@ -57,7 +57,7 @@ var handleEventViewClick = function() {
 			selected_event = event_data[eventNum - 1];
 
 			// populate and display event view
-			highlightSearchResult($(this));
+			highlightSearchResult($(this), eventNum);
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
@@ -98,7 +98,10 @@ function getGoogleCalLink(eventNum, i) {
 }
 
 // Toggle highlighting in search results.
-function highlightSearchResult(elt) {
+function highlightSearchResult(elt, eventNum) {
+	var event_id = event_data[eventNum - 1]._id;
+	updateUrl(addUrlParameter(document.location.search, 'event', event_id));
+
 	$(".smallSearchResult").removeClass("selected");
 	elt.addClass("selected");
 }
@@ -108,9 +111,6 @@ function selectSearchResult(eventNum) {
 	// Don't allow this to happen if we're in calendar view.
 	// Seriously.
 	if (!inCalendarView()) {
-		var event_id = event_data[eventNum - 1]._id;
-		updateUrl(addUrlParameter(document.location.search, 'event', event_id));
-
 		var selected_event = $(".smallSearchResult.selected");
 		var event_to_select = $("#smallSearchResult" + eventNum);
 
