@@ -68,6 +68,8 @@ var handleEventViewClick = function() {
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 	});
 }
 
@@ -114,11 +116,8 @@ function selectSearchResult(eventNum) {
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
 			selected_event.animate({"margin-right": '2vh'});
 		}
-		// Open new events.
 		event_to_select.animate({"margin-right": '0vh'});
 	}
-	// Trigger slick action if mobile
-	if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 }
 
 // Update the popularity of an event when the fire button is clicked

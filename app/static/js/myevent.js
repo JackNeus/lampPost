@@ -150,6 +150,8 @@ var handleDeleteMyEvent = function() {
 				unselectIcons();
 			}
 		});
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 	});
 }
 
@@ -173,6 +175,8 @@ var handleEditMyEvent = function() {
 			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
 		}
 		renderEditForm(eventNum);
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 		e.stopPropagation();
 	});
 }

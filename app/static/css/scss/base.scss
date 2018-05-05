@@ -652,27 +652,10 @@ html, body {
 	}
 }
 
-/* THINGS FOR SLICK CAROUSEL */
-.slick-list {
-  /* flex-container-row */
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
+.slick-initialized .slick-slide {
+    display: flex !important;
 }
-.slick-track {
-  /* flex-container-row */
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
-}
-.slick-slide {
-  /* so that height is stretched (safari) */
-  height: auto;
-}
-/* override (for flex in display-body) */
-.flex-container-col.slick-slide {
-  display: flex;
-}
+
 #myModal {
 	padding-top:25vh;
 	padding-left:10vw
