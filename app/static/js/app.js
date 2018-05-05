@@ -39,8 +39,18 @@ function setData(data) {
 }
 
 $(document).ready(function(){
+	// Setup device view handler
+	INITIAL_PANE = 1;
+	browserView();
+	addSearchButton();
+
+	// Manage welcome "event""
 	$("#welcomeDiv").hide();
 	var hideWelcome = false;
+
+	// setup search bar functionality
+	setupSearch();
+	setupDataRetrieval();
 
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
@@ -54,10 +64,7 @@ $(document).ready(function(){
 
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
-	
-	// setup search bar functionality
-	setupSearch();
-	setupDataRetrieval();
+
 
 	// add the trending events
 	if (!checkCalendarParameter() && !$("#search-box").val())
@@ -82,7 +89,7 @@ function addTrendingResults() {
 	    if (data["status"] === "Success") {
 	    	// updating this is enough
 	    	// other code automatically makes a call to showSearchResults()
-			event_data = data["data"];
+			event_data = toJavaEventData(data["data"]);
 		}
 		else {
 			event_data = [];
@@ -114,18 +121,34 @@ var setupSearch = function() {
 	});
 
 	$('#filter-btn').click(function() {
-		$('#all-events').slideToggle(200);
-		$('.datetime').slideToggle(200);
+		$(".filters").slideToggle(200);
 	});
 
+	$('.filter-btn').click(function() {
+		$(this).toggleClass('selected');
+	});
+
+	// All events filter
 	$("#all-events-filter-btn").click(function() {
 		if ($('#search-box').val() === "*") {
 			$('#search-box').val('');
+			$(this).removeClass('selected');
 		}
 		else {
-			$('#search-box').val('*'); 
+			$('#search-box').val('*');
+			$(this).addClass('selected');
 		}
 		$('#search-box').keyup();
+	});
+
+	// My favorites filter
+	$("#favorite-events-filter-btn").click(function() {
+		trigger_search(true);
+	});
+
+	// Tags filter
+	$(".form-check-input[name='tags']").change(function() {
+		trigger_search(true);
 	});
 
 	// allow user to sort by date or popularity
@@ -142,29 +165,50 @@ var setupSearch = function() {
 	});
 };
 
+var getSelectedTagFilters = function() {
+	var checked = $("input.form-check-input[type='checkbox']:checked");
+	tags = []
+	for (var i = 0; i < checked.length; i++) {
+		tags.push($(checked[i]).val());
+	}
+	return tags;
+}
+
 // searches for events immediately based on search box and datepicker values
-var trigger_search = function() {
+var trigger_search = function(force) {
+	if (typeof(force) === "undefined") force = false;
+
+	// highlight all events button, if appropriate
+	if ($("#search-box").val() === "*") {
+		$("#all-events-filter-btn").addClass("selected");
+	}
+	else if (prevQuery === "*") {
+		$("#all-events-filter-btn").removeClass("selected");
+	}
+
 	// default search for calendar view: all events since one year ago
-	if (inCalendarView() && !$("#search-box").val())
-		var query = "*/" + getDaysAgo(365);
+	if (inCalendarView() && !$("#search-box").val()) {
+		var query = "*/" + java2py_date(getDaysAgo(365));
+	}
 	else if ($("#search-box").val()) {
-		if ($("#datepicker").val())
+		if (inCalendarView())
+			var query = $("#search-box").val() + "/" + java2py_date(getDaysAgo(365));
+		else if ($("#datepicker").val())
 			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
-		else  
+		else
 			var query = $("#search-box").val();
 	}
-	else
+	else {
 		var query = "";
-		
+	}
+
 	// don't make api call if query hasn't changed (unless view mode has changed)
-	if (query != prevQuery || change_view_mode) {
+	if (force || (query != prevQuery || change_view_mode)) {
 		fetchData(query);
-	
+
 		// update url with eventid paramter only if search box changes
-		if ($("#search-box").val() !== getUrlParameter('search')) {
-			updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
-		}
-		
+		updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
+
 		prevQuery = query;
 		change_view_mode = false;
 	}
@@ -186,8 +230,10 @@ var setupDataRetrieval = function() {
 		  	}
 		  	else fetchData($("#search-box").val());
 		}
-		else 
+		else {
+			calWeek = 0;
 			showSearchResults();
+		}
 	});
 };
 
@@ -204,12 +250,15 @@ function fetchData(query) {
 	// restore user's sorting options
 	$("#searchSort").val(user_sort_option);
 
+	// add tag filters
+	var data = {"tags": getSelectedTagFilters()};
+
 	search_requests_in_progress += 1;
 	$("#loading-spinner").removeClass("hidden");
 
 	var success_callback = function(data){
 	    if (data["status"] === "Success")
-			event_data = data["data"];
+			event_data = toJavaEventData(data["data"]);
 		else
 			event_data = [];
 		setupUserFavorites();
@@ -221,8 +270,11 @@ function fetchData(query) {
 		}
 	}
 	$.ajax({
+		method: "POST",
 		url: base_url + '/api/event/search/' + query,
+		contentType: 'application/json',
 		dataType: 'json',
+		data: JSON.stringify(data),
 		headers: {
 			'Authorization': ('Token ' + $.cookie('api_token'))
 		},
@@ -237,14 +289,19 @@ var setupUserFavorites = function() {
 
 	var success_callback = function(data) {
 		if (data["status"] === "Success")
-			user_fav_data = data["data"];
+			user_fav_data = toJavaEventData(data["data"]);
 		else
 			user_fav_data = [];
+
+		// Filter button
+		if ($("#favorite-events-filter-btn").hasClass("selected")) {
+			event_data = getFavoritesOnly(event_data, user_fav_data);
+		}
 	};
 
 	var updateSearch = function() {
 		showSearchResults();
-		
+
 		// update event view if url has eventId
 		if (urlParamEventId) {
 			updateUrlParamEventView(urlParamEventId);
@@ -256,7 +313,7 @@ var setupUserFavorites = function() {
 	if (userId === "") {
 		updateSearch();
 	}
-	else { 
+	else {
 		$.ajax({
 				url: base_url + '/api/user/fav/get/'+ userId,
 				dataType: 'json',
@@ -269,7 +326,34 @@ var setupUserFavorites = function() {
 	}
 }
 
+function clearReportForm() {
+	// clear the elements
+	$("#description").val("");
+	$('#category-0').prop('checked', false);
+	$('#category-1').prop('checked', false);
+	$('#category-2').prop('checked', false);
+	// there was not an error (this will stop the modal from popping up over and over)
+	$("#wasError").remove();
+}
+
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
+
+function getEvent(event_data, id) {
+	var event = $.grep(event_data, function(event){return event._id === id;})[0];
+	return event;
+}
+
+function getFavoritesOnly(event_data, favorite_data) {
+	var favorite_events = [];
+	for (var i = 0; i < favorite_data.length; i++) {
+		var event_id = favorite_data[i]["_id"];
+		var event = getEvent(event_data, event_id);
+		if (typeof(event) !== "undefined") {
+			favorite_events.push(event);
+		}
+	}
+	return favorite_events;
+}
 
 // converts java date string into python date string (mm/dd/yy to yy-mm-dd)
 function java2py_date( date_java ){
@@ -290,5 +374,25 @@ var getDaysAgo = function(n) {
 	var timeAgo = new Date();
 	timeAgo.setDate(today.getDate() - n);
 	var dateStr = makeDayMonthYearString(timeAgo, true);
-	return timeAgo;
+	return dateStr;
 };
+
+var toJavaEventData = function(data) {
+	for (var i = 0; i < data.length; i++) {
+		var instances = data[i].instances;
+		for (var j = 0; j < instances.length; j++) {
+			var javaStartDate = py2java_date(instances[j].start_datetime);
+			var javaEndDate = py2java_date(instances[j].end_datetime);
+			instances[j].start_datetime = javaStartDate;
+			instances[j].end_datetime = javaEndDate;
+		}
+	}
+	data.instances = instances;
+	return data;
+};
+
+// converts python date string into java date string (yyyy-mm-dd to yyyy/mm/dd)
+function py2java_date( date_py ) {
+	var date_java = date_py.replace(/-/g, '/');
+	return date_java;
+}

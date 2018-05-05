@@ -20,6 +20,7 @@ def main_handler(e):
 		return "Event object does not include field %s" % str(e)
 	else:
 		if CONFIG["DEBUG"]:
+			print(type(e))
 			return str(e)
 		else:
 			return "Something went wrong."
@@ -31,7 +32,12 @@ def validation_error(e):
 
 	if errors is not None:
 		for key in errors:
+			location = str(key).capitalize()
 			message = str(errors[key])
+
+			if key is "instances":
+				location = "Showings"
+
 			if message.find("too short") is not -1:
 				readable = " is too short."
 			elif message.find("too long") is not -1:
@@ -40,13 +46,19 @@ def validation_error(e):
 				readable = " is not a URL."
 			elif message.find("only accepts") is not -1:
 				readable = " is the wrong type."
+			elif message.find("may be used in a list") is not -1:
+				readable = " is the wrong type."
 			elif message.find("not a valid") is not -1:
 				readable = " is not a valid id."
 			elif message.find("Unknown string format") is not -1:
 				readable = " has the wrong format."
 			else:
-				readable = str(errors[key])
-			report = report + str(key).capitalize() + readable + " "
+				# Don't want to expose ugly erros to user.
+				if CONFIG["DEBUG"]:
+					readable = str(errors[key])
+				else:
+					readable = " was malformatted."
+			report = report + location + readable + " "
 
 	if report is not "":
 		return report

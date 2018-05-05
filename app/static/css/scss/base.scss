@@ -6,7 +6,7 @@ $light-color: #999999;
 $orange: #ee7f2d;
 $font-light: "Avenir-Light", "Arial Narrow", "Helvetica-Light", sans-serif;
 $font-med: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
-$font-heavy: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
+$font-heavy: "Avenir-Heavy", "Arial", "Helvetica-Bold", sans-serif;
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
@@ -45,7 +45,9 @@ html, body {
 // Navbar style
 html, body {
 	.logo {
-		width: 200px;
+		height: 60px;
+		padding-right: .5rem;
+		padding-left: .5rem;
 	}
 	.navbar-expand-md {
 		background-color: $primary-color;
@@ -53,6 +55,12 @@ html, body {
 	.nav-link {
 		font-family: $font-med;
 		font-size:24px;
+		@media screen and (min-width: 825px) and (max-width: 920px) {
+			font-size:20px;
+		}
+		@media screen and (min-width: 768px) and (max-width: 825px) {
+			font-size:17px;
+		}
 	}
 
 	.dropdown-content {
@@ -64,7 +72,26 @@ html, body {
 	    z-index: 6;
 	}
 
-	#bigRow {
+	.mobile-search-button {
+		height: 40px;
+		width: 56px;
+		margin-right: 1rem;
+	}
+
+	.navbar-toggler {
+		&:hover {
+	 		color: $primary-color !important;
+			border-color: $primary-color;
+			background-color: white;
+			.navbar-toggler-icon {
+				background-image:  url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='"
+					+ rgba($primary-color-r, $primary-color-g, $primary-color-b, 1.0)
+					+ "' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+			}
+		}
+	}
+
+	#browserView {
 		padding-left: 0vw;
 		padding-right: 0vw;
 		margin-bottom: 2vh;
@@ -98,10 +125,11 @@ html, body {
 	color: red;
 }
 
-#searches-wrapper {
+.searches-wrapper {
 	min-height: 75px;
 	border-top: 5px solid $med-color;
 	position: relative;
+	padding-top: 5px;
 
 	.centered{
 		margin: auto;
@@ -117,6 +145,10 @@ html, body {
 	}
 }
 
+.search-container {
+	padding-bottom: 2vh;
+}
+
 #searchBox {
 	padding: 0;
 	margin: 2vh 2vh;
@@ -125,6 +157,10 @@ html, body {
 	width: 100%;
 	flex-shrink: 1000;
 	font-size: 16px !important;
+}
+
+#searches {
+	padding-bottom: 30px;
 }
 
 #myEventSortBtn {
@@ -157,6 +193,10 @@ html, body {
 	margin-right: 2vh;
 	font-size: 14px;
 
+	&.myevents {
+		padding-bottom: 2vh;
+	}
+
 	.filter-button {
 		padding-left: 0;
 		font-size: 1.25em;
@@ -177,13 +217,13 @@ html, body {
 		.select-style {
 		    border: 1px solid #ccc;
 		    width: 175px;
-		    min-width: 175px;	
+		    min-width: 175px;
 		    border-radius: 3px;
 		    overflow: hidden;
 		    background: #fafafa url("../graphics/sort-down.png") no-repeat 95% 50%;
 		    float: left;
 		}
-		
+
 		.select-style select {
 		    padding: 5px 8px;
 		    width: 130%;
@@ -205,24 +245,52 @@ html, body {
 }
 
 .filters {
-	margin: 0vh 2vh;
-	margin-bottom: 2vh;
-
-	label {
-		font-size: 0.75em;
-	}
-
-	input[type=text] {
-		font-size: 0.65em;
-	}
+	margin: 1vh 2vh;
+	font-size: 14px !important;
+	background-color: #dedede;
+	border-radius: 5px;
+	padding: 5px;
 
 	div {
-		display: none;
+		display: block;
+		//display: inline-block;
+		margin-top: 2px;
+	}
+
+	.date-filter {
+		span {
+			margin-left: 5px;
+			margin-right: 5px;
+			float: left;
+		}
+		#datepicker {
+			float: left;
+			font-size: 14px !important;
+			width: 100px;
+			padding: 3px 8px !important;
+			border-color: #80bdff;
+		}
 	}
 
 	.filter-btn {
-		background-color: $primary-color;
-		color: white;
+		font-size: 14px !important;
+		//border-color: #ced4da;
+		border-color: #80bdff;
+		background-color: white;
+		padding: 3px 8px !important;
+		&:hover {
+			border-color: $primary-color;
+		}
+		&.selected {
+			color: white;
+			background-color: $primary-color;
+		}
+	}
+
+	#tag-filters {
+		.form-check {
+			display: inline-block;
+		}
 	}
 }
 
@@ -238,8 +306,14 @@ html, body {
  	overflow: hidden;
  	background: white;
 	color: $dark-color;
+	.resultTitleContainer {
+		width: 80%;
+		overflow: hidden;
+	}
 	.resultTitle {
 		font-size: 1.2em;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	.resultTime {
 		font-size: 1em;
@@ -345,7 +419,7 @@ html, body {
 		line-height: 30px;
 		font-size: 20px;
 	}
-	.event-view-subtitle{
+	.event-view-subtitle {
 	    color: $med-color;
 		margin: 0;
 		line-height: normal;
@@ -375,25 +449,32 @@ html, body {
 	.event-view-info {
 	    width: 100%;
 	    background-color: white;
-	    height: 75vh;
+		padding-bottom: 50px;
 	    overflow-y: scroll;
 	    overflow-x: hidden;
-	    padding-bottom: 2vh;
+		.event-wrapper {
+			display: block !important;
+		}
 	}
 	img {
 		width: 100%;
 	}
 	.posterImage {
 		img {
-			height: 75vh;
+			height: 76vh;
 			width: auto;
 		}
 	}
 	.eventSection {
-		padding-top: 20px;
 		color: $med-color;
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
+	}
+	.event-view-data {
+		font-size:18px;
+		color: $light-color;
+		line-height: normal;
+		margin: 0px;
 	}
 	.calendar-btn {
 		padding-right: 10px;
@@ -403,10 +484,13 @@ html, body {
 	 		color: $primary-color;
 	 	}
   	}
-
+  	#eventDescription {
+  		white-space: pre-wrap;
+  	}
 	.reportBtn {
-		padding-right: 15px;
-		font-size: 1.2em;
+		padding-right: 20px;
+		padding-top: 10px;
+		font-size: 1.0em;
 		cursor: pointer;
 	}
 }
@@ -414,6 +498,12 @@ html, body {
 .flex-container-row {
 	display: flex;
 	flex-flow: row wrap;
+	overflow: hidden;
+}
+
+.flex-container-bigrow {
+	display: flex;
+	flex-flow: row nowrap;
 	overflow: hidden;
 }
 
@@ -450,6 +540,7 @@ html, body {
   .flashedMessage {
     padding-top: 1.5vh;
 	padding-bottom: 1.5vh;
+	font-size: 24px;
   }
 
   .close {
@@ -472,17 +563,34 @@ html, body {
 }
 
 #leftCol {
+	min-width: 275px;
 	max-height: 88vh;
 	height: 88vh;
-	flex: 30%;
+	flex: 35%;
     float: left;
     border-right: 5px solid $primary-color;
 }
 #rightCol {
 	max-height: 88vh;
 	height: 88vh;
-	flex: 70%;
+	flex: 65%;
     float: left;
+}
+
+@media screen and (max-width: 767px) {
+	#leftCol, #rightCol {
+		width: 100vw !important;
+		flex: 100%;
+		-webkit-overflow-scrolling: touch;
+	}
+	#leftCol {
+		min-width: 0px;
+		border-right: none;
+	}
+}
+
+.slick-initialized .slick-slide {
+    display: flex !important;
 }
 
 .calendar-view {
@@ -495,31 +603,74 @@ html, body {
 }
 
 .calendarBtns {
-	display: none;
+	display:none;
+
+	.calendarHeader {
+		background-color: $primary-color;//#1d669a;
+		justify-content: center;
+		align-items: center;
+		display: flex;
+		flex-wrap: nowrap;
+		flex-direction: row;
+		width: 100%;
+		margin-right: 0vh;
+		border-left: 2px solid $dark-color;
+		border-right: 2px solid $dark-color;
+		border-bottom: 2px solid $dark-color;
+
+		.weekTitle {
+			font-family: $font-med;
+			font-size: 2em;
+			font-weight: bold;
+			color: white;
+			margin-left: 2vh;
+			margin-right: 2vh;
+		}
+
+		.previousWeekBtn {
+			margin-left: 4vw;
+		}
+
+		.nextWeekBtn {
+			margin-right: 4vw;
+		}
+	}
 }
 
 .calendar-view-row {
-	display: flex; 
-	flex-wrap: nowrap; 
+	display: flex;
+	flex-wrap: nowrap;
 	flex-direction: row;
 	width: 100%;
-	border-left: 2px solid black;
-	margin-left: 1.5vh;
-	margin-right: 0vh;
-	
+	border-left: 2px solid $dark-color;
+
 	.dayCol {
-		max-width: 14%;
-		min-width: 14%;
-		border-right: 2px solid black;
-		border-bottom: 2px solid black;
+		max-width: 14.2857%;
+		min-width: 14.2857%;
+		border-right: 2px solid $dark-color;
+		border-bottom: 2px solid $dark-color;
 		min-height: 55vh;
 		height: auto;
-		
+
 		.dayTitle {
-		 	border-bottom: 2px solid black;
+		 	border-bottom: 2px solid $dark-color;
 		 	width: 100%;
+		 	text-align: center;
+			vertical-align: middle;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: center;
+
+			.dayName {
+				margin: 0vh 0.5vh;
+			}
+
+			.date {
+				margin: 0vh 0.5vh;
+			}
 		}
-		
+
 		.dayResults {
 			display: flex;
 			flex-direction: column;
@@ -531,19 +682,21 @@ html, body {
 				border-top: none;
 				border-radius: 0;
 				.resultContents {
+					max-height: 5.6em;
 					.resultTitle {
-						font-size: 0.8em;
+						font-size: 0.9em;
 						line-height: 1em;
-						height: 3em;
+						max-height: 3.8em;
 						overflow: hidden;
 					}
 					.resultTime {
 						font-size: 0.6em;
+						line-height: 1em;
 					}
 					.resultFireBtn {
 						display: none;
 					}
-			
+
 					.resultFireNum {
 						display: none;
 					}
@@ -558,14 +711,19 @@ html, body {
 	flex: 40%;
 }
 
-@media screen and (max-width: 825px) {
-    .flex-container-row {
-        flex-direction: column;
-    }
-    #leftCol {
-    	   max-height: 55vh;
-    	   height: auto;
-    }
+/* THINGS FOR SLICK CAROUSEL */
+.slick-list {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+.slick-track {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+.slick-slide {
+  height: auto;
 }
 
 #interiorWelcomeDiv {
@@ -584,7 +742,11 @@ html, body {
 			color:$primary-color;
 		}
 	}
-
+	@media screen and (max-width: 768px) {
+		.welcome-img {
+			display: none;
+		}
+	}
 }
 
 #welcome {
@@ -602,11 +764,58 @@ html, body {
 	display: none;
 }
 
-#myModal {
-	padding-top:25vh; 
-	padding-left:10vw
+.badge-primary {
+    font-size:15px;
 }
 
+.badge-border {
+	padding-left: 14px;
+	padding-top: 13px;
+}
+
+// badge colors
+#MusicTag {
+  background-color: CornflowerBlue;
+}
+
+#DanceTag {
+  background-color: purple;
+}
+
+#TalkTag {
+  background-color: IndianRed;
+}
+
+#TheaterTag {
+  background-color: green;
+}
+
+#StreetTag {
+  background-color: gray;
+}
+
+#OrientationTag {
+  background-color: orange;
+}
+
+#myModal {
+	padding-top:25vh;
+	padding-left:10vw
+}
 .modal-content {
 	width:50vw;
+}
+
+.video-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+.video-responsive iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
 }

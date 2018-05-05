@@ -5,13 +5,17 @@
 
 {% block scripts %}
 <link rel="stylesheet" type="text/css" href="/static/css/add.css">
-<script src="/static/js/myevent.js?v=0"></script>
-<script src="/static/js/handleUrlParam.js?v=0"></script>
-<script src="/static/js/handleFavorites.js?v=0"></script>
-<script src="/static/js/add.js?v=0"></script>
+
+<script src="/static/js/myevent.js?v=1"></script>
+<script src="/static/js/handleUrlParam.js?v=1"></script>
+<script src="/static/js/handleFavorites.js?v=1"></script>
+<script src="/static/js/add.js?v=1"></script>
+<script src="/static/js/browser.js?v=1"></script>
+
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
+
 {% endblock %}
 
 <!--*************************** MAIN CONTENT *****************************-->
@@ -20,32 +24,33 @@ setBaseUrl("{{ config.BASE_URL }}");
 <link rel="stylesheet" type="text/css" href="/static/css/myevents.css">
 
 
+
 <div class="container-fluid">
-  	<div class="flex-container-row" id="bigRow">
-  	
-	   <div class="flex-container-col" id = "leftCol">
-	   
+  	<div class="flex-container-bigrow" id="browserView">
+
+	   <div class="flex-container-col slide" id = "leftCol">
+
 	   	<h1 style="text-align:center; padding-top:1vh">My Events</h1>
 	   	
-		<div class="searchButtons justify-content-center align-items-center">
+		<div class="searchButtons justify-content-center align-items-center myevents">
 			<div class="d-flex flex-nowrap sort-box">
 				{% include "web/sortbox.html" %}
 			</div>
-		</div>	
+		</div>
 
 		<!-- Fills in with "search" results from events.json -->
 		<div class="flex-container-scroll" id="searches"></div>
-	    </div>
-		
-	 	<div class="flex-container-col" id = "rightCol">
+	   </div>
+
+	 	<div class="flex-container-col slide" id = "rightCol">
  			{% include "web/eventview.html" %}
-			
+
 			<!-- TODO: this element is not really necessary, only referenced
-			in displayEvent.js so maybe we should fix at some point, but not a 
+			in displayEvent.js so maybe we should fix at some point, but not a
 			priority right now -->
 			<div id="welcome" ></div>
 
-			<!-- Hacky, but I can't think of a better way. 
+			<!-- Hacky, but I can't think of a better way.
 			If this element exists, then we will force the form to display with jQuery. -->
 			{% if display %}
 				<a id="displayEventForm"> </a>
@@ -65,18 +70,18 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 			            <!-- Hidden event id, populated by jquery -->
 			            {{ form.event_id(class="hidden") }}
-			            
+
 						<div class="form-group">
-							{{ form.title.label(class="req") }} 
+							{{ form.title.label(class="req") }}
 							{{ form.title(class="form-control", maxlength="100") }}
 						</div>
 						<div class="form-group">
-							{{ form.description.label(class="req") }} 
+							{{ form.description.label(class="req") }}
 							{{ form.description(class="form-control", rows="4", maxlength="3000") }}
 						</div>
 
 						<div class="form-group">
-							{{ form.host.label(class="req") }} 
+							{{ form.host.label(class="req") }}
 							{{ form.host(class="form-control", maxlength="100") }}
 						</div>
 
@@ -103,7 +108,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 						</div>
 
 						{% for i in range(form.locations.__len__()) %}
-							<div class="form-row" id="form-row-{{i+1}}"> 
+							<div class="form-row" id="form-row-{{i+1}}">
 								<div class="form-group col-md-4">
 		        					{{ form.locations.__getitem__(i).label(class="numbered req") }}
 		        					{{ form.locations.__getitem__(i)(class="form-control", maxlength="100") }}
@@ -114,7 +119,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 									{{ form.startDates.__getitem__(i)(class="form-control") }}
 								</div>
 								<div class="form-group col-md-2">
-									{{ form.startTimes.__getitem__(i).label(class="numbered req") }} 
+									{{ form.startTimes.__getitem__(i).label(class="numbered req") }}
 									{{ form.startTimes.__getitem__(i)(class="form-control") }}
 								</div>
 								<div class="form-group col-md-2">
@@ -142,8 +147,25 @@ setBaseUrl("{{ config.BASE_URL }}");
 						</div>
 
 						<div class="form-group">
-							{{ form.link.label }} 
+							{{ form.link.label }}
 							{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control", maxlength="100") }}
+						</div>
+
+						<div class="form-group">
+							{{ form.tags.label(style="padding-right:1vw", class="fullWidthMobileS") }}
+
+							{% for key, value, checked in form.tags.iter_choices() %}
+		        				<div class="form-check form-check-inline">
+		        					{% if checked %}
+		    							<input class="form-check-input" type="checkbox" name="tags" id="tags-{{loop.index-1}}" value="{{key}}" checked>
+		    						{% else %}
+		    							<input class="form-check-input" type="checkbox" name="tags" id="tags-{{loop.index-1}}" value="{{key}}">
+		    						{% endif %}
+		    						<label class="form-check-label" for="inlineCheckbox{{loop.index-1}}"> <span class="badge badge-primary" id="{{key}}Tag"> {{key}} </span> </label>
+			        			</div>
+			        			
+		    				{% endfor %}
+							<small id="tagHelp" class="form-text text-muted"> Optionally, add tags to your event. </small>
 						</div>
 
 						<button type="submit" class="btn btn-primary">Submit!</button>
@@ -153,10 +175,10 @@ setBaseUrl("{{ config.BASE_URL }}");
 								{{ i.capitalize() }}: {{errors[i][0]}} <br />
 							{% endfor %}
 						</div>
-					</form>				
+					</form>
 			</div>
 
-		</div>	
+		</div>
 	</div>
 </div>
 

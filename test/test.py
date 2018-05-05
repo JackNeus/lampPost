@@ -130,11 +130,11 @@ def make_report_event_request(event_id, report, token=None):
 def make_get_trending_request(token=None):
 	return make_request("get", "/event/trending", token=token)
 
-def make_search_request(query, start_datetime=None, token=None):
+def make_search_request(query, start_datetime=None, token=None, json=None):
 	params = query
 	if start_datetime is not None:
 		params += "/" + str(start_datetime)
-	return make_request("get", "/event/search/", params, token)
+	return make_request("get", "/event/search/", params, token, json=json)
 
 def make_feedback_request(data=None, token=None):
 	return make_request("put", "/feedback/", json=data, token=token)
@@ -208,7 +208,7 @@ def test_add_event_missing_field():
 
 def test_add_event_bad_type():		
 	# String fields type check.
-	for field in ["title", "host", "description"]:
+	for field in ["title", "host", "description", "tags"]:
 		# Incorrectly-typed value.
 		bad_value = deepcopy(base_event)
 		bad_value[field] = 123
@@ -218,6 +218,12 @@ def test_add_event_bad_type():
 			assert "different" in r["error_msg"]
 		else:
 			assert "wrong type" in r["error_msg"]
+	# Test string fields inside tags.
+	bad_value = deepcopy(base_event)
+	bad_value["tags"] = [123, 456]
+	r = make_add_event_request(bad_value, generate_auth_token(base_event["creator"]))
+	assert is_error(r)
+	assert "wrong type" in r["error_msg"]
 
 def test_add_event_bad_field_length_short():		
 	# String fields length check.
@@ -394,14 +400,17 @@ def test_edit_event_valid():
 					  				 "location": "Princeton University"},
 					  				 {"start_datetime": "3pm April 2 2100",
 					  				 "end_datetime": "4pm April 2 2100",
-					  				 "location": "Yale University"}]}
+					  				 "location": "Yale University"}],
+					  "tags": ["Dance", "Party"],
+					  "tags": []}
 		# Try editing each field separately.
 		for field in event_edits:
-			edit = {field: event_edits[field]}
-			new_event[field] = deepcopy(event_edits[field])
-			r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
-			assert is_success(r)
-			assert compare_events(new_event, r["data"])
+			if field is not "instances":
+				edit = {field: event_edits[field]}
+				new_event[field] = deepcopy(event_edits[field])
+				r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
+				assert is_success(r)
+				assert compare_events(new_event, r["data"])
 	make_test(test)
 
 def test_edit_event_system_fields():
@@ -624,7 +633,6 @@ def test_search_no_auth():
 		expected = filter(lambda x: "visibility" not in x or x["visibility"] == 0, new_events)
 		expected_ids = get_ids(expected)
 		event_ids = get_ids(r["data"])
-
 		assert expected_ids == event_ids
 	make_test_multi(test, len(dummy_events), get_dummy_event)
 
@@ -660,6 +668,72 @@ def test_search_starttime():
 		event_ids = get_ids(r["data"])
 		assert expected_ids == event_ids
 	make_test_multi(test, len(dummy_events), get_dummy_event_now)
+
+def test_search_tag():
+	def test(new_events):
+		expected = filter(lambda x: x["title"] == "Conference Series #2", new_events)
+		expected_ids = get_ids(expected)
+
+		# Search for Conference.
+		# This should match.
+		r = make_search_request("Conference", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+		# Search for Conference and the tag "Academic"
+		# This should match.
+		r = make_search_request("Conference AcAdEmIc", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+		# Search for Conference and part of the tag "Academic"
+		# This should not match anything.
+		r = make_search_request("Conference AcaDem", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		assert get_ids(r["data"]) == set()
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+def test_search_tag_json():
+	def test(new_events):
+		# Search for Academic. We should get events tagged Academic, but also 
+		# potentially other events that match the query on some other field.
+		r = make_search_request("AcaDeMic", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		expected = filter(lambda x: x["title"] in ["Test #1", "Conference Series #2"], new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+		# Search for the Academic tag using json.
+		# Only events which are tagged Academic should be shown.
+		r = make_search_request("AcaDeMic", None, token=generate_auth_token("bwk"), json={"tags":["Academic"]})
+		assert is_success(r)
+		expected = filter(lambda x: x["title"] in ["Conference Series #2"], new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+def test_search_json_override():
+	def test(new_events):
+		# Query submitted via JSON should override the URL query.
+		r = make_search_request("first", None, token=generate_auth_token("bwk"), json={"query": "multiple"})
+		assert is_success(r)
+		expected = filter(lambda x: x["title"] in ["Conference Series #2"], new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+		# start_datetime should override the URL start_datetime.
+		r = make_search_request("This", "3:30pm April 16th 2030", token=generate_auth_token("bwk"), json={"start_datetime": "5pm April 20th 2030"})
+		assert is_success(r)
+		expected = filter(lambda x: x["title"] in ["Test #1", "Test #3"], new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event)
 
 # Valid feedback check.
 def test_valid_feedback():
@@ -718,6 +792,9 @@ test_search_empty,
 test_search_no_auth,
 test_search_all,
 test_search_default_starttime,
+test_search_tag,
+test_search_tag_json,
+test_search_json_override,
 test_valid_feedback,
 test_invalid_feedback
 ]

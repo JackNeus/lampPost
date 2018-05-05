@@ -1,8 +1,10 @@
+from copy import copy, deepcopy
 from datetime import datetime, timedelta
 from dateutil.parser import *
 import json
 import os
 import re
+import string
 import sendgrid
 from sendgrid.helpers.mail import *
 
@@ -24,6 +26,12 @@ def get_max_visibility(user):
 
 def is_visible(event, user):
 	return event.visibility <= get_max_visibility(user)
+
+def is_banned(user):
+	if user.netid in CONFIG["BANNED"]:
+		return True
+	else:
+		return False
 
 def add_event(data):
 	new_event = EventEntry.from_json(json.dumps(data))
@@ -74,6 +82,9 @@ def edit_event(id, data):
 		field_data = data[field]
 		if field == "instances":
 			field_data = data[field]
+			for instance in field_data:
+				if instance["start_datetime"] or instance["end_datetime"] is " ":
+					raise ReadableError("Did not select a time.")
 			field_data = [InstanceEntry(location = instance["location"],
 										start_datetime = instance["start_datetime"],
 										end_datetime = instance["end_datetime"]) for instance in field_data]
@@ -155,30 +166,48 @@ def remove_user_favorite(user, eventid):
 
 # Search works as follows:
 # The query is tokenized (whitespace delimited).
-# For each token, events with tokens (whitespace delimited) matching the token are aggregated.
-# The current event fields queried are title, location, and host.
+# For each token, events matching the token (there are a set of queries against different fields) are aggregated
 # The intersection of results for the tokens is returned.
 # Only events ending after start_datetime are included in search results.
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
-def search_events(query, start_datetime, user=None):
+def search_events(query, start_datetime, user=None, tags=None):
 	# Query settings that go with ALL queries.
 	query_settings = {"visibility__lte": get_max_visibility(user),
 		"instances__end_datetime__gte": start_datetime}
+	# If tags is set, return ONLY events with some combination of those tags.
+	if tags is not None and len(tags) > 0:
+		escaped_tags = [re.escape(tag) for tag in tags]
+		tags_re = re.compile("^(%s)$" % "|".join(escaped_tags), re.IGNORECASE)
+		query_settings["tags"] = tags_re
 
 	tokens = query.split()
 	results = []
 	for token in tokens:
-		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
-		prefix_re = re.compile("(\s+|^)%s" % token, re.IGNORECASE)
-		full_word_re = re.compile("(\s+|^)%s(\s+|$)" % token, re.IGNORECASE)
+		escaped_token = re.escape(token)
+
+		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace or punctuation).
+		punctuation = "[%s]" % re.escape(string.punctuation)
+		pre_token = "(\s+|^|%s+)" % punctuation
+		post_token = "(\s+|$|%s+)" % punctuation
+
+		prefix_re = re.compile(pre_token + token, re.IGNORECASE)
+		full_word_re = re.compile(pre_token + token + post_token, re.IGNORECASE)
+		exact_word_re = re.compile("^%s$" % escaped_token, re.IGNORECASE)
 
 		# Queries to run.
 		queries = [{"title": prefix_re},
 			{"host": prefix_re},
 			{"instances__location": prefix_re},
-			{"description": full_word_re}]
+			{"description": full_word_re},
+			{"tags": exact_word_re}]
 
-		sources = list(map(lambda query: set(EventEntry.objects(**query, **query_settings)), queries))
+		sources = []
+		for query in queries:
+			settings = copy(query_settings)
+			# If tags is in query, we don't need it in query settings.
+			if "tags" in query and "tags" in settings:
+				del settings["tags"]
+			sources.append(set(EventEntry.objects(**query, **settings)))
 		events = set().union(*sources)
 		
 		results.append(events)

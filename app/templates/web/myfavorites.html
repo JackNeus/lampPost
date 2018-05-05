@@ -4,9 +4,10 @@
 <!-- SCRIPTS -->
 
 {% block scripts %}
-<script src="/static/js/myfavorites.js?v=0"></script>
-<script src="/static/js/handleUrlParam.js?v=0"></script>
-<script src="/static/js/handleFavorites.js?v=0"></script>
+<script src="/static/js/myfavorites.js?v=1"></script>
+<script src="/static/js/handleUrlParam.js?v=1"></script>
+<script src="/static/js/handleFavorites.js?v=1"></script>
+<script src="/static/js/browser.js?v=1"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -19,26 +20,26 @@ setBaseUrl("{{ config.BASE_URL }}");
 
 
 <div class="container-fluid">
-  	<div class="flex-container-row" id="bigRow">
-  	
-	   <div class="flex-container-col" id = "leftCol">
-	   
+  	<div class="flex-container-bigrow" id="browserView">
+
+	   <div class="flex-container-col slide" id = "leftCol">
+
 	   	<h1>Favorite Events</h1>
-			
+
 		<!-- Fills in with "search" results from events.json -->
 		<div class="flex-container-scroll" id="searches"></div>
-		
+
 	   </div>
-		
- 	   <div class="flex-container-col" id = "rightCol">
+
+ 	   <div class="flex-container-col slide" id = "rightCol">
 		{% include "web/eventview.html" %}
-		
+
 		<!-- TODO: this element is not really necessary, only referenced
-		in displayEvent.js so maybe we should fix at some point, but not a 
+		in displayEvent.js so maybe we should fix at some point, but not a
 		priority right now -->
 		<div id="welcome" ></div>
 
-  	   </div>	
+  	   </div>
      </div>
 </div>
 {% endblock %}

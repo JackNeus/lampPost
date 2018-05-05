@@ -5,6 +5,18 @@ var selected_event = null;
 // keep track of current title shown in event view
 var selected_title = "";
 
+var renderedImg;
+
+// puts urls in text with hrefs so they are hyperlinked
+// function layout from https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+// regex from https://www.regextester.com/94502
+function urlify(text) {
+    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    return text.replace(urlRegex, function(url) {
+        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    })
+}
+
 // Shows large event view when search result is clicked
 var handleEventViewClick = function() {
 	$(".smallSearchResult").click( function(){
@@ -38,29 +50,19 @@ var handleEventViewClick = function() {
 
 		// Get rid of the edit parameter, if it exists.
 		updateUrl(removeUrlParameter(document.location.search, 'edit'));
-		
+
 		// change view/handling if in calendar view mode
 		var calendarMode = checkCalendarParameter();
 		if (calendarMode) {
-			// update url with eventid paramter if event is different than 
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
 			// populate and display event view
-			highlightSearchResult($(this));
+			highlightSearchResult($(this), eventNum);
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
 		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter if event is different than 
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
@@ -68,6 +70,8 @@ var handleEventViewClick = function() {
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 	});
 }
 
@@ -95,7 +99,10 @@ function getGoogleCalLink(eventNum, i) {
 }
 
 // Toggle highlighting in search results.
-function highlightSearchResult(elt) {
+function highlightSearchResult(elt, eventNum) {
+	var event_id = event_data[eventNum - 1]._id;
+	updateUrl(addUrlParameter(document.location.search, 'event', event_id));
+
 	$(".smallSearchResult").removeClass("selected");
 	elt.addClass("selected");
 }
@@ -103,18 +110,17 @@ function highlightSearchResult(elt) {
 // Animate selection
 function selectSearchResult(eventNum) {
 	// Don't allow this to happen if we're in calendar view.
-	// Seriously. 
+	// Seriously.
 	if (!inCalendarView()) {
 		var selected_event = $(".smallSearchResult.selected");
 		var event_to_select = $("#smallSearchResult" + eventNum);
 
-		highlightSearchResult(event_to_select);
+		highlightSearchResult(event_to_select, eventNum);
 
 		// Close previously selected event, if it's not the one we want to open.
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
 			selected_event.animate({"margin-right": '2vh'});
 		}
-		// Open new events.
 		event_to_select.animate({"margin-right": '0vh'});
 	}
 }
@@ -137,6 +143,8 @@ function setTitle(title) {
 function populateEventViewPanel(eventNum) {
 	$(".event-view").hide();
 
+	// Remove edit parameter.
+	updateUrl(removeUrlParameter(document.location.search, "edit"));
 	// Search pane stuff.
 	selectSearchResult(eventNum);
 
@@ -152,21 +160,34 @@ function populateEventViewPanel(eventNum) {
 	// hide welcome image
 	$("#welcome").css("display", "none");
 
+	
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
-	$("#eventSubtitle").html("");
+	$("#eventSetting").html("");
 
+	// clear tags
+	$(".badge-border").remove();
+
+	eventTags = event_data[eventNum-1].tags
+	for (var i = 0; i < eventTags.length; i++) {
+		$("#titleRow").append("<div class=\"badge-border\">" 
+			+ "<span class=\"badge badge-primary\" id=\"" + eventTags[i] + "Tag\">" + eventTags[i] + "</span>"
+			+ "</div>");
+	}
+	
+	$("#eventSubtitle").html("");
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
-		$("#eventSubtitle").append("<a class=\"calendar-btn\" target=\"_blank\" href=\""
+		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" title=\"Export to Google Calendar\" data-toggle=\"tooltip\""
+
 			+ getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>");
 		// Location
-		$("#eventSubtitle").append(instances[i].location + "&nbsp|&nbsp;");
+		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
-		$("#eventSubtitle").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
+		$("#eventSetting").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 
-		$("#eventSubtitle").append("<br>");
+		$("#eventSetting").append("<br>");
 	}
 
 	selected_title = event_data[eventNum-1].title;
@@ -190,7 +211,7 @@ function populateEventViewPanel(eventNum) {
 
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
-	$("#eventDescription").html(event_data[eventNum-1].description);
+	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
 
 	// If the event has a poster, display that.
 	document.getElementById("bannerImage").innerHTML = "";
@@ -198,6 +219,21 @@ function populateEventViewPanel(eventNum) {
 	document.getElementById("otherImage").innerHTML = "";
 	if ("poster" in event_data[eventNum-1]) {
 		renderImage(event_data[eventNum-1].poster);
+	}
+	else {
+		renderedImg = null;
+	}
+
+	// If the event has a video, embed it
+	if ("trailer" in event_data[eventNum-1]) {
+		var videoID = getVidID(event_data[eventNum-1].trailer);
+		document.getElementById("eventVideo-data").innerHTML = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"
+			+ videoID + "?rel=0&amp;showinfo=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>";
+		document.getElementById("eventVideo").style.display = "block";
+	}
+	else {
+		document.getElementById("eventVideo-data").innerHTML = "";
+		document.getElementById("eventVideo").style.display = "none";
 	}
 
 	// highlight fire button if appropriate
@@ -207,33 +243,51 @@ function populateEventViewPanel(eventNum) {
 	else $("#eventFireBtn").removeClass("selected");
 
 	$("#event-view").show();
+	eventViewResizeHeight();
+
+	// show tips when hovering
+	$('[data-toggle="tooltip"]').tooltip();
 }
 
 function renderImage(url){
-    var img = new Image();
-    img.src = url;
-    img.addEventListener("load", function(){
-		// Determine where the image should go based off of its aspect ratio
-		// <ratio> gives the aspect ratio of the image
-		// <proportion> gives the proportion of the event-view pane that the image
-		//              takes up by width
-		var ratio = this.naturalWidth / this.naturalHeight;
-		var scaledWidth = document.getElementById("event-view-info").clientHeight
-						  * ratio;
-		var proportion = scaledWidth
-						 / document.getElementById("event-view-info").clientWidth;
-		if (2.5 <= ratio) {
-			// We put thin and wide images above the description
-			document.getElementById("bannerImage").innerHTML =
-			"<img class=\"img-fluid\" src=\""+img.src+"\">";
-		} else if (proportion < 0.6) {
-			// We put tall images next to the description if the screen is wide enough
-			document.getElementById("posterImage").innerHTML =
-			"<img class=\"img-cover\" src=\""+img.src+"\">";
-		} else {
-			// Otherwise, we put the image below the description
-			document.getElementById("otherImage").innerHTML =
-			"<img class=\"img-fluid\" src=\""+img.src+"\">";
+    renderedImg = new Image();
+    renderedImg.src = url;
+    renderedImg.addEventListener("load", formatImage);
+	$(window).resize(formatImage);
+	function formatImage() {
+		if (renderedImg != null) {
+			document.getElementById("bannerImage").innerHTML = "";
+			document.getElementById("posterImage").innerHTML = "";
+			document.getElementById("otherImage").innerHTML = "";
+			// Determine where the image should go based off of its aspect ratio
+			// <ratio> gives the aspect ratio of the image
+			// <proportion> gives the proportion of the event-view pane that the image
+			//              takes up by width
+			var ratio = renderedImg.naturalWidth / renderedImg.naturalHeight;
+			var scaledWidth = document.getElementById("event-view-info").clientHeight
+							  * ratio;
+			var proportion = scaledWidth
+							 / document.getElementById("event-view-info").clientWidth;
+			if (2.5 <= ratio) {
+				// We put thin and wide images above the description
+				document.getElementById("bannerImage").innerHTML =
+				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
+			} else if (proportion < 0.6) {
+				// We put tall images next to the description if the screen is wide enough
+				document.getElementById("posterImage").innerHTML =
+				"<img class=\"img-cover\" src=\""+renderedImg.src+"\">";
+			} else {
+				// Otherwise, we put the image below the description
+				document.getElementById("otherImage").innerHTML =
+				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
+			}
 		}
-    });
+	}
+}
+
+// A function to extract the unique youtube video ID from an arbitrary Youtube
+// video link. Regex coverage credit to https://gist.github.com/ghalusa/6c7f3a00fd2383e5ef33
+function getVidID(url) {
+	var regex = new RegExp('(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})', 'i');
+	return url.match(regex)[1];
 }
