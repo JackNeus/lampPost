@@ -74,6 +74,9 @@ def edit_event(id, data):
 		field_data = data[field]
 		if field == "instances":
 			field_data = data[field]
+			for instance in field_data:
+				if instance["start_datetime"] or instance["end_datetime"] is " ":
+					raise ReadableError("Did not select a time.")
 			field_data = [InstanceEntry(location = instance["location"],
 										start_datetime = instance["start_datetime"],
 										end_datetime = instance["end_datetime"]) for instance in field_data]
