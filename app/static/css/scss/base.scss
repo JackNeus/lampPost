@@ -521,7 +521,38 @@ html, body {
 }
 
 .calendarBtns {
-	display: none;
+	display:none;
+	
+	.calendarHeader {
+		background-color: $primary-color;//#1d669a;
+		justify-content: center;
+		align-items: center;
+		display: flex; 
+		flex-wrap: nowrap; 
+		flex-direction: row;
+		width: 100%;
+		margin-right: 0vh;
+		border-left: 2px solid $dark-color;
+		border-right: 2px solid $dark-color;
+		border-bottom: 2px solid $dark-color;
+			
+		.weekTitle {
+			font-family: $font-med;
+			font-size: 2em;
+			font-weight: bold;
+			color: white;
+			margin-left: 2vh;
+			margin-right: 2vh;
+		}
+		
+		.previousWeekBtn {
+			margin-left: 4vw;
+		}
+		
+		.nextWeekBtn {
+			margin-right: 4vw;
+		}
+	}
 }
 
 .calendar-view-row {
@@ -529,21 +560,33 @@ html, body {
 	flex-wrap: nowrap; 
 	flex-direction: row;
 	width: 100%;
-	border-left: 2px solid black;
-	margin-left: 1.5vh;
-	margin-right: 0vh;
+	border-left: 2px solid $dark-color;
 	
 	.dayCol {
-		max-width: 14%;
-		min-width: 14%;
-		border-right: 2px solid black;
-		border-bottom: 2px solid black;
+		max-width: 14.2857%;
+		min-width: 14.2857%;
+		border-right: 2px solid $dark-color;
+		border-bottom: 2px solid $dark-color;
 		min-height: 55vh;
 		height: auto;
 		
 		.dayTitle {
-		 	border-bottom: 2px solid black;
+		 	border-bottom: 2px solid $dark-color;
 		 	width: 100%;
+		 	text-align: center;
+			vertical-align: middle;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: center;
+			
+			.dayName {
+				margin: 0vh 0.5vh;
+			}
+			
+			.date {
+				margin: 0vh 0.5vh;
+			}
 		}
 		
 		.dayResults {
@@ -557,14 +600,16 @@ html, body {
 				border-top: none;
 				border-radius: 0;
 				.resultContents {
+					max-height: 5.6em;
 					.resultTitle {
-						font-size: 0.8em;
+						font-size: 0.9em;
 						line-height: 1em;
-						height: 3em;
+						max-height: 3.8em;
 						overflow: hidden;
 					}
 					.resultTime {
 						font-size: 0.6em;
+						line-height: 1em;
 					}
 					.resultFireBtn {
 						display: none;
