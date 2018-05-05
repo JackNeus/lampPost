@@ -8,8 +8,9 @@ var handleCalendarView = function() {
 		else {
 			updateUrl(removeUrlParameter(document.location.search, 'cal'));
 		}
-
-		$(this).tooltip('hide');
+		$(this).tooltip('hide');		
+		// update that view mode has changed
+		change_view_mode = true;
 		toggleCalendarView();
 	})
 };
@@ -34,9 +35,7 @@ var toggleCalendarView = function() {
 		$("#calendarViewBtn").html(calendarBtn);
 		$("#calendarViewBtn").attr('data-original-title', 'Calendar View');
 		$("#calendarViewBtn").prop('title', 'Calendar View');
-		removeSearchFromDate();
-		$("#searches").html("");
-		fetchData($("#search-box").val());
+		
 	}
 	else {
 		var listBtn = `<i class="fas fa-list"></i>`;
@@ -44,24 +43,18 @@ var toggleCalendarView = function() {
 		$("#calendarViewBtn").attr('data-original-title', 'List View');
 		$("#calendarViewBtn").prop('title', 'List View');
 		calWeek = 0; // reset week to 0 (current week)
-		addSearchFromDate();
-		
-		// fetch data again since searching from an earlier date by default
-		if ($("#search-box").val())
-			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
-		else
-			var query = "*/" + java2py_date($("#datepicker").val());
-		$("#searches").html("");
-		fetchData(query);
 	}
 	
-	$("#calendarViewBtn").toggleClass("calendarMode");
+	$("#searches").html("");
 	
+	$("#calendarViewBtn").toggleClass("calendarMode");
+	trigger_search();	// get new search results
 	handleNextWeekClick();
 	handlePreviousWeekClick();
 };
 
 // handle clicks of next week arrow
+// TODO: make date update in datepicker
 var handleNextWeekClick = function() {
 	$(".nextWeekBtn").unbind("click");
 	$(".nextWeekBtn").click(function() {
@@ -78,18 +71,3 @@ var handlePreviousWeekClick = function() {
 		showSearchResults();
 	})
 };
-
-// adds the date a year prior to today to the datepicker
-var addSearchFromDate = function() {
-	var today = new Date();
-	var timeAgo = new Date();
-	timeAgo.setDate(today.getDate() - 12*7);
-	var dateStr = makeDayMonthYearString(timeAgo, true);
-	$("#datepicker").val(dateStr);
-};
-
-// removes the date from the datepicker
-var removeSearchFromDate = function() {
-	$("#datepicker").val("");
-};
-

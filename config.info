@@ -28,3 +28,6 @@ REPORT_TIME_LIMIT=30
 USE_MOCK_DATA=
 # If set to True, will unprotect all API endpoints. Should only be used if absolutely needed.
 BYPASS_API_AUTH=
+
+# Length of session (in days)
+SESSION_LENGTH=7

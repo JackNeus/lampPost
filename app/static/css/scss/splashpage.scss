@@ -1,6 +1,7 @@
 $background-color: #eeeeee;
 $primary-color: #2d9eee;
-$font-stack: "Avenir-Medium";
+$font-header: "Avenir-Heavy", "Arial", "Helvetica-Light", sans-serif;
+$font-button: "Avenir-Medium", "Arial", "Helvetica-Light", sans-serif;
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
@@ -8,7 +9,7 @@ $primary-color-b: 238;
 
 html, body {
 	// Font Style
-	font: 100% $font-stack;
+	font-family: $font-header;
 
 	#id_navbar {
 		display:none;
@@ -24,39 +25,71 @@ html, body {
 		background-size: cover;
 		background-repeat: no-repeat;
 		text-align: center;
-
+		.row {
+			margin: 0px;
+		}
 		.headerBox {
 			position: relative;
 			width: 100%;
 			text-align: center;
-			margin-top: 30vh;
+			margin-top: 20vh;
 			.loginBox {
+				background-color: rgba(40, 40, 40, 0.7);
+				border-radius: 10px;
+				padding: 1vw;
 				.welcome {
-					font-weight: bold;
 					font-size: 45px;
 					@media screen and (max-width: 768px) {
 						font-size: 35px;
 					}
-					margin-bottom: 1em;
-					color: white; 
+					margin-bottom: 0.5em;
+					color: white;
 					text-shadow: 2px 2px 0px #000;
 				}
-		
-				a {
-					border: none;
-					background-color: $primary-color;
-					border-radius: 5px;
+				.btn-outline-primary {
+					font-family: $font-button;
+					min-width: 202px;
 					color: white;
+					border-color: $primary-color;
+					&:hover {
+						background-color: $primary-color;
+						border-color: white;
+					}
+				}
+				a {
+					border-radius: 5px;
 				  	margin-bottom: 1em;
+					margin-left: 3%;
+					margin-right: 3%;
 				  	max-width: 100%;
 				  	overflow: hidden;
 				  	text-align: center;
 				  }
-				  
+
 				 p {
 				 	padding: 0;
 				 	margin: 0;
-				 }  
+				 }
+				 img {
+  			 		-webkit-filter: drop-shadow(2px 2px 0px #000);
+  					filter: drop-shadow(2px 2px 0px #000);
+				}
+				.welcomeLogo {
+					width: 45%;
+					@media screen and (max-width: 768px) {
+						padding-top: 4%;
+						width: 90%;
+					}
+				}
+				.welcomeText {
+					padding-top: 4%;
+					width: 45%;
+					@media screen and (max-width: 768px) {
+						width: 90%;
+						padding-top: 5%;
+						padding-bottom: 5%;
+					}
+				}
 			}
 		}
 	}

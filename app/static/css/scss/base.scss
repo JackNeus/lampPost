@@ -4,9 +4,9 @@ $dark-color: #333333;
 $med-color: #555555;
 $light-color: #999999;
 $orange: #ee7f2d;
-$font-light: "Avenir-Light", "Arial-Light", sans-serif;
-$font-med: "Avenir-Medium", "Arial-Medium", sans-serif;
-$font-heavy: "Avenir-Heavy", "Arial-Heavy", sans-serif;
+$font-light: "Avenir-Light", "Arial Narrow", "Helvetica-Light", sans-serif;
+$font-med: "Avenir-Medium", "Arial", "Helvetica", sans-serif;
+$font-heavy: "Avenir-Heavy", "Arial Black", "Helvetica-Bold", sans-serif;
 /* rgb values for primary-color */
 $primary-color-r: 29;
 $primary-color-g: 158;
@@ -17,20 +17,20 @@ html, body {
 	// Font Style
 
 	// Base font
-	font-family: 100% $font-med;
+	font-family: $font-med;
 	// Headers
 	.h1, h1 {
-		font-family: 100% $font-heavy;
+		font-family: $font-heavy;
 		font-size:36px;
 	}
 
 	.h2, h2 {
-		font-family: 100% $font-heavy;
+		font-family: $font-heavy;
 		font-size:26px;
 	}
 
 	.h3, h3 {
-		font-family: 100% $font-med;
+		font-family: $font-med;
 		font-size:20px;
 	}
 
@@ -51,7 +51,7 @@ html, body {
 		background-color: $primary-color;
 	}
 	.nav-link {
-		font: 100% $font-med;
+		font-family: $font-med;
 		font-size:24px;
 	}
 
@@ -125,6 +125,22 @@ html, body {
 	width: 100%;
 	flex-shrink: 1000;
 	font-size: 16px !important;
+}
+
+#myEventSortBtn {
+	margin: 2vh 2vh;
+	border: 1px solid #AAA;
+	color: $dark-color;
+	font-size: 0.75em;
+	overflow: hidden;
+	border-radius: 2px;
+	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 4.25vh;
+    float:left;
+    font-family: $font-light;
+	font-size: 14px !important;
 }
 
 #searchRow {
@@ -278,11 +294,11 @@ html, body {
 			&:hover {
 				color: rgba(238, 127, 45, 0.75);
 			}
-			.resultFireNum {
-				color: $dark-color !important;
-				font-size: 0.85em;
-				font-weight: bold;
-			}
+		}
+		.resultFireNum {
+			color: $dark-color !important;
+			font-size: 0.85em;
+			font-weight: bold;
 		}
 	}
 }
@@ -584,4 +600,13 @@ html, body {
 	color:darkorange;
 	font-weight:bold;
 	display: none;
+}
+
+#myModal {
+	padding-top:25vh; 
+	padding-left:10vw
+}
+
+.modal-content {
+	width:50vw;
 }

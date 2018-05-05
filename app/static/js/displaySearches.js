@@ -5,15 +5,17 @@ var showSearchResults = function() {
 	// clear previous search results
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
-
-	sortResults(); 			// sort by date or popularity
 	
 	// create html code for each search result and display them
 	// show results differently for calendar view
-	if ($("#calendarViewBtn").hasClass("calendarMode"))
+	if (inCalendarView()) {
+		sortEventsByDate();	// sort by date
 		createCalenderViewResults();
-	else 
+	}
+	else {
+		sortResults(); 		// sort by date or popularity
 		createSearchResults();
+	}
   
 	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load
@@ -27,7 +29,7 @@ var showMyEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortResults(); 			// sort events by date
+	sortResults(); 				// sort events by date
 	createMyEventResults(); 	// create html code for each created event and display them
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button
@@ -66,7 +68,7 @@ var checkHighlightEventInUrl = function() {
 		if (event != undefined) {
 			eventNum = event_data.indexOf(event) + 1;
 			selected_event = event;
-			$("#smallSearchResult" + eventNum).addClass("selected");
+			selectSearchResult(eventNum);
 		}
 	}
 };
@@ -96,6 +98,11 @@ function getSortDirection() {
 	}
 }
 
+// return true if in calendar view
+function inCalendarView() {
+	return $("#calendarViewBtn").hasClass("calendarMode");
+}
+
 /*----------------------------- UTILITY FUNCTIONS ----------------------------*/
 
 // Given an id of the form 'smallSearchResultX', return X.
@@ -122,7 +129,7 @@ function sortEventsByDate() {
 		}
 		return time_between;
 	});
-	if (!getSortDirection()) {
+	if (!getSortDirection() && !inCalendarView()) {
 		event_data.reverse();
 	}
 }
