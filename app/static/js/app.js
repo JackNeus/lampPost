@@ -42,6 +42,10 @@ $(document).ready(function(){
 	$("#welcomeDiv").hide();
 	var hideWelcome = false;
 
+	// setup search bar functionality
+	setupSearch();
+	setupDataRetrieval();
+	
 	// fill in search box with search url parameter if it exists
 	checkSearchUrlParameter();
 	urlParamEventId = checkEventUrlParameter();
@@ -55,9 +59,6 @@ $(document).ready(function(){
 	// show search results for the search url parameter if it exists
 	if ($("#search-box").val()) fetchData($("#search-box").val());
 	
-	// setup search bar functionality
-	setupSearch();
-	setupDataRetrieval();
 
 	// add the trending events
 	if (!checkCalendarParameter() && !$("#search-box").val())
@@ -125,9 +126,11 @@ var setupSearch = function() {
 	$("#all-events-filter-btn").click(function() {
 		if ($('#search-box').val() === "*") {
 			$('#search-box').val('');
+			$(this).removeClass('selected');
 		}
 		else {
 			$('#search-box').val('*'); 
+			$(this).addClass('selected');
 		}
 		$('#search-box').keyup();
 	});
@@ -148,17 +151,29 @@ var setupSearch = function() {
 
 // searches for events immediately based on search box and datepicker values
 var trigger_search = function() {
+	// highlight all events button, if appropriate
+	if ($("#search-box").val() === "*") {
+		$("#all-events-filter-btn").addClass("selected");
+	}
+	else if (prevQuery === "*") {
+		$("#all-events-filter-btn").removeClass("selected");
+	}
+
 	// default search for calendar view: all events since one year ago
-	if (inCalendarView() && !$("#search-box").val())
-		var query = "*/" + getDaysAgo(365);
+	if (inCalendarView() && !$("#search-box").val()) {
+		var query = "*/" + java2py_date(getDaysAgo(365));
+	}
 	else if ($("#search-box").val()) {
-		if ($("#datepicker").val())
+		if (inCalendarView())
+			var query = $("#search-box").val() + "/" + java2py_date(getDaysAgo(365));
+		else if ($("#datepicker").val())
 			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
 		else  
 			var query = $("#search-box").val();
 	}
-	else
+	else {
 		var query = "";
+	}
 		
 	// don't make api call if query hasn't changed (unless view mode has changed)
 	if (query != prevQuery || change_view_mode) {
@@ -273,6 +288,16 @@ var setupUserFavorites = function() {
 	}
 }
 
+function clearReportForm() {
+	// clear the elements
+	$("#description").val("");
+	$('#category-0').prop('checked', false);
+	$('#category-1').prop('checked', false);
+	$('#category-2').prop('checked', false);
+	// there was not an error (this will stop the modal from popping up over and over)
+	$("#wasError").remove();
+}
+
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
 
 // converts java date string into python date string (mm/dd/yy to yy-mm-dd)
@@ -294,5 +319,5 @@ var getDaysAgo = function(n) {
 	var timeAgo = new Date();
 	timeAgo.setDate(today.getDate() - n);
 	var dateStr = makeDayMonthYearString(timeAgo, true);
-	return timeAgo;
+	return dateStr;
 };
