@@ -207,22 +207,45 @@ html, body {
 .filters {
 	margin: 0vh 2vh;
 	margin-bottom: 2vh;
-
-	label {
-		font-size: 0.75em;
-	}
-
-	input[type=text] {
-		font-size: 0.65em;
-	}
+	font-size: 14px !important;
+	background-color: #dedede;
+	padding: 5px;
+	border-radius: 5px;
 
 	div {
-		display: none;
+		display: block;
+		//display: inline-block;
+		margin-top: 2px;
+	}
+
+	.date-filter {
+		span {
+			margin-left: 5px;
+			margin-right: 5px;
+			float: left;
+		}	
+		#datepicker {
+			float: left;
+			font-size: 14px !important;
+			width: 100px;
+			padding: 3px 8px !important;
+			border-color: #80bdff;
+		}
 	}
 
 	.filter-btn {
-		background-color: $primary-color;
-		color: white;
+		font-size: 14px !important;
+		//border-color: #ced4da;
+		border-color: #80bdff;
+		background-color: white;
+		padding: 3px 8px !important;
+		&:hover {
+			border-color: $primary-color;
+		}
+		&.selected {
+			color: white;
+			background-color: $primary-color;
+		}
 	}
 }
 

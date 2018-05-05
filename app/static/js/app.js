@@ -114,10 +114,14 @@ var setupSearch = function() {
 	});
 
 	$('#filter-btn').click(function() {
-		$('#all-events').slideToggle(200);
-		$('.datetime').slideToggle(200);
+		$(".filters").slideToggle(200);
+	});
+	
+	$('.filter-btn').click(function() {
+		$(this).toggleClass('selected');
 	});
 
+	// All events filter
 	$("#all-events-filter-btn").click(function() {
 		if ($('#search-box').val() === "*") {
 			$('#search-box').val('');
