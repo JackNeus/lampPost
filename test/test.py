@@ -676,7 +676,6 @@ def test_search_tag():
 		# Search for Conference.
 		# This should match.
 		r = make_search_request("Conference", None, token=generate_auth_token("bwk"))
-		print(r)
 		assert is_success(r)
 		event_ids = get_ids(r["data"])
 		assert expected_ids == event_ids
@@ -777,7 +776,6 @@ test_search_tag,
 test_valid_feedback,
 test_invalid_feedback
 ]
-tests=[test_search_tag,test_search_tag_json]
 
 if __name__ == '__main__':
 	setup()
