@@ -130,11 +130,11 @@ def make_report_event_request(event_id, report, token=None):
 def make_get_trending_request(token=None):
 	return make_request("get", "/event/trending", token=token)
 
-def make_search_request(query, start_datetime=None, token=None):
+def make_search_request(query, start_datetime=None, token=None, json=None):
 	params = query
 	if start_datetime is not None:
 		params += "/" + str(start_datetime)
-	return make_request("get", "/event/search/", params, token)
+	return make_request("get", "/event/search/", params, token, json=json)
 
 def make_feedback_request(data=None, token=None):
 	return make_request("put", "/feedback/", json=data, token=token)
@@ -692,7 +692,28 @@ def test_search_tag():
 		r = make_search_request("Conference AcaDem", None, token=generate_auth_token("bwk"))
 		assert is_success(r)
 		assert get_ids(r["data"]) == set()
-	make_test_multi(test, len(dummy_events), get_dummy_event_now)
+	make_test_multi(test, len(dummy_events), get_dummy_event)
+
+def test_search_tag_json():
+	def test(new_events):
+		# Search for Academic. We should get events tagged Academic, but also 
+		# potentially other events that match the query on some other field.
+		r = make_search_request("AcaDeMic", None, token=generate_auth_token("bwk"))
+		assert is_success(r)
+		expected = filter(lambda x: x["title"] in ["Test #1", "Conference Series #2"], new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+		# Search for the Academic tag using json.
+		# Only events which are tagged Academic should be shown.
+		r = make_search_request("AcaDeMic", None, token=generate_auth_token("bwk"), json={"tags":["Academic"]})
+		assert is_success(r)
+		expected = filter(lambda x: x["title"] in ["Conference Series #2"], new_events)
+		expected_ids = get_ids(expected)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+	make_test_multi(test, len(dummy_events), get_dummy_event)
 
 # Valid feedback check.
 def test_valid_feedback():
@@ -752,6 +773,7 @@ test_search_no_auth,
 test_search_all,
 test_search_default_starttime,
 test_search_tag,
+test_search_tag_json,
 test_valid_feedback,
 test_invalid_feedback
 ]
