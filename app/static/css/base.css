@@ -215,6 +215,7 @@ html #browserView, body #browserView {
     overflow: hidden;
     text-overflow: ellipsis; }
   .smallSearchResult .resultTime {
+    padding-top: 1rem;
     font-size: 1em;
     color: #999999;
     margin-bottom: 0.3em; }
@@ -345,9 +346,8 @@ html #browserView, body #browserView {
   .event-view #eventDescription {
     white-space: pre-wrap; }
   .event-view .reportBtn {
-    padding-right: 20px;
-    padding-top: 10px;
-    font-size: 1.0em;
+    padding-right: 15px;
+    font-size: 1.2em;
     cursor: pointer; }
 
 .flex-container-row {
