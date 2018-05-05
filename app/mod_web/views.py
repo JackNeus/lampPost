@@ -110,7 +110,7 @@ def addEvent():
 	if request.method == "POST":
 		form = EventForm(request.form)
 		if not form.validate_on_submit():
-			return render_template("web/add.html", form=form, errors=form.errors)
+			return render_template("web/add.html", form=form, errors=form.errors, wereErrors=True)
 		else:
 			eventData, numShowings = controller.form_to_event_object(form)
 			
@@ -121,7 +121,7 @@ def addEvent():
 
 			if r.status_code != 200:
 				flash("Error: something went wrong. Please contact a developer.")
-				return render_template("web/add.html", form=EventForm(), numRows=numShowings)
+				return render_template("web/add.html", form=EventForm(), numRows=numShowings, wereErrors=True)
 			r = json.loads(r.text)
 			if r["status"] == "Success":
 				event_id = r["data"]["id"]
@@ -139,13 +139,13 @@ def addEvent():
 					# nothing happened.
 					controller.make_delete_request(event_id)
 					flash("Error. " + str(e))
-					return render_template("web/add.html", form=EventForm(), numRows=numShowings)
+					return render_template("web/add.html", form=EventForm(), numRows=numShowings, wereErrors=True)
 
 				flash("Success! Your event has been added.")
 				return redirect("/myevents?event="+event_id)
 			else:
 				flash("Error. " + r["error_msg"])
-				return render_template("web/add.html", form=EventForm(), numRows=numShowings)
+				return render_template("web/add.html", form=EventForm(), numRows=numShowings, wereErrors=True)
 	else:
 		return render_template("web/add.html", form=EventForm(), numRows=1)
 		

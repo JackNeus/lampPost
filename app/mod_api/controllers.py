@@ -1,8 +1,10 @@
+from copy import copy, deepcopy
 from datetime import datetime, timedelta
 from dateutil.parser import *
 import json
 import os
 import re
+import string
 import sendgrid
 from sendgrid.helpers.mail import *
 
@@ -162,19 +164,28 @@ def remove_user_favorite(user, eventid):
 # The intersection of results for the tokens is returned.
 # Only events ending after start_datetime are included in search results.
 # Currently, if one or more instances of an event match the search terms, all instances are returned.
-def search_events(query, start_datetime, user=None):
+def search_events(query, start_datetime, user=None, tags=None):
 	# Query settings that go with ALL queries.
 	query_settings = {"visibility__lte": get_max_visibility(user),
 		"instances__end_datetime__gte": start_datetime}
+	# If tags is set, return ONLY events with some combination of those tags.
+	if tags is not None:
+		escaped_tags = [re.escape(tag) for tag in tags]
+		tags_re = re.compile("^(%s)$" % "|".join(escaped_tags), re.IGNORECASE)
+		query_settings["tags"] = tags_re
 
 	tokens = query.split()
 	results = []
 	for token in tokens:
 		escaped_token = re.escape(token)
 
-		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace).
-		prefix_re = re.compile("(\s+|^)%s" % token, re.IGNORECASE)
-		full_word_re = re.compile("(\s+|^)%s(\s+|$)" % token, re.IGNORECASE)
+		# We want to either match the first word, or a subsequent word (i.e. text preceded by whitespace or punctuation).
+		punctuation = "[%s]" % re.escape(string.punctuation)
+		pre_token = "(\s+|^|%s+)" % punctuation
+		post_token = "(\s+|$|%s+)" % punctuation
+
+		prefix_re = re.compile(pre_token + token, re.IGNORECASE)
+		full_word_re = re.compile(pre_token + token + post_token, re.IGNORECASE)
 		exact_word_re = re.compile("^%s$" % escaped_token, re.IGNORECASE)
 
 		# Queries to run.
@@ -184,7 +195,13 @@ def search_events(query, start_datetime, user=None):
 			{"description": full_word_re},
 			{"tags": exact_word_re}]
 
-		sources = list(map(lambda query: set(EventEntry.objects(**query, **query_settings)), queries))
+		sources = []
+		for query in queries:
+			settings = copy(query_settings)
+			# If tags is in query, we don't need it in query settings.
+			if "tags" in query and "tags" in settings:
+				del settings["tags"]
+			sources.append(set(EventEntry.objects(**query, **settings)))
 		events = set().union(*sources)
 		
 		results.append(events)
