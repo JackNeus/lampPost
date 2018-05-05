@@ -1,7 +1,7 @@
 // code for the date
 $(document).ready(function(){
 	// selects from all fields with name containing the substring "Date"
-    var date_input=$('input[name*="Date"]'); 
+    var date_input=$('input[name*="Date"]');
     var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
     var options={
       	format: 'mm/dd/yyyy',
@@ -72,7 +72,11 @@ function processClick( num ) {
 }
 
 
-$(document).ready(function(){	
+$(document).ready(function(){
+	// Setup device view handler
+    INITIAL_PANE = 0;
+	browserView();
+	addViewButton();
 
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({});
@@ -145,7 +149,7 @@ $(document).ready(function(){
 		}
 	});
 
-	
+
 	// when we click the circle for x showings, slide up all the forms instantly
 	// then, slide down the relevant ones slowly
 	$("#numShowings-0").click(function() {
@@ -161,5 +165,3 @@ $(document).ready(function(){
 		processClick(4);
 	});
 });
-
-	
