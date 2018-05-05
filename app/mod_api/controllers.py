@@ -27,6 +27,12 @@ def get_max_visibility(user):
 def is_visible(event, user):
 	return event.visibility <= get_max_visibility(user)
 
+def is_banned(user):
+	if user.netid in CONFIG["BANNED"]:
+		return True
+	else:
+		return False
+
 def add_event(data):
 	new_event = EventEntry.from_json(json.dumps(data))
 	new_event.save()
