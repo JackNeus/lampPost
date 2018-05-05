@@ -8,6 +8,7 @@
 <script src="/static/js/handleUrlParam.js?v=0"></script>
 <script src="/static/js/handleFavorites.js?v=0"></script>
 <script src="/static/js/calendarView.js?v=0"></script>
+<script src="/static/js/browser.js?v=0"></script>
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
@@ -25,8 +26,8 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 <!--***************************** MAIN CONTENT ******************************-->
 {% block content %}
 <div class="container-fluid">
-<div class="flex-container-row list-view" id="bigRow">
-   <div class="flex-container-col" id="leftCol">
+<div class="flex-container-bigrow" id="browserView">
+   <div class="flex-container-col slide" id="leftCol">
    		<form class="search-container" onsubmit="return false;">
    			<div class="" id="searchRow">
 				<div class="form-group searchBoxCol" id="searchBox">
@@ -65,7 +66,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
 		<!-- Fills in with both search results, and trending events. -->
 
-		<div class="flex-container-scroll" id="searches-wrapper">
+		<div class="flex-container-scroll searches-wrapper" id="searches-wrapper">
 			<div class="calendarBtns" id="calendarBtns">
 				<div class="calendarHeader">
           <div class="mr-auto previousWeekBtn btn" id="previousWeekBtn" title="Previous Week">
@@ -87,7 +88,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
   	</div>
 
- 	<div class="flex-container-col" id = "rightCol">
+ 	<div class="flex-container-col slide" id = "rightCol">
  		<div id="welcomeDiv" style="display:none">
  			<div id = "interiorWelcomeDiv">
 	 			<h1 id = "welcomeMessage"> Welcome to lampPost! </h1>
@@ -103,7 +104,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 	 					</ul>
 	 					</p>
 	 				</div>
-				    <div class="col-md-6">
+				    <div class="col-md-6 welcome-img">
 				      <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/lamppostMeme.png">
 				    </div>
 				  </div>

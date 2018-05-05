@@ -73,13 +73,13 @@ var checkSort = function() {
 // Take advantage of a jinja variable to force rendering of
 // edit form at page load.
 function checkDisplay() {
-	let i = $("#displayEventForm").length;	
+	let i = $("#displayEventForm").length;
 	if (i > 0) {
 		$("#event-form").show();
 
 		var eventId = $("#event_id").val();
 		var eventNum = event_data.findIndex(function(event){return event._id === eventId;}) + 1;
-		
+
 		// Graphical commands to select event result.
 		selectSearchResult(eventNum);
 		selectEditBtn($("#editBtn"+eventNum));
@@ -138,9 +138,7 @@ var handleDeleteMyEvent = function() {
 		deleteBtn.addClass("selectedIcon");
 
 		// toggle highlighting in search results
-		if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			selectSearchResult(eventNum);
-		}
+		selectSearchResult(eventNum);
 
 		// show event
 		populateEventViewPanel(eventNum);
@@ -174,6 +172,8 @@ var handleDeleteMyEvent = function() {
 				unselectIcons();
 			}
 		});
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 	});
 }
 
@@ -197,6 +197,8 @@ var handleEditMyEvent = function() {
 			updateUrl(addUrlParameter(document.location.search, 'event', eventId));
 		}
 		renderEditForm(eventNum);
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 		e.stopPropagation();
 	});
 }
@@ -212,9 +214,7 @@ var renderEditForm = function(eventNum) {
 	selectEditBtn(editBtn);
 
 	// toggle highlighting in search results
-	if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-		selectSearchResult(eventNum);
-	}
+	selectSearchResult(eventNum);
 
 	// hide the event display
 	$(".event-view").hide();
