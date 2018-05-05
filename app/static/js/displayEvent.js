@@ -53,25 +53,15 @@ var handleEventViewClick = function() {
 		// change view/handling if in calendar view mode
 		var calendarMode = checkCalendarParameter();
 		if (calendarMode) {
-			// update url with eventid paramter if event is different than
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
 			// populate and display event view
-			highlightSearchResult($(this));
+			highlightSearchResult($(this), eventNum);
 			populateEventViewPanel(eventNum);
 			handleEventFireBtnClick(eventNum);
 		}
 		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// update url with eventid paramter if event is different than
-			// event currently in url
-			if (getUrlParameter('event') !== eventId)
-				updateUrl(addUrlParameter(document.location.search, 'event', eventId));
-
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
@@ -108,7 +98,10 @@ function getGoogleCalLink(eventNum, i) {
 }
 
 // Toggle highlighting in search results.
-function highlightSearchResult(elt) {
+function highlightSearchResult(elt, eventNum) {
+	var event_id = event_data[eventNum - 1]._id;
+	updateUrl(addUrlParameter(document.location.search, 'event', event_id));
+
 	$(".smallSearchResult").removeClass("selected");
 	elt.addClass("selected");
 }
@@ -121,7 +114,7 @@ function selectSearchResult(eventNum) {
 		var selected_event = $(".smallSearchResult.selected");
 		var event_to_select = $("#smallSearchResult" + eventNum);
 
-		highlightSearchResult(event_to_select);
+		highlightSearchResult(event_to_select, eventNum);
 
 		// Close previously selected event, if it's not the one we want to open.
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
@@ -149,6 +142,8 @@ function setTitle(title) {
 function populateEventViewPanel(eventNum) {
 	$(".event-view").hide();
 
+	// Remove edit parameter.
+	updateUrl(removeUrlParameter(document.location.search, "edit"));
 	// Search pane stuff.
 	selectSearchResult(eventNum);
 
@@ -216,7 +211,6 @@ function populateEventViewPanel(eventNum) {
 	// setup host and description
 	$("#eventHost").html("by " + event_data[eventNum-1].host);
 	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
-	console.log(urlify(event_data[eventNum-1].description).substring(0, 30));
 
 	// If the event has a poster, display that.
 	document.getElementById("bannerImage").innerHTML = "";
