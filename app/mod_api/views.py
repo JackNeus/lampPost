@@ -169,9 +169,9 @@ def delete_event(id):
 	except Exception as e:
 		return gen_error_response(error_handler.main_handler(e))
 
-@mod_api.route("/event/search/", defaults={"query":"","start_datetime":datetime.now()})
-@mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()})
-@mod_api.route("/event/search/<query>/<start_datetime>")
+@mod_api.route("/event/search/", defaults={"query":"","start_datetime":datetime.now()}, methods=["GET", "POST"])
+@mod_api.route("/event/search/<query>", defaults={"start_datetime":datetime.now()}, methods=["GET", "POST"])
+@mod_api.route("/event/search/<query>/<start_datetime>", methods=["GET", "POST"])
 def event_search(query, start_datetime):
 	tags = None
 	# Alternatively, allow user to send json parameters.
@@ -185,9 +185,11 @@ def event_search(query, start_datetime):
 			if "start_datetime" in data:
 				start_datetime = data["start_datetime"]
 			'''
+			print(data)
 			if "tags" in data:
 				tags = data["tags"]
 		except Exception as e:
+			print(type(e))
 			return gen_failure_response("Request was malformatted.")
 
 	try:
