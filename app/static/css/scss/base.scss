@@ -117,6 +117,10 @@ html, body {
 	}
 }
 
+.search-container {
+	padding-bottom: 2vh;
+}
+
 #searchBox {
 	padding: 0;
 	margin: 2vh 2vh;
@@ -156,7 +160,6 @@ html, body {
 	flex-wrap: nowrap;
 	margin-right: 2vh;
 	font-size: 14px;
-	padding-bottom: 5px;
 
 	.filter-button {
 		padding-left: 0;
@@ -206,12 +209,11 @@ html, body {
 }
 
 .filters {
-	margin: 0vh 2vh;
-	margin-bottom: 2vh;
+	margin: 1vh 2vh;
 	font-size: 14px !important;
 	background-color: #dedede;
-	padding: 5px;
 	border-radius: 5px;
+	padding: 5px;
 
 	div {
 		display: block;
