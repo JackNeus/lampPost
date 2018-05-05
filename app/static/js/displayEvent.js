@@ -114,7 +114,7 @@ function selectSearchResult(eventNum) {
 		var selected_event = $(".smallSearchResult.selected");
 		var event_to_select = $("#smallSearchResult" + eventNum);
 
-		highlightSearchResult(event_to_select);
+		highlightSearchResult(event_to_select, eventNum);
 
 		// Close previously selected event, if it's not the one we want to open.
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
