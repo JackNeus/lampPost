@@ -773,6 +773,7 @@ test_search_no_auth,
 test_search_all,
 test_search_default_starttime,
 test_search_tag,
+test_search_tag_json,
 test_valid_feedback,
 test_invalid_feedback
 ]
