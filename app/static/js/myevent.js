@@ -10,6 +10,7 @@ function setBaseUrl(url) {
 }
 
 // code from Stack Overflow
+// https://stackoverflow.com/questions/5796718/html-entity-decode
 var decodeEntities = (function() {
   // this prevents any overhead from creating the object each time
   var element = document.createElement('div');
