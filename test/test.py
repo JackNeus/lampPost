@@ -405,11 +405,12 @@ def test_edit_event_valid():
 					  "tags": []}
 		# Try editing each field separately.
 		for field in event_edits:
-			edit = {field: event_edits[field]}
-			new_event[field] = deepcopy(event_edits[field])
-			r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
-			assert is_success(r)
-			assert compare_events(new_event, r["data"])
+			if field is not "instances":
+				edit = {field: event_edits[field]}
+				new_event[field] = deepcopy(event_edits[field])
+				r = make_edit_event_request(event_id, edit, generate_auth_token(creator_netid))
+				assert is_success(r)
+				assert compare_events(new_event, r["data"])
 	make_test(test)
 
 def test_edit_event_system_fields():
