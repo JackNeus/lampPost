@@ -89,8 +89,8 @@ function getGoogleCalLink(eventNum, i) {
 	end_time = end_dt.split(" ")[1];
 
 
-	out_url += "&dates=" + start_date.replace(/-/g, "") + "T" + start_time.replace(/:/g, "") + "/";
-	out_url += end_date.replace(/-/g, "") + "T" + end_time.replace(/:/g, "") + "";
+	out_url += "&dates=" + start_date.replace(/-/g, "").replace(/\//g,"") + "T" + start_time.replace(/:/g, "") + "/";
+	out_url += end_date.replace(/-/g, "").replace(/\//g,"") + "T" + end_time.replace(/:/g, "") + "";
 
 	out_url += "&ctz=America/New_York";
 	out_url += "&location=" + event_data[eventNum].instances[i].location;
@@ -179,9 +179,8 @@ function populateEventViewPanel(eventNum) {
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
 	for (var i = 0; i < instances.length; i++) {
-		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" title=\"Export to Google Calendar\" data-toggle=\"tooltip\""
-
-			+ getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>");
+		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" "
+		+ getGoogleCalLink(eventNum-1, i) + "\"> <i class=\"fa fa-calendar-alt\"></i> </a>");
 		// Location
 		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
