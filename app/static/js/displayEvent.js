@@ -89,8 +89,8 @@ function getGoogleCalLink(eventNum, i) {
 	end_time = end_dt.split(" ")[1];
 
 
-	out_url += "&dates=" + start_date.replace(/-/g, "") + "T" + start_time.replace(/:/g, "") + "/";
-	out_url += end_date.replace(/-/g, "") + "T" + end_time.replace(/:/g, "") + "";
+	out_url += "&dates=" + start_date.replace(/-/g, "").replace(/\//g,"") + "T" + start_time.replace(/:/g, "") + "/";
+	out_url += end_date.replace(/-/g, "").replace(/\//g,"") + "T" + end_time.replace(/:/g, "") + "";
 
 	out_url += "&ctz=America/New_York";
 	out_url += "&location=" + event_data[eventNum].instances[i].location;
