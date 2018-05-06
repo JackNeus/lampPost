@@ -14,8 +14,14 @@ label {
 
  @media screen and (min-width: 900px) {
   .eventFormView { 
-    width: 100%;
     margin: auto;
+  }
+  .addFormView {
+    min-width: 900px;
+    width: 60vw;
+  }
+  .editFormView {
+    width: 100%;
   }
 }
 
