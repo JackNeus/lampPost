@@ -1,134 +1,129 @@
 {% extends "base.html" %}
 {% block content %}
 
-<link rel="stylesheet" type="text/css" href="/static/css/add.css?v=5">
 <script src="/static/js/add.js?v=4"> </script>
 
-<body>
+<!-- Hacky, but I can't think of another way. -->
 
-	<!-- Hacky, but I can't think of another way. -->
+<!-- If this exists, it means the submission had an error. -->
+{% if wereErrors %}
+	<a id="wereErrorsAddForm" style="display:none"> {{ wereErrors }} </a>
+{% endif %}
 
-	<!-- If this exists, it means the submission had an error. -->
-	{% if wereErrors %}
-		<a id="wereErrorsAddForm" style="display:none"> {{ wereErrors }} </a>
-	{% endif %}
+<!-- If this exists, the form will have this number of rows. -->
+{% if numRows %}
+	<a id="numRowsEventForm" style="display:none"> {{ numRows }} </a>
+{% endif %}
 
-	<!-- If this exists, the form will have this number of rows. -->
-	{% if numRows %}
-		<a id="numRowsEventForm" style="display:none"> {{ numRows }} </a>
-	{% endif %}
+	
+	<div class="eventFormView addFormView" id = "formCol">
+		<h2 style="text-align:center"> Add your event by filling out the fields below. </h2>
 
-		
-		<div class="eventFormView" id = "formCol">
-			<h2 style="text-align:center"> Add your event by filling out the fields below. </h2>
+		<form id="addEventForm" action="/add" method="POST" role="form" enctype="multipart/form-data">
+			{{ form.csrf_token }}
 
-			<form id="addEventForm" action="/add" method="POST" role="form" enctype="multipart/form-data">
-				{{ form.csrf_token }}
+			<div class="form-group">
+				{{ form.title.label(class="req") }}
+				{{ form.title(placeholder="The name of your event", class="form-control", maxlength="100") }}
+			</div>
+			<div class="form-group">
+				{{ form.description.label(class="req") }}
+				{{ form.description(placeholder="A brief description of your event, and why people should come! Links are supported.", class="form-control", rows="4", maxlength="3000") }}
+			</div>
+			<div class="form-group">
+				{{ form.host.label(class="req") }}
+				{{ form.host(placeholder="(e.g. Bodyhype, Whig-Clio)", class="form-control", maxlength="100") }}
+			</div>
 
-				<div class="form-group">
-					{{ form.title.label(class="req") }}
-					{{ form.title(placeholder="The name of your event", class="form-control", maxlength="100") }}
-				</div>
-				<div class="form-group">
-					{{ form.description.label(class="req") }}
-					{{ form.description(placeholder="A brief description of your event, and why people should come! Links are supported.", class="form-control", rows="4", maxlength="3000") }}
-				</div>
-				<div class="form-group">
-					{{ form.host.label(class="req") }}
-					{{ form.host(placeholder="(e.g. Bodyhype, Whig-Clio)", class="form-control", maxlength="100") }}
-				</div>
-
-				<div class="form-group">
-					{{ form.visibility.label(style="padding-right:1vw", class="req fullWidthMobileI") }}
-					{% for subfield in form.visibility %}
-    					<div class="form-check form-check-inline">
-	        				{{ subfield(class="form-check-input") }}
-	        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
-	        			</div>
-					{% endfor %}
-					<small id="fileHelp" class="form-text text-muted"> If you indicate the audience as "Princeton community", the event will only be visible to CAS-authenticated users. Otherwise, the general public can view it. </small>
-				</div>
-
-
-				<div class="form-group">
-					{{ form.numShowings.label(style="padding-right:1vw", class="req fullWidthMobileS") }}
-					{% for subfield in form.numShowings %}
-    					<div class="form-check form-check-inline">
-	        				{{ subfield(class="form-check-input") }}
-	        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
-	        			</div>
-					{% endfor %}
-					<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!</small>
-				</div>
-
-
-				{% for i in range(form.locations.__len__()) %}
-					<div class="form-row" id="form-row-{{i+1}}" style={{"display:none;" if i > 0 else "" }}>
-						<div class="form-group col-md-4">
-        					{{ form.locations.__getitem__(i).label(class="numbered req", maxlength="100") }}
-        					{{ form.locations.__getitem__(i)(class="form-control") }}
-        				</div>
-
-        				<div class="form-group col-md-2">
-							{{ form.startDates.__getitem__(i).label(class="numbered req") }}
-							{{ form.startDates.__getitem__(i)(class="form-control") }}
-						</div>
-						<div class="form-group col-md-2">
-							{{ form.startTimes.__getitem__(i).label(class="numbered req") }}
-							{{ form.startTimes.__getitem__(i)(class="form-control", autocomplete="off") }}
-						</div>
-						<div class="form-group col-md-2">
-							{{ form.endDates.__getitem__(i).label(class="numbered req") }}
-							{{ form.endDates.__getitem__(i)(class="form-control") }}
-						</div>
-						<div class="form-group col-md-2">
-							{{ form.endTimes.__getitem__(i).label(class="numbered req") }}
-							{{ form.endTimes.__getitem__(i)(class="form-control", autocomplete="off") }}
-						</div>
+			<div class="form-group">
+				{{ form.visibility.label(style="padding-right:1vw", class="req fullWidthMobileI") }}
+				{% for subfield in form.visibility %}
+					<div class="form-check form-check-inline">
+        				{{ subfield(class="form-check-input") }}
+        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
         			</div>
-    			{% endfor %}
-
-				<div class="form-group">
-					{{ form.poster.label }}
-					{{ form.poster(class="form-control-file") }}
-					<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
-				</div>
-
-				<div class="form-group">
-					{{ form.link.label }}
-					{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control", maxlength="100") }}
-				</div>
-
-				<div class="form-group">
-					{{ form.tags.label(style="padding-right:1vw", class="fullWidthMobileS") }}
-
-					{% for key, value, checked in form.tags.iter_choices() %}
-        				<div class="form-check form-check-inline">
-        					{% if checked %}
-    							<input class="form-check-input" type="checkbox" name="tags" id="tags-{{loop.index-1}}" value="{{key}}" checked>
-    						{% else %}
-    							<input class="form-check-input" type="checkbox" name="tags" id="tags-{{loop.index-1}}" value="{{key}}">
-    						{% endif %}
-    						<label class="form-check-label" for="inlineCheckbox{{loop.index-1}}"> <span class="badge badge-primary" id="{{key}}Tag"> {{key}} </span> </label>
-	        			</div>
-	        			
-    				{% endfor %}
-					<small id="tagHelp" class="form-text text-muted"> Optionally, add tags to your event. </small>
-					<small id="tagResponsible" class="form-text text-muted"> Devs monitor the site for reports. Please be responsible! </small>
-				</div>
+				{% endfor %}
+				<small id="fileHelp" class="form-text text-muted"> If you indicate the audience as "Princeton community", the event will only be visible to CAS-authenticated users. Otherwise, the general public can view it. </small>
+			</div>
 
 
-				<button type="submit" class="btn btn-primary submitAddButton">Submit!</button>
+			<div class="form-group">
+				{{ form.numShowings.label(style="padding-right:1vw", class="req fullWidthMobileS") }}
+				{% for subfield in form.numShowings %}
+					<div class="form-check form-check-inline">
+        				{{ subfield(class="form-check-input") }}
+        				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
+        			</div>
+				{% endfor %}
+				<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!</small>
+			</div>
 
-				<div class="errors" style="text-align:center; color:red">
-					{% for i in errors %}
-						{{ i.capitalize() }}: {{errors[i][0]}} <br />
-					{% endfor %}
-				</div>
+
+			{% for i in range(form.locations.__len__()) %}
+				<div class="form-row" id="form-row-{{i+1}}" style={{"display:none;" if i > 0 else "" }}>
+					<div class="form-group col-md-4">
+    					{{ form.locations.__getitem__(i).label(class="numbered req", maxlength="100") }}
+    					{{ form.locations.__getitem__(i)(class="form-control") }}
+    				</div>
+
+    				<div class="form-group col-md-2">
+						{{ form.startDates.__getitem__(i).label(class="numbered req") }}
+						{{ form.startDates.__getitem__(i)(class="form-control") }}
+					</div>
+					<div class="form-group col-md-2">
+						{{ form.startTimes.__getitem__(i).label(class="numbered req") }}
+						{{ form.startTimes.__getitem__(i)(class="form-control", autocomplete="off") }}
+					</div>
+					<div class="form-group col-md-2">
+						{{ form.endDates.__getitem__(i).label(class="numbered req") }}
+						{{ form.endDates.__getitem__(i)(class="form-control") }}
+					</div>
+					<div class="form-group col-md-2">
+						{{ form.endTimes.__getitem__(i).label(class="numbered req") }}
+						{{ form.endTimes.__getitem__(i)(class="form-control", autocomplete="off") }}
+					</div>
+    			</div>
+			{% endfor %}
+
+			<div class="form-group">
+				{{ form.poster.label }}
+				{{ form.poster(class="form-control-file") }}
+				<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
+			</div>
+
+			<div class="form-group">
+				{{ form.link.label }}
+				{{ form.link(placeholder="Youtube link to your video, if applicable", class="form-control", maxlength="100") }}
+			</div>
+
+			<div class="form-group">
+				{{ form.tags.label(style="padding-right:1vw", class="fullWidthMobileS") }}
+
+				{% for key, value, checked in form.tags.iter_choices() %}
+    				<div class="form-check form-check-inline">
+    					{% if checked %}
+							<input class="form-check-input" type="checkbox" name="tags" id="tags-{{loop.index-1}}" value="{{key}}" checked>
+						{% else %}
+							<input class="form-check-input" type="checkbox" name="tags" id="tags-{{loop.index-1}}" value="{{key}}">
+						{% endif %}
+						<label class="form-check-label" for="inlineCheckbox{{loop.index-1}}"> <span class="badge badge-primary" id="{{key}}Tag"> {{key}} </span> </label>
+        			</div>
+        			
+				{% endfor %}
+				<small id="tagHelp" class="form-text text-muted"> Optionally, add tags to your event. </small>
+			</div>
 
 
-			</form>
+			<button type="submit" class="btn btn-primary submitAddButton">Submit!</button>
 
-		</div>
-	</body>
+			<div class="errors" style="text-align:center; color:red">
+				{% for i in errors %}
+					{{ i.capitalize() }}: {{errors[i][0]}} <br />
+				{% endfor %}
+			</div>
+
+
+		</form>
+
+	</div>
 {% endblock %}
