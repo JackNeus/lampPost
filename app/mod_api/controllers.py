@@ -101,10 +101,11 @@ def get_events_by_creator(netid):
 # with the most favories.
 def get_trending_events(user = None):
 	trending_size = 15
-	# Start a day ago.
-	start_datetime = datetime.now() - timedelta(days = 1)
+	# Start an hour ago.
+	start_datetime = datetime.now() - timedelta(hours = 1)
 	end_datetime = datetime.now() + timedelta(days = 7)
-	trending_events = EventEntry.objects(instances__end_datetime__gte = start_datetime,
+	trending_events = EventEntry.objects(
+		instances__end_datetime__gte = start_datetime,
 		instances__end_datetime__lte = end_datetime, 
 		visibility__lte = get_max_visibility(user))
 	trending_events = trending_events.order_by('-favorites').limit(trending_size)
