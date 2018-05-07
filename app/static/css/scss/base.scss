@@ -563,12 +563,10 @@ html, body {
 	flex: 35%;
     float: left;
     border-right: 5px solid $primary-color;
-	border-bottom: 5px solid $primary-color;
 }
 #rightCol {
 	flex: 65%;
     float: left;
-	border-bottom: 5px solid $primary-color;
 }
 
 @media screen and (max-width: 767px) {
@@ -587,12 +585,14 @@ html, body {
     display: flex !important;
 }
 
-.calendar-view {
-	#leftCol {
-		flex: 60%;
-	}
-	#rightCol {
-		flex: 40%;
+@media screen and (min-width: 768px) {
+	.calendar-view {
+		#leftCol {
+			flex: 60%;
+		}
+		#rightCol {
+			flex: 40%;
+		}
 	}
 }
 
