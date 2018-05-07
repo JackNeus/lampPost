@@ -72,7 +72,7 @@ $(document).ready(function(){
 
 	if (!hideWelcome)
 		$("#welcomeDiv").show();
-
+	heightResizeHandler()
 });
 
 function addTrendingResults() {
@@ -90,6 +90,8 @@ function addTrendingResults() {
 	    	// updating this is enough
 	    	// other code automatically makes a call to showSearchResults()
 			event_data = toJavaEventData(data["data"]);
+			// apply tag filters
+			event_data = filterByTag(event_data, getSelectedTagFilters());
 		}
 		else {
 			event_data = [];
@@ -337,6 +339,36 @@ function clearReportForm() {
 }
 
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
+
+// Only include events with at least one of the tags in the
+// array tags.
+function filterByTag(event_data, tags) {
+	// If tags array is empty, don't apply filter.
+	if (tags.length == 0) {
+		return event_data;
+	}
+	var new_event_data = [];
+	for (var i = 0; i < event_data.length; i++) {
+		let event = event_data[i];
+		if (event.tags === undefined) continue;
+		// For each tag on the event, check if
+		// it's in the request list of tags (parameter tags).
+		for (var j = 0; j < event.tags.length; j++) {
+			let hasTag = false;
+			for (var k = 0; k < tags.length; k++) {
+				if (event.tags[j].toLowerCase() === tags[k].toLowerCase()) {
+					hasTag = true;
+					break;
+				}
+			}
+			if (hasTag) {
+				new_event_data.push(event);
+				break;
+			}
+		}
+	}
+	return new_event_data;
+}
 
 function getEvent(event_data, id) {
 	var event = $.grep(event_data, function(event){return event._id === id;})[0];

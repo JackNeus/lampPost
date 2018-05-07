@@ -34,10 +34,13 @@ var decodeEntities = (function() {
 $(document).ready(function(){
 	checkSort();
 	loadEvents();
+	addViewButton();
 	// hide the form that users would edit events with
 	$("#event-form").hide();
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({});
+	browserView()
+	heightResizeHandler();
 });
 
 
@@ -47,7 +50,6 @@ var checkSort = function() {
 	$("#searchSort").change(function() {
 		if (event_data != []) {
 			showMyEvents();
-			handleDeletePoster();
 			handleDeleteMyEvent();
 			handleEditMyEvent();
 			var urlParamEventId = checkEventUrlParameter();
@@ -60,7 +62,6 @@ var checkSort = function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
 		showMyEvents();
-		handleDeletePoster();
 		handleDeleteMyEvent();
 		handleEditMyEvent();
 		var urlParamEventId = checkEventUrlParameter();
@@ -161,7 +162,7 @@ var handleDeleteMyEvent = function() {
 				else {
 					var eventSelected = false;
 				}
-				
+
 				var callback = function() {
 					if (eventSelected) {
 						updateUrl(removeUrlParameter(removeUrlParameter(document.location.search, "event"), "edit"));
@@ -278,8 +279,13 @@ var renderEditForm = function(eventNum) {
 	}
 	if (event_data[eventNum - 1].poster !== undefined) {
 		$("#poster-link").attr('href', event_data[eventNum - 1].poster);
-		$("#current-poster").toggleClass("hidden");
+		$("#current-poster").removeClass("hidden");
+		handleDeletePoster();
 	}
+	else {
+		$("#current-poster").addClass("hidden");
+	}
+
 	$("#link").val(decodeEntities(event_data[eventNum - 1].trailer));
 
 	// make sure everything is unchecked to begin with
@@ -296,7 +302,7 @@ var renderEditForm = function(eventNum) {
 
 var selectEditBtn = function(editBtn) {
 	updateUrl(addUrlParameter(document.location.search, 'edit'));
-	
+
 	// make the icon "selected"
 	editBtn.addClass("selectedIcon");
 }
