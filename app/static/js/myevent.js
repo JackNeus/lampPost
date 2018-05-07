@@ -34,11 +34,13 @@ var decodeEntities = (function() {
 $(document).ready(function(){
 	checkSort();
 	loadEvents();
+	addViewButton();
 	// hide the form that users would edit events with
 	$("#event-form").hide();
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({});
-	heightResizeHandler()
+	browserView()
+	heightResizeHandler();
 });
 
 
