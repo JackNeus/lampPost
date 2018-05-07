@@ -72,7 +72,7 @@ $(document).ready(function(){
 
 	if (!hideWelcome)
 		$("#welcomeDiv").show();
-
+	heightResizeHandler()
 });
 
 function addTrendingResults() {

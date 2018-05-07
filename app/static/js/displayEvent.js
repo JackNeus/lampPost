@@ -160,7 +160,7 @@ function populateEventViewPanel(eventNum) {
 	// hide welcome image
 	$("#welcome").css("display", "none");
 
-	
+
 	// setup event main header
 	$("#eventTitle").html(event_data[eventNum-1].title);
 	$("#eventSetting").html("");
@@ -170,11 +170,11 @@ function populateEventViewPanel(eventNum) {
 
 	eventTags = event_data[eventNum-1].tags
 	for (var i = 0; i < eventTags.length; i++) {
-		$("#titleRow").append("<div class=\"badge-border\">" 
+		$("#titleRow").append("<div class=\"badge-border\">"
 			+ "<span class=\"badge badge-primary\" id=\"" + eventTags[i] + "Tag\">" + eventTags[i] + "</span>"
 			+ "</div>");
 	}
-	
+
 	$("#eventSubtitle").html("");
 	// setup dates and times
 	var instances = event_data[eventNum-1].instances;
@@ -243,10 +243,10 @@ function populateEventViewPanel(eventNum) {
 	else $("#eventFireBtn").removeClass("selected");
 
 	$("#event-view").show();
-	eventViewResizeHeight();
 
 	// show tips when hovering
 	$('[data-toggle="tooltip"]').tooltip();
+    heightResizeHandler();
 }
 
 function renderImage(url){
@@ -264,18 +264,19 @@ function renderImage(url){
 			// <proportion> gives the proportion of the event-view pane that the image
 			//              takes up by width
 			var ratio = renderedImg.naturalWidth / renderedImg.naturalHeight;
-			var scaledWidth = document.getElementById("event-view-info").clientHeight
-							  * ratio;
-			var proportion = scaledWidth
-							 / document.getElementById("event-view-info").clientWidth;
+            var eventViewHeight = document.getElementById("event-view-info").clientHeight;
+            var eventViewWidth = document.getElementById("event-view-info").clientWidth;
+			var scaledWidth = eventViewHeight * ratio;
+			var proportion = scaledWidth / eventViewWidth;
 			if (2.5 <= ratio) {
 				// We put thin and wide images above the description
 				document.getElementById("bannerImage").innerHTML =
 				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
-			} else if (proportion < 0.6) {
+			} else if ((proportion < 0.6) && (eventViewWidth * 0.4 > 250)) {
 				// We put tall images next to the description if the screen is wide enough
 				document.getElementById("posterImage").innerHTML =
-				"<img class=\"img-cover\" src=\""+renderedImg.src+"\">";
+				"<img id=\"posterImageSrc\" class=\"img-cover\" src=\""+renderedImg.src+"\">";
+                document.getElementById("posterImageSrc").style.height = eventViewHeight + "px";
 			} else {
 				// Otherwise, we put the image below the description
 				document.getElementById("otherImage").innerHTML =

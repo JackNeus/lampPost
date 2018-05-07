@@ -94,7 +94,6 @@ html, body {
 	#browserView {
 		padding-left: 0vw;
 		padding-right: 0vw;
-		margin-bottom: 2vh;
 	}
 }
 
@@ -396,7 +395,6 @@ html, body {
 // TODO: Move to seperate file?
 .event-view {
   max-height: 100%;
-  min-width: 30vh;
   display: none;
   color: $light-color;
 
@@ -449,7 +447,6 @@ html, body {
 	.event-view-info {
 	    width: 100%;
 	    background-color: white;
-		padding-bottom: 50px;
 	    overflow-y: scroll;
 	    overflow-x: hidden;
 		.event-wrapper {
@@ -461,7 +458,6 @@ html, body {
 	}
 	.posterImage {
 		img {
-			height: 76vh;
 			width: auto;
 		}
 	}
@@ -564,15 +560,11 @@ html, body {
 
 #leftCol {
 	min-width: 275px;
-	max-height: 88vh;
-	height: 88vh;
 	flex: 35%;
     float: left;
     border-right: 5px solid $primary-color;
 }
 #rightCol {
-	max-height: 88vh;
-	height: 88vh;
 	flex: 65%;
     float: left;
 }
@@ -593,12 +585,14 @@ html, body {
     display: flex !important;
 }
 
-.calendar-view {
-	#leftCol {
-		flex: 60%;
-	}
-	#rightCol {
-		flex: 40%;
+@media screen and (min-width: 768px) {
+	.calendar-view {
+		#leftCol {
+			flex: 60%;
+		}
+		#rightCol {
+			flex: 40%;
+		}
 	}
 }
 
@@ -799,11 +793,7 @@ html, body {
 }
 
 #myModal {
-	padding-top:25vh;
-	padding-left:10vw
-}
-.modal-content {
-	width:50vw;
+	padding-top:20vh;
 }
 
 .video-responsive{
