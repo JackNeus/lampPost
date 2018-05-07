@@ -343,6 +343,7 @@ function clearReportForm() {
 // Only include events with at least one of the tags in the
 // array tags.
 function filterByTag(event_data, tags) {
+	// If tags array is empty, don't apply filter.
 	if (tags.length == 0) {
 		return event_data;
 	}
@@ -350,6 +351,8 @@ function filterByTag(event_data, tags) {
 	for (var i = 0; i < event_data.length; i++) {
 		let event = event_data[i];
 		if (event.tags === undefined) continue;
+		// For each tag on the event, check if
+		// it's in the request list of tags (parameter tags).
 		for (var j = 0; j < event.tags.length; j++) {
 			let hasTag = false;
 			for (var k = 0; k < tags.length; k++) {
