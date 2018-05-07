@@ -50,7 +50,6 @@ var checkSort = function() {
 	$("#searchSort").change(function() {
 		if (event_data != []) {
 			showMyEvents();
-			handleDeletePoster();
 			handleDeleteMyEvent();
 			handleEditMyEvent();
 			var urlParamEventId = checkEventUrlParameter();
@@ -63,7 +62,6 @@ var checkSort = function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
 		showMyEvents();
-		handleDeletePoster();
 		handleDeleteMyEvent();
 		handleEditMyEvent();
 		var urlParamEventId = checkEventUrlParameter();
@@ -281,8 +279,13 @@ var renderEditForm = function(eventNum) {
 	}
 	if (event_data[eventNum - 1].poster !== undefined) {
 		$("#poster-link").attr('href', event_data[eventNum - 1].poster);
-		$("#current-poster").toggleClass("hidden");
+		$("#current-poster").removeClass("hidden");
+		handleDeletePoster();
 	}
+	else {
+		$("#current-poster").addClass("hidden");
+	}
+
 	$("#link").val(decodeEntities(event_data[eventNum - 1].trailer));
 
 	// make sure everything is unchecked to begin with
