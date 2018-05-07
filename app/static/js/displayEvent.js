@@ -268,7 +268,7 @@ function renderImage(url){
             var eventViewWidth = document.getElementById("event-view-info").clientWidth;
 			var scaledWidth = eventViewHeight * ratio;
 			var proportion = scaledWidth / eventViewWidth;
-			if (2.5 <= ratio) {
+			if (2.25 <= ratio) {
 				// We put thin and wide images above the description
 				document.getElementById("bannerImage").innerHTML =
 				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
