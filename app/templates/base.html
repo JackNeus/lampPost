@@ -20,6 +20,17 @@
 
 <html>
   <head>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118836866-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-118836866-1', {
+        'user_id': '{{ current_user.netid }}'
+      });
+    </script>
+
     <title>lampPost</title>
 
     <!-- Bootstrap CSS -->
@@ -125,41 +136,41 @@
       }
 
       /* Toggle My Profile dropdown */
-	$("#userProfileLink").click( function () {
-	    $("#userProfileDropdown").toggle();
-	});
+  $("#userProfileLink").click( function () {
+      $("#userProfileDropdown").toggle();
+  });
 
-	// Close the dropdown if the user clicks outside of it
-	window.onclick = function(event) {
-	  if (!event.target.matches('#userProfileLink')) {
-	  	$("#userProfileDropdown").hide();
-	  }
-	}
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.matches('#userProfileLink')) {
+      $("#userProfileDropdown").hide();
+    }
+  }
   </script>
 
 
-	<!-- JINJA VARIABLES -->
-	<meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}">
+  <!-- JINJA VARIABLES -->
+  <meta id="userData" data-uid="{{current_user.uid}}" data-netid="{{current_user.netid}}">
 
-	{% if config.DEBUG %}
-	 <h4 class="debug-data" id="global-debug-msg"></h4>
-	{% endif %}
-	{% block content %}{% endblock %}
+  {% if config.DEBUG %}
+   <h4 class="debug-data" id="global-debug-msg"></h4>
+  {% endif %}
+  {% block content %}{% endblock %}
 
-	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-  	<div id="footer" class="footer {{ 'successFlash' if messages[0][0:3] != 'Err' else 'errorFlash'}}">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div id="footer" class="footer {{ 'successFlash' if messages[0][0:3] != 'Err' else 'errorFlash'}}">
       <div class="flashedMessage" id="flashedMessage"> {{ messages[0] }} </div>
       <div class="close"><div class="icon-container"><i class="icon fa fa-times" onclick="$('#footer').fadeOut('slow');"></i></div></div>
-	    <script type="text/javascript">
-		    slideFooter();
+      <script type="text/javascript">
+        slideFooter();
         setTimeout(function() {
             $('.footer').fadeOut('fast');
             }, 15000);
-	    </script>
-	  </div>
-	{% endif %}
-	{% endwith %}
+      </script>
+    </div>
+  {% endif %}
+  {% endwith %}
 
 
   </body>
