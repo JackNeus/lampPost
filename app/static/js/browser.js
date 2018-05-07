@@ -12,7 +12,7 @@ function browserView() {
 	// Dynamically reformat the website based on window pane width
 	$(window).resize(viewChange_Browser);
 	// Dynamically reformat event-view-info height
-	$(window).resize(eventViewResizeHeight);
+	$(window).resize(heightResizeHandler);
 }
 
 // Add search button for mobile view of browser
@@ -36,10 +36,27 @@ function mobileClick() {
     if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickPrev");
 }
 
-function eventViewResizeHeight() {
-	var totalHeight = document.getElementById("rightCol").clientHeight;
+/*==============================================================================
+Resize Handlers
+==============================================================================*/
+
+function heightResizeHandler() {
+	var colHeight = columnResize();
+	eventViewResizeHeight(colHeight);
+}
+
+function columnResize() {
+	var totalHeight = $(window).height();
+	var navbarHeight = document.getElementById("id_navbar").clientHeight;
+	var newHeight = totalHeight - navbarHeight;
+	document.getElementById("leftCol").style.height = newHeight + "px";
+	document.getElementById("rightCol").style.height = newHeight + "px";
+	return newHeight;
+}
+
+function eventViewResizeHeight(colHeight) {
 	var headerHeight = document.getElementById("event-view-header").clientHeight;
-	var newHeight = totalHeight - headerHeight;
+	var newHeight = colHeight - headerHeight;
 	if (newHeight > 0) {
 		document.getElementById("event-view-info").style.height = newHeight + "px";
 	}
