@@ -41,6 +41,7 @@ Resize Handlers
 ==============================================================================*/
 
 function heightResizeHandler() {
+	console.log("hi");
 	var colHeight = columnResize();
 	eventViewResizeHeight(colHeight);
 }

@@ -38,6 +38,7 @@ $(document).ready(function(){
 	$("#event-form").hide();
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({});
+	heightResizeHandler()
 });
 
 
@@ -161,7 +162,7 @@ var handleDeleteMyEvent = function() {
 				else {
 					var eventSelected = false;
 				}
-				
+
 				var callback = function() {
 					if (eventSelected) {
 						updateUrl(removeUrlParameter(removeUrlParameter(document.location.search, "event"), "edit"));
@@ -296,7 +297,7 @@ var renderEditForm = function(eventNum) {
 
 var selectEditBtn = function(editBtn) {
 	updateUrl(addUrlParameter(document.location.search, 'edit'));
-	
+
 	// make the icon "selected"
 	editBtn.addClass("selectedIcon");
 }
