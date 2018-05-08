@@ -280,7 +280,14 @@ function renderImage(url){
 			} else {
 				// Otherwise, we put the image below the description
 				document.getElementById("otherImage").innerHTML =
-				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
+				"<img id=\"otherImageSrc\" class=\"img-fluid\" src=\""+renderedImg.src+"\">";
+                if ((scaledWidth * 3.0/4.0) < eventViewWidth) {
+                    document.getElementById("otherImageSrc").style.height = (eventViewHeight * 3.0/4.0) + "px";
+                }
+                else {
+                    document.getElementById("otherImageSrc").style.width = "100%";
+                    document.getElementById("otherImageSrc").style.height = "auto";
+                }
 			}
 		}
 	}

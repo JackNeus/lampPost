@@ -78,7 +78,7 @@ $(document).ready(function(){
 function addTrendingResults() {
 	// Slide depending whether or not this is on load or search
 	if ($("#trendingLabel")[0].style.display == "none") {
-		$("#trendingLabel").slideToggle(50);
+		$("#trendingLabel").slideToggle(100);
 	}
 	else {
 		$("#trendingLabel").show();
@@ -254,7 +254,7 @@ function fetchData(query) {
 	}
 	// when loading an actual query (length > 0), clear the ``trending events" label
 	if ($("#trendingLabel")[0].style.display == "block") {
-		$("#trendingLabel").slideToggle(50);
+		$("#trendingLabel").slideToggle(100);
 	}
 	$("#search-container").css("padding-bottom", "1vh");
 

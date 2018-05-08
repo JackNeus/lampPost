@@ -12,7 +12,7 @@ class EventForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     host = StringField('Host', validators=[DataRequired()])
-    visibility = RadioField('Intended Audience:', choices=[("0","General public"), ("1","Princeton community")], default="0")
+    visibility = RadioField('Intended Audience:', choices=[("0","General Public"), ("1","Princeton University")], default="0")
     numShowings = RadioField('Number of Showings:', choices=[("1","1"),("2","2"),("3","3"),("4","4")], default="1")
     locations = FieldList(StringField('Location'), min_entries=4)
     startDates = FieldList(DateField('Start Date', format='%m/%d/%Y', validators=(validators.Optional(),)), min_entries=4)
