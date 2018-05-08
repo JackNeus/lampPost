@@ -129,6 +129,14 @@ var setupSearch = function() {
 
 	$('#filter-btn').click(function() {
 		$(".filters").slideToggle(200);
+		$( "#filter-btn" ).toggleClass("active");
+		// Change tooltip text
+		if ($( "#filter-btn" )[0].title == "Show Filters") {
+			$( "#filter-btn" )[0].title = "Hide Filters";
+		}
+		else {
+			$("#filter-btn")[0].title = "Show Filters";
+		}
 	});
 
 	$('.filter-btn').click(function() {

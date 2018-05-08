@@ -215,6 +215,9 @@ html, body {
 		&:hover {
 	 		color: $primary-color;
 	 	}
+		&.active {
+			color: $primary-color !important;
+		}
 	}
 
 	.sort-box {
@@ -477,12 +480,12 @@ html, body {
 		font-weight: bold;
 	}
 	.event-view-info {
+		background-color: white;
 	    width: 100%;
 	    overflow-y: scroll;
 	    overflow-x: hidden;
 		.event-wrapper {
 			padding-top: 2vh;
-		    background-color: white;
 			display: block !important;
 		}
 	}
