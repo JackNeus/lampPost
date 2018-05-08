@@ -12,12 +12,11 @@ label {
 	color:red;
  }
 
- @media screen and (min-width: 900px) {
-  .eventFormView { 
+ @media screen and (min-width: 1100px) {
+  .eventFormView {
     margin: auto;
   }
   .addFormView {
-    min-width: 900px;
     width: 60vw;
   }
   .editFormView {
@@ -25,7 +24,7 @@ label {
   }
 }
 
-@media screen and (max-width: 620px) {
+@media screen and (max-width: 1100px) {
   .fullWidthMobileI {
     width:100%;
   }
