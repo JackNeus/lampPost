@@ -1,4 +1,8 @@
+$background-color: #eeeeee;
 $primary-color: #2d9eee;
+$dark-color: #333333;
+$med-color: #555555;
+$light-color: #999999;
 
 h1 {
 	padding-top:3vh;
@@ -12,8 +16,8 @@ h1 {
 
 @media screen and (min-width: 900px) {
   .colAbt {
-    min-width: 900px; 
-    margin: auto; 
+    min-width: 900px;
+    margin: auto;
     width: 74vw;
   }
 }
@@ -29,6 +33,7 @@ h1 {
 }
 
 .bigTagC {
+	margin-bottom: 0;
 	color: $primary-color;
 	text-align:center;
 	font-weight:bold;
@@ -67,10 +72,14 @@ h1 {
 }
 
 #abtBlankFooter {
-	padding-top:5vh;	
+	padding-top:5vh;
 }
 
-
+.textBox {
+	background-color: #dedede;
+	border-radius: 5px;
+	margin: 0vh 2vw;
+}
 
 html {
 	height: 100%;
@@ -80,4 +89,3 @@ body {
   height: 100%;
 
 }
-
