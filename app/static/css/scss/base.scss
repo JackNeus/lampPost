@@ -22,16 +22,25 @@ html, body {
 	.h1, h1 {
 		font-family: $font-heavy;
 		font-size:36px;
+		@media screen and (max-width: 767px) {
+			font-size:32px;
+		}
 	}
 
 	.h2, h2 {
 		font-family: $font-heavy;
-		font-size:26px;
+		font-size:24px;
+		@media screen and (max-width: 767px) {
+			font-size:20px;
+		}
 	}
 
 	.h3, h3 {
 		font-family: $font-med;
 		font-size:20px;
+		@media screen and (max-width: 767px) {
+			font-size:16px;
+		}
 	}
 
 	// Other Style
@@ -436,6 +445,9 @@ html, body {
 		margin: 0;
 		line-height: 30px;
 		font-size: 20px;
+		@media screen and (max-width: 767px) {
+			font-size:16px;
+		}
 	}
 	.event-view-subtitle {
 	    color: $med-color;
@@ -494,6 +506,7 @@ html, body {
 		}
 	}
 	.eventSection {
+		padding-top: 2vh;
 		color: $med-color;
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
@@ -501,11 +514,16 @@ html, body {
 	.event-view-data {
 		width: 100%;
 		font-size:18px;
+		@media screen and (max-width: 767px) {
+			font-size:12px;
+		}
 		color: $light-color;
 		line-height: normal;
 		margin: 0px;
 	}
 	.event-view-box {
+		padding-top: 0 !important;
+		padding-bottom: 1vh !important;
 		width: 100%;
 	}
 	.calendar-btn {
@@ -715,12 +733,18 @@ html, body {
 					max-height: 5.6em;
 					.resultTitle {
 						font-size: 0.9em;
+						@media screen and (max-width: 767px) {
+							font-size:0.6em;
+						}
 						line-height: 1em;
 						max-height: 3.8em;
 						overflow: hidden;
 					}
 					.resultTime {
 						font-size: 0.6em;
+						@media screen and (max-width: 767px) {
+							font-size:0.3em;
+						}
 						line-height: 1em;
 					}
 					.resultFireBtn {
