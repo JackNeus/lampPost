@@ -181,7 +181,7 @@ function populateEventViewPanel(eventNum) {
 	for (var i = 0; i < instances.length; i++) {
 		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" "
 		+ getGoogleCalLink(eventNum-1, i) + "\" data-toggle=\"tooltip\" title=\"Add to Google Calendar\">"+
-		"<i class=\"fa fa-calendar-alt\"></i> </a>");
+		"<i class=\"fa fa-share-square\"></i> </a>");
 		// Location
 		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time

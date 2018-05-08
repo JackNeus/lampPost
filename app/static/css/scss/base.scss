@@ -481,6 +481,7 @@ html, body {
 	    overflow-y: scroll;
 	    overflow-x: hidden;
 		.event-wrapper {
+			padding-top: 2vh;
 		    background-color: white;
 			display: block !important;
 		}
@@ -506,7 +507,7 @@ html, body {
 		}
 	}
 	.eventSection {
-		padding-top: 2vh;
+		padding-top: 1vh;
 		color: $med-color;
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
@@ -662,9 +663,9 @@ html, body {
 		flex-direction: row;
 		width: 100%;
 		margin-right: 0vh;
-		border-left: 2px solid $dark-color;
-		border-right: 2px solid $dark-color;
 		border-bottom: 2px solid $dark-color;
+		position: relative;
+		z-index: 1000;
 
 		.weekTitle {
 			font-family: $font-med;
@@ -677,10 +678,16 @@ html, body {
 
 		.previousWeekBtn {
 			margin-left: 4vw;
+			&:hover {
+		 		color: white;
+		 	}
 		}
 
 		.nextWeekBtn {
 			margin-right: 4vw;
+			&:hover {
+		 		color: white;
+		 	}
 		}
 	}
 }
@@ -690,12 +697,12 @@ html, body {
 	flex-wrap: nowrap;
 	flex-direction: row;
 	width: 100%;
-	border-left: 2px solid $dark-color;
+	border-right: 2px solid $dark-color;
 
 	.dayCol {
 		max-width: 14.2857%;
 		min-width: 14.2857%;
-		border-right: 2px solid $dark-color;
+		border-left: 2px solid $dark-color;
 		border-bottom: 2px solid $dark-color;
 		min-height: 55vh;
 		height: auto;
