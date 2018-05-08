@@ -131,11 +131,15 @@ var setupSearch = function() {
 		$(".filters").slideToggle(200);
 		$( "#filter-btn" ).toggleClass("active");
 		// Change tooltip text
-		if ($( "#filter-btn" )[0].title == "Show Filters") {
+		if ($( "#filter-btn" )[0].title != "Hide Filters") {
 			$( "#filter-btn" )[0].title = "Hide Filters";
+			$("#filter-btn").tooltip({title: "Hide Filters"});
+			$("#filter-btn").removeAttr("data-original-title");
 		}
 		else {
 			$("#filter-btn")[0].title = "Show Filters";
+			$("#filter-btn").tooltip({title: "Show Filters"});
+			$("#filter-btn").removeAttr("data-original-title");
 		}
 	});
 

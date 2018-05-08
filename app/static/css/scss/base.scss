@@ -590,6 +590,7 @@ html, body {
   width: 100%;
   text-align:center;
   height: 6.4vh;
+  z-index: 100000;
 
   .flashedMessage {
     padding-top: 1.5vh;
