@@ -43,6 +43,7 @@ Resize Handlers
 function heightResizeHandler() {
 	var colHeight = columnResize();
 	eventViewResizeHeight(colHeight);
+	eventViewResizeTitle();
 }
 
 function columnResize() {
@@ -59,5 +60,18 @@ function eventViewResizeHeight(colHeight) {
 	var newHeight = colHeight - headerHeight;
 	if (newHeight > 0) {
 		document.getElementById("event-view-info").style.height = newHeight + "px";
+	}
+}
+function eventViewResizeTitle(colHeight) {
+	var fontsize = 36;
+	var pad = 1.0;
+	document.getElementById("eventTitle").style.fontSize = fontsize + "px";
+	var titleHeight = document.getElementById("titleRow").clientHeight;
+	while ((titleHeight > 50) && (fontsize >= 22)) {
+		document.getElementById("eventTitle").style.fontSize = fontsize + "px";
+		document.getElementById("eventTitle").style.paddingTop = pad + "px";
+		fontsize -= 2;
+		pad += 1.5;
+		titleHeight = document.getElementById("titleRow").clientHeight;
 	}
 }

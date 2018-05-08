@@ -499,10 +499,14 @@ html, body {
 		border-bottom: 2px solid $primary-color;
 	}
 	.event-view-data {
+		width: 100%;
 		font-size:18px;
 		color: $light-color;
 		line-height: normal;
 		margin: 0px;
+	}
+	.event-view-box {
+		width: 100%;
 	}
 	.calendar-btn {
 		padding-right: 10px;
