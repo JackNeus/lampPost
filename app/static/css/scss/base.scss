@@ -160,7 +160,10 @@ html, body {
 
 #searchBox {
 	padding: 0;
-	margin: 2vh 1vw;
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+	margin-left: 1vw;
+	margin-right: 0;
 	margin-bottom: 0;
 	max-width: 100%;
 	width: 100%;
@@ -191,7 +194,6 @@ html, body {
 #searchRow {
  	min-height: 4.25vh;
  	display: flex;
- 	margin-right: 1vw;
  	flex-wrap: nowrap;
  	align-items: stretch;
 }
@@ -199,7 +201,6 @@ html, body {
 .searchButtons {
 	display: flex;
 	flex-wrap: nowrap;
-	margin-right: 2vh;
 	font-size: 14px;
 
 	&.myevents {
@@ -225,7 +226,8 @@ html, body {
 
 		.sort-direction {
 			cursor: pointer;
-			padding-left: 1vw;
+			padding-left: 8px;
+			padding-right: 10px;
 			font-size: 1.55em;
 			display: inline-block;
 			float: left;
@@ -264,8 +266,8 @@ html, body {
 }
 
 .calendar-view-button {
-	padding-right: 0.5vw;
-	padding-left: 0;
+	padding-left: 8px;
+	padding-right: 12px;
 	margin-top: 2vh;
 	&:hover {
 		color: $primary-color;
