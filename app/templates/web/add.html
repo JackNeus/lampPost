@@ -15,7 +15,7 @@
 	<a id="numRowsEventForm" style="display:none"> {{ numRows }} </a>
 {% endif %}
 
-	
+
 	<div class="eventFormView addFormView" id = "formCol">
 		<h2 style="text-align:center"> Add your event by filling out the fields below. </h2>
 
@@ -88,7 +88,7 @@
 			<div class="form-group">
 				{{ form.poster.label }}
 				{{ form.poster(class="form-control-file") }}
-				<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
+				<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended. Posters and banners (very long or very tall, but not square) work best.</small>
 			</div>
 
 			<div class="form-group">
@@ -108,7 +108,7 @@
 						{% endif %}
 						<label class="form-check-label" for="inlineCheckbox{{loop.index-1}}"> <span class="badge badge-primary" id="{{key}}Tag"> {{key}} </span> </label>
         			</div>
-        			
+
 				{% endfor %}
 				<small id="tagHelp" class="form-text text-muted"> Optionally, add tags to your event. </small>
 			</div>

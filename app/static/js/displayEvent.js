@@ -119,9 +119,9 @@ function selectSearchResult(eventNum) {
 
 		// Close previously selected event, if it's not the one we want to open.
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
-			selected_event.animate({"margin-right": '2vh'});
+			selected_event.animate({"margin-right": '2vw'});
 		}
-		event_to_select.animate({"margin-right": '0vh'});
+		event_to_select.animate({"margin-right": '0vw'});
 	}
 }
 

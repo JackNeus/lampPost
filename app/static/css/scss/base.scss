@@ -128,7 +128,6 @@ html, body {
 	min-height: 75px;
 	border-top: 5px solid $med-color;
 	position: relative;
-	padding-top: 5px;
 
 	.centered{
 		margin: auto;
@@ -145,12 +144,14 @@ html, body {
 }
 
 .search-container {
-	padding-bottom: 2vh;
+	position: relative;
+	z-index: 1000;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 #searchBox {
 	padding: 0;
-	margin: 2vh 2vh;
+	margin: 2vh 1vw;
 	margin-bottom: 0;
 	max-width: 100%;
 	width: 100%;
@@ -181,7 +182,7 @@ html, body {
 #searchRow {
  	min-height: 4.25vh;
  	display: flex;
- 	margin-right: 2vh;
+ 	margin-right: 1vw;
  	flex-wrap: nowrap;
  	align-items: stretch;
 }
@@ -197,9 +198,14 @@ html, body {
 	}
 
 	.filter-button {
-		padding-left: 0;
+		padding-left: 0rem !important;
+		padding-bottom: 0rem !important;
+		padding-top: .5rem !important;
 		font-size: 1.25em;
-		margin-left: 2vh;
+		margin-left: 1vw;
+		&:hover {
+	 		color: $primary-color;
+	 	}
 	}
 
 	.sort-box {
@@ -207,10 +213,15 @@ html, body {
 
 		.sort-direction {
 			cursor: pointer;
-			padding-left: 5px;
+			padding-left: 1vw;
 			font-size: 1.55em;
 			display: inline-block;
 			float: left;
+			.sort-direction-btn {
+				&:hover {
+			 		color: $primary-color;
+			 	}
+			}
 		}
 
 		.select-style {
@@ -219,7 +230,8 @@ html, body {
 		    min-width: 175px;
 		    border-radius: 3px;
 		    overflow: hidden;
-		    background: #fafafa url("../graphics/sort-down.png") no-repeat 95% 50%;
+		    background: #fafafa url("../graphics/sort-down.svg") no-repeat 95% 50%;
+			background-size: 12px 16px;
 		    float: left;
 		}
 
@@ -240,7 +252,12 @@ html, body {
 }
 
 .calendar-view-button {
+	padding-right: 0.5vw;
+	padding-left: 0;
 	margin-top: 2vh;
+	&:hover {
+		color: $primary-color;
+	}
 }
 
 .filters {
@@ -248,7 +265,7 @@ html, body {
 	font-size: 14px !important;
 	background-color: #dedede;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 8px;
 
 	div {
 		display: block;
@@ -272,6 +289,7 @@ html, body {
 	}
 
 	.filter-btn {
+		margin: 2px;
 		font-size: 14px !important;
 		//border-color: #ced4da;
 		border-color: #80bdff;
@@ -287,7 +305,9 @@ html, body {
 	}
 
 	#tag-filters {
+		margin-bottom: 2px !important;
 		.form-check {
+			margin: 2px;
 			display: inline-block;
 		}
 	}
@@ -301,7 +321,7 @@ html, body {
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
 	cursor: pointer;
-	margin: 0vh 2vh 0vh 0vh;
+	margin: 0vw 2vw 0vw 0vw;
  	overflow: hidden;
  	background: white;
 	color: $dark-color;
@@ -326,7 +346,7 @@ html, body {
 		.resultTime {
 			color: white;
 		}
-		margin: 0vh;
+		margin: 0vw;
 		border-radius: 0px;
 		background-color: $primary-color;
 		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
@@ -751,9 +771,11 @@ html, body {
 }
 
 #trendingLabel {
+	margin-top: 1vh;
 	text-align:center;
 	font-size:24px;
-	color:darkorange;
+	background-color: $med-color;
+	color: white;
 	font-weight:bold;
 	display: none;
 }
