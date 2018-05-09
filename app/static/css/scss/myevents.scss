@@ -1,11 +1,16 @@
 $med-color: #555555;
 $primary-color: #2d9eee;
+$dark-color: #333333;
 
 .invisible {
   display: none; }
 
 label {
   font-weight: bold;
+}
+
+h1 {
+    color: $dark-color;
 }
 
 #reportBtn {
