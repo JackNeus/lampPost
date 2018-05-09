@@ -533,7 +533,7 @@ html, body {
 		width: 100%;
 		font-size:18px;
 		@media screen and (max-width: 767px) {
-			font-size:12px;
+			font-size:14px;
 		}
 		color: $light-color;
 		line-height: normal;
@@ -545,6 +545,7 @@ html, body {
 		width: 100%;
 	}
 	.calendar-btn {
+		font-size: 18px;
 		padding-right: 10px;
 		text-decoration: none !important;
 		color: $light-color;

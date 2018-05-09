@@ -21,6 +21,7 @@ function addSearchButton() {
         + "id=\"mobileSearchButton\" type=\"button\"> <i class=\"fas fa-search\"></i></button>");
 
     $("#mobileSearchButton").click(mobileClick);
+	$("#mobileSearchButton").click(function() {document.getElementById("search-box").focus();});
 }
 
 // Add view button for mobile view of add
