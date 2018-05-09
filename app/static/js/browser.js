@@ -41,9 +41,9 @@ Resize Handlers
 ==============================================================================*/
 
 function heightResizeHandler() {
+	eventViewResizeText();
 	var colHeight = columnResize();
 	eventViewResizeHeight(colHeight);
-	eventViewResizeText();
 }
 
 function columnResize() {

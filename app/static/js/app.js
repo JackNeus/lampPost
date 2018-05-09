@@ -131,15 +131,15 @@ var setupSearch = function() {
 		$(".filters").slideToggle(200);
 		$( "#filter-btn" ).toggleClass("active");
 		// Change tooltip text
-		if ($( "#filter-btn" )[0].title != "Hide Filters") {
-			$( "#filter-btn" )[0].title = "Hide Filters";
-			$("#filter-btn").tooltip({title: "Hide Filters"});
-			$("#filter-btn").removeAttr("data-original-title");
+		var hideText = "Hide Filters";
+		var showText = "Show Filters"
+		if ($("#filter-btn")[0].title != hideText) {
+			$("#filter-btn")[0].title = hideText;
+			$("#filter-btn").attr("data-original-title", hideText).parent().find("tooltip-inner").html(hideText);
 		}
 		else {
-			$("#filter-btn")[0].title = "Show Filters";
-			$("#filter-btn").tooltip({title: "Show Filters"});
-			$("#filter-btn").removeAttr("data-original-title");
+			$("#filter-btn")[0].title = showText;
+			$("#filter-btn").attr("data-original-title", showText).parent().find("tooltip-inner").html(showText);
 		}
 	});
 
