@@ -116,9 +116,11 @@ html, body {
 
 .danger-button {
 	color: $light-color;
- 	&:hover {
- 		color: #cc0000;
- 	}
+	@media screen and (min-width: 768px) {
+	 	&:hover {
+	 		color: #cc0000;
+	 	}
+	}
  }
 
 ::placeholder {
@@ -397,12 +399,16 @@ html, body {
 			padding: 0;
 			&.selected {
 				color: $orange;
-				&:hover {
-					color: $orange;
+				@media screen and (min-width: 768px) {
+					&:hover {
+						color: $orange;
+					}
 				}
 			}
-			&:hover {
-				color: rgba(238, 127, 45, 0.75);
+			@media screen and (min-width: 768px) {
+				&:hover {
+					color: rgba(238, 127, 45, 0.75);
+				}
 			}
 		}
 		.resultFireNum {
@@ -413,8 +419,6 @@ html, body {
 	}
 }
 
-// We got rid of this temporarily
-// TODO: Delete?
 .searches-resizer {
 	max-height: 88vh;
 	height: 88vh;
@@ -472,12 +476,16 @@ html, body {
 		margin-left:2vh;
 		&.selected {
 			color: $orange;
-			&:hover {
-				color: $orange;
+			@media screen and (min-width: 768px) {
+				&:hover {
+					color: $orange;
+				}
 			}
 		}
-		&:hover {
-			color: rgba(238, 127, 45, 0.75);
+		@media screen and (min-width: 768px) {
+			&:hover {
+				color: rgba(238, 127, 45, 0.75);
+			}
 		}
 	}
 	.eventFireNum {
