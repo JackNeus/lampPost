@@ -19,7 +19,17 @@
 
 
 <html>
-  <head>
+  <head>    
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118836866-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-118836866-1', {
+        'user_id': '{{ current_user.netid }}'
+      });
+    </script>
     <title>lampPost</title>
 
     <!-- Bootstrap CSS -->

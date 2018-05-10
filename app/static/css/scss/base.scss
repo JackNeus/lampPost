@@ -119,9 +119,10 @@ html, body {
 	@media screen and (min-width: 768px) {
 	 	&:hover {
 	 		color: #cc0000;
+ 		  cursor: pointer;
 	 	}
 	}
- }
+}
 
 ::placeholder {
 	color: $light-color !important;
