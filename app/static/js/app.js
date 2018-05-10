@@ -378,8 +378,8 @@ var filterEventsByTime = function(starttime, endtime) {
 	var startminute = (starttime !== "") ? parseInt(starttime.substring(3, 5)) : 0;
 	
 	// if endtime is blank, set end time to 11:59pm
-	var endhour = (endtime !== "") ? strToMilitaryTime(endtime) : 23;
-	var endminute = (endtime !== "") ? endtime.substring(3, 5) : 59;
+	var endhour = (endtime !== "") ? parseInt(strToMilitaryTime(endtime)) : 23;
+	var endminute = (endtime !== "") ? parseInt(endtime.substring(3, 5)) : 59;
 	
 	for (var i = 0; i < event_data.length; i++) {
 		var instances = event_data[i].instances;
