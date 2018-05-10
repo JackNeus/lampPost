@@ -119,24 +119,48 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
  	<div class="flex-container-col slide" id = "rightCol">
  		<div id="welcomeDiv" style="display:none">
- 			<div id = "interiorWelcomeDiv">
-	 			<h1 id = "welcomeMessage"> Welcome to lampPost! </h1>
+ 			<div class="flex-container-col align-items-center justify-content-center" id = "interiorWelcomeDiv">
+	 			<h1 class="row justify-content-center" id="welcomeMessage">
+                    <div>
+                        <img id="welcomeToText" src="../../static/graphics/welcomeToAvenir.svg">
+                    </div>
+                    <div>
+                        <img id="lampPostText" src="../../static/graphics/logoGray.svg">
+                    </div>
+                </h1>
 
-				  <div class="row">
-				    <div class="col-md-6">
-	 					<p class = "welcomeText" > Get started by:
-	 					<ul class="welcomeText">
-	 						<li> <a class="keyword"> Browsing </a> through trending events on the left! </li>
-	 						<li> <a class="keyword"> Searching </a> for events by keyword/date/location. </li>
-	 						<li> <a class="keyword"> Exporting </a> your favorites to Google Calendar. </li>
-	 						<li> <a class="keyword"> Adding </a> your own event! </li>
-	 					</ul>
-	 					</p>
-	 				</div>
-				    <div class="col-md-6 welcome-img">
-				      <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/lamppostMeme.png">
-				    </div>
-				  </div>
+                <div>
+                    <div class="row">
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-search"></i></p>
+                            <p class="bigText">Event Browser</p>
+                            <p>Browse through trending events and search for events by keyword/date/location on the left! Click <i class="fas fa-filter"></i> to reveal a set of filters that can help you refine your search.</p>
+                        </div>
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-calendar"></i></p>
+                            <p class="bigText">Calendar View</p>
+                            <p>Hit the calendar button to display events by week. Use the left and right arrows to navigate from week to week.</p>
+                        </div>
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-fire"></i></p>
+                            <p class="bigText">Fire Events</p>
+                            <p>Think the event you found is “hot”? Let others know by smashing the fire button! The more flames an upcoming event accrues, the greater its chances of reaching the trending events list!</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-share"></i></p>
+                            <p class="bigText">Export Events</p>
+                            <p>When you find an event you want to attend, click the export button next to your preferred showing of the event in order to add the event to your Google Calendar.</p>
+                        </div>
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-edit"></i></p>
+                            <p class="bigText">Add Events</p>
+                            <p>Are you looking to publicize your upcoming event? If so, visit the ‘Add Event’ page to add it to lampPost! lampPost supports multiple showings, ticket links, poster/banner upload, and even Youtube trailers!</p>
+                        </div>
+                        <img class="col textBox" src="../../static/graphics/images/lamppostMeme.png" style="height: auto">
+                    </div>
+                </div>
 	 		</div>
  		</div>
  		{% include "web/eventview.html" %}

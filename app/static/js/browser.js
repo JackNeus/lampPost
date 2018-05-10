@@ -53,6 +53,9 @@ function columnResize() {
 	var newHeight = totalHeight - navbarHeight;
 	document.getElementById("leftCol").style.height = newHeight + "px";
 	document.getElementById("rightCol").style.height = newHeight + "px";
+	if (document.getElementById("welcomeDiv") != null) {
+		document.getElementById("welcomeDiv").style.height = newHeight + "px";
+	}
 	return newHeight;
 }
 

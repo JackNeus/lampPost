@@ -216,7 +216,7 @@ html, body {
 	&.myevents {
 		padding-bottom: 2vh;
 	}
-	
+
 	.filter-button {
 		padding-left: 0rem !important;
 		padding-bottom: 0rem !important;
@@ -812,21 +812,66 @@ html, body {
   height: auto;
 }
 
+#welcomeDiv {
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
 #interiorWelcomeDiv {
-	padding-left: 5vw;
+	margin: 0vh 2vw;
+	margin-top: 1vh;
+	color: $dark-color;
 	#welcomeMessage {
-		color: $dark-color;
 		font-size: 50px;
 		text-align: center;
-		padding-top: 30px;
-		padding-bottom: 20px;
+		margin-bottom: 2vh;
+		div {
+			margin-top: 1vh;
+		}
 	}
-	.welcomeText {
-		font-size:23px;
-		.keyword {
-			font-size:25px;
-			font-weight:bold;
-			color:$primary-color;
+	.row {
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+	.textBox {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		background-color: white;
+		border-radius: 5px;
+		border: 1px solid $primary-color;
+		margin: 0vh 10px;
+		margin-bottom: 2vh;
+	    min-width: 150px;
+		@media screen and (max-width: 450px) {
+			min-width: 90%;
+		}
+	}
+	.bigText {
+		margin-bottom: 8px;
+		color: $primary-color;
+		text-align:center;
+		font-weight:bold;
+		font-size:25px;
+		max-height: 425px;
+	}
+	.welcomeIcon {
+		border-radius: 50%;
+		margin-bottom: 0px;
+		color: $med-color;
+		text-align:center;
+		font-weight:bold;
+		font-size:64px;
+
+	}
+	#lampPostText {
+		height: 60px;
+	}
+	#welcomeToText {
+		height: 41px;
+		margin-bottom: 4px;
+		@media screen and (max-width: 768px) {
+			margin-bottom: 0px;
+			margin-top: 8px;
 		}
 	}
 	@media screen and (max-width: 768px) {
