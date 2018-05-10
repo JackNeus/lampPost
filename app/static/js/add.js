@@ -77,7 +77,7 @@ $(document).ready(function(){
     INITIAL_PANE = 0;
 
 	// change the time inputs to be handled by timepicker
-	$("input[id*='Time']").timepicker({});
+	$("input[id*='Time']").timepicker({'timeFormat': 'h:i A'});
 	//$("input[id*='Time']").prop('type', 'time');
 
 	// if the form passes us a number of showings, initialize the radio button to that
