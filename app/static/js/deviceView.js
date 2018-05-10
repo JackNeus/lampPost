@@ -66,6 +66,7 @@ Event browser
 function viewMobile_Browser() {
     $("#mobileImg").show();
     $("#mobileWelcomeBox").show();
+    $("#mobileInstruction").show();
     $("#desktopImg").hide();
 
     // Add slick to the viewport
@@ -83,7 +84,7 @@ function viewDesktop_Browser() {
     $("#mobileImg").hide();
     $("#desktopImg").show();
     $("#mobileWelcomeBox").hide();
-
+    $("#mobileInstruction").hide();
 }
 
 // Handle the transition to desktop view from mobile view
