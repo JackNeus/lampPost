@@ -130,7 +130,12 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
                 </h1>
 
                 <div>
-                    <div class="row">
+                    <div class="row justify-content-center">
+                        <div class="col textBox" id="mobileWelcomeBox">
+                            <p class="welcomeIcon"><i class="fas fa-exchange-alt"></i></p>
+                            <p class="bigText">Mobile Friendly</p>
+                            <p>Swiping left and right to navigate between the panes! lampPost features full mobile integration, so you can browse events on any device.</p>
+                        </div>
                         <div class="col textBox">
                             <p class="welcomeIcon"><i class="fas fa-search"></i></p>
                             <p class="bigText">Event Browser</p>
@@ -143,11 +148,9 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
                         </div>
                         <div class="col textBox">
                             <p class="welcomeIcon"><i class="fas fa-fire"></i></p>
-                            <p class="bigText">Fire Events</p>
-                            <p>Think the event you found is “hot”? Let others know by smashing the fire button! The more flames an upcoming event accrues, the greater its chances of reaching the trending events list!</p>
+                            <p class="bigText">Hot Events</p>
+                            <p>Think the event you found is hot? Let others know by smashing the fire button! The more flames an upcoming event accrues, the greater its chances of reaching the trending events list!</p>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col textBox">
                             <p class="welcomeIcon"><i class="fas fa-share"></i></p>
                             <p class="bigText">Export Events</p>
@@ -158,10 +161,11 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
                             <p class="bigText">Add Events</p>
                             <p>Are you looking to publicize your upcoming event? If so, visit the ‘Add Event’ page to add it to lampPost! lampPost supports multiple showings, ticket links, poster/banner upload, and even Youtube trailers!</p>
                         </div>
-                        <img class="col textBox" src="../../static/graphics/images/lamppostMeme.png" style="height: auto">
                     </div>
                 </div>
 	 		</div>
+            <img id="desktopImg" src="../../static/graphics/images/explore.png" style="width: 100%;">
+            <div class="mobileImage row justify-content-center" id="mobileImg"><img id="mobileImageSrc" src="../../static/graphics/images/lamppostMeme.png" style="width: auto;"></div>
  		</div>
  		{% include "web/eventview.html" %}
 	</div>

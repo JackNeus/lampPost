@@ -64,6 +64,10 @@ Event browser
 
 // Mobile view layout that applies to browser webpages
 function viewMobile_Browser() {
+    $("#mobileImg").show();
+    $("#mobileWelcomeBox").show();
+    $("#desktopImg").hide();
+
     // Add slick to the viewport
     $("#browserView").slick({infinite: false, edgeFriction: 0.15, slide: ".slide", initialSlide: INITIAL_PANE, touchThreshold: 7});
 }
@@ -76,6 +80,10 @@ function viewToMobile_Browser() {
 
 // Desktop view layout that applies to browser webpages
 function viewDesktop_Browser() {
+    $("#mobileImg").hide();
+    $("#desktopImg").show();
+    $("#mobileWelcomeBox").hide();
+
 }
 
 // Handle the transition to desktop view from mobile view

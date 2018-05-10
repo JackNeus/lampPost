@@ -55,6 +55,7 @@ function columnResize() {
 	document.getElementById("rightCol").style.height = newHeight + "px";
 	if (document.getElementById("welcomeDiv") != null) {
 		document.getElementById("welcomeDiv").style.height = newHeight + "px";
+		document.getElementById("mobileImageSrc").style.height = (0.75*newHeight) + "px";
 	}
 	return newHeight;
 }

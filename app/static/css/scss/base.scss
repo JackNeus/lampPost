@@ -841,9 +841,24 @@ html, body {
 		border: 1px solid $primary-color;
 		margin: 0vh 10px;
 		margin-bottom: 2vh;
-	    min-width: 150px;
+	    min-width: 200px;
+		max-width: 300px;
 		@media screen and (max-width: 450px) {
-			min-width: 90%;
+			min-width: 80%;
+		}
+	}
+	.imageBox {
+		border-radius: 5px;
+		border: 1px solid $primary-color;
+		margin: 0vh 10px;
+		margin-bottom: 2vh;
+		padding: 0;
+		min-width: 200px;
+		max-width: 300px;
+		overflow-x: hidden;
+		overflow-y: hidden;
+		@media screen and (max-width: 450px) {
+			min-width: 80%;
 		}
 	}
 	.bigText {
@@ -874,10 +889,17 @@ html, body {
 			margin-top: 8px;
 		}
 	}
-	@media screen and (max-width: 768px) {
-		.welcome-img {
-			display: none;
-		}
+}
+.mobileImage {
+	background-color: $primary-color;
+	img {
+		position: relative;
+		z-index: 1000;
+		box-shadow: 0px 14px 16px 8px rgba(0, 0, 0, 0.4);
+		margin-left: auto;
+		margin-right: auto;
+		width: auto;
+		display:block;
 	}
 }
 
