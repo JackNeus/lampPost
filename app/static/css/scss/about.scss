@@ -14,6 +14,11 @@ h1 {
 	padding-bottom:1vh;
 }
 
+.row {
+	margin-left: -2vw !important;
+	margin-right: -2vw !important;
+}
+
 .message {
 	color: $dark-color;
 	text-align:center;
@@ -86,6 +91,15 @@ h1 {
 
 .teamPhoto {
     border-radius: 5px;
+	border: 1px solid $primary-color;
+}
+
+#broken {
+    border-radius: 5px;
+	border: 1px solid $primary-color;
+	display: block;
+	margin-top:2vh;
+	width: 100%;
 }
 
 #abtFoot {

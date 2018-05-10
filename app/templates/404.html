@@ -1,18 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="/static/css/404.css?v=4">
-	<div class="col404"> 
-		<h1 class="message"> 404 Error: Page Not Found </h1>
-	  	<p> We can't find the page you're looking for. You can try: </p>
+<link rel="stylesheet" type="text/css" href="/static/css/about.css?v=4">
+<div class="colAbt">
+	<h1 class="message"> 404 Error | Page Not Found </h1>
+  	<div class="col textBox" style="margin-left: 0; margin-right: 0;">
+		We can't find the page you're looking for. You can try:
 	  	<ul>
 	  		<li style="padding-bottom:0.5vh"> <a href="/login"> Logging in </a> </li>
 	  		<li> <a href="/browse"> Browsing events </a></li>
 	  	</ul>
-	  	<img class="img-fluid fit" id="welcome" src="../../static/graphics/images/broken8.jpeg" style="display: block;
-		    margin-left: auto;
-		    margin-right: auto;
-		    padding-top:5vh;
-		    width: 85%;">
 	</div>
-	
+	<img class="img-fluid fit" id="broken" src="../../static/graphics/images/broken8.jpeg">
+</div>
+
 {% endblock %}
