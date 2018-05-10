@@ -78,7 +78,13 @@ $(document).ready(function(){
 
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({'timeFormat': 'h:i A'});
-	//$("input[id*='Time']").prop('type', 'time');
+	
+	// autofills end time when start time changes
+	$("input[id*='startTimes'").on('changeTime', function() {
+		var idNum = getNum($(this).attr('id'), 'startTimes-');
+		var timeVal = $(this).val();
+		$('#endTimes-' + idNum).val(timeVal);
+	});
 
 	// if the form passes us a number of showings, initialize the radio button to that
 	// otherwise, initialize the first radio option (for number of showings) to be checked
