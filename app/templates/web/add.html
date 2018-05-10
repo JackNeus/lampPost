@@ -55,7 +55,10 @@
         				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
         			</div>
 				{% endfor %}
-				<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!</small>
+				<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!
+					<br><br>
+					If you want the time to display as "@start-time" (e.g. "@7:00pm"), set the end-time field equal to that of the start-time. This is useful when you do not know when your event will end. (You may also use it if you prefer this alternative styling)
+				</small>
 			</div>
 
 

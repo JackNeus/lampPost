@@ -7,6 +7,10 @@ label {
   font-weight: bold;
 }
 
+.form-control {
+	border: 1px solid $primary-color;
+}
+
 .req:after {
 	content: " *";
 	color:red;

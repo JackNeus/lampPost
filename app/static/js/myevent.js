@@ -39,6 +39,8 @@ $(document).ready(function(){
 	$("#event-form").hide();
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({});
+	// Setup device view handler
+	INITIAL_PANE = 0;
 	browserView()
 	heightResizeHandler();
 });
@@ -106,9 +108,8 @@ function unselectIcons() {
 // load user events
 var loadEvents = function() {
 	var userId = $("#userData").data("uid");
-
 	var callback = function(data) {
-		if (data["status"] === "Success") {
+		if (data["status"] === "Success" && data["data"].length > 0) {
 			event_data = toJavaEventData(data["data"]);
 			setupUserFavorites();
 		}
@@ -340,7 +341,7 @@ var setupUserFavorites = function() {
 	});
 };
 
-// Writes simple message to user if they have no favorites
+// Writes simple message to user if they have no events
 // TODO: Figure out if we want to show them this message, or just not show the 'Manage
 // my Events' tab at all if they have no events
 var showNoEvents = function() {
@@ -348,7 +349,8 @@ var showNoEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	currentSearches.innerHTML = `<h5>You have no events :( Go to 'Add Event' to create one!</h5>`;
+	currentSearches.innerHTML = "<div class=\"no-event align-items-center\">"
+		+ "It seems there's nothing here yet! When you next want to publicize an event, navigate to the 'Add Event' form linked above, post the event, and then your new event will show up here!</div>";
 }
 
 var toJavaEventData = function(data) {
