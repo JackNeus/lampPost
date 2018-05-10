@@ -12,6 +12,10 @@ html, body {
 h1 {
 	padding-top:3vh;
 	padding-bottom:1vh;
+	img {
+      	height: 45px;
+    	margin-bottom: 5px;
+	}
 }
 
 .row {
@@ -48,7 +52,7 @@ h1 {
 }
 
 .bigTagC {
-	margin-bottom: 0;
+	margin-bottom: 8px;
 	color: $primary-color;
 	text-align:center;
 	font-weight:bold;
