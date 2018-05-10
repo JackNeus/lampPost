@@ -12,9 +12,12 @@ html, body {
 h1 {
 	padding-top:3vh;
 	padding-bottom:1vh;
-	img {
-      	height: 45px;
-    	margin-bottom: 5px;
+	#lampPostText {
+      	height: 50px;
+	}
+	#aboutText {
+    	height: 33px;
+    	margin-bottom: 2.5px;
 	}
 }
 
@@ -135,7 +138,7 @@ h1 {
 	margin-bottom: 2vh;
     min-width: 300px;
 	@media screen and (max-width: 350px) {
-		min-width: 100%;
+		min-width: 90%;
 	}
 	a {
 		color: #2d9eee !important;
