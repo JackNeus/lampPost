@@ -99,6 +99,7 @@ h1 {
 	border: 1px solid $primary-color;
 	display: block;
 	margin-top:2vh;
+	margin-bottom:2vh;
 	width: 100%;
 }
 
@@ -131,6 +132,9 @@ h1 {
     min-width: 300px;
 	@media screen and (max-width: 350px) {
 		min-width: 100%;
+	}
+	a {
+		color: #2d9eee !important;
 	}
 }
 
