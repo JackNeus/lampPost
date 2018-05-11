@@ -119,6 +119,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
  	<div class="flex-container-col slide" id = "rightCol">
  		<div id="welcomeDiv" style="display:none">
+            <img id="desktopImg" src="../../static/graphics/images/explore.png" style="width: 100%;">
  			<div class="flex-container-col align-items-center justify-content-center" id = "interiorWelcomeDiv">
 	 			<h1 class="row justify-content-center" id="welcomeMessage">
                     <div>
@@ -128,8 +129,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
                         <img id="lampPostText" src="../../static/graphics/logoGray.svg">
                     </div>
                 </h1>
-            <div id="mobileInstruction"><h2>Swipe right to begin!<i class="fas fa-long-arrow-alt-right"></i> </h2></div>
-
+                <div id="mobileInstruction"><h2>Swipe right to begin!&nbsp<i class="fas fa-long-arrow-alt-right"></i> </h2></div>
                 <div>
                     <div class="row justify-content-center">
                         <div class="col textBox" id="mobileWelcomeBox">
@@ -152,6 +152,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
                             <p class="bigText">Hot Events</p>
                             <p>Think the event you found is hot? Let others know by smashing the fire button! The more flames an upcoming event accrues, the greater its chances of reaching the trending events list!</p>
                         </div>
+                        <div class="welcomeBreak"></div>
                         <div class="col textBox">
                             <p class="welcomeIcon"><i class="fas fa-share"></i></p>
                             <p class="bigText">Export Events</p>
@@ -165,7 +166,6 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
                     </div>
                 </div>
 	 		</div>
-            <img id="desktopImg" src="../../static/graphics/images/explore.png" style="width: 100%;">
             <div class="mobileImage row justify-content-center" id="mobileImg"><img id="mobileImageSrc" src="../../static/graphics/images/lamppostMeme.png" style="width: auto;"></div>
  		</div>
  		{% include "web/eventview.html" %}

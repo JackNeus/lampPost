@@ -767,16 +767,16 @@ html, body {
 					.resultTitle {
 						font-size: 0.9em;
 						@media screen and (max-width: 767px) {
-							font-size:0.6em;
+							font-size:0.7em;
 						}
 						line-height: 1em;
 						max-height: 3.8em;
 						overflow: hidden;
 					}
 					.resultTime {
-						font-size: 0.6em;
+						font-size: 0.7em;
 						@media screen and (max-width: 767px) {
-							font-size:0.3em;
+							font-size:0.5em;
 						}
 						line-height: 1em;
 					}
@@ -819,8 +819,11 @@ html, body {
 }
 
 #interiorWelcomeDiv {
-	margin: 0vh 2vw;
-	margin-top: 1vh;
+	background-color: $background-color;
+    position: relative;
+    z-index: 3;
+	padding: 0vh 2vw;
+	padding-top: 1vh;
 	color: $dark-color;
 	#welcomeMessage {
 		font-size: 50px;
@@ -836,7 +839,6 @@ html, body {
 	}
 	.textBox {
 		padding-top: 10px;
-		padding-bottom: 10px;
 		background-color: white;
 		border-radius: 5px;
 		border: 1px solid $primary-color;
@@ -844,8 +846,14 @@ html, body {
 		margin-bottom: 2vh;
 	    min-width: 200px;
 		max-width: 300px;
+		text-align: center;
 		@media screen and (max-width: 450px) {
 			min-width: 80%;
+		}
+	}
+	.welcomeBreak {
+		@media screen and (min-width: 1440px) and (max-width: 1820px){
+			width: 100% !important;
 		}
 	}
 	.imageBox {
@@ -902,6 +910,11 @@ html, body {
 		width: auto;
 		display:block;
 	}
+}
+
+#desktopImg {
+	position: fixed;
+	z-index: 1;
 }
 
 #welcome {
