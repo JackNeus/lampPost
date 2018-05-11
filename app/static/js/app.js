@@ -76,6 +76,7 @@ $(document).ready(function(){
 });
 
 function addTrendingResults() {
+	$("#resultCount").hide();
 	$("#trendingLabel").show();
 
 	// Switch sort to popularity.
@@ -299,6 +300,8 @@ var setupUserFavorites = function() {
 		if ($("#favorite-events-filter-btn").hasClass("selected")) {
 			event_data = getFavoritesOnly(event_data, user_fav_data);
 		}
+		
+		if (!inTrendingView() && !inCalendarView()) addResultCount(event_data.length);
 	};
 
 	var updateSearch = function() {
@@ -336,6 +339,15 @@ function clearReportForm() {
 	$('#category-2').prop('checked', false);
 	// there was not an error (this will stop the modal from popping up over and over)
 	$("#wasError").remove();
+}
+
+var inTrendingView = function() {
+	return ($("#trendingLabel").css('display') !== "none");
+};
+
+function addResultCount(num) {
+	$("#resultCount").text(num + ' Search Results');
+	$("#resultCount").show();
 }
 
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
