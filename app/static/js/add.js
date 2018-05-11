@@ -73,9 +73,6 @@ function processClick( num ) {
 
 
 $(document).ready(function(){
-	// Setup device view handler
-    INITIAL_PANE = 0;
-
 	// change the time inputs to be handled by timepicker
 	$("input[id*='Time']").timepicker({'timeFormat': 'h:i A'});
 	

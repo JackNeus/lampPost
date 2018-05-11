@@ -28,7 +28,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 <div class="container-fluid">
 <div class="flex-container-bigrow" id="browserView">
    <div class="flex-container-col slide" id="leftCol">
-   		<form class="search-container" onsubmit="return false;">
+   		<form class="search-container" id="search-container" onsubmit="return false;">
    			<div class="" id="searchRow">
 				<div class="form-group searchBoxCol" id="searchBox">
 			    		<input id="search-box" class="form-control"
@@ -39,7 +39,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				</div>
 			</div>
 			<div class="flex-row searchButtons align-items-start justify-content-between flex-wrap">
-				<div class="filter-button btn" id="filter-btn" title="Filter">
+				<div class="filter-button btn" id="filter-btn" data-toggle="tooltip" title="Show Filters">
 				  <i class="fas fa-filter"></i>
 			  	</div>
 			  	<div class="ml-auto d-flex flex-nowrap align-items-start sort-box">
@@ -62,15 +62,17 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 						<input type="text" id="datepicker" class="form-control" name="datepicker" placeholder="Start date">
 					</div>
 				</div>
-				<div id="all-events">
-					<button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
-				</div>
-          		{% if current_user.is_authenticated %}
-				<div id="favorite-events">
-					<button type="button" id="favorite-events-filter-btn" class="btn filter-btn">Favorites Only</button>
-				</div>
-				{% endif %}
+            	</div>
+            <div class="filters flex-row">
+    					<button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
 
+              		{% if current_user.is_authenticated %}
+
+    					<button type="button" id="favorite-events-filter-btn" class="btn filter-btn">Favorites Only</button>
+
+    				{% endif %}
+            </div>
+            <div class="filters flex-col" style="display:none;">
 				<div class="form-group" id="tag-filters">
         				<div  class="form-check form-check-inline">
     						<input class="form-check-input" type="checkbox" name="tags" id="tags-0" value="Music">
@@ -99,7 +101,7 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 	  				</div>
 
 			 </div>
-
+ 			<div id="trendingLabel"> Trending Events </div>
 		</form>
 
 		<!-- Fills in with both search results, and trending events. -->
@@ -116,7 +118,6 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
           </div>
 				</div>
 			</div>
-			<div id="trendingLabel"> Trending Events </div>
 			<div id="searches">
             	<div class="searchPost"></div>
         	</div>
@@ -128,25 +129,54 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 
  	<div class="flex-container-col slide" id = "rightCol">
  		<div id="welcomeDiv" style="display:none">
- 			<div id = "interiorWelcomeDiv">
-	 			<h1 id = "welcomeMessage"> Welcome to lampPost! </h1>
-
-				  <div class="row">
-				    <div class="col-md-6">
-	 					<p class = "welcomeText" > Get started by:
-	 					<ul class="welcomeText">
-	 						<li> <a class="keyword"> Browsing </a> through trending events on the left! </li>
-	 						<li> <a class="keyword"> Searching </a> for events by keyword/date/location. </li>
-	 						<li> <a class="keyword"> Exporting </a> your favorites to Google Calendar. </li>
-	 						<li> <a class="keyword"> Adding </a> your own event! </li>
-	 					</ul>
-	 					</p>
-	 				</div>
-				    <div class="col-md-6 welcome-img">
-				      <img class="img-fluid fit" id="welcome" src="../../static/graphics/images/lamppostMeme.png">
-				    </div>
-				  </div>
+            <img id="desktopImg" src="../../static/graphics/images/explore.png" style="width: 100%;">
+ 			<div class="flex-container-col align-items-center justify-content-center" id = "interiorWelcomeDiv">
+	 			<h1 class="row justify-content-center" id="welcomeMessage">
+                    <div>
+                        <img id="welcomeToText" src="../../static/graphics/welcomeToAvenir.svg">
+                    </div>
+                    <div>
+                        <img id="lampPostText" src="../../static/graphics/logoGray.svg">
+                    </div>
+                </h1>
+                <div id="mobileInstruction"><h2>Swipe right to begin!&nbsp<i class="fas fa-long-arrow-alt-right"></i> </h2></div>
+                <div>
+                    <div class="row justify-content-center">
+                        <div class="col textBox" id="mobileWelcomeBox">
+                            <p class="welcomeIcon"><i class="fas fa-exchange-alt"></i></p>
+                            <p class="bigText">Mobile Friendly</p>
+                            <p>Swiping left and right to navigate between the panes! lampPost features full mobile integration, so you can browse events on any device.</p>
+                        </div>
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-search"></i></p>
+                            <p class="bigText">Event Browser</p>
+                            <p>Browse through trending events and search for events by keyword/date/location on the left! Click <i class="fas fa-filter"></i> to reveal a set of filters that can help you refine your search.</p>
+                        </div>
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-calendar"></i></p>
+                            <p class="bigText">Calendar View</p>
+                            <p>Hit the calendar button to display events by week. Use the left and right arrows to navigate from week to week.</p>
+                        </div>
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-fire"></i></p>
+                            <p class="bigText">Hot Events</p>
+                            <p>Think the event you found is hot? Let others know by smashing the fire button! The more flames an upcoming event accrues, the greater its chances of reaching the trending events list!</p>
+                        </div>
+                        <div class="welcomeBreak"></div>
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-share"></i></p>
+                            <p class="bigText">Export Events</p>
+                            <p>When you find an event you want to attend, click the export button next to your preferred showing of the event in order to add the event to your Google Calendar.</p>
+                        </div>
+                        <div class="col textBox">
+                            <p class="welcomeIcon"><i class="fas fa-edit"></i></p>
+                            <p class="bigText">Add Events</p>
+                            <p>Are you looking to publicize your upcoming event? If so, visit the ‘Add Event’ page to add it to lampPost! lampPost supports multiple showings, ticket links, poster/banner upload, and even Youtube trailers!</p>
+                        </div>
+                    </div>
+                </div>
 	 		</div>
+            <div class="mobileImage row justify-content-center" id="mobileImg"><img id="mobileImageSrc" src="../../static/graphics/images/lamppostMeme.png" style="width: auto;"></div>
  		</div>
  		{% include "web/eventview.html" %}
 	</div>
