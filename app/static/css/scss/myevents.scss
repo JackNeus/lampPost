@@ -1,16 +1,11 @@
 $med-color: #555555;
 $primary-color: #2d9eee;
-$dark-color: #333333;
 
 .invisible {
   display: none; }
 
 label {
   font-weight: bold;
-}
-
-h1 {
-    color: $dark-color;
 }
 
 #reportBtn {
@@ -20,16 +15,6 @@ h1 {
 .req:after {
 	content: " *";
 	color:red;
- }
-
- .no-event {
-     background-color: white;
-     border-radius: 5px;
-     margin-top: 3vh;
-     margin-left: 2vw;
-     margin-right: 2vw;
-     padding: 8px;
-     border: 1px solid $primary-color;
  }
 
  .deleteBtn {

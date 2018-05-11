@@ -76,14 +76,7 @@ $(document).ready(function(){
 });
 
 function addTrendingResults() {
-	// Slide depending whether or not this is on load or search
-	if ($("#trendingLabel")[0].style.display == "none") {
-		$("#trendingLabel").slideToggle(100);
-	}
-	else {
-		$("#trendingLabel").show();
-	}
-	$("#search-container").css("padding-bottom", "0vh");
+	$("#trendingLabel").show();
 
 	// Switch sort to popularity.
 	user_sort_option = $("#searchSort").val();
@@ -139,18 +132,6 @@ var setupSearch = function() {
 
 	$('#filter-btn').click(function() {
 		$(".filters").slideToggle(200);
-		$( "#filter-btn" ).toggleClass("active");
-		// Change tooltip text
-		var hideText = "Hide Filters";
-		var showText = "Show Filters"
-		if ($("#filter-btn")[0].title != hideText) {
-			$("#filter-btn")[0].title = hideText;
-			$("#filter-btn").attr("data-original-title", hideText).parent().find("tooltip-inner").html(hideText);
-		}
-		else {
-			$("#filter-btn")[0].title = showText;
-			$("#filter-btn").attr("data-original-title", showText).parent().find("tooltip-inner").html(showText);
-		}
 	});
 
 	$('.filter-btn').click(function() {
@@ -291,11 +272,7 @@ function fetchData(query) {
 		return;
 	}
 	// when loading an actual query (length > 0), clear the ``trending events" label
-	if ($("#trendingLabel")[0].style.display == "block") {
-		$("#trendingLabel").slideToggle(100);
-	}
-	$("#search-container").css("padding-bottom", "1vh");
-
+	$("#trendingLabel").hide();
 	// restore user's sorting options
 	$("#searchSort").val(user_sort_option);
 

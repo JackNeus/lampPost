@@ -84,9 +84,9 @@ var createCalenderViewResults = function() {
 	// create html code for each search result
 	var searchResult = "";
 	searchResult += `<div class="calendar-view-row">`;
-
+	
 	var daysInWeek = 7;
-
+	
 	// figure out first date of calendar week view
 	if ($("#datepicker").val())
 		var firstDay = new Date($("#datepicker").val());
@@ -97,16 +97,16 @@ var createCalenderViewResults = function() {
 	firstDay.setMinutes(0);
 	firstDay.setSeconds(0);
 	firstDay.setMilliseconds(0);
-
+	
 	// day of week string of first day of calendar view
 	var firstDayStr = firstDay.getDay();
-
+	
 	// title the week with the month
 	createWeekTitle(firstDay);
-
+	
 	// stores number of search results
 	count = 1;
-
+	
 	// create html for each day of week, starting from firstDay
 	var currentDate = new Date(firstDay);
 	for (var i = firstDayStr; i < daysInWeek; i++) {
@@ -120,15 +120,15 @@ var createCalenderViewResults = function() {
 		count++;
 	}
 	searchResult += `</div>`;
-
+	 
 	// add html to "searches" div
   	$("#searches").append(searchResult);
-
+  	
   	// create html code for each search result
 	var count = 0;
 	for (var i = 0; i < event_data.length; i++) {
 		var instances = event_data[i].instances;
-		for (var j = 0; j < instances.length; j++) {
+		for (var j = 0; j < instances.length; j++) { 
 			var searchResult = "";
 
 			searchResult =
@@ -142,7 +142,7 @@ var createCalenderViewResults = function() {
 			+	   `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
 			+   `</div>`
 		  	+`</div>`;
-
+		  	
 		  	var startDate = new Date(instances[j].start_datetime);
 			var endDate =  new Date(instances[j].end_datetime);
 
@@ -152,36 +152,35 @@ var createCalenderViewResults = function() {
 		  	if (time_diff >= 0 && time_diff < seconds_in_week) {
 		  		$("#" + getDayOfWeek(startDate)).append(searchResult);
 		  	}
-
+		  	
 		  	// number the given ids to match the event number so that elements can
 		  	// be differentiated
 		  	numberIds(["smallSearchResult", "resultFireNum", "resultFireBtn"], i);
 		  	numberIds(["eventInstances"], count);
-
+			
 			// add in all the event instances (dates and times) to the "eventInstances" div
 		  	var timeElement = getEventTimeElement(startDate, endDate);
 		  	$("#eventInstances" + (count+1)).append(timeElement);
 		  	count++;
 	  	}
 	  }
-	  calendarViewResizeDates();
 };
 
 // create html for date column
 var createDayColumn = function(currentDate, i, count) {
 	var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday",
 				"Thursday", "Friday", "Saturday"];
-
-	var dateCol = "";
-	dateCol +=
+			
+	var dateCol = "";	
+	dateCol += 
 	`<div class="flex-container-col dayCol">`
-	+  `<div class="dayTitle" id="dayTitle` + count + `">`
+	+  `<div class="dayTitle" id="dayTitle` + count + `">` 
 	+ 	`<div class="dayName">` + daysOfWeek[i].substring(0, 3) + `</div>`
 	+ 	`<div class="date" id="date` + count + `">` + makeDayMonthYearString(currentDate, false) + `</div>`
 	+   `</div>`
 	+  `<div class="dayResults" id="` + daysOfWeek[i] + `"></div>`
 	+ `</div>`;
-
+	
 	return dateCol;
 };
 
@@ -208,23 +207,23 @@ var addEventInstances = function(i) {
 // create title for week based on month name and year if different from current year
 var createWeekTitle = function(date) {
 	var months = ["Jan", "Feb", "Mar", "Apr", "May",
-			  "Jun", "Jul", "Aug", "Sep",
+			  "Jun", "Jul", "Aug", "Sep", 
 			  "Oct", "Nov", "Dec"]
 	var monthIndex = date.getMonth();
 	var title = months[monthIndex];
 	var endOfWeek = new Date(date);
 	endOfWeek.setDate(date.getDate() + 6);
 	var today = new Date();
-
+	
 	if (date.getFullYear() != today.getFullYear())
 		title += " " + date.getFullYear();
-
+		
 	if (endOfWeek.getMonth() !== date.getMonth())
 		title += " " + date.getDate() + " - " + months[endOfWeek.getMonth()] + " " + endOfWeek.getDate();
-	else
-		title += " " + date.getDate() + "-" +
+	else 
+		title += " " + date.getDate() + "-" + 
 		 	   endOfWeek.getDate();
-
+	
 	$("#weekTitle").text(title);
 };
 
@@ -235,14 +234,14 @@ var getEventTimeElement = function(startDate, endDate) {
 			class: "resultTime"
 		}).append(timeStr);
 	return timeElement;
-
+	
 };
 
 // return the day of the week of the a given instance
 var getDayOfWeek = function(startDate) {
 	var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday",
 				"Thursday", "Friday", "Saturday"];
-
+	
 	var dayIndex = startDate.getDay();
 	return daysOfWeek[dayIndex];
 };

@@ -1,41 +1,19 @@
-$background-color: #eeeeee;
 $primary-color: #2d9eee;
-$dark-color: #333333;
-$med-color: #555555;
-$light-color: #999999;
-
-
-html, body {
-	color: $dark-color;
-}
 
 h1 {
 	padding-top:3vh;
 	padding-bottom:1vh;
-	#lampPostText {
-      	height: 50px;
-	}
-	#aboutText {
-    	height: 33px;
-    	margin-bottom: 2.5px;
-	}
-}
-
-.row {
-	margin-left: -2vw !important;
-	margin-right: -2vw !important;
 }
 
 .message {
-	color: $dark-color;
 	text-align:center;
 	font-size:40px;
 }
 
 @media screen and (min-width: 900px) {
   .colAbt {
-    min-width: 900px;
-    margin: auto;
+    min-width: 900px; 
+    margin: auto; 
     width: 74vw;
   }
 }
@@ -47,15 +25,10 @@ h1 {
 }
 
 #probSol {
-	padding-bottom: 1vh;
-}
-
-#feedback {
-	border: 1px solid $primary-color;
+	padding-bottom: 2vh;
 }
 
 .bigTagC {
-	margin-bottom: 8px;
 	color: $primary-color;
 	text-align:center;
 	font-weight:bold;
@@ -63,10 +36,9 @@ h1 {
 }
 
 .bigTag {
-	color: $dark-color;
+	color: $primary-color;
 	font-weight:bold;
 	font-size:25px;
-	margin-bottom: 0;
 }
 
 #photoRow {
@@ -88,62 +60,17 @@ h1 {
    text-align:center;
 }
 
-#theFeedback {
-   align-items:center;
-   margin-bottom: 2vh;
-   margin-left:auto;
-   margin-right:auto;
-   text-align:center;
-}
-
-.teamPhoto {
-    border-radius: 5px;
-	border: 1px solid $primary-color;
-}
-
-#broken {
-    border-radius: 5px;
-	border: 1px solid $primary-color;
-	display: block;
-	margin-top:2vh;
-	margin-bottom:2vh;
-	width: 100%;
-}
-
 #abtFoot {
-	border: 1px solid $primary-color;
-	margin-top: 2vh;
-	margin-bottom: 2vh;
-	padding: 5px;
+	padding-top: 2vh;
 	font-style: italic;
-	font-size:14px;
-	background-color: white;
-	border-radius: 5px;
-	p {
-		margin-bottom: 0;
-	}
+	font-size:15px;
 }
 
 #abtBlankFooter {
-	padding-top:5vh;
+	padding-top:5vh;	
 }
 
-.textBox {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background-color: white;
-	border-radius: 5px;
-	border: 1px solid $primary-color;
-	margin: 0vh 2vw;
-	margin-bottom: 2vh;
-    min-width: 300px;
-	@media screen and (max-width: 350px) {
-		min-width: 90%;
-	}
-	a {
-		color: #2d9eee !important;
-	}
-}
+
 
 html {
 	height: 100%;
@@ -153,3 +80,4 @@ body {
   height: 100%;
 
 }
+

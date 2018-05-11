@@ -121,7 +121,7 @@ function selectSearchResult(eventNum) {
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
 			selected_event.animate({"margin-right": '12px'});
 		}
-		event_to_select.animate({"margin-right": '0vw'});
+		event_to_select.animate({"margin-right": '0vh'});
 	}
 }
 
@@ -181,7 +181,7 @@ function populateEventViewPanel(eventNum) {
 	for (var i = 0; i < instances.length; i++) {
 		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" "
 		+ getGoogleCalLink(eventNum-1, i) + "\" data-toggle=\"tooltip\" title=\"Add to Google Calendar\">"+
-		"<i class=\"fa fa-share-square\"></i> </a>");
+		"<i class=\"fa fa-calendar-alt\"></i> </a>");
 		// Location
 		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
@@ -268,7 +268,7 @@ function renderImage(url){
             var eventViewWidth = document.getElementById("event-view-info").clientWidth;
 			var scaledWidth = eventViewHeight * ratio;
 			var proportion = scaledWidth / eventViewWidth;
-			if (2.25 <= ratio) {
+			if (2.5 <= ratio) {
 				// We put thin and wide images above the description
 				document.getElementById("bannerImage").innerHTML =
 				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
@@ -280,14 +280,7 @@ function renderImage(url){
 			} else {
 				// Otherwise, we put the image below the description
 				document.getElementById("otherImage").innerHTML =
-				"<img id=\"otherImageSrc\" class=\"img-fluid\" src=\""+renderedImg.src+"\">";
-                if ((scaledWidth * 3.0/4.0) < eventViewWidth) {
-                    document.getElementById("otherImageSrc").style.height = (eventViewHeight * 3.0/4.0) + "px";
-                }
-                else {
-                    document.getElementById("otherImageSrc").style.width = "100%";
-                    document.getElementById("otherImageSrc").style.height = "auto";
-                }
+				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
 			}
 		}
 	}

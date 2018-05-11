@@ -1,0 +1,27 @@
+h1 {
+  text-align: center;
+  padding-top: 4vh;
+  padding-bottom: 1vh; }
+
+.message {
+  font-size: 60px; }
+
+@media screen and (min-width: 900px) {
+  .col404 {
+    min-width: 900px;
+    margin: auto;
+    width: 55vw; } }
+@media screen and (max-width: 850px) {
+  .message {
+    font-size: 40px; } }
+.col404 {
+  padding-left: 4vw;
+  padding-right: 4vw; }
+
+html {
+  height: 100%; }
+
+body {
+  height: 100%; }
+
+/*# sourceMappingURL=404.css.map */

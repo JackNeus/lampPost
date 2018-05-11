@@ -59,7 +59,6 @@ var handleNextWeekClick = function() {
 	$(".nextWeekBtn").click(function() {
 		calWeek++;
 		showSearchResults();
-		calendarViewResizeDates();
 	})
 };
 
@@ -69,33 +68,5 @@ var handlePreviousWeekClick = function() {
 	$(".previousWeekBtn").click(function() {
 		calWeek--;
 		showSearchResults();
-		calendarViewResizeDates();
 	})
 };
-
-function calendarViewResizeDates() {
-	var maxWidth = 0.0
-	var days = document.getElementsByClassName("dayName");
-	// Find max
-	for (var i = 0; i < 7; i++) {
-		if (days[i].clientWidth > maxWidth) {
-			maxWidth = days[i].clientWidth;
-		}
-	}
-	// Set max
-	for (var i = 0; i < 7; i++) {
-		days[i].style.width = maxWidth + "px";
-	}
-	maxWidth = 0.0
-	var dates = document.getElementsByClassName("date");
-	// Find max
-	for (var i = 0; i < 7; i++) {
-		if (dates[i].clientWidth > maxWidth) {
-			maxWidth = dates[i].clientWidth;
-		}
-	}
-	// Set max
-	for (var i = 0; i < 7; i++) {
-		dates[i].style.width = maxWidth + "px";
-	}
-}

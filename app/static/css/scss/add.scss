@@ -7,20 +7,17 @@ label {
   font-weight: bold;
 }
 
-.form-control {
-	border: 1px solid $primary-color;
-}
-
 .req:after {
 	content: " *";
 	color:red;
  }
 
- @media screen and (min-width: 1100px) {
-  .eventFormView {
+ @media screen and (min-width: 900px) {
+  .eventFormView { 
     margin: auto;
   }
   .addFormView {
+    min-width: 900px;
     width: 60vw;
   }
   .editFormView {
@@ -28,7 +25,7 @@ label {
   }
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 620px) {
   .fullWidthMobileI {
     width:100%;
   }

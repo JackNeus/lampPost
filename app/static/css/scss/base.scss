@@ -22,25 +22,16 @@ html, body {
 	.h1, h1 {
 		font-family: $font-heavy;
 		font-size:36px;
-		@media screen and (max-width: 767px) {
-			font-size:32px;
-		}
 	}
 
 	.h2, h2 {
 		font-family: $font-heavy;
-		font-size:24px;
-		@media screen and (max-width: 767px) {
-			font-size:20px;
-		}
+		font-size:26px;
 	}
 
 	.h3, h3 {
 		font-family: $font-med;
 		font-size:20px;
-		@media screen and (max-width: 767px) {
-			font-size:16px;
-		}
 	}
 
 	// Other Style
@@ -57,9 +48,6 @@ html, body {
 		height: 60px;
 		padding-right: .5rem;
 		padding-left: .5rem;
-		@media screen and (max-width: 767px) {
-			height: 40px;
-		}
 	}
 	.navbar-expand-md {
 		background-color: $primary-color;
@@ -116,13 +104,11 @@ html, body {
 
 .danger-button {
 	color: $light-color;
-	@media screen and (min-width: 768px) {
-	 	&:hover {
-	 		color: #cc0000;
- 		  cursor: pointer;
-	 	}
-	}
-}
+ 	&:hover {
+ 		color: #cc0000;
+ 		cursor: pointer;
+ 	}
+ }
 
 ::placeholder {
 	color: $light-color !important;
@@ -143,6 +129,7 @@ html, body {
 	min-height: 75px;
 	border-top: 5px solid $med-color;
 	position: relative;
+	padding-top: 5px;
 
 	.centered{
 		margin: auto;
@@ -159,17 +146,12 @@ html, body {
 }
 
 .search-container {
-	position: relative;
-	z-index: 1000;
-	box-shadow: 0px 8px 20px 2px rgba(0, 0, 0, 0.3);
+	padding-bottom: 2vh;
 }
 
 #searchBox {
 	padding: 0;
-	margin-top: 2vh;
-	margin-bottom: 2vh;
-	margin-left: 1vw;
-	margin-right: 0;
+	margin: 2vh 2vh;
 	margin-bottom: 0;
 	max-width: 100%;
 	width: 100%;
@@ -200,18 +182,15 @@ html, body {
 #searchRow {
  	min-height: 4.25vh;
  	display: flex;
+ 	margin-right: 2vh;
  	flex-wrap: nowrap;
  	align-items: stretch;
 }
 
-.my-events-container {
-	position: relative;
-	z-index: 1000;
-	box-shadow: 0px 8px 20px 2px rgba(0, 0, 0, 0.3);
-}
 .searchButtons {
 	display: flex;
 	flex-wrap: nowrap;
+	margin-right: 2vh;
 	font-size: 14px;
 
 	&.myevents {
@@ -219,35 +198,20 @@ html, body {
 	}
 
 	.filter-button {
-		padding-left: 0rem !important;
-		padding-bottom: 0rem !important;
-		padding-top: .5rem !important;
+		padding-left: 0;
 		font-size: 1.25em;
-		margin-left: 1vw;
-		&:hover {
-	 		color: $primary-color;
-	 	}
-		&.active {
-			color: $primary-color !important;
-		}
+		margin-left: 2vh;
 	}
 
 	.sort-box {
 		padding-top: 1vh;
 
 		.sort-direction {
-			color: $dark-color;
 			cursor: pointer;
-			padding-left: 8px;
-			padding-right: 10px;
+			padding-left: 5px;
 			font-size: 1.55em;
 			display: inline-block;
 			float: left;
-			.sort-direction-btn {
-				&:hover {
-			 		color: $primary-color;
-			 	}
-			}
 		}
 
 		.select-style {
@@ -256,8 +220,7 @@ html, body {
 		    min-width: 175px;
 		    border-radius: 3px;
 		    overflow: hidden;
-		    background: #fafafa url("../graphics/sort-down.svg") no-repeat 95% 50%;
-			background-size: 12px 16px;
+		    background: #fafafa url("../graphics/sort-down.png") no-repeat 95% 50%;
 		    float: left;
 		}
 
@@ -278,12 +241,7 @@ html, body {
 }
 
 .calendar-view-button {
-	padding-left: 8px;
-	padding-right: 12px;
 	margin-top: 2vh;
-	&:hover {
-		color: $primary-color;
-	}
 }
 
 .filters {
@@ -292,7 +250,7 @@ html, body {
 	font-size: 14px !important;
 	background-color: #dedede;
 	border-radius: 5px;
-	padding: 8px;
+	padding: 5px;
 
 	div {
 		display: block;
@@ -308,13 +266,16 @@ html, body {
 		#datepicker, .timepicker {
 			float: left;
 			font-size: 14px !important;
-			width: 90px;
+			width: 100px;
 			padding: 3px 8px !important;
 			border-color: #80bdff;
 		}
+		.timepicker {
+			width: 95px;
+		}
 		
 		p {
-			margin: 0.25vh 0.25vh;
+			margin: 0vh 0.25vh;
 		}
 		.timeFilter {
 			display: flex;
@@ -324,7 +285,6 @@ html, body {
 	}
 
 	.filter-btn {
-		margin: 2px;
 		font-size: 14px !important;
 		border-color: #80bdff;
 		background-color: white;
@@ -341,9 +301,7 @@ html, body {
 	}
 
 	#tag-filters {
-		margin-bottom: 2px !important;
 		.form-check {
-			margin: 2px;
 			display: inline-block;
 		}
 	}
@@ -381,7 +339,7 @@ html, body {
 		.resultTime {
 			color: white;
 		}
-		margin: 0vw;
+		margin: 0vh;
 		border-radius: 0px;
 		background-color: $primary-color;
 		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
@@ -415,16 +373,12 @@ html, body {
 			padding: 0;
 			&.selected {
 				color: $orange;
-				@media screen and (min-width: 768px) {
-					&:hover {
-						color: $orange;
-					}
+				&:hover {
+					color: $orange;
 				}
 			}
-			@media screen and (min-width: 768px) {
-				&:hover {
-					color: rgba(238, 127, 45, 0.75);
-				}
+			&:hover {
+				color: rgba(238, 127, 45, 0.75);
 			}
 		}
 		.resultFireNum {
@@ -435,6 +389,8 @@ html, body {
 	}
 }
 
+// We got rid of this temporarily
+// TODO: Delete?
 .searches-resizer {
 	max-height: 88vh;
 	height: 88vh;
@@ -459,12 +415,11 @@ html, body {
 		padding: 10px;
     	background-color: $background-color;
 		// Shadow
-		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.3), 0px 4px 20px 0 rgba(0, 0, 0, 0.2);
+		box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
 		position: relative;
     	z-index: 5;
 	}
 	.event-view-title {
-		padding-right: 5px;
 	    color: $dark-color;
 		margin: 0;
 		line-height: normal;
@@ -474,9 +429,6 @@ html, body {
 		margin: 0;
 		line-height: 30px;
 		font-size: 20px;
-		@media screen and (max-width: 767px) {
-			font-size:16px;
-		}
 	}
 	.event-view-subtitle {
 	    color: $med-color;
@@ -492,16 +444,12 @@ html, body {
 		margin-left:2vh;
 		&.selected {
 			color: $orange;
-			@media screen and (min-width: 768px) {
-				&:hover {
-					color: $orange;
-				}
+			&:hover {
+				color: $orange;
 			}
 		}
-		@media screen and (min-width: 768px) {
-			&:hover {
-				color: rgba(238, 127, 45, 0.75);
-			}
+		&:hover {
+			color: rgba(238, 127, 45, 0.75);
 		}
 	}
 	.eventFireNum {
@@ -510,29 +458,16 @@ html, body {
 		font-weight: bold;
 	}
 	.event-view-info {
-		background-color: white;
 	    width: 100%;
+	    background-color: white;
 	    overflow-y: scroll;
 	    overflow-x: hidden;
 		.event-wrapper {
-			padding-top: 2vh;
 			display: block !important;
 		}
 	}
 	img {
 		width: 100%;
-	}
-	.otherImage {
-		background-color: $primary-color;
-		img {
-			position: relative;
-			z-index: 1000;
-			box-shadow: 0px 14px 16px 8px rgba(0, 0, 0, 0.4);
-			margin-left: auto;
-			margin-right: auto;
-			width: auto;
-			display:block;
-		}
 	}
 	.posterImage {
 		img {
@@ -540,28 +475,17 @@ html, body {
 		}
 	}
 	.eventSection {
-		padding-top: 1vh;
 		color: $med-color;
 		margin: 0;
 		border-bottom: 2px solid $primary-color;
 	}
 	.event-view-data {
-		width: 100%;
 		font-size:18px;
-		@media screen and (max-width: 767px) {
-			font-size:14px;
-		}
 		color: $light-color;
 		line-height: normal;
 		margin: 0px;
 	}
-	.event-view-box {
-		padding-top: 0 !important;
-		padding-bottom: 1vh !important;
-		width: 100%;
-	}
 	.calendar-btn {
-		font-size: 18px;
 		padding-right: 10px;
 		text-decoration: none !important;
 		color: $light-color;
@@ -621,7 +545,6 @@ html, body {
   width: 100%;
   text-align:center;
   height: 6.4vh;
-  z-index: 100000;
 
   .flashedMessage {
     padding-top: 1.5vh;
@@ -698,9 +621,9 @@ html, body {
 		flex-direction: row;
 		width: 100%;
 		margin-right: 0vh;
+		border-left: 2px solid $dark-color;
+		border-right: 2px solid $dark-color;
 		border-bottom: 2px solid $dark-color;
-		position: relative;
-		z-index: 1000;
 
 		.weekTitle {
 			font-family: $font-med;
@@ -713,16 +636,10 @@ html, body {
 
 		.previousWeekBtn {
 			margin-left: 4vw;
-			&:hover {
-		 		color: white;
-		 	}
 		}
 
 		.nextWeekBtn {
 			margin-right: 4vw;
-			&:hover {
-		 		color: white;
-		 	}
 		}
 	}
 }
@@ -732,12 +649,12 @@ html, body {
 	flex-wrap: nowrap;
 	flex-direction: row;
 	width: 100%;
-	border-right: 2px solid $dark-color;
+	border-left: 2px solid $dark-color;
 
 	.dayCol {
 		max-width: 14.2857%;
 		min-width: 14.2857%;
-		border-left: 2px solid $dark-color;
+		border-right: 2px solid $dark-color;
 		border-bottom: 2px solid $dark-color;
 		min-height: 55vh;
 		height: auto;
@@ -775,18 +692,12 @@ html, body {
 					max-height: 5.6em;
 					.resultTitle {
 						font-size: 0.9em;
-						@media screen and (max-width: 767px) {
-							font-size:0.7em;
-						}
 						line-height: 1em;
 						max-height: 3.8em;
 						overflow: hidden;
 					}
 					.resultTime {
-						font-size: 0.7em;
-						@media screen and (max-width: 767px) {
-							font-size:0.5em;
-						}
+						font-size: 0.6em;
 						line-height: 1em;
 					}
 					.resultFireBtn {
@@ -822,108 +733,27 @@ html, body {
   height: auto;
 }
 
-#welcomeDiv {
-	overflow-x: hidden;
-	overflow-y: scroll;
-}
-
 #interiorWelcomeDiv {
-	background-color: $background-color;
-    position: relative;
-    z-index: 3;
-	padding: 0vh 2vw;
-	padding-top: 1vh;
-	color: $dark-color;
+	padding-left: 5vw;
 	#welcomeMessage {
 		font-size: 50px;
 		text-align: center;
-		margin-bottom: 2vh;
-		div {
-			margin-top: 1vh;
+		padding-top: 30px;
+		padding-bottom: 20px;
+	}
+	.welcomeText {
+		font-size:23px;
+		.keyword {
+			font-size:25px;
+			font-weight:bold;
+			color:$primary-color;
 		}
 	}
-	.row {
-		margin-left: 0 !important;
-		margin-right: 0 !important;
-	}
-	.textBox {
-		padding-top: 10px;
-		background-color: white;
-		border-radius: 5px;
-		border: 1px solid $primary-color;
-		margin: 0vh 10px;
-		margin-bottom: 2vh;
-	    min-width: 200px;
-		max-width: 300px;
-		text-align: center;
-		@media screen and (max-width: 450px) {
-			min-width: 80%;
+	@media screen and (max-width: 768px) {
+		.welcome-img {
+			display: none;
 		}
 	}
-	.welcomeBreak {
-		@media screen and (min-width: 1440px) and (max-width: 1820px){
-			width: 100% !important;
-		}
-	}
-	.imageBox {
-		border-radius: 5px;
-		border: 1px solid $primary-color;
-		margin: 0vh 10px;
-		margin-bottom: 2vh;
-		padding: 0;
-		min-width: 200px;
-		max-width: 300px;
-		overflow-x: hidden;
-		overflow-y: hidden;
-		@media screen and (max-width: 450px) {
-			min-width: 80%;
-		}
-	}
-	.bigText {
-		margin-bottom: 8px;
-		color: $primary-color;
-		text-align:center;
-		font-weight:bold;
-		font-size:25px;
-		max-height: 425px;
-	}
-	.welcomeIcon {
-		border-radius: 50%;
-		margin-bottom: 0px;
-		color: $med-color;
-		text-align:center;
-		font-weight:bold;
-		font-size:64px;
-
-	}
-	#lampPostText {
-		height: 60px;
-	}
-	#welcomeToText {
-		height: 41px;
-		margin-bottom: 4px;
-		@media screen and (max-width: 768px) {
-			margin-bottom: 0px;
-			margin-top: 8px;
-		}
-	}
-}
-.mobileImage {
-	background-color: $primary-color;
-	img {
-		position: relative;
-		z-index: 1000;
-		box-shadow: 0px 14px 16px 8px rgba(0, 0, 0, 0.4);
-		margin-left: auto;
-		margin-right: auto;
-		width: auto;
-		display:block;
-	}
-}
-
-#desktopImg {
-	position: fixed;
-	z-index: 1;
 }
 
 #welcome {
@@ -934,11 +764,9 @@ html, body {
 }
 
 #trendingLabel {
-	margin-top: 1vh;
 	text-align:center;
 	font-size:24px;
-	background-color: $primary-color;
-	color: white;
+	color:darkorange;
 	font-weight:bold;
 	display: none;
 }
@@ -948,7 +776,7 @@ html, body {
 }
 
 .badge-border {
-	padding-left: 8px;
+	padding-left: 14px;
 	padding-top: 13px;
 }
 
@@ -993,10 +821,4 @@ html, body {
     height:100%;
     width:100%;
     position:absolute;
-}
-
-@media screen and (max-width: 768px) {
-	.tooltip {
-		display: none;
-	}
 }

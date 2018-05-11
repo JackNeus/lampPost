@@ -25,15 +25,14 @@ setBaseUrl("{{ config.BASE_URL }}");
   	<div class="flex-container-bigrow" id="browserView">
 
 	   <div class="flex-container-col slide" id = "leftCol">
-         <div class="my-events-container">
-    	   	<h1 class="my-events-head" style="text-align:center; padding-top:1vh">My Events</h1>
 
-    		<div class="searchButtons justify-content-center align-items-center myevents">
-    			<div class="d-flex flex-nowrap sort-box">
-    				{% include "web/sortbox.html" %}
-    			</div>
-    		</div>
-        </div>
+	   	<h1 style="text-align:center; padding-top:1vh">My Events</h1>
+
+		<div class="searchButtons justify-content-center align-items-center myevents">
+			<div class="d-flex flex-nowrap sort-box">
+				{% include "web/sortbox.html" %}
+			</div>
+		</div>
 
 		<!-- Fills in with "search" results from events.json -->
 		<div class="flex-container-scroll searches-wrapper" id="searches"></div>
@@ -165,7 +164,7 @@ setBaseUrl("{{ config.BASE_URL }}");
 							<small id="tagHelp" class="form-text text-muted"> Optionally, add tags to your event. </small>
 						</div>
 
-						<button type="submit" class="btn btn-primary submitAddButton">Submit!</button>
+						<button type="submit" class="btn btn-primary">Submit!</button>
 
 						<div class="errors" style="text-align:center; color:red">
 							{% for i in errors %}

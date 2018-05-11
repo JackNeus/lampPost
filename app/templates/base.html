@@ -45,9 +45,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no, user-scalable=0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-
-    <!-- Favicon -->
-    <link rel="icon" href="../../static/graphics/logoSquare.png" />
+    <link rel="icon" href="https://www.cs.princeton.edu/favicon" />
 
     <!-- Time picker and date picker -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -72,7 +70,7 @@
     <script src="/static/js/displayEvent.js?v=5"></script>
     <script src="/static/js/createEventHtml.js?v=4"></script>
     <script src="/static/js/handleFavorites.js?v=4"></script>
-    <script src="/static/js/browser.js?v=5"></script>
+    <script src="/static/js/browser.js?v=5"></script>    
 
     {% block header %}{% endblock %}
   </head>
@@ -102,9 +100,6 @@
               <a class="nav-link" href="/myevents">My Events</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/about">About</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="/logout"> Logout ({{current_user.netid}}) </a>
           </li>
           {% else %}
@@ -112,6 +107,9 @@
              <a class="nav-link" href="/login"> Login </a>
           </li>
           {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
 
         </ul>
       </div>
