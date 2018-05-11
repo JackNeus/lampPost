@@ -353,11 +353,10 @@ html, body {
 	flex-grow: 1000;
  	min-height: 10vh;
  	border-right: 4px solid $primary-color;
-	// border-left: 4px solid $primary-color;
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
 	cursor: pointer;
-	margin: 0vw 2vw 0vw 0vw;
+	margin: 0vw 12px 0vw 0vw;
  	overflow: hidden;
  	background: white;
 	color: $dark-color;
