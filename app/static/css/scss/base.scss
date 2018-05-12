@@ -245,6 +245,7 @@ html, body {
 }
 
 .filters {
+	display: none;
 	margin: 1vh 2vh;
 	font-size: 14px !important;
 	background-color: #dedede;
@@ -253,7 +254,6 @@ html, body {
 
 	div {
 		display: block;
-		//display: inline-block;
 		margin-top: 2px;
 	}
 
@@ -263,21 +263,34 @@ html, body {
 			margin-right: 5px;
 			float: left;
 		}
-		#datepicker {
+		#datepicker, .timepicker {
 			float: left;
 			font-size: 14px !important;
-			width: 100px;
+			width: 95px;
 			padding: 3px 8px !important;
 			border-color: #80bdff;
+		}
+		.timepicker {
+			width: 95px;
+		}
+		
+		p {
+			margin: 0.25vh 0.25vh;
+		}
+		.timeFilter {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
 		}
 	}
 
 	.filter-btn {
 		font-size: 14px !important;
-		//border-color: #ced4da;
 		border-color: #80bdff;
 		background-color: white;
 		padding: 3px 8px !important;
+		width: 150px;
+		margin-right: 2vh;
 		&:hover {
 			border-color: $primary-color;
 		}
@@ -298,11 +311,10 @@ html, body {
 	flex-grow: 1000;
  	min-height: 10vh;
  	border-right: 4px solid $primary-color;
-	// border-left: 4px solid $primary-color;
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
 	cursor: pointer;
-	margin: 0vh 2vh 0vh 0vh;
+	margin: 0vw 12px 0vw 0vw;
  	overflow: hidden;
  	background: white;
 	color: $dark-color;
