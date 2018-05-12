@@ -119,9 +119,9 @@ function selectSearchResult(eventNum) {
 
 		// Close previously selected event, if it's not the one we want to open.
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
-			selected_event.animate({"margin-right": '2vh'});
+			selected_event.animate({"margin-right": '2vw'});
 		}
-		event_to_select.animate({"margin-right": '0vh'});
+		event_to_select.animate({"margin-right": '0vw'});
 	}
 }
 
@@ -181,7 +181,7 @@ function populateEventViewPanel(eventNum) {
 	for (var i = 0; i < instances.length; i++) {
 		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" "
 		+ getGoogleCalLink(eventNum-1, i) + "\" data-toggle=\"tooltip\" title=\"Add to Google Calendar\">"+
-		"<i class=\"fa fa-calendar-alt\"></i> </a>");
+		"<i class=\"fa fa-share-square\"></i> </a>");
 		// Location
 		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
 		// Time
@@ -268,7 +268,7 @@ function renderImage(url){
             var eventViewWidth = document.getElementById("event-view-info").clientWidth;
 			var scaledWidth = eventViewHeight * ratio;
 			var proportion = scaledWidth / eventViewWidth;
-			if (2.5 <= ratio) {
+			if (2.25 <= ratio) {
 				// We put thin and wide images above the description
 				document.getElementById("bannerImage").innerHTML =
 				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
@@ -280,7 +280,14 @@ function renderImage(url){
 			} else {
 				// Otherwise, we put the image below the description
 				document.getElementById("otherImage").innerHTML =
-				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
+				"<img id=\"otherImageSrc\" class=\"img-fluid\" src=\""+renderedImg.src+"\">";
+                if ((scaledWidth * 3.0/4.0) < eventViewWidth) {
+                    document.getElementById("otherImageSrc").style.height = (eventViewHeight * 3.0/4.0) + "px";
+                }
+                else {
+                    document.getElementById("otherImageSrc").style.width = "100%";
+                    document.getElementById("otherImageSrc").style.height = "auto";
+                }
 			}
 		}
 	}
