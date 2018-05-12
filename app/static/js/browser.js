@@ -56,22 +56,8 @@ function columnResize() {
 	// format welcome message
 	if (document.getElementById("welcomeDiv") != null) {
 		document.getElementById("welcomeDiv").style.height = newHeight + "px";
-		document.getElementById("interiorWelcomeDiv").style.marginBottom = "0px";
-		document.getElementById("interiorWelcomeDiv").style.paddingBottom = "0px";
 		if ($(window).width() < WIDTH_THRESHOLD) {
 			document.getElementById("mobileImageSrc").style.height = (0.75*newHeight) + "px";
-		}
-		else {
-			document.getElementById("desktopImg").style.paddingTop = "0px";
-			document.getElementById("desktopImg").style.width = document.getElementById("rightCol").clientWidth + "px";
-			var imgH = document.getElementById("desktopImg").clientHeight;
-			document.getElementById("desktopImg").style.paddingTop = (newHeight - imgH) + "px";
-			if (newHeight > document.getElementById("interiorWelcomeDiv").clientHeight) {
-				console.log(newHeight);
-				console.log(document.getElementById("interiorWelcomeDiv").clientHeight)
-				document.getElementById("interiorWelcomeDiv").style.paddingBottom = (newHeight - document.getElementById("interiorWelcomeDiv").clientHeight) + "px";
-			}
-			document.getElementById("interiorWelcomeDiv").style.marginBottom = imgH + "px";
 		}
 	}
 	return newHeight;

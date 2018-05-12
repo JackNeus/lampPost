@@ -820,8 +820,6 @@ html, body {
 
 #interiorWelcomeDiv {
 	background-color: $background-color;
-    position: relative;
-    z-index: 3;
 	padding: 0vh 2vw;
 	padding-top: 1vh;
 	color: $dark-color;
@@ -845,10 +843,12 @@ html, body {
 		margin: 0vh 10px;
 		margin-bottom: 2vh;
 	    min-width: 200px;
-		max-width: 300px;
 		text-align: center;
 		@media screen and (max-width: 450px) {
 			min-width: 80%;
+		}
+		@media screen and (min-width: 1820px){
+			max-width: 300px;
 		}
 	}
 	.welcomeBreak {
@@ -898,6 +898,17 @@ html, body {
 			margin-top: 8px;
 		}
 	}
+	.desktop-col {
+		width:100%;
+		margin: 0vh 10px;
+	}
+	#desktopImg {
+		margin-bottom: 2vh;
+		border: 1px solid $primary-color;
+		border-radius: 5px;
+		width:100%;
+	}
+
 }
 .mobileImage {
     margin-bottom: 2vh;
@@ -910,12 +921,6 @@ html, body {
 		display:block;
 	}
 }
-
-#desktopImg {
-	position: fixed;
-	z-index: 1;
-}
-
 #welcome {
 	display: block;
 	margin-left: auto;
