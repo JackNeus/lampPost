@@ -24,6 +24,11 @@ var calWeek = 0;
 // Keep track of whether the view mode just changed (to/from calendar view)
 var change_view_mode;
 
+// Keep track of whether or not trending has just loaded
+// if false, trending has just loaded so the default sort is by popularity
+// if true, trending has been loaded so the user can choose their sort
+var change_sort = false;
+
 // Keep track of the user's settings.
 // This is used in relation to the trending events display.
 // When we display trending, we record what sort
@@ -82,8 +87,11 @@ function addTrendingResults() {
 	$("#search-container").css("padding-bottom", "0vh");
 
 	// Switch sort to popularity.
-	user_sort_option = $("#searchSort").val();
-	$("#searchSort").val("Popularity");
+	if (!change_sort) {
+		// Record user's previous sort option.
+		user_sort_option = $("#searchSort").val();
+		$("#searchSort").val("Popularity");
+	}
 
 	search_requests_in_progress += 1;
 	$("#loading-spinner").removeClass("hidden");
@@ -187,6 +195,8 @@ var setupSearch = function() {
 
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
+		if (inTrendingView()) change_sort = true;
+		user_sort_option = $("#searchSort").val();
 		trigger_search(true);
 	});
 
