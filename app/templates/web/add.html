@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<script src="/static/js/add.js?v=4"> </script>
+<script src="/static/js/add.js?v=6"> </script>
 
 <!-- Hacky, but I can't think of another way. -->
 
@@ -15,7 +15,7 @@
 	<a id="numRowsEventForm" style="display:none"> {{ numRows }} </a>
 {% endif %}
 
-	
+
 	<div class="eventFormView addFormView" id = "formCol">
 		<h2 style="text-align:center"> Add your event by filling out the fields below. </h2>
 
@@ -43,7 +43,7 @@
         				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
         			</div>
 				{% endfor %}
-				<small id="fileHelp" class="form-text text-muted"> If you indicate the audience as "Princeton community", the event will only be visible to CAS-authenticated users. Otherwise, the general public can view it. </small>
+				<small id="fileHelp" class="form-text text-muted"> If you indicate the audience as "Princeton University", the event will only be visible to CAS-authenticated users. Otherwise, the general public can view it. </small>
 			</div>
 
 
@@ -55,7 +55,9 @@
         				{{ subfield.label(style="font-weight:normal", class="form-check-label") }}
         			</div>
 				{% endfor %}
-				<small id="fileHelp" class="form-text text-muted"> Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!</small>
+				<small id="fileHelp" class="form-text text-muted">
+					Most events will have only one showing. If, however, a performance is being offered multiple times, fill out location/time details for each showing!
+				</small>
 			</div>
 
 
@@ -84,11 +86,14 @@
 					</div>
     			</div>
 			{% endfor %}
+			<small id="fileHelp" class="form-text text-muted" style="margin-bottom: 1rem;">
+				If you are unsure of your event's end-time, set the end-time field equal to that of the start-time. The time will display as "@start-time" (e.g. "@7:00pm").
+			</small>
 
 			<div class="form-group">
 				{{ form.poster.label }}
 				{{ form.poster(class="form-control-file") }}
-				<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended.</small>
+				<small id="fileHelp" class="form-text text-muted"> Including a poster is optional, but strongly recommended. Posters and banners (very long or very tall, but not square) work best.</small>
 			</div>
 
 			<div class="form-group">
@@ -108,7 +113,7 @@
 						{% endif %}
 						<label class="form-check-label" for="inlineCheckbox{{loop.index-1}}"> <span class="badge badge-primary" id="{{key}}Tag"> {{key}} </span> </label>
         			</div>
-        			
+
 				{% endfor %}
 				<small id="tagHelp" class="form-text text-muted"> Optionally, add tags to your event. </small>
 			</div>

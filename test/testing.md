@@ -3,6 +3,9 @@ Testing LampPost is semi-automatic.
 Currently, the tests are not quite unit tests. They are dependent on one another, and the order in which they are executed matters. 
 This should probably be redone when our app becomes massively successful and is being rolled out nationwide.
 
+## Installation
+All the files you need are in the repository, though you'll need to install the program ```mongod``` on your machine. https://docs.mongodb.com/manual/installation/ might be helpful.
+
 ## Files
 ```test.sh``` sets up a local MongoDB instance and starts LampPost with the proper testing configuration file.
 
@@ -18,3 +21,12 @@ To test LampPost, run the following from the main directory:
 ./test/test.sh (in one window)
 python3 test/test.py (in a second window)
 ```
+## Adding Tests
+To add tests to ```tests.py```, simply create a function for each test, and add the function name(s) to the ```tests``` array found at the bottom of ```tests.py```. 
+
+If possible, please use ```make_test``` or ```make_test_multi``` to create your tests. These functions automatically handle setup and teardown and will ensure that the database remains clean.
+
+## Tips
+If tests are passing on one run but not on the next, try restarting ```test.sh```. If older tests fail, they don't properly clean up the database.
+
+When ```test.sh``` is starting up, make sure you see text like ```child process started successfully, parent exiting```. This means that the local mongod server was successfully started, which is necessary for the tests to run.

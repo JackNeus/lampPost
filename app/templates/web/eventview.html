@@ -24,31 +24,31 @@
     </div>
     <div class="d-flex flex-row align-items-start">
         <div class="event-view-info" id="event-view-info">
-            <div class="flex-container-col event-wrapper">
+            <div class="flex-container-col event-wrapper" id="eventWrapper">
                 <div id="bannerImage"></div>
                 <div class="flex-container-col">
-                    <div class="d-inline-flex p-2">
+                    <div class="d-inline-flex p-2 event-view-box">
                         <h2 class="eventSection">When / Where</h2>
                     </div>
-                    <div class="d-inline-flex p-2">
+                    <div class="d-inline-flex p-2 event-view-box">
                         <p class="event-view-data" id="eventSetting"></p>
             	    </div>
                 </div>
                 <div>
-                    <div class="d-inline-flex p-2">
+                    <div class="d-inline-flex p-2 event-view-box">
                         <h2 class="eventSection">Description</h2>
                     </div>
-                    <div class="d-inline-flex p-2">
+                    <div class="d-inline-flex p-2 event-view-box">
                         <p class="event-view-data" id="eventDescription"></p>
             	    </div>
                 </div>
                 <div id="eventVideo">
-                    <div class="d-inline-flex p-2">
+                    <div class="d-inline-flex p-2 event-view-box">
                         <h2 class="eventSection">Trailer</h2>
                     </div>
                     <div class="video-responsive" id="eventVideo-data"></div>
                 </div>
-                <div id="otherImage"></div>
+                <div class="otherImage" id="otherImage"></div>
             </div>
         </div>
         <div class="posterImage" id="posterImage"></div>
@@ -56,5 +56,5 @@
 </div>
 
 {% if wasError %}
- <a style="display:none" id="wasError"> </a>
+ <a class="align-it style="display:none" id="wasError"> </a>
 {% endif %}
