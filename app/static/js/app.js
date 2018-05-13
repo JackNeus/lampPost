@@ -75,14 +75,9 @@ $(document).ready(function(){
 	heightResizeHandler()
 });
 
-function addTrendingResults() {
-	// Slide depending whether or not this is on load or search
-	if ($("#trendingLabel")[0].style.display == "none") {
-		$("#trendingLabel").slideToggle(100);
-	}
-	else {
-		$("#trendingLabel").show();
-	}
+function addTrendingResults() {	
+	$("#trendingLabel").show();
+
 	$("#search-container").css("padding-bottom", "0vh");
 
 	// Switch sort to popularity.
@@ -266,10 +261,8 @@ function fetchData(query) {
 		addTrendingResults();
 		return;
 	}
-	// when loading an actual query (length > 0), clear the ``trending events" label
-	if ($("#trendingLabel")[0].style.display == "block") {
-		$("#trendingLabel").slideToggle(100);
-	}
+
+	$("#trendingLabel").hide();
 	$("#search-container").css("padding-bottom", "1vh");
 
 	// restore user's sorting options
