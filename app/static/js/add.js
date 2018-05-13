@@ -74,8 +74,12 @@ function processClick( num ) {
 
 $(document).ready(function(){
 	// change the time inputs to be handled by timepicker
-	$("input[id*='Time']").timepicker({});
-	//$("input[id*='Time']").prop('type', 'time');
+	// autofills end time when start time changes
+	$("input[id*='Time']").timepicker({ timeFormat: 'hh:mm p', interval: 30, scrollbar: true, change: function(time) {
+		var idNum = getNum($(this).attr('id'), 'startTimes-');
+		var timeVal = $(this).val();
+		$('#endTimes-' + idNum).val(timeVal);} 
+	});
 
 	// if the form passes us a number of showings, initialize the radio button to that
 	// otherwise, initialize the first radio option (for number of showings) to be checked

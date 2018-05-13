@@ -76,13 +76,9 @@ $(document).ready(function(){
 });
 
 function addTrendingResults() {
-	// Slide depending whether or not this is on load or search
-	if ($("#trendingLabel")[0].style.display == "none") {
-		$("#trendingLabel").slideToggle(100);
-	}
-	else {
-		$("#trendingLabel").show();
-	}
+	$("#resultCount").hide();
+	$("#trendingLabel").show();
+
 	$("#search-container").css("padding-bottom", "0vh");
 
 	// Switch sort to popularity.
@@ -128,6 +124,14 @@ var setupSearch = function() {
 	$(function() {
 		$('#datepicker').datepicker();
 	});
+	// timepickers
+	$(function() {
+		$('#startTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
+	});
+	
+	$(function() {
+		$('#endTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
+	});
 
 	$('#filter-btn').click(function() {
 		$(".filters").slideToggle(200);
@@ -147,6 +151,15 @@ var setupSearch = function() {
 
 	$('.filter-btn').click(function() {
 		$(this).toggleClass('selected');
+	});
+	
+	// Time filter toggles
+	$('#timeFilterToggle').click(function() {
+		$(".timeFilter").slideToggle(200);
+	});
+	
+	$('#dateFilterToggle').click(function() {
+		$(".dateFilter").slideToggle(200);
 	});
 
 	// All events filter
@@ -174,7 +187,7 @@ var setupSearch = function() {
 
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
-		showSearchResults(false);
+		trigger_search(true);
 	});
 
 	handleCalendarView();
@@ -182,7 +195,7 @@ var setupSearch = function() {
 	$(".sort-direction-btn").click(function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
-		showSearchResults();
+		trigger_search(true);
 	});
 };
 
@@ -266,10 +279,8 @@ function fetchData(query) {
 		addTrendingResults();
 		return;
 	}
-	// when loading an actual query (length > 0), clear the ``trending events" label
-	if ($("#trendingLabel")[0].style.display == "block") {
-		$("#trendingLabel").slideToggle(100);
-	}
+
+	$("#trendingLabel").hide();
 	$("#search-container").css("padding-bottom", "1vh");
 
 	// restore user's sorting options
@@ -322,6 +333,14 @@ var setupUserFavorites = function() {
 		if ($("#favorite-events-filter-btn").hasClass("selected")) {
 			event_data = getFavoritesOnly(event_data, user_fav_data);
 		}
+		
+		// Time filters
+		if ($("#startTimepicker").val() || $("#endTimePicker").val()) {
+			event_data = filterEventsByTime($("#startTimepicker").val(), 
+					 			  $("#endTimepicker").val());
+		}
+
+		if (!inTrendingView() && !inCalendarView()) addResultCount(event_data.length);
 	};
 
 	var updateSearch = function() {
@@ -359,6 +378,50 @@ function clearReportForm() {
 	$('#category-2').prop('checked', false);
 	// there was not an error (this will stop the modal from popping up over and over)
 	$("#wasError").remove();
+}
+
+// return all events in event_data that start at or after starttime and end at or before endtime
+// starttime and endtime are in format hh:mm AM/PM
+var filterEventsByTime = function(starttime, endtime) {
+	var filteredEvents = [];
+	
+	// if starttime is blank, set start time to midnight
+	var starthour = (starttime !== "") ? parseInt(strToMilitaryTime(starttime)) : 0;
+	var startminute = (starttime !== "") ? parseInt(starttime.substring(3, 5)) : 0;
+	
+	// if endtime is blank, set end time to 11:59pm
+	var endhour = (endtime !== "") ? parseInt(strToMilitaryTime(endtime)) : 23;
+	var endminute = (endtime !== "") ? parseInt(endtime.substring(3, 5)) : 59;
+	
+	for (var i = 0; i < event_data.length; i++) {
+		var instances = event_data[i].instances;
+		for (var j = 0; j < instances.length; j++) {
+			var eventStart = new Date(instances[j].start_datetime);
+			var eventStarthour = parseInt(eventStart.getHours());
+			var eventStartminute = parseInt(eventStart.getMinutes());
+			
+			var eventEnd = new Date(instances[j].end_datetime);
+			var eventEndhour = parseInt(eventEnd.getHours());
+			var eventEndminute = parseInt(eventEnd.getMinutes());
+			
+			// return events between starttime and endtime
+			if ((compareTimes(starthour, startminute, eventStarthour, eventStartminute) >= 0) &&
+			    (compareTimes(endhour, endminute, eventEndhour, eventEndminute) <= 0)) {
+				filteredEvents.push(event_data[i]);
+				break; // make sure events aren't duplicated
+			}
+		}
+	}
+	return filteredEvents;
+};
+
+var inTrendingView = function() {
+	return ($("#trendingLabel").css('display') !== "none");
+};
+
+function addResultCount(num) {
+	$("#resultCount").text(num + ' Search Results');
+	$("#resultCount").show();
 }
 
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
@@ -409,6 +472,25 @@ function getFavoritesOnly(event_data, favorite_data) {
 	}
 	return favorite_events;
 }
+
+// compares two times h1:m1 and h2:m2
+function compareTimes(h1, m1, h2, m2) {
+	if (h1 == h2) return m2 - m1;
+	return h2 - h1;
+}
+
+// find military time hour for standard time string in format hh:mm AM/PM
+function strToMilitaryTime(time) {
+	var am_pm = time.substring(time.length - 2, time.length);
+	var hour = parseInt(time.substring(0, 2));
+	if (am_pm === "AM") {
+		if (hour === 12) return 0; // case for 12:00 AM
+		return hour;
+	}
+	if (hour < 12) return hour + 12;
+	return hour; // case for 12:00 PM
+}
+
 
 // converts java date string into python date string (mm/dd/yy to yy-mm-dd)
 function java2py_date( date_java ){

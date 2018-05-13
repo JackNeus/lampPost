@@ -51,25 +51,13 @@ var checkSort = function() {
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
 		if (event_data != []) {
-			showMyEvents();
-			handleDeleteMyEvent();
-			handleEditMyEvent();
-			var urlParamEventId = checkEventUrlParameter();
-			if (urlParamEventId) {
-				updateUrlParamEventView(urlParamEventId);
-			}
+			loadEvents();
 		}
 	});
 	$(".sort-direction-btn").click(function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
-		showMyEvents();
-		handleDeleteMyEvent();
-		handleEditMyEvent();
-		var urlParamEventId = checkEventUrlParameter();
-		if (urlParamEventId) {
-			updateUrlParamEventView(urlParamEventId);
-		}
+		loadEvents();
 	});
 };
 
@@ -325,6 +313,8 @@ var setupUserFavorites = function() {
 			user_fav_data = toJavaEventData(data["data"]);
 		else
 			user_fav_data = [];
+	};
+	var updateSearch = function() {
 		showMyEvents();
 		handleDeleteMyEvent();
 		handleEditMyEvent();
@@ -340,7 +330,8 @@ var setupUserFavorites = function() {
 			headers: {
 				'Authorization': ('Token ' + $.cookie('api_token'))
 			},
-			success: callback
+			success: callback,
+			complete: updateSearch
 	});
 };
 
