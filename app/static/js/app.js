@@ -169,7 +169,7 @@ var setupSearch = function() {
 
 	// allow user to sort by date or popularity
 	$("#searchSort").change(function() {
-		showSearchResults(false);
+		trigger_search(true);
 	});
 
 	handleCalendarView();
@@ -177,7 +177,7 @@ var setupSearch = function() {
 	$(".sort-direction-btn").click(function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
-		showSearchResults();
+		trigger_search(true);
 	});
 };
 
