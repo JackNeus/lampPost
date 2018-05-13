@@ -426,6 +426,10 @@ var filterEventsByTime = function(starttime, endtime) {
 	return filteredEvents;
 };
 
+var inTrendingView = function() {
+	return document.inTrending;
+}
+
 function addResultCount(num) {
 	var string;
 	if (num != 1) string = num + " Search Results";
