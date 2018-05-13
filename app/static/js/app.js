@@ -69,6 +69,9 @@ $(document).ready(function(){
 	// add the trending events
 	if (!checkCalendarParameter() && !$("#search-box").val())
  		addTrendingResults();
+	else {
+		document.inTrending = false;
+	}
 
 	if (!hideWelcome)
 		$("#welcomeDiv").show();
@@ -76,10 +79,8 @@ $(document).ready(function(){
 });
 
 function addTrendingResults() {
-	$("#resultCount").hide();
-	$("#trendingLabel").show();
-
-	$("#search-container").css("padding-bottom", "0vh");
+	document.getElementById("browserMsg").innerHTML = "Trending Events";
+	document.inTrending = true;
 
 	// Switch sort to popularity.
 	user_sort_option = $("#searchSort").val();
@@ -128,7 +129,7 @@ var setupSearch = function() {
 	$(function() {
 		$('#startTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
 	});
-	
+
 	$(function() {
 		$('#endTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
 	});
@@ -152,12 +153,12 @@ var setupSearch = function() {
 	$('.filter-btn').click(function() {
 		$(this).toggleClass('selected');
 	});
-	
+
 	// Time filter toggles
 	$('#timeFilterToggle').click(function() {
 		$(".timeFilter").slideToggle(200);
 	});
-	
+
 	$('#dateFilterToggle').click(function() {
 		$(".dateFilter").slideToggle(200);
 	});
@@ -279,9 +280,9 @@ function fetchData(query) {
 		addTrendingResults();
 		return;
 	}
-
-	$("#trendingLabel").hide();
-	$("#search-container").css("padding-bottom", "1vh");
+	else {
+		document.inTrending = false;
+	}
 
 	// restore user's sorting options
 	$("#searchSort").val(user_sort_option);
@@ -333,14 +334,14 @@ var setupUserFavorites = function() {
 		if ($("#favorite-events-filter-btn").hasClass("selected")) {
 			event_data = getFavoritesOnly(event_data, user_fav_data);
 		}
-		
+
 		// Time filters
 		if ($("#startTimepicker").val() || $("#endTimePicker").val()) {
-			event_data = filterEventsByTime($("#startTimepicker").val(), 
+			event_data = filterEventsByTime($("#startTimepicker").val(),
 					 			  $("#endTimepicker").val());
 		}
 
-		if (!inTrendingView() && !inCalendarView()) addResultCount(event_data.length);
+		if (!document.inTrending && !inCalendarView()) addResultCount(event_data.length);
 	};
 
 	var updateSearch = function() {
@@ -384,26 +385,26 @@ function clearReportForm() {
 // starttime and endtime are in format hh:mm AM/PM
 var filterEventsByTime = function(starttime, endtime) {
 	var filteredEvents = [];
-	
+
 	// if starttime is blank, set start time to midnight
 	var starthour = (starttime !== "") ? parseInt(strToMilitaryTime(starttime)) : 0;
 	var startminute = (starttime !== "") ? parseInt(starttime.substring(3, 5)) : 0;
-	
+
 	// if endtime is blank, set end time to 11:59pm
 	var endhour = (endtime !== "") ? parseInt(strToMilitaryTime(endtime)) : 23;
 	var endminute = (endtime !== "") ? parseInt(endtime.substring(3, 5)) : 59;
-	
+
 	for (var i = 0; i < event_data.length; i++) {
 		var instances = event_data[i].instances;
 		for (var j = 0; j < instances.length; j++) {
 			var eventStart = new Date(instances[j].start_datetime);
 			var eventStarthour = parseInt(eventStart.getHours());
 			var eventStartminute = parseInt(eventStart.getMinutes());
-			
+
 			var eventEnd = new Date(instances[j].end_datetime);
 			var eventEndhour = parseInt(eventEnd.getHours());
 			var eventEndminute = parseInt(eventEnd.getMinutes());
-			
+
 			// return events between starttime and endtime
 			if ((compareTimes(starthour, startminute, eventStarthour, eventStartminute) >= 0) &&
 			    (compareTimes(endhour, endminute, eventEndhour, eventEndminute) <= 0)) {
@@ -415,13 +416,12 @@ var filterEventsByTime = function(starttime, endtime) {
 	return filteredEvents;
 };
 
-var inTrendingView = function() {
-	return ($("#trendingLabel").css('display') !== "none");
-};
-
 function addResultCount(num) {
-	$("#resultCount").text(num + ' Search Results');
-	$("#resultCount").show();
+	var string;
+	if (num > 1) string = num + " Search Results";
+	else if (num == 1) string = num + " Search Result";
+	else string = "No Search Results &ensp; :(";
+	document.getElementById("browserMsg").innerHTML = string;
 }
 
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/
