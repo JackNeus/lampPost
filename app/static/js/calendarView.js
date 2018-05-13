@@ -24,6 +24,7 @@ var toggleCalendarView = function() {
 	$(".sort-direction").toggle();
 	$(".sort-box").toggle();
 	$(".calendarBtns").toggle();
+	$("#resultCount").hide();
 
 	// make sure to update event view and recheck event url paramater
 	$("#event-view").hide();
