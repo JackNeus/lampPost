@@ -312,13 +312,16 @@ html, body {
 			padding: 3px 8px !important;
 			border-color: #80bdff;
 		}
+		select.timepicker-select {
+			background-color: blue;
+		}
 		p {
 			margin: 0.25vh 0.25vh;
 		}
 		.timeFilter {
 			display: flex;
 			flex-direction: row;
-			flew-wrap: wrap;
+			flex-wrap: wrap;
 		}
 	}
 

@@ -130,11 +130,11 @@ var setupSearch = function() {
 	});
 	// timepickers
 	$(function() {
-		$('#startTimepicker').timepicker({ 'timeFormat': 'h:i A', 'step': 60});
+		$('#startTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
 	});
 	
 	$(function() {
-		$('#endTimepicker').timepicker({ 'timeFormat': 'h:i A', 'step': 60});
+		$('#endTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
 	});
 
 	$('#filter-btn').click(function() {
@@ -164,14 +164,6 @@ var setupSearch = function() {
 	
 	$('#dateFilterToggle').click(function() {
 		$(".dateFilter").slideToggle(200);
-	});
-	
-	// Time filters actions
-	$("#startTimepicker").on('changeTime', function() {
-		trigger_search(true);
-	});
-	$("#endTimepicker").on('changeTime', function() {
-		trigger_search(true);
 	});
 
 	// All events filter
