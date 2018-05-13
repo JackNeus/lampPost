@@ -305,12 +305,20 @@ html, body {
 			margin-right: 5px;
 			float: left;
 		}
-		#datepicker {
+		#datepicker, .timepicker {
 			float: left;
 			font-size: 14px !important;
-			width: 100px;
+			width: 95px;
 			padding: 3px 8px !important;
 			border-color: #80bdff;
+		}
+		p {
+			margin: 0.25vh 0.25vh;
+		}
+		.timeFilter {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
 		}
 	}
 
@@ -321,6 +329,8 @@ html, body {
 		border-color: #80bdff;
 		background-color: white;
 		padding: 3px 8px !important;
+		margin-right: 2vh;
+		width: 150px;
 		&:hover {
 			border-color: $primary-color;
 		}
@@ -347,7 +357,7 @@ html, body {
 	border-top: 2px solid $primary-color;
 	border-bottom: 2px solid $primary-color;
 	cursor: pointer;
-	margin: 0vw 2vw 0vw 0vw;
+	margin: 0vw 12px 0vw 0vw;
  	overflow: hidden;
  	background: white;
 	color: $dark-color;

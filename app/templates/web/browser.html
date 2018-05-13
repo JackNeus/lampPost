@@ -12,6 +12,11 @@
 <script>
 setBaseUrl("{{ config.BASE_URL }}");
 </script>
+<style>
+.ui-corner-all {
+	font-size: 0.85em;
+}
+</style>
 
 {% if data %}
 <script>
@@ -47,11 +52,21 @@ $("#global-debug-msg").text("Page initialized with mock data. Search box will re
 				</div>
 			</div>
 
-			<div class="filters flex-col" style="display:none;">
-				<div class="date-filter datetime d-flex flex-row flex-nowrap align-items-center justify-content-left">
-					<span for="datepicker">Search from date: </span>
-					<input type="text" id="datepicker" class="form-control" name="datepicker">
+		<div class="filters flex-col" style="display:none;">
+			<div class="date-filter datetime d-flex flex-row flex-wrap align-items-center">
+				<button class="btn filter-btn" id="timeFilterToggle" type="button">Search by time</button>
+				<div class="timeFilter" id="timeFilter" style="display:none;">
+					<input type="text" id="startTimepicker" placeholder="Start time" class="timepicker form-control"  name="timepicker">
+					<p>to</p>
+					<input type="text" id="endTimepicker" class="timepicker form-control" placeholder="End time" name="timepicker">
 				</div>
+			</div>
+			<div class="date-filter datetime d-flex flex-row flex-wrap align-items-center">
+				<button class="btn filter-btn" id="dateFilterToggle" type="button">Search from date</button>
+				<div class="dateFilter" id="timeFilter" style="display:none;">
+					<input type="text" id="datepicker" class="form-control" name="datepicker" placeholder="Start date">
+				</div>
+			</div>
             </div>
             <div class="filters flex-row" style="display:none;">
     					<button type="button" id="all-events-filter-btn" class="btn filter-btn">Show All Events (*)</button>
