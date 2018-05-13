@@ -88,6 +88,8 @@ function addTrendingResults() {
 
 	// Switch sort to popularity.
 	if (!change_sort) {
+		// Record user's previous sort option.
+		user_sort_option = $("#searchSort").val();
 		$("#searchSort").val("Popularity");
 	}
 
