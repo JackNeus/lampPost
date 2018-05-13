@@ -938,6 +938,14 @@ html, body {
 	display: none;
 }
 
+.resultCount {
+	display: none;
+	text-align: left;
+	font-weight: bold;
+	margin-left: 2vh;
+	color: $dark-color;
+}
+
 .badge-primary {
     font-size:15px;
 }
