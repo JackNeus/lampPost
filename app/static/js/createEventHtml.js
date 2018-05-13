@@ -147,11 +147,18 @@ var createCalenderViewResults = function() {
 			var endDate =  new Date(instances[j].end_datetime);
 
 		  	// add the created html to the correct day of week element in myevent.html
-		  	var seconds_in_week = 7*24*3600;
+			var seconds_in_day = 24*3600;
+			var seconds_in_week = 7*seconds_in_day;
+
 		  	var time_diff = Date.timeBetween(firstDay, startDate, 'seconds');
-		  	if (time_diff >= 0 && time_diff < seconds_in_week) {
-		  		$("#" + getDayOfWeek(startDate)).append(searchResult);
-		  	}
+			var time_range =  Date.timeBetween(startDate, endDate, 'seconds');
+			var counter = 0;
+			while (time_range > 0 && time_diff >= 0 && time_diff < seconds_in_week) {
+			  	$("#" + getDayFromIndex((startDate.getDay() + counter) % 7)).append(searchResult);
+			  	time_range -= seconds_in_day;
+				time_diff += seconds_in_day;
+				counter += 1;
+			}
 
 		  	// number the given ids to match the event number so that elements can
 		  	// be differentiated
@@ -238,11 +245,13 @@ var getEventTimeElement = function(startDate, endDate) {
 
 };
 
-// return the day of the week of the a given instance
-var getDayOfWeek = function(startDate) {
+var getDayFromIndex = function(index) {
 	var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday",
 				"Thursday", "Friday", "Saturday"];
+	return daysOfWeek[index];
+};
 
-	var dayIndex = startDate.getDay();
-	return daysOfWeek[dayIndex];
+// return the day of the week of the a given instance
+var getDayOfWeek = function(startDate) {
+	return getDayFromIndex(startDate.getDay());
 };
