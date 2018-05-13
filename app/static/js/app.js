@@ -418,9 +418,8 @@ var filterEventsByTime = function(starttime, endtime) {
 
 function addResultCount(num) {
 	var string;
-	if (num > 1) string = num + " Search Results";
-	else if (num == 1) string = num + " Search Result";
-	else string = "No Search Results &ensp; :(";
+	if (num != 1) string = num + " Search Results";
+	else string = num + " Search Result";
 	document.getElementById("browserMsg").innerHTML = string;
 }
 
