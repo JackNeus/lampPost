@@ -150,7 +150,7 @@ var createCalenderViewResults = function() {
 		  	var seconds_in_week = 7*24*3600;
 		  	var time_diff = Date.timeBetween(firstDay, startDate, 'seconds');
 		  	if (time_diff >= 0 && time_diff < seconds_in_week) {
-		  		$("#" + getDayOfWeek(startDate)).append(searchResult);
+		  		$("#" + getDayOfWeekStr(startDate)).append(searchResult);
 		  	}
 
 		  	// number the given ids to match the event number so that elements can
@@ -236,13 +236,4 @@ var getEventTimeElement = function(startDate, endDate) {
 		}).append(timeStr);
 	return timeElement;
 
-};
-
-// return the day of the week of the a given instance
-var getDayOfWeek = function(startDate) {
-	var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday",
-				"Thursday", "Friday", "Saturday"];
-
-	var dayIndex = startDate.getDay();
-	return daysOfWeek[dayIndex];
 };

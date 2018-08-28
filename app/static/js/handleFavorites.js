@@ -5,7 +5,7 @@ var handleFireBtnClick = function () {
 		
 		// check if this is the result fire button or the event view button
 		if ($(this).hasClass("resultFireBtn")) 
-			eventNum = getNum($(this).attr("id"), "resultFireBtn");
+			eventNum = getEventNumberFromID($(this).attr("id"), "resultFireBtn");
 		else 
 			eventNum = event_data.indexOf(selected_event) + 1;
 		

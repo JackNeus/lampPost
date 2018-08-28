@@ -83,49 +83,7 @@ $(document).ready(function(){
 	heightResizeHandler()
 });
 
-function addTrendingResults() {
-	document.getElementById("browserMsg").innerHTML = "Trending Events";
-	document.inTrending = true;
-
-	// Switch sort to popularity.
-	if (!change_sort) {
-		// Record user's previous sort option.
-		user_sort_option = $("#searchSort").val();
-		$("#searchSort").val("Popularity");
-	}
-
-	search_requests_in_progress += 1;
-	$("#loading-spinner").removeClass("hidden");
-
-	var success_callback = function(data){
-	    if (data["status"] === "Success") {
-	    	// updating this is enough
-	    	// other code automatically makes a call to showSearchResults()
-			event_data = toJavaEventData(data["data"]);
-			// apply tag filters
-			event_data = filterByTag(event_data, getSelectedTagFilters());
-		}
-		else {
-			event_data = [];
-		}
-		setupUserFavorites();
-	};
-	var cleanup_callback = function() {
-		search_requests_in_progress -= 1;
-		if (search_requests_in_progress == 0) {
-			$("#loading-spinner").addClass("hidden");
-		}
-	}
-	$.ajax({
-		url: base_url + '/api/event/trending',
-		dataType: 'json',
-		headers: {
-			'Authorization': ('Token ' + $.cookie('api_token'))
-		},
-		success: success_callback,
-		complete: cleanup_callback
-	});
-}
+/*------------------------------- SEARCH -------------------------------------*/
 
 // Sets up sort and filter functionality for search box
 var setupSearch = function() {
@@ -216,6 +174,58 @@ var setupSearch = function() {
 	});
 };
 
+/*------------------------------- TRENDING -----------------------------------*/
+
+function addTrendingResults() {
+	document.getElementById("browserMsg").innerHTML = "Trending Events";
+	document.inTrending = true;
+
+	// Switch sort to popularity.
+	if (!change_sort) {
+		// Record user's previous sort option.
+		user_sort_option = $("#searchSort").val();
+		$("#searchSort").val("Popularity");
+	}
+
+	search_requests_in_progress += 1;
+	$("#loading-spinner").removeClass("hidden");
+
+	var success_callback = function(data){
+	    if (data["status"] === "Success") {
+	    	// updating this is enough
+	    	// other code automatically makes a call to showSearchResults()
+			event_data = toJavaEventData(data["data"]);
+			// apply tag filters
+			event_data = filterByTag(event_data, getSelectedTagFilters());
+		}
+		else {
+			event_data = [];
+		}
+		setupUserFavorites();
+	};
+	var cleanup_callback = function() {
+		search_requests_in_progress -= 1;
+		if (search_requests_in_progress == 0) {
+			$("#loading-spinner").addClass("hidden");
+		}
+	}
+	$.ajax({
+		url: base_url + '/api/event/trending',
+		dataType: 'json',
+		headers: {
+			'Authorization': ('Token ' + $.cookie('api_token'))
+		},
+		success: success_callback,
+		complete: cleanup_callback
+	});
+}
+
+var inTrendingView = function() {
+	return document.inTrending;
+}
+
+/*--------------------------- DATA RETRIEVAL ---------------------------------*/
+
 // searches for events immediately based on search box and datepicker values
 var trigger_search = function(force) {
 	if (typeof(force) === "undefined") force = false;
@@ -230,11 +240,11 @@ var trigger_search = function(force) {
 
 	// default search for calendar view: all events since one year ago
 	if (inCalendarView() && !$("#search-box").val()) {
-		var query = "*/" + java2py_date(getDaysAgo(365));
+		var query = "*/" + java2py_date(daysAgoToDate(365));
 	}
 	else if ($("#search-box").val()) {
 		if (inCalendarView())
-			var query = $("#search-box").val() + "/" + java2py_date(getDaysAgo(365));
+			var query = $("#search-box").val() + "/" + java2py_date(daysAgoToDate(365));
 		else if ($("#datepicker").val())
 			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
 		else
@@ -316,7 +326,7 @@ var setupUserFavorites = function() {
 
 		// Favorites filter button
 		if ($("#favorite-events-filter-btn").hasClass("selected")) {
-			event_data = getFavoritesOnly(event_data, user_fav_data);
+			event_data = filterByFavorites(event_data, user_fav_data);
 		}
 
 		// Time filters
@@ -348,6 +358,8 @@ var setupUserFavorites = function() {
 	}
 }
 
+/* -------------------------------- DISPLAY ----------------------------------*/
+
 function clearReportForm() {
 	// clear the elements
 	$("#description").val("");
@@ -358,45 +370,6 @@ function clearReportForm() {
 	$("#wasError").remove();
 }
 
-// return all events in event_data that start at or after starttime and end at or before endtime
-// starttime and endtime are in format hh:mm AM/PM
-var filterEventsByTime = function(starttime, endtime) {
-	var filteredEvents = [];
-
-	// if starttime is blank, set start time to midnight
-	var starthour = (starttime !== "") ? parseInt(strToMilitaryTime(starttime)) : 0;
-	var startminute = (starttime !== "") ? parseInt(starttime.substring(3, 5)) : 0;
-
-	// if endtime is blank, set end time to 11:59pm
-	var endhour = (endtime !== "") ? parseInt(strToMilitaryTime(endtime)) : 23;
-	var endminute = (endtime !== "") ? parseInt(endtime.substring(3, 5)) : 59;
-
-	for (var i = 0; i < event_data.length; i++) {
-		var instances = event_data[i].instances;
-		for (var j = 0; j < instances.length; j++) {
-			var eventStart = new Date(instances[j].start_datetime);
-			var eventStarthour = parseInt(eventStart.getHours());
-			var eventStartminute = parseInt(eventStart.getMinutes());
-
-			var eventEnd = new Date(instances[j].end_datetime);
-			var eventEndhour = parseInt(eventEnd.getHours());
-			var eventEndminute = parseInt(eventEnd.getMinutes());
-
-			// return events between starttime and endtime
-			if ((compareTimes(starthour, startminute, eventStarthour, eventStartminute) >= 0) &&
-			    (compareTimes(endhour, endminute, eventEndhour, eventEndminute) <= 0)) {
-				filteredEvents.push(event_data[i]);
-				break; // make sure events aren't duplicated
-			}
-		}
-	}
-	return filteredEvents;
-};
-
-var inTrendingView = function() {
-	return document.inTrending;
-}
-
 function addResultCount(num) {
 	var string;
 	if (num != 1) string = num + " Search Results";
@@ -404,6 +377,9 @@ function addResultCount(num) {
 	document.getElementById("browserMsg").innerHTML = string;
 }
 
+/* ----------------------------- FILTER DATA ---------------------------------*/
+
+// Return list of selected tags to filter by
 var getSelectedTagFilters = function() {
 	var checked = $("input.form-check-input[type='checkbox']:checked");
 	tags = []
@@ -412,8 +388,6 @@ var getSelectedTagFilters = function() {
 	}
 	return tags;
 }
-
-/* -------------------------------UTILITY FUNCTIONS --------------------------*/
 
 // Only include events with at least one of the tags in the
 // array tags.
@@ -445,16 +419,12 @@ function filterByTag(event_data, tags) {
 	return new_event_data;
 }
 
-function getEvent(event_data, id) {
-	var event = $.grep(event_data, function(event){return event._id === id;})[0];
-	return event;
-}
-
-function getFavoritesOnly(event_data, favorite_data) {
+// Filter event data to only include user favorites
+function filterByFavorites(event_data, favorite_data) {
 	var favorite_events = [];
 	for (var i = 0; i < favorite_data.length; i++) {
 		var event_id = favorite_data[i]["_id"];
-		var event = getEvent(event_data, event_id);
+		var event = getEventInDataById(event_data, event_id);
 		if (typeof(event) !== "undefined") {
 			favorite_events.push(event);
 		}
@@ -462,63 +432,37 @@ function getFavoritesOnly(event_data, favorite_data) {
 	return favorite_events;
 }
 
-// compares two times h1:m1 and h2:m2
-function compareTimes(h1, m1, h2, m2) {
-	if (h1 == h2) return m2 - m1;
-	return h2 - h1;
-}
+// return all events in event_data that start at or after starttime and end at or before endtime
+// starttime and endtime are in format hh:mm AM/PM
+var filterEventsByTime = function(starttime, endtime) {
+	var filteredEvents = [];
 
-// find military time hour for standard time string in format hh:mm AM/PM
-function strToMilitaryTime(time) {
-	var am_pm = time.substring(time.length - 2, time.length);
-	var hour = parseInt(time.substring(0, 2));
-	if (am_pm === "AM") {
-		if (hour === 12) return 0; // case for 12:00 AM
-		return hour;
-	}
-	if (hour < 12) return hour + 12;
-	return hour; // case for 12:00 PM
-}
+	// if starttime is blank, set start time to midnight
+	var starthour = (starttime !== "") ? parseInt(strToMilitaryTime(starttime)) : 0;
+	var startminute = (starttime !== "") ? parseInt(starttime.substring(3, 5)) : 0;
 
-
-// converts java date string into python date string (mm/dd/yy to yy-mm-dd)
-function java2py_date( date_java ){
-	var today = new Date();
-	var date_split = date_java.split('/');
-
-	var date_py = "";
-	if (date_split.length == 3)
-		date_py = date_split[2] + "-" + date_split[0] + "-" + date_split[1];
-	else return;
-
-	return date_py;
-}
-
-// return date in mm/dd/yyyy format n days ago
-var getDaysAgo = function(n) {
-	var today = new Date();
-	var timeAgo = new Date();
-	timeAgo.setDate(today.getDate() - n);
-	var dateStr = makeDayMonthYearString(timeAgo, true);
-	return dateStr;
-};
-
-var toJavaEventData = function(data) {
-	for (var i = 0; i < data.length; i++) {
-		var instances = data[i].instances;
+	// if endtime is blank, set end time to 11:59pm
+	var endhour = (endtime !== "") ? parseInt(strToMilitaryTime(endtime)) : 23;
+	var endminute = (endtime !== "") ? parseInt(endtime.substring(3, 5)) : 59;
+	
+	for (var i = 0; i < event_data.length; i++) {
+		var instances = event_data[i].instances;
 		for (var j = 0; j < instances.length; j++) {
-			var javaStartDate = py2java_date(instances[j].start_datetime);
-			var javaEndDate = py2java_date(instances[j].end_datetime);
-			instances[j].start_datetime = javaStartDate;
-			instances[j].end_datetime = javaEndDate;
+			var eventStart = new Date(instances[j].start_datetime);
+			var eventStarthour = parseInt(eventStart.getHours());
+			var eventStartminute = parseInt(eventStart.getMinutes());
+
+			var eventEnd = new Date(instances[j].end_datetime);
+			var eventEndhour = parseInt(eventEnd.getHours());
+			var eventEndminute = parseInt(eventEnd.getMinutes());
+
+			// return events between starttime and endtime
+			if ((compareTimesHHMM(starthour, startminute, eventStarthour, eventStartminute) >= 0) &&
+			    (compareTimesHHMM(endhour, endminute, eventEndhour, eventEndminute) <= 0)) {
+				filteredEvents.push(event_data[i]);
+				break; // make sure events aren't duplicated
+			}
 		}
 	}
-	data.instances = instances;
-	return data;
+	return filteredEvents;
 };
-
-// converts python date string into java date string (yyyy-mm-dd to yyyy/mm/dd)
-function py2java_date( date_py ) {
-	var date_java = date_py.replace(/-/g, '/');
-	return date_java;
-}

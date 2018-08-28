@@ -7,20 +7,7 @@ var selected_title = "";
 
 var renderedImg;
 
-// puts urls in text with hrefs so they are hyperlinked
-// function layout from https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
-// regex from https://www.regextester.com/94502
-function urlify(text) {
-    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-    return text.replace(urlRegex, function(url) {
-        return '<a target="_blank" href="' + url + '">' + url + '</a>';
-    })
-}
-
-// Return true if current event view is in edit mode, false otherwise
-function eventViewIsEditEvent() {
-	return $(".eventFormView").css("display") == "block";
-}
+/*------------------------ DISPLAY EVENT VIEW --------------------------------*/
 
 // Update the event view panel
 function updateEventView(eventNum) {
@@ -31,11 +18,12 @@ function updateEventView(eventNum) {
 
 // Clears previous event view panel
 function clearEventViewPanel() {
-	// hide welcome image / footer
+	// hide welcome image if it exists
 	$("#welcomeDiv").hide();
 	$("#welcome").css("display", "none");
+	
+	// hide event form if it exists
 	$("#event-form").hide();
-	$(".footer").hide();
 	
 	// clear previous event view
 	$(".event-view").hide();
@@ -45,6 +33,9 @@ function clearEventViewPanel() {
 	$("#bannerImage").html("");
 	$("#posterImage").html("");
 	$("#otherImage").html("");
+	
+	// hide footer if it exists
+	$(".footer").hide();
 }
 
 // Populate event view panel with event_data[eventNum-1] (basic layout)
@@ -225,4 +216,100 @@ function renderImage(url){
 function getVidID(url) {
 	var regex = new RegExp('(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})', 'i');
 	return url.match(regex)[1];
+}
+
+/*-------------------------- EDIT EVENT VIEW ---------------------------------*/
+
+// Return true if current event view is in edit mode, false otherwise
+function eventViewIsEditEvent() {
+	return $(".eventFormView").css("display") == "block";
+}
+
+// Update the event view panel
+function updateEventViewEditForm(eventNum) {
+	clearEventViewPanel();
+	populateEventViewEditForm(eventNum);
+}
+
+// Populate event view panel with an event edit form for event_data[eventNum-1]
+var populateEventViewEditForm = function(eventNum) {
+	// fill the form with the correct values
+	$("#event_id").val(decodeEntities(event_data[eventNum - 1]._id));
+	$("#title").val(decodeEntities(event_data[eventNum - 1].title));
+	$("#description").val(decodeEntities(event_data[eventNum - 1].description));
+	$("#host").val(decodeEntities(event_data[eventNum - 1].host));
+
+	$("#visibility-"+(event_data[eventNum-1].visibility)).attr('checked', 'checked');
+
+	var numShowings = event_data[eventNum - 1].instances.length;
+	$("#numShowings-" + (numShowings - 1)).prop("checked", true);
+
+	// to avoid flickering, if we haven't loaded anything yet, do this special case
+	if (currentRows == 0) {
+		for (var i = 1; i <= numShowings; i++) {
+			$("#form-row-" + i).show();
+		}
+		currentRows = numShowings;
+	}
+	// otherwise, do the standard
+	else {
+		// show the correct number of form rows, by sliding down any extra we might need
+		for (var i = currentRows; i <= numShowings; i++) {
+			$("#form-row-" + i).slideDown();
+		}
+
+		currentRows = numShowings;
+
+		// slide up any extra form rows
+		for (var i = numShowings + 1; i <= 4; i++) {
+			$("#form-row-" + i).slideUp();
+		}
+	}
+
+	// fill in correct values in any relevant form rows
+	for (var i = 0; i < numShowings; i++) {
+		$("#locations-" + i).val(decodeEntities(event_data[eventNum - 1].instances[i]["location"]));
+		starts = event_data[eventNum - 1].instances[i]["start_datetime"].split(" ");
+		ends = event_data[eventNum - 1].instances[i]["end_datetime"].split(" ");
+
+		yearMonDayS = starts[0].split("/")
+		yearMonDayE = ends[0].split("/")
+		$("#startDates-" + i).val(yearMonDayS[1] + "/" + yearMonDayS[2] + "/" + yearMonDayS[0]);
+		$("#endDates-" + i).val(yearMonDayE[1] + "/" + yearMonDayE[2] + "/" + yearMonDayE[0]);
+
+		timeS = starts[1];
+		timeE = ends[1];
+		$("#startTimes-" + i).val(timeS);
+		$("#endTimes-" + i).val(timeE);
+	}
+
+	// empty the values in all the other form rows
+	for (var i = numShowings; i < 4; i++) {
+		$("#locations-" + i).val("");
+		$("#startDates-" + i).val("");
+		$("#endDates-" + i).val("");
+		$("#startTimes-" + i).val("");
+		$("#endTimes-" + i).val("");
+	}
+	if (event_data[eventNum - 1].poster !== undefined) {
+		$("#poster-link").attr('href', event_data[eventNum - 1].poster);
+		$("#current-poster").removeClass("hidden");
+		handleDeletePoster();
+	}
+	else {
+		$("#current-poster").addClass("hidden");
+	}
+
+	$("#link").val(decodeEntities(event_data[eventNum - 1].trailer));
+
+	// make sure everything is unchecked to begin with
+	$("input[name='tags'").prop("checked", false);
+
+	// check appropriate tags
+	eventTags = event_data[eventNum - 1].tags;
+	for (var i = 0; i < eventTags.length; i++) {
+		$("input[value=\'" + eventTags[i] + "\']").prop("checked", true);
+	}
+	// display the form
+	$("#event-form").show();
 }
