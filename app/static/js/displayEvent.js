@@ -17,61 +17,136 @@ function urlify(text) {
     })
 }
 
-// Shows large event view when search result is clicked
-var handleEventViewClick = function() {
-	$(".smallSearchResult").click( function(){
-		// hide welcome message
-		$("#welcomeDiv").hide();
+// Return true if current event view is in edit mode, false otherwise
+function eventViewIsEditEvent() {
+	return $(".eventFormView").css("display") == "block";
+}
 
-		// hide any footer
-		$(".footer").hide();
-		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
-		var eventId = event_data[eventNum - 1]._id;
+// Update the event view panel
+function updateEventView(eventNum) {
+	clearEventViewPanel();
+	populateEventViewPanel(eventNum);
+	handleEventViewReportBtnClick(eventNum);
+}
 
-		// if currently showing the event edit form, don't animate
-		// highlight again
-		if ($(".eventFormView").css("display") == "block") {
+// Clears previous event view panel
+function clearEventViewPanel() {
+	// hide welcome image / footer
+	$("#welcomeDiv").hide();
+	$("#welcome").css("display", "none");
+	$("#event-form").hide();
+	$(".footer").hide();
+	
+	// clear previous event view
+	$(".event-view").hide();
+	$("#eventSetting").html("");
+	$("#eventSubtitle").html("");
+	$(".badge-border").remove();	// clear previous event tags
+	$("#bannerImage").html("");
+	$("#posterImage").html("");
+	$("#otherImage").html("");
+}
 
-			// hide the form view
-			$("#event-form").hide();
+// Populate event view panel with event_data[eventNum-1] (basic layout)
+function populateEventViewPanel(eventNum) {
 
-			//hide the footer if it exists
-			$(".footer").hide();
+	// setup event main header
+	selected_title = event_data[eventNum-1].title;
+	$("#eventTitle").html(selected_title);
+	$("#eventHost").html("by " + event_data[eventNum-1].host);
+	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
 
-			// make all icons not "selected"
-			$(".editBtn").removeClass("selectedIcon");
-			$(".fa-pencil-alt").removeClass("fa-inverse");
-			$(".deleteBtn").removeClass("selectedIcon");
-			$(".fa-trash-alt").removeClass("fa-inverse");
+	// set new event tags
+	eventTags = event_data[eventNum-1].tags
+	for (var i = 0; i < eventTags.length; i++) {
+		$("#titleRow").append("<div class=\"badge-border\">"
+			+ "<span class=\"badge badge-primary\" id=\"" + eventTags[i] + "Tag\">" + eventTags[i] + "</span>"
+			+ "</div>");
+	}
 
-			populateEventViewPanel(eventNum);
-			handleEventFireBtnClick(eventNum);
-		}
+	// setup dates and times
+	var instances = event_data[eventNum-1].instances;
+	for (var i = 0; i < instances.length; i++) {
+		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" "
+		+ getGoogleCalLink(eventNum-1, i) + "\" data-toggle=\"tooltip\" title=\"Add to Google Calendar\">"+
+		"<i class=\"fa fa-share-square\"></i> </a>");
+		// Location
+		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
+		// Time
+		$("#eventSetting").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
 
-		// Get rid of the edit parameter, if it exists.
-		updateUrl(removeUrlParameter(document.location.search, 'edit'));
+		$("#eventSetting").append("<br>");
+	}
+	
+	// setup fire button
+	// if search result fire button exists, make the event view fire button match it
+	if ($("#resultFireBtn" + eventNum).length) {
+		var eventIsFavorite = $("#resultFireBtn" + eventNum).hasClass("selected");
+		var eventFireCount = $("#resultFireNum" + eventNum).text();
+	}
+	// otherwise, get the actual favorite data
+	else {
+		var eventIsFavorite = eventIsUserFavorite(event_data[eventNum - 1]._id);
+		var eventFireCount = event_data[eventNum - 1].favorites;
+	}
+	// update the event view fire button with the count and selection
+	if (eventIsFavorite) selectFireButton($("#eventFireBtn"));
+	else deselectFireButton($("#eventFireBtn"));
+	$("#eventFireNum").html(eventFireCount);
 
-		// change view/handling if in calendar view mode
-		if (inCalendarView()) {
-			// store currently selected event
-			selected_event = event_data[eventNum - 1];
+	// If the event has a poster, display that.
+    	// Reinstate padding from parent div in case we came from a banner
+    	document.getElementById("eventWrapper").style.paddingTop = "2vh";
+	if ("poster" in event_data[eventNum-1]) {
+		renderImage(event_data[eventNum-1].poster);
+	}
+	else {
+		renderedImg = null;
+	}
 
-			// populate and display event view
-			highlightSearchResult($(this), eventNum);
-			populateEventViewPanel(eventNum);
-			handleEventFireBtnClick(eventNum);
-		}
-		else if (!($("#smallSearchResult" + eventNum).hasClass("selected"))) {
-			// store currently selected event
-			selected_event = event_data[eventNum - 1];
+	// If the event has a video, embed it
+	if ("trailer" in event_data[eventNum-1]) {
+		var videoID = getVidID(event_data[eventNum-1].trailer);
+		document.getElementById("eventVideo-data").innerHTML = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"
+			+ videoID + "?rel=0&amp;showinfo=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>";
+		document.getElementById("eventVideo").style.display = "block";
+	}
+	else {
+		document.getElementById("eventVideo-data").innerHTML = "";
+		document.getElementById("eventVideo").style.display = "none";
+	}
 
-			// populate and display event view
-			populateEventViewPanel(eventNum);
-			handleEventFireBtnClick(eventNum);
-		}
-		// Trigger slick action if mobile
-		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
+	$("#event-view").show();
+
+	// show tips when hovering
+	$('[data-toggle="tooltip"]').tooltip();
+    	heightResizeHandler();
+}
+
+// Upon clicking report button, clear elements and fill id
+function handleEventViewReportBtnClick(eventNum) {
+	$("#reportBtn").click(function() {
+		// set title of report popup
+		$("#reportPopupTitle").html("\"" + selected_title + "\"");
+		
+		// fill this element of the form with the correct value
+		$("#event_id").val(event_data[eventNum - 1]._id);
+		
+		// clear the other elements
+		$("#description").val("");
+		$("#category-0").attr("checked", false);
+		$("#category-1").attr("checked", false);
+		$("#category-2").attr("checked", false);
 	});
+	
+	// if there was an error in submitting report, then show modal
+	if ($('#wasError').length) {
+		// set title of report popup
+		$("#reportPopupTitle").html("\"" + selected_title + "\"");
+		
+		// show report form
+		$('#myModal').modal('show');
+	}
 }
 
 // Get link to Google Calendar event for ith instance of event_data[eventNum]
@@ -97,158 +172,6 @@ function getGoogleCalLink(eventNum, i) {
 	return out_url;
 }
 
-// Toggle highlighting in search results.
-function highlightSearchResult(elt, eventNum) {
-	var event_id = event_data[eventNum - 1]._id;
-	updateUrl(addUrlParameter(document.location.search, 'event', event_id));
-
-	$(".smallSearchResult").removeClass("selected");
-	elt.addClass("selected");
-}
-
-// Highlight/animate selection of a search result
-function selectSearchResult(eventNum) {
-	// Highlight selected event
-	var selected_event = $(".smallSearchResult.selected");
-	var event_to_select = $("#smallSearchResult" + eventNum);
-	highlightSearchResult(event_to_select, eventNum);
-	
-	// Animate selection if not in calendar view
-	if (!inCalendarView()) {
-		// Close previously selected event, if it's not the one we want to open.
-		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
-			selected_event.animate({"margin-right": '12px'});
-		}
-		event_to_select.animate({"margin-right": '0vw'});
-	}
-}
-
-// Update the popularity of an event when the fire button is clicked
-var handleEventFireBtnClick = function (eventNum) {
-	$(".eventFireBtn").unbind("click");
-	$(".eventFireBtn").click(function(e) {
-		updateFireBtn(this, eventNum);
-		e.stopPropagation();
-	});
-};
-
-// set title of report popup
-function setTitle(title) {
-	$("#reportPopupTitle").html("\"" + title + "\"");
-}
-
-// Populate event view panel with event_data[eventNum-1] (basic layout)
-function populateEventViewPanel(eventNum) {
-	$(".event-view").hide();
-
-	// Remove edit parameter.
-	updateUrl(removeUrlParameter(document.location.search, "edit"));
-	// Search pane stuff.
-	selectSearchResult(eventNum);
-
-	// Clickable fire button that displays "Favorite" when hovered over
-	var fireBtn = $("#eventFireBtn");
-
-
-	// Number of favorites
-	var fireNum = $("#eventFireNum");
-	var fireCount = $("#resultFireNum" + eventNum).text();
-	fireNum.html(fireCount);
-
-	// hide welcome image
-	$("#welcome").css("display", "none");
-
-
-	// setup event main header
-	$("#eventTitle").html(event_data[eventNum-1].title);
-	$("#eventSetting").html("");
-
-	// clear tags
-	$(".badge-border").remove();
-
-	eventTags = event_data[eventNum-1].tags
-	for (var i = 0; i < eventTags.length; i++) {
-		$("#titleRow").append("<div class=\"badge-border\">"
-			+ "<span class=\"badge badge-primary\" id=\"" + eventTags[i] + "Tag\">" + eventTags[i] + "</span>"
-			+ "</div>");
-	}
-
-	$("#eventSubtitle").html("");
-	// setup dates and times
-	var instances = event_data[eventNum-1].instances;
-	for (var i = 0; i < instances.length; i++) {
-		$("#eventSetting").append("<a class=\"calendar-btn\" target=\"_blank\" href=\" "
-		+ getGoogleCalLink(eventNum-1, i) + "\" data-toggle=\"tooltip\" title=\"Add to Google Calendar\">"+
-		"<i class=\"fa fa-share-square\"></i> </a>");
-		// Location
-		$("#eventSetting").append(instances[i].location + "&nbsp|&nbsp;");
-		// Time
-		$("#eventSetting").append(makeDate(instances[i].start_datetime, instances[i].end_datetime));
-
-		$("#eventSetting").append("<br>");
-	}
-
-	selected_title = event_data[eventNum-1].title;
-
-	// upon clicking report button, clear elements and fill id
-	$("#reportBtn").click(function() {
-		// fill this element of the form with the correct value
-		$("#event_id").val(event_data[eventNum - 1]._id);
-		// clear the other elements
-		$("#description").val("");
-		$("#category-0").attr("checked", false);
-		$("#category-1").attr("checked", false);
-		$("#category-2").attr("checked", false);
-	});
-
-	// if there was an error in submitting report, then show modal
-	if ($('#wasError').length) {
-		setTitle(selected_title);
-		$('#myModal').modal('show');
-	}
-
-	// setup host and description
-	$("#eventHost").html("by " + event_data[eventNum-1].host);
-	$("#eventDescription").html(urlify(event_data[eventNum-1].description));
-
-	// If the event has a poster, display that.
-	document.getElementById("bannerImage").innerHTML = "";
-	document.getElementById("posterImage").innerHTML = "";
-	document.getElementById("otherImage").innerHTML = "";
-    // Reinstate padding from parent div in case we came from a banner
-    document.getElementById("eventWrapper").style.paddingTop = "2vh";
-	if ("poster" in event_data[eventNum-1]) {
-		renderImage(event_data[eventNum-1].poster);
-	}
-	else {
-		renderedImg = null;
-	}
-
-	// If the event has a video, embed it
-	if ("trailer" in event_data[eventNum-1]) {
-		var videoID = getVidID(event_data[eventNum-1].trailer);
-		document.getElementById("eventVideo-data").innerHTML = "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/"
-			+ videoID + "?rel=0&amp;showinfo=0\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>";
-		document.getElementById("eventVideo").style.display = "block";
-	}
-	else {
-		document.getElementById("eventVideo-data").innerHTML = "";
-		document.getElementById("eventVideo").style.display = "none";
-	}
-
-	// highlight fire button if appropriate
-	if ($("#resultFireBtn" + eventNum).hasClass("selected")) {
-		$("#eventFireBtn").addClass("selected");
-	}
-	else $("#eventFireBtn").removeClass("selected");
-
-	$("#event-view").show();
-
-	// show tips when hovering
-	$('[data-toggle="tooltip"]').tooltip();
-    heightResizeHandler();
-}
-
 function renderImage(url){
     renderedImg = new Image();
     renderedImg.src = url;
@@ -256,40 +179,42 @@ function renderImage(url){
 	$(window).resize(formatImage);
 	function formatImage() {
 		if (renderedImg != null) {
-			document.getElementById("bannerImage").innerHTML = "";
-			document.getElementById("posterImage").innerHTML = "";
-			document.getElementById("otherImage").innerHTML = "";
+			$("#bannerImage").html("");
+			$("#posterImage").html("");
+			$("#otherImage").html("");
 			// Determine where the image should go based off of its aspect ratio
 			// <ratio> gives the aspect ratio of the image
 			// <proportion> gives the proportion of the event-view pane that the image
 			//              takes up by width
 			var ratio = renderedImg.naturalWidth / renderedImg.naturalHeight;
-            var eventViewHeight = document.getElementById("event-view-info").clientHeight;
-            var eventViewWidth = document.getElementById("event-view-info").clientWidth;
+            	var eventViewHeight = document.getElementById("event-view-info").clientHeight;
+            	var eventViewWidth = document.getElementById("event-view-info").clientWidth;
 			var scaledWidth = eventViewHeight * ratio;
 			var proportion = scaledWidth / eventViewWidth;
 			if (2.25 <= ratio) {
 				// We put thin and wide images above the description
 				document.getElementById("bannerImage").innerHTML =
 				"<img class=\"img-fluid\" src=\""+renderedImg.src+"\">";
-                // Remove padding from parent div
-                document.getElementById("eventWrapper").style.paddingTop = "0px";
-			} else if ((proportion < 0.6) && (eventViewWidth * 0.4 > 250)) {
+				// Remove padding from parent div
+				document.getElementById("eventWrapper").style.paddingTop = "0px";
+			} 
+			else if ((proportion < 0.6) && (eventViewWidth * 0.4 > 250)) {
 				// We put tall images next to the description if the screen is wide enough
 				document.getElementById("posterImage").innerHTML =
 				"<img id=\"posterImageSrc\" class=\"img-cover\" src=\""+renderedImg.src+"\">";
-                document.getElementById("posterImageSrc").style.height = eventViewHeight + "px";
-			} else {
+                		document.getElementById("posterImageSrc").style.height = eventViewHeight + "px";
+			} 
+			else {
 				// Otherwise, we put the image below the description
 				document.getElementById("otherImage").innerHTML =
 				"<img id=\"otherImageSrc\" class=\"img-fluid\" src=\""+renderedImg.src+"\">";
-                if ((scaledWidth * 3.0/4.0) < eventViewWidth) {
-                    document.getElementById("otherImageSrc").style.height = (eventViewHeight * 3.0/4.0) + "px";
-                }
-                else {
-                    document.getElementById("otherImageSrc").style.width = "100%";
-                    document.getElementById("otherImageSrc").style.height = "auto";
-                }
+				if ((scaledWidth * 3.0/4.0) < eventViewWidth) {
+					document.getElementById("otherImageSrc").style.height = (eventViewHeight * 3.0/4.0) + "px";
+				}
+				else {
+					document.getElementById("otherImageSrc").style.width = "100%";
+					document.getElementById("otherImageSrc").style.height = "auto";
+				}
 			}
 		}
 	}

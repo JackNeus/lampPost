@@ -5,7 +5,7 @@
                 <div class="flex-container-row" id = "titleRow">
                     <h1 class="event-view-title" id="eventTitle"></h1>
                 </div>
-                <div class="eventFireBtn btn ml-auto" title="Favorite" id="eventFireBtn" data-toggle="tooltip">
+                <div class="eventFireBtn fireBtn btn ml-auto" title="Favorite" id="eventFireBtn" data-toggle="tooltip">
                     <i class="fas fa-fire"></i>
                 </div>
                 <p class="eventFireNum" id="eventFireNum"></p>
@@ -14,7 +14,7 @@
                 <h3 class="event-view-subtitle mr-auto" id="eventHost"></h3>
                 {% if current_user.is_authenticated %}
                 <span data-toggle="modal" data-target="#myModal">
-                    <a id="reportBtn" class="reportBtn" data-toggle="tooltip" onclick="setTitle(selected_title)" title="Report this event">
+                    <a id="reportBtn" class="reportBtn" data-toggle="tooltip" title="Report this event">
                         <i class="fas fa-flag danger-button"></i>
                     </a>
                 </span>

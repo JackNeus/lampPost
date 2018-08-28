@@ -1,38 +1,3 @@
-// check if the event url parameter exists. If so, return the event id
-var checkEventUrlParameter = function() {
-	var eventId = getUrlParameter('event');
-	return eventId;
-};
-
-// check if the edit event url parameter exists. If so, return true.
-var checkEditEventUrlParameter = function() {
-	var editMode = getUrlParameter('edit');
-	if (editMode === undefined) {
-		return false;
-	}
-	return editMode;
-}
-
-
-// check if eventId exists in event_data. If so, highlight search result
-// and show event view for that event
-var updateUrlParamEventView = function(eventId) {
-	// get the event data for the given event id
-	var event = $.grep(event_data, function(event){return event._id === eventId;})[0];
-	console.log(event);
-	if (event != undefined) {
-		eventNum = event_data.indexOf(event) + 1;
-		selected_event = event;
-		if (checkEditEventUrlParameter()) {
-			renderEditForm(eventNum);
-		}
-		else {
-			populateEventViewPanel(eventNum);
-			handleEventFireBtnClick(eventNum);
-		}
-	}
-};
-
 // Function found online in stack overflow
 // given a url parameter, return the value of that parameter
 // return undefined if parameter doesn't exist

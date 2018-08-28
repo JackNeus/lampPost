@@ -4,7 +4,7 @@ var inCalendarView = function() {
 }
 
 // handle clicks of calendar view/list view button
-var handleCalendarView = function() {
+var handleCalendarViewClick = function() {
 	$("#calendarViewBtn").click(function() {
 		// Add calendar parameter to URL.
 		if (getUrlParameter('cal') === undefined) {
@@ -33,7 +33,6 @@ var toggleCalendarView = function() {
 
 	// make sure to update event view
 	$("#event-view").hide();
-	urlParamEventId = getUrlParameter('event');
 
 	// toggle calendar/list view button
 	if ($("#calendarViewBtn").hasClass("calendarMode")) {

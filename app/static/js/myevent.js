@@ -72,8 +72,8 @@ function checkDisplay() {
 		var eventNum = event_data.findIndex(function(event){return event._id === eventId;}) + 1;
 
 		// Graphical commands to select event result.
-		selectSearchResult(eventNum);
-		selectEditBtn($("#editBtn"+eventNum));
+		selectSearchResult($("#smallSearchResult" + eventNum));
+		selectEditBtn($("#editBtn" + eventNum));
 
 		// If the user attempted to edit an event and was unsuccessful,
 		// the url parameter will not be set. We need to manually check for this.
@@ -128,7 +128,7 @@ var handleDeleteMyEvent = function() {
 		deleteBtn.addClass("selectedIcon");
 
 		// toggle highlighting in search results
-		selectSearchResult(eventNum);
+		selectSearchResult($("#smallSearchResult" + eventNum));
 
 		// show event
 		populateEventViewPanel(eventNum);
@@ -203,7 +203,7 @@ var renderEditForm = function(eventNum) {
 	selectEditBtn(editBtn);
 
 	// toggle highlighting in search results
-	selectSearchResult(eventNum);
+	selectSearchResult($("#smallSearchResult" + eventNum));
 
 	// hide the event display
 	$(".event-view").hide();
@@ -318,10 +318,7 @@ var setupUserFavorites = function() {
 		showMyEvents();
 		handleDeleteMyEvent();
 		handleEditMyEvent();
-		var urlParamEventId = checkEventUrlParameter();
-		if (urlParamEventId) {
-			updateUrlParamEventView(urlParamEventId);
-		}
+		
 		checkDisplay();
 	};
 	$.ajax({

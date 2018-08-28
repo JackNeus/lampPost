@@ -17,10 +17,10 @@ var showSearchResults = function() {
 		createSearchResults();
 	}
   
-	checkHighlightEventInUrl();	// highlight the event in url if exists
 	highlightUserFavorites(); 	// highlight user favorites on load
+	checkHighlightEventInUrl();	// highlight the event in url if exists
 	handleFireBtnClick(); 		// handle clicks of fire button
-	handleEventViewClick(); 	// handle click of event
+	handleSearchResultClick(); 	// handle click of event
 };
 
 // Populate search result panel with event_data sorted by date.
@@ -32,35 +32,47 @@ var showMyEvents = function() {
 	sortResults(); 			// sort events by date
 	createMyEventResults(); 	// create html code for each created event and display them
 	highlightUserFavorites(); 	// highlight user favorites on load
-	handleFireBtnClick(); 		// handle clicks of fire button
-	handleEventViewClick(); 	// handle click of event
-};
-
-// Populate search result panel with event_data sorted by date.
-var showMyFavorites = function() {
-	// clear previous search results
-	var currentSearches = document.getElementById("searches");
-	currentSearches.innerHTML = "";
-
-	sortResults(); 			// sort by date or popularity
-	createSearchResults();		// create html code for each search result and display them
 	checkHighlightEventInUrl();	// highlight the event in url if exists
-	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button
-	handleEventViewClick(); 	// handle click of event
+	handleSearchResultClick(); 	// handle click of event
 };
 
-// Update the popularity of an event when the fire button is clicked
-var handleFireBtnClick = function () {
-	$(".resultFireBtn").click(function(e) {
-		var eventNum = getNum($(this).attr("id"), "resultFireBtn");
-		updateFireBtn(this, eventNum);
-		e.stopPropagation();
+// Handle clicks of a search result
+var handleSearchResultClick = function() {
+	$(".smallSearchResult").click(function() {
+		// Get event info
+		var eventNum = getNum($(this).attr("id"), "smallSearchResult");
+		selected_event = event_data[eventNum - 1]; // store currently selected event
+		var eventId = selected_event._id;
+	
+		// Update display if clicking on new search result or if in calendar view
+		if (!($(this).hasClass("selected")) || inCalendarView()) {
+			selectSearchResult($(this));		// highlight search result
+			updateEventView(eventNum); 		// populate and display event view
+		}
+		
+		// Update display if changing from edit event view to normal event view
+		if (eventViewIsEditEvent()) {
+			// deselect all icons
+			$(".editBtn").removeClass("selectedIcon");
+			$(".fa-pencil-alt").removeClass("fa-inverse");
+			$(".deleteBtn").removeClass("selectedIcon");
+			$(".fa-trash-alt").removeClass("fa-inverse");
+		
+			updateEventView(eventNum);	// populate and display event view
+		}
+		
+		// Get rid of the edit parameter, if it exists.
+		updateUrl(removeUrlParameter(document.location.search, 'edit'));
+		// Update event url parameter
+		updateUrl(addUrlParameter(document.location.search, 'event', eventId));
+		
+		// Trigger slick action if mobile
+		if ($(window).width() < WIDTH_THRESHOLD) $('#browserView').slick("slickNext");
 	});
 };
 
 // Highlight the event in the url
-// TODO: Make the length of the small search result not shrink
 var checkHighlightEventInUrl = function() {
 	var eventId = getUrlParameter('event');
 	if (eventId) {
@@ -69,14 +81,35 @@ var checkHighlightEventInUrl = function() {
 			// select the search result
 			eventNum = event_data.indexOf(event) + 1;
 			selected_event = event;
-			selectSearchResult(eventNum);
+			selectSearchResult($("#smallSearchResult" + eventNum));
 			
-			// display the event view
-			populateEventViewPanel(eventNum);
-			handleEventFireBtnClick(eventNum);
+			// display the event view or edit event form if appropriate
+			if (getUrlParameter('edit')) 
+				renderEditForm(eventNum);
+			else
+				updateEventView(eventNum);
 		}
 	}
 };
+
+// Highlight/animate selection of a search result
+function selectSearchResult(elt_to_select) {
+	// Previously selected event
+	var selected_event = $(".smallSearchResult.selected");
+	
+	// Highlight selected event
+	$(".smallSearchResult").removeClass("selected");
+	elt_to_select.addClass("selected");
+	
+	// Animate selection if not in calendar view
+	if (!inCalendarView()) {
+		// Close previously selected event, if it's not the one we want to open.
+		if (selected_event.length > 0 && selected_event[0] !== elt_to_select[0]) {
+			selected_event.animate({"margin-right": '12px'});
+		}
+		elt_to_select.animate({"margin-right": '0vw'});
+	}
+}
 
 // Sort results by popularity or date
 var sortResults = function () {
@@ -117,14 +150,6 @@ function getEventNum(event_data, id) {
 // Given an id of the form 'smallSearchResultX', return X.
 function getNum(searchId, titleSplit) {
 	return searchId.split(titleSplit).pop();
-}
-
-// Returns true if event is in list of user favorites, false otherwise
-function eventIsFav(eventId) {
-	for (var i = 0; i < user_fav_data.length; i++) {
-		if (eventId == user_fav_data[i]._id) return true;
-	}
-	return false;
 }
 
 // sort the events by date (using the first instance of the event)

@@ -12,9 +12,6 @@ var user_fav_data = [];
 // Keep track of previous search query
 var prevQuery = null;
 
-// Keep track of eventId in url if it exists
-var urlParamEventId = null;
-
 // Keep track of the number of search requests currently out.
 var search_requests_in_progress = 0;
 
@@ -57,7 +54,7 @@ $(document).ready(function(){
 	setupSearch();
 	
 	/* Handle toggling of the calendar view */
-	handleCalendarView();
+	handleCalendarViewClick();
 
 	/* Check url parameters and update display accordingly */
 	// Search url parameter
@@ -68,8 +65,7 @@ $(document).ready(function(){
 		prevQuery = searchQuery;
 	}
 	// Event url parameter
-	urlParamEventId = getUrlParameter('event');
-	if (urlParamEventId) {
+	if (getUrlParameter('event')) {
 		// if some event is being displayed, hide welcome
 		hideWelcome = true;
 	}
@@ -252,7 +248,7 @@ var trigger_search = function(force) {
 	if (force || (query != prevQuery || change_view_mode)) {
 		fetchData(query);
 
-		// update url with eventid paramter only if search box changes
+		// update url with search paramter only if search box changes
 		updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
 
 		prevQuery = query;
@@ -320,7 +316,6 @@ var setupUserFavorites = function() {
 
 		// Favorites filter button
 		if ($("#favorite-events-filter-btn").hasClass("selected")) {
-			console.log('fav');
 			event_data = getFavoritesOnly(event_data, user_fav_data);
 		}
 
