@@ -52,8 +52,7 @@ var handleEventViewClick = function() {
 		updateUrl(removeUrlParameter(document.location.search, 'edit'));
 
 		// change view/handling if in calendar view mode
-		var calendarMode = checkCalendarParameter();
-		if (calendarMode) {
+		if (inCalendarView()) {
 			// store currently selected event
 			selected_event = event_data[eventNum - 1];
 
@@ -107,16 +106,15 @@ function highlightSearchResult(elt, eventNum) {
 	elt.addClass("selected");
 }
 
-// Animate selection
+// Highlight/animate selection of a search result
 function selectSearchResult(eventNum) {
-	// Don't allow this to happen if we're in calendar view.
-	// Seriously.
+	// Highlight selected event
+	var selected_event = $(".smallSearchResult.selected");
+	var event_to_select = $("#smallSearchResult" + eventNum);
+	highlightSearchResult(event_to_select, eventNum);
+	
+	// Animate selection if not in calendar view
 	if (!inCalendarView()) {
-		var selected_event = $(".smallSearchResult.selected");
-		var event_to_select = $("#smallSearchResult" + eventNum);
-
-		highlightSearchResult(event_to_select, eventNum);
-
 		// Close previously selected event, if it's not the one we want to open.
 		if (selected_event.length > 0 && selected_event[0] !== event_to_select[0]) {
 			selected_event.animate({"margin-right": '12px'});

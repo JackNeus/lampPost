@@ -49,37 +49,41 @@ $(document).ready(function(){
 	browserView();
 	addSearchButton();
 
-	// Manage welcome "event""
+	// Manage welcome "event"
 	$("#welcomeDiv").hide();
 	var hideWelcome = false;
 
-	// setup search bar functionality
+	/* Setup search bar functionality */
 	setupSearch();
-	setupDataRetrieval();
+	
+	/* Handle toggling of the calendar view */
+	handleCalendarView();
 
-	// fill in search box with search url parameter if it exists
-	checkSearchUrlParameter();
-	urlParamEventId = checkEventUrlParameter();
-	if (checkCalendarParameter()) toggleCalendarView();
-
-	// if some event is being displayed, hide welcome
+	/* Check url parameters and update display accordingly */
+	// Search url parameter
+	var searchQuery = getUrlParameter('search');
+	if (searchQuery) {
+		$("#search-box").val(searchQuery);
+		$("#search-box").keyup();
+		prevQuery = searchQuery;
+	}
+	// Event url parameter
+	urlParamEventId = getUrlParameter('event');
 	if (urlParamEventId) {
+		// if some event is being displayed, hide welcome
 		hideWelcome = true;
 	}
+	// Calendar url parameter
+	if (getUrlParameter('cal')) toggleCalendarView();
 
-	// show search results for the search url parameter if it exists
-	if ($("#search-box").val()) fetchData($("#search-box").val());
-
-
-	// add the trending events
-	if (!checkCalendarParameter() && !$("#search-box").val())
+	/* Add the trending events */
+	if (!inCalendarView() && !$("#search-box").val())
  		addTrendingResults();
 	else {
 		document.inTrending = false;
 	}
 
-	if (!hideWelcome)
-		$("#welcomeDiv").show();
+	if (!hideWelcome) $("#welcomeDiv").show();
 	heightResizeHandler()
 });
 
@@ -129,19 +133,21 @@ function addTrendingResults() {
 
 // Sets up sort and filter functionality for search box
 var setupSearch = function() {
-	// allow user to pick start date and toggle the filter
+
+	/* Initialize datepicker and timepickers */
 	$(function() {
 		$('#datepicker').datepicker();
 	});
-	// timepickers
 	$(function() {
-		$('#startTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
+		$('#startTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(force=true);} });
+	});
+	$(function() {
+		$('#endTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(force=true);} });
 	});
 
-	$(function() {
-		$('#endTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
-	});
-
+	/* Toggle visibility/color of the search filters */
+	
+	// Toggle view of all filters
 	$('#filter-btn').click(function() {
 		$(".filters").slideToggle(200);
 		$( "#filter-btn" ).toggleClass("active");
@@ -157,67 +163,62 @@ var setupSearch = function() {
 			$("#filter-btn").attr("data-original-title", showText).parent().find("tooltip-inner").html(showText);
 		}
 	});
-
+	// Toggle view of time filter
+	$('#timeFilterToggle').click(function() {
+		$(".timeFilter").slideToggle(200);
+	});
+	// Toggle view of date filter
+	$('#dateFilterToggle').click(function() {
+		$(".dateFilter").slideToggle(200);
+	});
+	// Toggle highlighting of filter options
 	$('.filter-btn').click(function() {
 		$(this).toggleClass('selected');
 	});
 
-	// Time filter toggles
-	$('#timeFilterToggle').click(function() {
-		$(".timeFilter").slideToggle(200);
+	/* Handle specific search and filter events */
+	
+	// Search box (searches each time a key is typed in search box)
+	$("#search-box").keyup(function() {
+		trigger_search(force=false);
 	});
-
-	$('#dateFilterToggle').click(function() {
-		$(".dateFilter").slideToggle(200);
-	});
-
-	// All events filter
+	
+	// All Events filter
 	$("#all-events-filter-btn").click(function() {
 		if ($('#search-box').val() === "*") {
 			$('#search-box').val('');
-			$(this).removeClass('selected');
 		}
 		else {
 			$('#search-box').val('*');
-			$(this).addClass('selected');
 		}
-		$('#search-box').keyup();
+		trigger_search(force=false);
 	});
-
-	// My favorites filter
+	// My Favorites filter
 	$("#favorite-events-filter-btn").click(function() {
-		trigger_search(true);
+		trigger_search(force=true);
 	});
-
 	// Tags filter
 	$(".form-check-input[name='tags']").change(function() {
-		trigger_search(true);
+		trigger_search(force=true);
 	});
-
-	// allow user to sort by date or popularity
+	// Sort filter (allow user to sort by date or popularity)
 	$("#searchSort").change(function() {
 		if (inTrendingView()) change_sort = true;
 		user_sort_option = $("#searchSort").val();
-		trigger_search(true);
+		trigger_search(force=true);
 	});
-
-	handleCalendarView();
-
+	// Sort Direction filter
 	$(".sort-direction-btn").click(function() {
 		$("#sort-direction-btn-up").toggleClass("hidden");
 		$("#sort-direction-btn-down").toggleClass("hidden");
-		trigger_search(true);
+		trigger_search(force=true);
+	});
+	// Date filter (fetch data after date chosen in datepicker filter)
+	$("#datepicker").change(function() {
+		if (inCalendarView()) calWeek = 0;
+		trigger_search(force=true);
 	});
 };
-
-var getSelectedTagFilters = function() {
-	var checked = $("input.form-check-input[type='checkbox']:checked");
-	tags = []
-	for (var i = 0; i < checked.length; i++) {
-		tags.push($(checked[i]).val());
-	}
-	return tags;
-}
 
 // searches for events immediately based on search box and datepicker values
 var trigger_search = function(force) {
@@ -257,29 +258,6 @@ var trigger_search = function(force) {
 		prevQuery = query;
 		change_view_mode = false;
 	}
-};
-
-// Updates search results after input to search box or change in filters
-var setupDataRetrieval = function() {
-
-	// searches each time a key is typed in search box
-	$("#search-box").keyup(trigger_search);
-
-	// fetch data after date chosen in datepicker filter
-	$("#datepicker").change(function() {
-		if (!inCalendarView()) {
-			if ($(this).val() !== "") {
-				var date_py = java2py_date($(this).val());
-				if ($("#search-box").val() !== "")
-			  		fetchData($("#search-box").val() + "/" + date_py);
-		  	}
-		  	else fetchData($("#search-box").val());
-		}
-		else {
-			calWeek = 0;
-			showSearchResults();
-		}
-	});
 };
 
 // fetch data given a query string
@@ -340,8 +318,9 @@ var setupUserFavorites = function() {
 		else
 			user_fav_data = [];
 
-		// Filter button
+		// Favorites filter button
 		if ($("#favorite-events-filter-btn").hasClass("selected")) {
+			console.log('fav');
 			event_data = getFavoritesOnly(event_data, user_fav_data);
 		}
 
@@ -356,13 +335,6 @@ var setupUserFavorites = function() {
 
 	var updateSearch = function() {
 		showSearchResults();
-
-		// update event view if url has eventId
-		if (urlParamEventId) {
-			updateUrlParamEventView(urlParamEventId);
-			urlParamEventId = null;
-		}
-
 	}
 
 	if (userId === "") {
@@ -435,6 +407,15 @@ function addResultCount(num) {
 	if (num != 1) string = num + " Search Results";
 	else string = num + " Search Result";
 	document.getElementById("browserMsg").innerHTML = string;
+}
+
+var getSelectedTagFilters = function() {
+	var checked = $("input.form-check-input[type='checkbox']:checked");
+	tags = []
+	for (var i = 0; i < checked.length; i++) {
+		tags.push($(checked[i]).val());
+	}
+	return tags;
 }
 
 /* -------------------------------UTILITY FUNCTIONS --------------------------*/

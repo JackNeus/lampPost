@@ -29,7 +29,7 @@ var showMyEvents = function() {
 	var currentSearches = document.getElementById("searches");
 	currentSearches.innerHTML = "";
 
-	sortResults(); 				// sort events by date
+	sortResults(); 			// sort events by date
 	createMyEventResults(); 	// create html code for each created event and display them
 	highlightUserFavorites(); 	// highlight user favorites on load
 	handleFireBtnClick(); 		// handle clicks of fire button
@@ -66,9 +66,14 @@ var checkHighlightEventInUrl = function() {
 	if (eventId) {
 		var event = $.grep(event_data, function(event){return event._id === eventId;})[0];
 		if (event != undefined) {
+			// select the search result
 			eventNum = event_data.indexOf(event) + 1;
 			selected_event = event;
 			selectSearchResult(eventNum);
+			
+			// display the event view
+			populateEventViewPanel(eventNum);
+			handleEventFireBtnClick(eventNum);
 		}
 	}
 };
@@ -96,11 +101,6 @@ function getSortDirection() {
 	else {
 		return false;
 	}
-}
-
-// return true if in calendar view
-function inCalendarView() {
-	return $("#calendarViewBtn").hasClass("calendarMode");
 }
 
 /*----------------------------- UTILITY FUNCTIONS ----------------------------*/

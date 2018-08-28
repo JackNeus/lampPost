@@ -13,32 +13,13 @@ var checkEditEventUrlParameter = function() {
 	return editMode;
 }
 
-// check if the calendar view url parameter exists. If so, return true. 
-var checkCalendarParameter = function() {
-	var calendarMode = getUrlParameter('cal');
-	if (calendarMode === undefined)
-		return false;
-	return calendarMode;
-	
-};
-
-// check if the search url parameter exists. If so, fill in the 
-// search box with that value
-var checkSearchUrlParameter = function() {
-	var searchQuery = getUrlParameter('search');
-	if (searchQuery) {
-		$("#search-box").val(searchQuery);
-		$("#search-box").keyup();
-		prevQuery = searchQuery; // set previous query variable found in app.js
-	}
-};
 
 // check if eventId exists in event_data. If so, highlight search result
 // and show event view for that event
 var updateUrlParamEventView = function(eventId) {
 	// get the event data for the given event id
 	var event = $.grep(event_data, function(event){return event._id === eventId;})[0];
-	
+	console.log(event);
 	if (event != undefined) {
 		eventNum = event_data.indexOf(event) + 1;
 		selected_event = event;
@@ -54,6 +35,7 @@ var updateUrlParamEventView = function(eventId) {
 
 // Function found online in stack overflow
 // given a url parameter, return the value of that parameter
+// return undefined if parameter doesn't exist
 var getUrlParameter = function(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),
