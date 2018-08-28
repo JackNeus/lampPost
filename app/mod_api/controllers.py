@@ -106,8 +106,8 @@ def get_trending_events(user = None):
 	start_datetime = datetime.now() - timedelta(minutes = 5)
 	end_datetime = datetime.now() + timedelta(days = 7)
 	
-	trending_events = EventEntry.objects(instances__match={'end_datetime__gte': start_datetime, 
-		'end_datetime__lte': end_datetime},
+	trending_events = EventEntry.objects(instances__match={'start_datetime__lte': end_datetime, 
+		'end_datetime__gte': start_datetime},
 		visibility__lte = get_max_visibility(user))
 	trending_events = trending_events.order_by('-favorites').limit(trending_size)
 	return trending_events
