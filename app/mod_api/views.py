@@ -247,6 +247,8 @@ def add_event_fav(userid, eventid):
 
 		if eventid not in user.favorites:
 			controller.add_user_favorite(user, eventid)
+		# Get updated favorite count.
+		event = controller.get_event(eventid)
 		return gen_data_response(event.favorites) # need to return something or views gets angry
 	except Exception as e:
 		return gen_error_response(error_handler.main_handler(e))
@@ -274,6 +276,9 @@ def remove_event_fav(userid, eventid):
 			controller.remove_user_favorite(user, eventid)
 		else:
 			return gen_error_response("You can't un-favorite an event that isn't in your favorites!")
+		
+		# Get updated favorite count.
+		event = controller.get_event(eventid)
 		return gen_data_response(event.favorites)
 	except Exception as e:
 		return gen_error_response(error_handler.main_handler(e))

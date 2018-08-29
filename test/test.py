@@ -461,8 +461,16 @@ def test_edit_event_bad_poster_url():
 # Try to add a valid favorite.
 def test_add_valid_fav():
 	def test(new_event, event_id, creator_netid):
+		prev_favorites = new_event["favorites"]
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
+		new_favorites = r["data"]
+		assert prev_favorites + 1 == new_favorites
+		# Although the reported favorites may match, check the actual event
+		# to make sure it has been updated.
+		r = make_get_event_request(event_id, generate_auth_token(creator_netid))
+		assert is_success(r)
+		assert r["data"]["favorites"] == new_favorites
 	make_test(test)
 
 # Try to add a favorite to a different user.
@@ -475,10 +483,15 @@ def test_add_fav_wrong_user():
 # Try to favorite an event twice. Event should stay favorited.
 def test_add_double_favorite():
 	def test(new_event, event_id, creator_netid):
+		prev_favorites = new_event["favorites"]
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
+		new_favorites = r["data"]
+		assert prev_favorites + 1 == new_favorites
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
+		# Favorite count should not increase a second time.
+		assert new_favorites == r["data"]
 	make_test(test)
 
 # Try to add a favorite to an invalid event id.
@@ -492,10 +505,15 @@ def test_add_fav_bad_event():
 # Try to delete a valid favorite.
 def test_del_valid_fav():
 	def test(new_event, event_id, creator_netid):
+		prev_favorites = new_event["favorites"]
 		r = make_add_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
 		assert is_success(r)
+		new_favorites = r["data"]
+		assert prev_favorites + 1 == new_favorites
 		r = make_del_fav_request(user_ids[creator_netid], event_id, generate_auth_token(creator_netid))
-		assert is_success(get_data(r))
+		r = get_data(r)
+		assert is_success(r)
+		assert prev_favorites == r["data"]
 	make_test(test)
 
 # Try to delete a favorite without authorization.
