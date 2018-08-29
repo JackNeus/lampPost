@@ -204,9 +204,10 @@ def event_search(query, start_datetime):
 	except Exception as e:
 		return gen_error_response(error_handler.main_handler(e))
 
-@mod_api.route("/user/get_events/<userid>")
+@mod_api.route("/user/get_events/<userid>", defaults={"include_past":True}, methods=["GET"])
+@mod_api.route("/user/get_events/<userid>/<include_past>", methods=["GET"])
 @auth.login_required
-def get_created_events(userid):
+def get_created_events(userid, include_past):
 	try:
 		user = controller.get_user_by_uid(userid)
 		if user is None:
@@ -220,7 +221,7 @@ def get_created_events(userid):
 		except AuthorizationError:
 			return gen_error_response("Invalid authorization.")
 
-		events = controller.get_events_by_creator(str(user.netid))
+		events = controller.get_events_by_creator(str(user.netid), include_past)
 		events = [get_raw_event(event) for event in events]
 		return gen_data_response(events)
 	except Exception as e:
