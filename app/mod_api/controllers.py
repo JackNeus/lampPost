@@ -93,12 +93,12 @@ def edit_event(id, data):
 	return event
 	
 # Get list of events by creator's netid.
-def get_events_by_creator(netid, include_past):
-	if include_past:
+def get_events_by_creator(netid, include_past_events):
+	if include_past_events:
 		return EventEntry.objects(creator = netid)
 	else:
-		return EventEntry.objects(creator = netid, instances__end_datetime__gte = datetime.now())
-
+		return EventEntry.objects(creator = netid, instances__match={'end_datetime__gte':datetime.now()})
+	
 # Get trending events. This is curently the 15 events occurring in the next week 
 # with the most favories.
 def get_trending_events(user = None):

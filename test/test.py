@@ -121,8 +121,11 @@ def make_del_fav_request(user_id, event_id, token=None):
 def make_get_fav_request(user_id, token=None):
 	return make_request("get", "/user/fav/get/", user_id, token)
 	
-def make_get_created_events_request(user_id, token=None):
-	return make_request("get", "/user/get_events/", user_id, token)
+def make_get_created_events_request(user_id, include_past=None, token=None):
+	params = user_id
+	if include_past is not None:
+		params = "%s/%s" % (user_id, include_past)
+	return make_request("get", "/user/get_events/", params, token)
 
 def make_report_event_request(event_id, report, token=None):
 	return make_request("put", "/event/report/", event_id, token, json=report)
@@ -536,9 +539,42 @@ def test_get_fav_wrong_user():
 	make_test(test)
 
 def test_get_created_events_wrong_token():
-	r = make_get_created_events_request(user_ids["rrliu"], generate_auth_token("jneus"))
+	r = make_get_created_events_request(user_ids["rrliu"], token=generate_auth_token("jneus"))
 	assert is_error(r)
 	assert "different" in r["error_msg"]
+
+def test_get_created_events_include_past():
+	events = [deepcopy(base_event), deepcopy(base_event), deepcopy(base_event)]
+	for i in range(len(events)):
+		events[i]["title"] = "test event %d" % i
+		events[i]["creator"] = "jneus"
+		events[i]["instances"] = [{"location": "test location"}]
+	now = datetime.now().replace(second=0, microsecond=0)
+	d = timedelta(days=1)
+	events[0]["instances"][0]["start_datetime"] = str(now + d)
+	events[0]["instances"][0]["end_datetime"] = str(now + d * 2)
+	events[1]["instances"][0]["start_datetime"] = str(now - d * 3)
+	events[1]["instances"][0]["end_datetime"] = str(now - d * 2)
+	events[2]["instances"] = [events[0]["instances"][0], events[1]["instances"][0]]
+	
+	def get_events(i):
+		return events[i]
+
+	def test(new_events):
+		# Include events in the past.
+		r = make_get_created_events_request(user_ids["jneus"], True, token=generate_auth_token("jneus"))
+		expected_ids = get_ids(new_events)
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+		
+		# Don't include events in the past.
+		r = make_get_created_events_request(user_ids["jneus"], False, token=generate_auth_token("jneus"))
+		# Hardcoded events not in past.
+		expected_ids = get_ids(filter(lambda x: x["title"][-1] != '1', new_events))
+		event_ids = get_ids(r["data"])
+		assert expected_ids == event_ids
+
+	make_test_multi(test, len(events), get_events)
 
 # Valid report of event.
 def test_report_event():
@@ -796,8 +832,8 @@ test_search_tag,
 test_search_tag_json,
 test_search_json_override,
 test_valid_feedback,
-test_invalid_feedback
-]
+test_invalid_feedback,
+test_get_created_events_include_past]
 
 if __name__ == '__main__':
 	setup()

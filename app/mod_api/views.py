@@ -220,9 +220,12 @@ def get_created_events(userid, include_past):
 				return gen_error_response("Attempted to get created events for different user.")
 		except AuthorizationError:
 			return gen_error_response("Invalid authorization.")
-
+		if isinstance(include_past, str):
+			# include_past defaults to True when an invalid value is passed.
+			include_past = include_past != "False"
 		events = controller.get_events_by_creator(str(user.netid), include_past)
 		events = [get_raw_event(event) for event in events]
+		
 		return gen_data_response(events)
 	except Exception as e:
 		return gen_error_response(error_handler.main_handler(e))
