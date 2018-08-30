@@ -257,7 +257,7 @@ function militaryTimeToStr(date) {
 
 // convert from standard format (hh:mm AM/PM) to military time hour
 function strToMilitaryTime(time) {
-	var am_pm = time.splice(-2);
+	var am_pm = time.slice(-2);
 	var hour = parseInt(time.substring(0, 2));
 	if (am_pm === "AM") {
 		if (hour === 12) return 0; // case for 12:00 AM

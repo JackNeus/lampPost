@@ -330,7 +330,7 @@ var setupUserFavorites = function() {
 		}
 
 		// Time filters
-		if ($("#startTimepicker").val() || $("#endTimePicker").val()) {
+		if ($("#startTimepicker").val() || $("#endTimepicker").val()) {
 			event_data = filterEventsByTime($("#startTimepicker").val(),
 					 			  $("#endTimepicker").val());
 		}
@@ -455,7 +455,7 @@ var filterEventsByTime = function(starttime, endtime) {
 			var eventEnd = new Date(instances[j].end_datetime);
 			var eventEndhour = parseInt(eventEnd.getHours());
 			var eventEndminute = parseInt(eventEnd.getMinutes());
-
+			
 			// return events between starttime and endtime
 			if ((compareTimesHHMM(starthour, startminute, eventStarthour, eventStartminute) >= 0) &&
 			    (compareTimesHHMM(endhour, endminute, eventEndhour, eventEndminute) <= 0)) {
