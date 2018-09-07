@@ -21,6 +21,7 @@ To test LampPost, run the following from the main directory:
 ./test/test.sh (in one window)
 python3 test/test.py (in a second window)
 ```
+It is important you run test.sh first, as this starts up the local mongo instance.
 ## Adding Tests
 To add tests to ```tests.py```, simply create a function for each test, and add the function name(s) to the ```tests``` array found at the bottom of ```tests.py```. 
 

@@ -100,14 +100,16 @@ def get_events_by_creator(netid, include_past_events):
 		return EventEntry.objects(creator = netid, instances__match={'end_datetime__gte':datetime.now()})
 	
 # Get trending events. This is curently the 15 events occurring in the next week 
-# with the most favories.
+# with the most favorites.
+# We want events that start before the end of the week that haven't already ended.=
 def get_trending_events(user = None):
 	trending_size = 15
 	# Start a day ago.
-	start_datetime = datetime.now() - timedelta(days = 1)
+	start_datetime = datetime.now() - timedelta(minutes = 5)
 	end_datetime = datetime.now() + timedelta(days = 7)
-	trending_events = EventEntry.objects(instances__end_datetime__gte = start_datetime,
-		instances__end_datetime__lte = end_datetime, 
+	
+	trending_events = EventEntry.objects(instances__match={'start_datetime__lte': end_datetime, 
+		'end_datetime__gte': start_datetime},
 		visibility__lte = get_max_visibility(user))
 	trending_events = trending_events.order_by('-favorites').limit(trending_size)
 	return trending_events

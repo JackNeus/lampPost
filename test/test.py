@@ -606,6 +606,8 @@ def generate_event(i):
 	event["instances"][0]["end_datetime"] = str(now + timedelta(hours=1))
 	return event
 
+trending_size = 15
+
 def test_trending_event_valid_no_auth():
 	def test(new_events):
 		r = make_get_trending_request()
@@ -615,7 +617,7 @@ def test_trending_event_valid_no_auth():
 		expected_trending = list(filter(lambda x: x["visibility"] == 0, expected_trending))
 		for i in range(len(r['data'])):
 			assert compare_events(expected_trending[i], r['data'][i])
-	make_test_multi(test, 20, generate_event)
+	make_test_multi(test, trending_size + 5, generate_event)
 
 def test_trending_event_valid():
 	def test(new_events):
@@ -624,7 +626,67 @@ def test_trending_event_valid():
 		expected_trending = sorted(new_events, key=lambda x: x["favorites"], reverse=True)
 		for i in range(len(r['data'])):
 			assert compare_events(expected_trending[i], r['data'][i])
-	make_test_multi(test, 20, generate_event)
+	make_test_multi(test, trending_size + 5, generate_event)
+
+# Make sure that all trending events occur sometime in the next week.
+def test_trending_event_date_range():
+	now = datetime.now().replace(second=0, microsecond=0)
+	d = timedelta(days=1)
+
+	# Each element in the array is instance data for an event.
+	# Each tuple in an element is an instance in the form of (start time, end time).
+	test_event_datetimes = [[(now - d, now)], 
+		[(now - 7 * d, now - d)], 
+		[(now - 7 * d, now - d), (now + d, now + 10 * d)],
+		[(now, now + d), (now, now + 2 * d)], 
+		[(now + 99 * d, now + 100 * d)], 
+		[(now - d, now - timedelta(minutes = 1))],
+		[(now - 10 * d, now - 9 * d), (now + 10 * d, now + 11 * d)]]
+	# Hardcoded inrange answers.
+	test_event_inrange = [True, False, True, True, False, True, False]
+	assert len(test_event_datetimes) == len(test_event_inrange)
+
+	def test_data(i):
+		trending_event = generate_event(i)
+		if i >= len(test_event_datetimes):
+			return trending_event
+		trending_event["instances"] = []
+		for start, end in test_event_datetimes[i]:
+			trending_event["instances"].append({
+				'location': 'trend city',
+				'start_datetime': str(start),
+				'end_datetime': str(end)
+				})		
+		return trending_event
+
+	# Is event in the correct date range to be eligible for 'trending'?
+	def in_range(event):
+		for instance in event["instances"]:
+			start_in_range = parse(instance["end_datetime"]) >= now - timedelta(minutes = 5)
+			end_in_range = parse(instance["start_datetime"]) <= now + timedelta(days = 7)
+			if start_in_range and end_in_range:
+				return True
+		return False
+
+	def test(new_events):
+		r = make_get_trending_request(generate_auth_token("jneus"))
+		
+		assert is_success(r)
+		events_in_range = filter(in_range, new_events)
+		expected_trending = sorted(events_in_range, key=lambda x: x["favorites"], reverse=True)
+		
+		for i in range(len(r['data'])):
+			assert compare_events(expected_trending[i], r['data'][i])
+		# As an extra sanity check, look at hardcoded answer key.
+		# This relies on the fact that test_data(i) has i favorites.
+		expected_events = set(filter(lambda x: test_event_inrange[x], range(len(test_event_inrange))))
+		
+		for i in range(len(r['data'])):
+			assert r['data'][i]['favorites'] in expected_events
+			expected_events.remove(r['data'][i]['favorites'])
+		assert len(expected_events) == 0
+
+	make_test_multi(test, len(test_event_datetimes), test_data)
 
 # Can't add two reports within a certain number of seconds of one another.
 def test_report_two_reports():
@@ -833,7 +895,8 @@ test_search_tag_json,
 test_search_json_override,
 test_valid_feedback,
 test_invalid_feedback,
-test_get_created_events_include_past]
+test_get_created_events_include_past,
+test_trending_event_date_range]
 
 if __name__ == '__main__':
 	setup()
