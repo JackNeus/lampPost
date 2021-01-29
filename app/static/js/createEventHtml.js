@@ -11,7 +11,7 @@ var createSearchResults = function() {
 		+	      `<h2 class="resultTitle">` + event_data[i].title + `</h2>`
 		+	      `<div id="eventInstances"></div>`
 		+	   `</div>`
-		+	   `<div class="resultFireBtn btn" title="Favorite" data-toggle="tooltip" id="resultFireBtn">`
+		+	   `<div class="resultFireBtn fireBtn btn" title="Favorite" data-toggle="tooltip" id="resultFireBtn">`
 		+	      `<i class="fas fa-fire"></i>`
 		+	   `</div>`
 		+	   `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
@@ -49,7 +49,7 @@ var createMyEventResults = function() {
 		+	    `</div>`
 		+		`<div class="d-flex flex-column align-items-start justify-content-start">`
 		+			`<div class="d-flex flex-row ml-auto">`
-		+	    	  `<div class="resultFireBtn btn" data-toggle="tooltip" title="Favorite" id="resultFireBtn">`
+		+	    	  `<div class="resultFireBtn fireBtn btn" data-toggle="tooltip" title="Favorite" id="resultFireBtn">`
 		+		 	  `<i class="fas fa-fire"></i>`
 		+	    	  `</div>`
 		+			  `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
@@ -136,7 +136,7 @@ var createCalenderViewResults = function() {
 			+  `<div class="resultContents">`
 			+	   `<h2 class="resultTitle">` + event_data[i].title + `</h2>`
 			+	   `<div id="eventInstances"></div>`
-			+	   `<div class="resultFireBtn btn" title="Favorite" id="resultFireBtn">`
+			+	   `<div class="resultFireBtn fireBtn btn" title="Favorite" id="resultFireBtn">`
 			+	      `<i class="fas fa-fire"></i>`
 			+	   `</div>`
 			+	   `<p class="resultFireNum" id="resultFireNum">` + event_data[i].favorites + `</p>`
@@ -150,7 +150,7 @@ var createCalenderViewResults = function() {
 		  	var seconds_in_week = 7*24*3600;
 		  	var time_diff = Date.timeBetween(firstDay, startDate, 'seconds');
 		  	if (time_diff >= 0 && time_diff < seconds_in_week) {
-		  		$("#" + getDayOfWeek(startDate)).append(searchResult);
+		  		$("#" + getDayOfWeekStr(startDate)).append(searchResult);
 		  	}
 
 		  	// number the given ids to match the event number so that elements can
@@ -236,13 +236,4 @@ var getEventTimeElement = function(startDate, endDate) {
 		}).append(timeStr);
 	return timeElement;
 
-};
-
-// return the day of the week of the a given instance
-var getDayOfWeek = function(startDate) {
-	var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday",
-				"Thursday", "Friday", "Saturday"];
-
-	var dayIndex = startDate.getDay();
-	return daysOfWeek[dayIndex];
 };

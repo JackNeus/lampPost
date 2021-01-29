@@ -76,7 +76,7 @@ $(document).ready(function(){
 	// change the time inputs to be handled by timepicker
 	// autofills end time when start time changes
 	$("input[id*='Time']").timepicker({ timeFormat: 'hh:mm p', interval: 30, scrollbar: true, change: function(time) {
-		var idNum = getNum($(this).attr('id'), 'startTimes-');
+		var idNum = getEventNumberFromID($(this).attr('id'), 'startTimes-');
 		var timeVal = $(this).val();
 		$('#endTimes-' + idNum).val(timeVal);} 
 	});

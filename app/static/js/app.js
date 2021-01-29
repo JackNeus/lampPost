@@ -12,9 +12,6 @@ var user_fav_data = [];
 // Keep track of previous search query
 var prevQuery = null;
 
-// Keep track of eventId in url if it exists
-var urlParamEventId = null;
-
 // Keep track of the number of search requests currently out.
 var search_requests_in_progress = 0;
 
@@ -49,39 +46,135 @@ $(document).ready(function(){
 	browserView();
 	addSearchButton();
 
-	// Manage welcome "event""
+	// Manage welcome "event"
 	$("#welcomeDiv").hide();
 	var hideWelcome = false;
 
-	// setup search bar functionality
+	/* Setup search bar functionality */
 	setupSearch();
-	setupDataRetrieval();
+	
+	/* Handle toggling of the calendar view */
+	handleCalendarViewClick();
 
-	// fill in search box with search url parameter if it exists
-	checkSearchUrlParameter();
-	urlParamEventId = checkEventUrlParameter();
-	if (checkCalendarParameter()) toggleCalendarView();
-
-	// if some event is being displayed, hide welcome
-	if (urlParamEventId) {
+	/* Check url parameters and update display accordingly */
+	// Search url parameter
+	var searchQuery = getUrlParameter('search');
+	if (searchQuery) {
+		$("#search-box").val(searchQuery);
+		$("#search-box").keyup();
+		prevQuery = searchQuery;
+	}
+	// Event url parameter
+	if (getUrlParameter('event')) {
+		// if some event is being displayed, hide welcome
 		hideWelcome = true;
 	}
+	// Calendar url parameter
+	if (getUrlParameter('cal')) toggleCalendarView();
 
-	// show search results for the search url parameter if it exists
-	if ($("#search-box").val()) fetchData($("#search-box").val());
-
-
-	// add the trending events
-	if (!checkCalendarParameter() && !$("#search-box").val())
+	/* Add the trending events */
+	if (!inCalendarView() && !$("#search-box").val())
  		addTrendingResults();
 	else {
 		document.inTrending = false;
 	}
 
-	if (!hideWelcome)
-		$("#welcomeDiv").show();
+	if (!hideWelcome) $("#welcomeDiv").show();
 	heightResizeHandler()
 });
+
+/*------------------------------- SEARCH -------------------------------------*/
+
+// Sets up sort and filter functionality for search box
+var setupSearch = function() {
+
+	/* Initialize datepicker and timepickers */
+	$(function() {
+		$('#datepicker').datepicker();
+	});
+	$(function() {
+		$('#startTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(force=true);} });
+	});
+	$(function() {
+		$('#endTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(force=true);} });
+	});
+
+	/* Toggle visibility/color of the search filters */
+	
+	// Toggle view of all filters
+	$('#filter-btn').click(function() {
+		$(".filters").slideToggle(200);
+		$( "#filter-btn" ).toggleClass("active");
+		// Change tooltip text
+		var hideText = "Hide Filters";
+		var showText = "Show Filters"
+		if ($("#filter-btn")[0].title != hideText) {
+			$("#filter-btn")[0].title = hideText;
+			$("#filter-btn").attr("data-original-title", hideText).parent().find("tooltip-inner").html(hideText);
+		}
+		else {
+			$("#filter-btn")[0].title = showText;
+			$("#filter-btn").attr("data-original-title", showText).parent().find("tooltip-inner").html(showText);
+		}
+	});
+	// Toggle view of time filter
+	$('#timeFilterToggle').click(function() {
+		$(".timeFilter").slideToggle(200);
+	});
+	// Toggle view of date filter
+	$('#dateFilterToggle').click(function() {
+		$(".dateFilter").slideToggle(200);
+	});
+	// Toggle highlighting of filter options
+	$('.filter-btn').click(function() {
+		$(this).toggleClass('selected');
+	});
+
+	/* Handle specific search and filter events */
+	
+	// Search box (searches each time a key is typed in search box)
+	$("#search-box").keyup(function() {
+		trigger_search(force=false);
+	});
+	
+	// All Events filter
+	$("#all-events-filter-btn").click(function() {
+		if ($('#search-box').val() === "*") {
+			$('#search-box').val('');
+		}
+		else {
+			$('#search-box').val('*');
+		}
+		trigger_search(force=false);
+	});
+	// My Favorites filter
+	$("#favorite-events-filter-btn").click(function() {
+		trigger_search(force=true);
+	});
+	// Tags filter
+	$(".form-check-input[name='tags']").change(function() {
+		trigger_search(force=true);
+	});
+	// Sort filter (allow user to sort by date or popularity)
+	$("#searchSort").change(function() {
+		if (inTrendingView()) change_sort = true;
+		user_sort_option = $("#searchSort").val();
+		trigger_search(force=true);
+	});
+	// Sort Direction filter
+	$(".sort-direction-btn").click(function() {
+		$("#sort-direction-btn-up").toggleClass("hidden");
+		$("#sort-direction-btn-down").toggleClass("hidden");
+		trigger_search(force=true);
+	});
+	// Date filter (fetch data after date chosen in datepicker filter)
+	$("#datepicker").change(function() {
+		if (inCalendarView()) calWeek = 0;
+		trigger_search(force=true);
+	});
+};
+
+/*------------------------------- TRENDING -----------------------------------*/
 
 function addTrendingResults() {
 	document.getElementById("browserMsg").innerHTML = "Trending Events";
@@ -127,97 +220,11 @@ function addTrendingResults() {
 	});
 }
 
-// Sets up sort and filter functionality for search box
-var setupSearch = function() {
-	// allow user to pick start date and toggle the filter
-	$(function() {
-		$('#datepicker').datepicker();
-	});
-	// timepickers
-	$(function() {
-		$('#startTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
-	});
-
-	$(function() {
-		$('#endTimepicker').timepicker({ timeFormat: 'hh:mm p', interval: 60, scrollbar: true, change: function(time) {trigger_search(true);} });
-	});
-
-	$('#filter-btn').click(function() {
-		$(".filters").slideToggle(200);
-		$( "#filter-btn" ).toggleClass("active");
-		// Change tooltip text
-		var hideText = "Hide Filters";
-		var showText = "Show Filters"
-		if ($("#filter-btn")[0].title != hideText) {
-			$("#filter-btn")[0].title = hideText;
-			$("#filter-btn").attr("data-original-title", hideText).parent().find("tooltip-inner").html(hideText);
-		}
-		else {
-			$("#filter-btn")[0].title = showText;
-			$("#filter-btn").attr("data-original-title", showText).parent().find("tooltip-inner").html(showText);
-		}
-	});
-
-	$('.filter-btn').click(function() {
-		$(this).toggleClass('selected');
-	});
-
-	// Time filter toggles
-	$('#timeFilterToggle').click(function() {
-		$(".timeFilter").slideToggle(200);
-	});
-
-	$('#dateFilterToggle').click(function() {
-		$(".dateFilter").slideToggle(200);
-	});
-
-	// All events filter
-	$("#all-events-filter-btn").click(function() {
-		if ($('#search-box').val() === "*") {
-			$('#search-box').val('');
-			$(this).removeClass('selected');
-		}
-		else {
-			$('#search-box').val('*');
-			$(this).addClass('selected');
-		}
-		$('#search-box').keyup();
-	});
-
-	// My favorites filter
-	$("#favorite-events-filter-btn").click(function() {
-		trigger_search(true);
-	});
-
-	// Tags filter
-	$(".form-check-input[name='tags']").change(function() {
-		trigger_search(true);
-	});
-
-	// allow user to sort by date or popularity
-	$("#searchSort").change(function() {
-		if (inTrendingView()) change_sort = true;
-		user_sort_option = $("#searchSort").val();
-		trigger_search(true);
-	});
-
-	handleCalendarView();
-
-	$(".sort-direction-btn").click(function() {
-		$("#sort-direction-btn-up").toggleClass("hidden");
-		$("#sort-direction-btn-down").toggleClass("hidden");
-		trigger_search(true);
-	});
-};
-
-var getSelectedTagFilters = function() {
-	var checked = $("input.form-check-input[type='checkbox']:checked");
-	tags = []
-	for (var i = 0; i < checked.length; i++) {
-		tags.push($(checked[i]).val());
-	}
-	return tags;
+var inTrendingView = function() {
+	return document.inTrending;
 }
+
+/*--------------------------- DATA RETRIEVAL ---------------------------------*/
 
 // searches for events immediately based on search box and datepicker values
 var trigger_search = function(force) {
@@ -233,11 +240,11 @@ var trigger_search = function(force) {
 
 	// default search for calendar view: all events since one year ago
 	if (inCalendarView() && !$("#search-box").val()) {
-		var query = "*/" + java2py_date(getDaysAgo(365));
+		var query = "*/" + java2py_date(daysAgoToDate(365));
 	}
 	else if ($("#search-box").val()) {
 		if (inCalendarView())
-			var query = $("#search-box").val() + "/" + java2py_date(getDaysAgo(365));
+			var query = $("#search-box").val() + "/" + java2py_date(daysAgoToDate(365));
 		else if ($("#datepicker").val())
 			var query = $("#search-box").val() + "/" + java2py_date($("#datepicker").val());
 		else
@@ -251,35 +258,12 @@ var trigger_search = function(force) {
 	if (force || (query != prevQuery || change_view_mode)) {
 		fetchData(query);
 
-		// update url with eventid paramter only if search box changes
+		// update url with search paramter only if search box changes
 		updateUrl(addUrlParameter(document.location.search, 'search', $("#search-box").val()));
 
 		prevQuery = query;
 		change_view_mode = false;
 	}
-};
-
-// Updates search results after input to search box or change in filters
-var setupDataRetrieval = function() {
-
-	// searches each time a key is typed in search box
-	$("#search-box").keyup(trigger_search);
-
-	// fetch data after date chosen in datepicker filter
-	$("#datepicker").change(function() {
-		if (!inCalendarView()) {
-			if ($(this).val() !== "") {
-				var date_py = java2py_date($(this).val());
-				if ($("#search-box").val() !== "")
-			  		fetchData($("#search-box").val() + "/" + date_py);
-		  	}
-		  	else fetchData($("#search-box").val());
-		}
-		else {
-			calWeek = 0;
-			showSearchResults();
-		}
-	});
 };
 
 // fetch data given a query string
@@ -340,13 +324,13 @@ var setupUserFavorites = function() {
 		else
 			user_fav_data = [];
 
-		// Filter button
+		// Favorites filter button
 		if ($("#favorite-events-filter-btn").hasClass("selected")) {
-			event_data = getFavoritesOnly(event_data, user_fav_data);
+			event_data = filterByFavorites(event_data, user_fav_data);
 		}
 
 		// Time filters
-		if ($("#startTimepicker").val() || $("#endTimePicker").val()) {
+		if ($("#startTimepicker").val() || $("#endTimepicker").val()) {
 			event_data = filterEventsByTime($("#startTimepicker").val(),
 					 			  $("#endTimepicker").val());
 		}
@@ -356,13 +340,6 @@ var setupUserFavorites = function() {
 
 	var updateSearch = function() {
 		showSearchResults();
-
-		// update event view if url has eventId
-		if (urlParamEventId) {
-			updateUrlParamEventView(urlParamEventId);
-			urlParamEventId = null;
-		}
-
 	}
 
 	if (userId === "") {
@@ -381,6 +358,8 @@ var setupUserFavorites = function() {
 	}
 }
 
+/* -------------------------------- DISPLAY ----------------------------------*/
+
 function clearReportForm() {
 	// clear the elements
 	$("#description").val("");
@@ -391,45 +370,6 @@ function clearReportForm() {
 	$("#wasError").remove();
 }
 
-// return all events in event_data that start at or after starttime and end at or before endtime
-// starttime and endtime are in format hh:mm AM/PM
-var filterEventsByTime = function(starttime, endtime) {
-	var filteredEvents = [];
-
-	// if starttime is blank, set start time to midnight
-	var starthour = (starttime !== "") ? parseInt(strToMilitaryTime(starttime)) : 0;
-	var startminute = (starttime !== "") ? parseInt(starttime.substring(3, 5)) : 0;
-
-	// if endtime is blank, set end time to 11:59pm
-	var endhour = (endtime !== "") ? parseInt(strToMilitaryTime(endtime)) : 23;
-	var endminute = (endtime !== "") ? parseInt(endtime.substring(3, 5)) : 59;
-
-	for (var i = 0; i < event_data.length; i++) {
-		var instances = event_data[i].instances;
-		for (var j = 0; j < instances.length; j++) {
-			var eventStart = new Date(instances[j].start_datetime);
-			var eventStarthour = parseInt(eventStart.getHours());
-			var eventStartminute = parseInt(eventStart.getMinutes());
-
-			var eventEnd = new Date(instances[j].end_datetime);
-			var eventEndhour = parseInt(eventEnd.getHours());
-			var eventEndminute = parseInt(eventEnd.getMinutes());
-
-			// return events between starttime and endtime
-			if ((compareTimes(starthour, startminute, eventStarthour, eventStartminute) >= 0) &&
-			    (compareTimes(endhour, endminute, eventEndhour, eventEndminute) <= 0)) {
-				filteredEvents.push(event_data[i]);
-				break; // make sure events aren't duplicated
-			}
-		}
-	}
-	return filteredEvents;
-};
-
-var inTrendingView = function() {
-	return document.inTrending;
-}
-
 function addResultCount(num) {
 	var string;
 	if (num != 1) string = num + " Search Results";
@@ -437,7 +377,17 @@ function addResultCount(num) {
 	document.getElementById("browserMsg").innerHTML = string;
 }
 
-/* -------------------------------UTILITY FUNCTIONS --------------------------*/
+/* ----------------------------- FILTER DATA ---------------------------------*/
+
+// Return list of selected tags to filter by
+var getSelectedTagFilters = function() {
+	var checked = $("input.form-check-input[type='checkbox']:checked");
+	tags = []
+	for (var i = 0; i < checked.length; i++) {
+		tags.push($(checked[i]).val());
+	}
+	return tags;
+}
 
 // Only include events with at least one of the tags in the
 // array tags.
@@ -469,16 +419,12 @@ function filterByTag(event_data, tags) {
 	return new_event_data;
 }
 
-function getEvent(event_data, id) {
-	var event = $.grep(event_data, function(event){return event._id === id;})[0];
-	return event;
-}
-
-function getFavoritesOnly(event_data, favorite_data) {
+// Filter event data to only include user favorites
+function filterByFavorites(event_data, favorite_data) {
 	var favorite_events = [];
 	for (var i = 0; i < favorite_data.length; i++) {
 		var event_id = favorite_data[i]["_id"];
-		var event = getEvent(event_data, event_id);
+		var event = getEventInDataById(event_data, event_id);
 		if (typeof(event) !== "undefined") {
 			favorite_events.push(event);
 		}
@@ -486,63 +432,37 @@ function getFavoritesOnly(event_data, favorite_data) {
 	return favorite_events;
 }
 
-// compares two times h1:m1 and h2:m2
-function compareTimes(h1, m1, h2, m2) {
-	if (h1 == h2) return m2 - m1;
-	return h2 - h1;
-}
+// return all events in event_data that start at or after starttime and end at or before endtime
+// starttime and endtime are in format hh:mm AM/PM
+var filterEventsByTime = function(starttime, endtime) {
+	var filteredEvents = [];
 
-// find military time hour for standard time string in format hh:mm AM/PM
-function strToMilitaryTime(time) {
-	var am_pm = time.substring(time.length - 2, time.length);
-	var hour = parseInt(time.substring(0, 2));
-	if (am_pm === "AM") {
-		if (hour === 12) return 0; // case for 12:00 AM
-		return hour;
-	}
-	if (hour < 12) return hour + 12;
-	return hour; // case for 12:00 PM
-}
+	// if starttime is blank, set start time to midnight
+	var starthour = (starttime !== "") ? parseInt(strToMilitaryTime(starttime)) : 0;
+	var startminute = (starttime !== "") ? parseInt(starttime.substring(3, 5)) : 0;
 
-
-// converts java date string into python date string (mm/dd/yy to yy-mm-dd)
-function java2py_date( date_java ){
-	var today = new Date();
-	var date_split = date_java.split('/');
-
-	var date_py = "";
-	if (date_split.length == 3)
-		date_py = date_split[2] + "-" + date_split[0] + "-" + date_split[1];
-	else return;
-
-	return date_py;
-}
-
-// return date in mm/dd/yyyy format n days ago
-var getDaysAgo = function(n) {
-	var today = new Date();
-	var timeAgo = new Date();
-	timeAgo.setDate(today.getDate() - n);
-	var dateStr = makeDayMonthYearString(timeAgo, true);
-	return dateStr;
-};
-
-var toJavaEventData = function(data) {
-	for (var i = 0; i < data.length; i++) {
-		var instances = data[i].instances;
+	// if endtime is blank, set end time to 11:59pm
+	var endhour = (endtime !== "") ? parseInt(strToMilitaryTime(endtime)) : 23;
+	var endminute = (endtime !== "") ? parseInt(endtime.substring(3, 5)) : 59;
+	
+	for (var i = 0; i < event_data.length; i++) {
+		var instances = event_data[i].instances;
 		for (var j = 0; j < instances.length; j++) {
-			var javaStartDate = py2java_date(instances[j].start_datetime);
-			var javaEndDate = py2java_date(instances[j].end_datetime);
-			instances[j].start_datetime = javaStartDate;
-			instances[j].end_datetime = javaEndDate;
+			var eventStart = new Date(instances[j].start_datetime);
+			var eventStarthour = parseInt(eventStart.getHours());
+			var eventStartminute = parseInt(eventStart.getMinutes());
+
+			var eventEnd = new Date(instances[j].end_datetime);
+			var eventEndhour = parseInt(eventEnd.getHours());
+			var eventEndminute = parseInt(eventEnd.getMinutes());
+			
+			// return events between starttime and endtime
+			if ((compareTimesHHMM(starthour, startminute, eventStarthour, eventStartminute) >= 0) &&
+			    (compareTimesHHMM(endhour, endminute, eventEndhour, eventEndminute) <= 0)) {
+				filteredEvents.push(event_data[i]);
+				break; // make sure events aren't duplicated
+			}
 		}
 	}
-	data.instances = instances;
-	return data;
+	return filteredEvents;
 };
-
-// converts python date string into java date string (yyyy-mm-dd to yyyy/mm/dd)
-function py2java_date( date_py ) {
-	var date_java = date_py.replace(/-/g, '/');
-	return date_java;
-}

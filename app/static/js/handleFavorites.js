@@ -1,20 +1,24 @@
-// Color in fire button for events a user has favorited
-var highlightUserFavorites = function () {
-	for (var i = 0; i < event_data.length; i++) {
-		// Event id
-		var eventId = event_data[i]._id;
-
-		// Color in fire button if user has favorited an event
-		var fireBtn = $("#resultFireBtn" + (i + 1));
-		if (eventIsFav(eventId)) {
-			$(fireBtn).toggleClass("selected");
-			$(fireBtn).prop('title', 'Unfavorite');
-		}
-	}
+// Update the popularity of an event when the fire button is clicked
+var handleFireBtnClick = function () {
+	$(".fireBtn").click(function(e) {
+		var eventNum;
+		
+		// check if this is the result fire button or the event view button
+		if ($(this).hasClass("resultFireBtn")) 
+			eventNum = getEventNumberFromID($(this).attr("id"), "resultFireBtn");
+		else 
+			eventNum = event_data.indexOf(selected_event) + 1;
+		
+		// update the database and the button display
+		updateEventFavorite($(this), eventNum);
+		
+		// stop button click from selecting the whole search result
+		e.stopPropagation();
+	});
 };
 
 // Update the popularity of an event when the fire button is clicked
-var updateFireBtn = function (fireBtn, eventNum) {
+var updateEventFavorite = function (fireBtn, eventNum) {
 		// make sure api request for favoriting goes through before making
 		// another one
 		if ($(fireBtn).hasClass("disabled")) return;
@@ -29,11 +33,7 @@ var updateFireBtn = function (fireBtn, eventNum) {
 			var callback = function(data) {
 				$(fireBtn).toggleClass("disabled");
 				if (data["status"] === "Success") {
-					// update view for the two different button cases
-					if ($(fireBtn).hasClass('resultFireBtn'))
-						updateSearchResultFireView(fireBtn, eventNum, 1);
-					else if($(fireBtn).hasClass('eventFireBtn'))
-						updateEventFireView(fireBtn, eventNum, 1);
+					updateFireButtons(eventNum, favoriting=true);
 				}
 			};
 			$.ajax({
@@ -51,11 +51,7 @@ var updateFireBtn = function (fireBtn, eventNum) {
 			var callback = function(data) {
 				$(fireBtn).toggleClass("disabled");
 				if (data["status"] === "Success") {
-					// update view for the two different button cases
-					if ($(fireBtn).hasClass('resultFireBtn'))
-						updateSearchResultFireView(fireBtn, eventNum, -1);
-					else if($(fireBtn).hasClass('eventFireBtn'))
-						updateEventFireView(fireBtn, eventNum, -1);
+					updateFireButtons(eventNum, favoriting=false);
 				}
 			};
 			$.ajax({
@@ -73,54 +69,68 @@ var updateFireBtn = function (fireBtn, eventNum) {
 		else favoriteEvent();
 };
 
-// handle updating fire button on small search result
-var updateSearchResultFireView = function(fireBtn, eventNum, change) {
-	updateFireNum($("#resultFireNum" + eventNum), eventNum, change);
-	toggleFireBtnHighlight(fireBtn, change);
-	checkUpdateEventViewFire(eventNum, change);
-	checkReloadFavoritePage(eventNum); 
-};
-
-// handle updating fire button on event view
-var updateEventFireView = function(fireBtn, eventNum, change) {
-	updateFireNum($("#eventFireNum"), eventNum, change);
-	updateFireNum($("#resultFireNum" + eventNum), eventNum, change);
-	toggleFireBtnHighlight(fireBtn, change);
-	toggleFireBtnHighlight($("#resultFireBtn" + eventNum), change);
-	checkReloadFavoritePage(eventNum);
-};
-
-// update favorite number information
-var updateFireNum = function(fireNum, eventNum, change) {
-	var getFireNum = $(fireNum).text();
-	var newFireNum = parseInt(getFireNum) + change;
-	$(fireNum).text(newFireNum);
+// Highlights and toggles the tooltip for the given fire button
+var selectFireButton = function(fireBtn) {
+	$(fireBtn).addClass("selected");
+	var newTooltip = "Unfavorite";
+	$(fireBtn).prop('title', newTooltip);
+	$(fireBtn).attr("data-original-title", newTooltip).parent().find("tooltip-inner").html(newTooltip);
 }
 
-// toggle highlighting and title of fire buttons
-var toggleFireBtnHighlight = function(fireBtn, change) {
-	$(fireBtn).toggleClass('selected');
-	 if (change == 1) $(fireBtn).prop('title', 'Unfavorite');
-	 else 		$(fireBtn).prop('title', 'Favorite');
-};
+// Unhighlights and toggles the tooltip for the given fire button
+var deselectFireButton = function(fireBtn) {
+	$(fireBtn).removeClass("selected");
+	var newTooltip = "Favorite";
+	$(fireBtn).prop('title', newTooltip);
+	$(fireBtn).attr("data-original-title", newTooltip).parent().find("tooltip-inner").html(newTooltip);
+}
 
-// if on favorite page, remove an event that has been unfavorited
-var checkReloadFavoritePage = function(eventNum) {
-	if (window.location.href.indexOf('myfavorites') != -1) {
-		$("#smallSearchResult" + eventNum).hide();
-		var eventId = event_data[eventNum - 1]._id;
-		if (selected_event !== null && selected_event._id == eventId)
-			$(".event-view").hide();
+// Update the relevant fire buttons' statuses
+var updateFireButtons = function(eventNum, favoriting) {
+	/* Update search result fire button */
+	if (favoriting) {
+		var newFavCount = parseInt($("#resultFireNum" + eventNum).text()) + 1;
+		$("#resultFireNum" + eventNum).text(newFavCount);
+		selectFireButton($("#resultFireBtn" + eventNum));
+	}
+	else {
+		var newFavCount = parseInt($("#resultFireNum" + eventNum).text()) - 1;
+		$("#resultFireNum" + eventNum).text(newFavCount);
+		deselectFireButton($("#resultFireBtn" + eventNum));
+	}
+	
+	// Update event view fire button if it matches the favorited/unfavorited event
+	if (selected_event === event_data[eventNum - 1]) {
+		if (favoriting) 
+			{
+			var newFavCount = parseInt($("#eventFireNum").text()) + 1;
+			$("#eventFireNum").text(newFavCount);
+			selectFireButton($("#eventFireBtn"));
+			}
+		else {
+			var newFavCount = parseInt($("#eventFireNum").text()) - 1;
+			$("#eventFireNum").text(newFavCount);
+			deselectFireButton($("#eventFireBtn"));
+			}
+	}
+}
+
+// Color in fire button in search results for events a user has favorited
+var highlightUserFavorites = function () {
+	for (var i = 0; i < event_data.length; i++) {
+		// Event id
+		var eventId = event_data[i]._id;
+
+		// Color in fire button if user has favorited an event
+		var fireBtn = $("#resultFireBtn" + (i + 1));
+		if (eventIsUserFavorite(eventId)) selectFireButton(fireBtn);
 	}
 };
 
-// update favorite button on event-view if the current event-view is the same as
-// the search that's been favorited
-var checkUpdateEventViewFire = function(eventNum, change) {
-	var eventId = event_data[eventNum - 1]._id;
-	if (selected_event !== null && selected_event._id == eventId) {
-		toggleFireBtnHighlight($("#eventFireBtn"), change);
-		updateFireNum($("#eventFireNum"), eventNum, change);
+// Returns true if event is in list of user favorites, false otherwise
+var eventIsUserFavorite = function(eventId) {
+	for (var i = 0; i < user_fav_data.length; i++) {
+		if (eventId == user_fav_data[i]._id) return true;
 	}
+	return false;
 };
-

@@ -1,5 +1,10 @@
+// return true if in calendar view
+var inCalendarView = function() {
+	return $("#calendarViewBtn").hasClass("calendarMode");
+}
+
 // handle clicks of calendar view/list view button
-var handleCalendarView = function() {
+var handleCalendarViewClick = function() {
 	$("#calendarViewBtn").click(function() {
 		// Add calendar parameter to URL.
 		if (getUrlParameter('cal') === undefined) {
@@ -26,9 +31,8 @@ var toggleCalendarView = function() {
 	$(".calendarBtns").toggle();
 	$("#browserMsg").toggle();
 
-	// make sure to update event view and recheck event url paramater
+	// make sure to update event view
 	$("#event-view").hide();
-	urlParamEventId = checkEventUrlParameter();
 
 	// toggle calendar/list view button
 	if ($("#calendarViewBtn").hasClass("calendarMode")) {
@@ -48,7 +52,7 @@ var toggleCalendarView = function() {
 
 	$("#searches").html("");
 	$("#calendarViewBtn").toggleClass("calendarMode");
-	trigger_search();	// get new search results
+	trigger_search(force=false);	// get new search results
 	handleNextWeekClick();
 	handlePreviousWeekClick();
 };
