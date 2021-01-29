@@ -31,3 +31,5 @@ If possible, please use ```make_test``` or ```make_test_multi``` to create your 
 If tests are passing on one run but not on the next, try restarting ```test.sh```. If older tests fail, they don't properly clean up the database.
 
 When ```test.sh``` is starting up, make sure you see text like ```child process started successfully, parent exiting```. This means that the local mongod server was successfully started, which is necessary for the tests to run.
+
+If restarting ```test.sh``` doesn't resolve your issues, try running the command ```ps aux | grep -i mongo``` to check if a local mongo db is running in the background. If this is the case, you'll need to kill the process.
